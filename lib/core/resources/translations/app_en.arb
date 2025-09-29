@@ -1,0 +1,14 @@
+{
+  "@@locale": "en",
+  "year": "year",
+  "name": "Name",
+  "tell_us_about_yourself": "Tell us about yourself",
+  "tell_about_your_experience": "Tell us about your experience",
+  "how_long_are_you_learn_english": "How long are you learn english ?",
+  "how_ofter_are_you_use_english": "How long are you use english ?",
+  "next": "next",
+  "select_your_goals": "Select your goals",
+  "how_old_are_you": "How old are you ?",
+  "clear" : "Clear",
+  "finish" : "Finish"
+}
