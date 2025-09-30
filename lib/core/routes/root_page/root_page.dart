@@ -10,8 +10,6 @@ class RootPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RootPage(
-      navigator: navigator,
-    );
+    return navigator;
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ErrorPage extends StatelessWidget {
+class ErrorMessageWidget extends StatelessWidget {
   final String message;
 
-  const ErrorPage({
+  const ErrorMessageWidget({
     super.key,
     required this.message,
   });
