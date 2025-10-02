@@ -56,6 +56,8 @@ dependencies:
   google_sign_in: ^7.2.0
   flutter_gen: ^5.12.0
   flutter_shaders: ^0.1.3
+  step_progress_indicator: ^1.0.2
+  flutter_svg: ^2.2.1
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +89,7 @@ flutter:
   assets:
     - .env
     - assets/images/
+    - assets/icons/
 #    - assets/shaders/
 
   # must be only at root shaders folder
@@ -94,6 +97,8 @@ flutter:
 #    - assets/shaders/onboard_section.frag.bak
     - shaders/simple.frag
     - shaders/ve.frag
+    - shaders/check_pulse.frag
+    - shaders/gradient_smooth.frag
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -6,6 +6,18 @@ enum AppColors {
 
   black(Colors.black),
 
+  buttonBlue(Color(0xff2196F3)),
+  darkOrchid(Color(0xff9C27B0)),
+  apple(Color(0xff4CAF50)),
+  eucalyptus(Color(0xff34D399)),
+  royalBlue(Color(0xff316fe7)),
+  lavenderFloral(Color(0xffbb7cfa)),
+  telemagenta(Color(0xffcf3079)),
+  hotPink(Color(0xffF26BB0)),
+  seaGreen(Color(0xff1c9b4a)),
+  uFOGreen(Color(0xff44d579)),
+  metallicOrange(Color(0xffe25b11)),
+  jasperOrange(Color(0xffea894c)),
 
   majorelleBlue(Color(0xff6E3EEA)),
   greenCrayola(Color(0xff0FBA81)),

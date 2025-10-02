@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
@@ -49,41 +47,43 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
 
   final Color onSurfaceVariant;
 
-
-
   /// Base light theme of the app.
   AppColorScheme.light()
-      : primary = AppColors.majorelleBlue.value,
-        onPrimary = AppColors.white.value,
-        secondary = AppColors.jacarta.value,
-        onSecondary = AppColors.mediumPurple.value,
-        inactiveSecondary = AppColors.white.value,
-        surface = AppColors.ghostWhite.value,
-        onSurface = AppColors.jacarta.value,
-        background = AppColors.pinkBakerMiller.value,
-        onBackground = AppColors.blueGray.value,
-        error = AppColors.pinkCandy.value,
-        onError = AppColors.white.value, // TODO: not used
-        unselectedItem = AppColors.white.value, // TODO: not used
-        selectedItem = AppColors.mediumPurple.value,
-        onSurfaceVariant = AppColors.black.value; // TODO: not used
+    : primary = AppColors.buttonBlue.value,
+      onPrimary = AppColors.white.value,
+      secondary = AppColors.white.value.withValues(
+        alpha: 0.8,
+      ),
+      onSecondary = AppColors.mediumPurple.value,
+      inactiveSecondary = AppColors.white.value,
+      surface = AppColors.ghostWhite.value,
+      onSurface = AppColors.jacarta.value,
+      background = AppColors.pinkBakerMiller.value,
+      onBackground = AppColors.blueGray.value,
+      error = AppColors.pinkCandy.value,
+      onError = AppColors.white.value,
+      // TODO: not used
+      unselectedItem = AppColors.white.value,
+      // TODO: not used
+      selectedItem = AppColors.mediumPurple.value,
+      onSurfaceVariant = AppColors.black.value; // TODO: not used
 
   /// Dark theme of the app. TODO: add colors for black theme
   AppColorScheme.dark()
-      : primary = AppColors.white.value,
-        onPrimary = AppColors.white.value,
-        secondary = AppColors.white.value,
-        onSecondary = AppColors.white.value,
-        inactiveSecondary = AppColors.white.value,
-        surface = AppColors.white.value,
-        onSurface = AppColors.white.value,
-        background = AppColors.white.value,
-        onBackground = AppColors.white.value,
-        error = AppColors.white.value,
-        onError = AppColors.white.value,
-        unselectedItem = AppColors.white.value,
-        selectedItem = AppColors.white.value,
-        onSurfaceVariant = AppColors.white.value;
+    : primary = AppColors.white.value,
+      onPrimary = AppColors.white.value,
+      secondary = AppColors.white.value,
+      onSecondary = AppColors.white.value,
+      inactiveSecondary = AppColors.white.value,
+      surface = AppColors.white.value,
+      onSurface = AppColors.white.value,
+      background = AppColors.white.value,
+      onBackground = AppColors.white.value,
+      error = AppColors.white.value,
+      onError = AppColors.white.value,
+      unselectedItem = AppColors.white.value,
+      selectedItem = AppColors.white.value,
+      onSurfaceVariant = AppColors.white.value;
 
   const AppColorScheme._({
     required this.primary,
@@ -140,9 +140,9 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
 
   @override
   ThemeExtension<AppColorScheme> lerp(
-      ThemeExtension<AppColorScheme>? other,
-      double t,
-      ) {
+    ThemeExtension<AppColorScheme>? other,
+    double t,
+  ) {
     if (other is! AppColorScheme) return this;
 
     return copyWith(
@@ -150,8 +150,11 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
       onPrimary: Color.lerp(onPrimary, other.onPrimary, t),
       secondary: Color.lerp(secondary, other.secondary, t),
       onSecondary: Color.lerp(onSecondary, other.onSecondary, t),
-      inactiveSecondary:
-      Color.lerp(inactiveSecondary, other.inactiveSecondary, t),
+      inactiveSecondary: Color.lerp(
+        inactiveSecondary,
+        other.inactiveSecondary,
+        t,
+      ),
       surface: Color.lerp(surface, other.surface, t),
       onSurface: Color.lerp(onSurface, other.onSurface, t),
       background: Color.lerp(background, other.background, t),
@@ -167,7 +170,7 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
   /// Return color scheme for app from context
   static AppColorScheme of(BuildContext context) =>
       Theme.of(context).extension<AppColorScheme>() ??
-          _throwThemeExceptionFromFunc(context);
+      _throwThemeExceptionFromFunc(context);
 }
 
 Never _throwThemeExceptionFromFunc(BuildContext context) =>

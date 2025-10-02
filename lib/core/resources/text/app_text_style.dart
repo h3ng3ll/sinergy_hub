@@ -16,6 +16,13 @@ enum AppTextStyle {
       fontWeight: FontWeight.w400,
     ),
   ),
+  regular8(
+    TextStyle(
+      fontSize: 8,
+      fontFamily: 'Manrope',
+      fontWeight: FontWeight.w400,
+    ),
+  ),
   regular12(
     TextStyle(
       fontSize: 12,

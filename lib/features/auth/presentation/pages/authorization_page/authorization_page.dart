@@ -32,8 +32,12 @@ class _AuthorizationPageState extends State<AuthorizationPage>
     _authCubit = AuthCubit();
     final isAuthorized = _authCubit.state.status == AuthStatus.authorized;
     if (isAuthorized) {
-      OnboardSurveyPageRoute().go(
-        context,
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          OnboardSurveyPageRoute().go(
+            context,
+          );
+        },
       );
     }
     _controller =
@@ -48,7 +52,9 @@ class _AuthorizationPageState extends State<AuthorizationPage>
           )
           ..addListener(
             () {
-              setState(() {});
+              if (mounted) {
+                setState(() {});
+              }
             },
           );
   }
@@ -90,7 +96,11 @@ class _AuthorizationPageState extends State<AuthorizationPage>
                         parameters: [
                           ShaderType(
                             shaderType: EShaderDataType.floatShader,
-                            value: _controller.value,
+                            value:
+                                _controller
+                                    .lastElapsedDuration!
+                                    .inMilliseconds /
+                                1000,
                           ),
                           ShaderType(
                             shaderType: EShaderDataType.floatShader,
@@ -111,6 +121,10 @@ class _AuthorizationPageState extends State<AuthorizationPage>
                                 ErrorMessageWidget(message: state.errorMessage),
                               Gap(24.0),
                               ActionBtn(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 15.0,
+                                  horizontal: 20.0,
+                                ),
                                 onPressed: () => onAuthWithGoogle(context),
                                 child: Text(
                                   'SIGN IN WITH GOOGLE',

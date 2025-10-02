@@ -11,25 +11,97 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsIconsGen {
+  const $AssetsIconsGen();
+
+  /// File path: assets/icons/analytic.svg
+  String get analytic => 'assets/icons/analytic.svg';
+
+  /// File path: assets/icons/community.svg
+  String get community => 'assets/icons/community.svg';
+
+  /// File path: assets/icons/pallete.svg
+  String get pallete => 'assets/icons/pallete.svg';
+
+  /// File path: assets/icons/psd-3d-render-rocket-ioslated-background.zip
+  String get psd3dRenderRocketIoslatedBackground =>
+      'assets/icons/psd-3d-render-rocket-ioslated-background.zip';
+
+  /// File path: assets/icons/rocket-ship-half-shadow.zip
+  String get rocketShipHalfShadow => 'assets/icons/rocket-ship-half-shadow.zip';
+
+  /// File path: assets/icons/rocket.svg
+  String get rocket => 'assets/icons/rocket.svg';
+
+  /// File path: assets/icons/tool.svg
+  String get tool => 'assets/icons/tool.svg';
+
+  /// File path: assets/icons/work.svg
+  String get work => 'assets/icons/work.svg';
+
+  /// List of all assets
+  List<String> get values => [
+    analytic,
+    community,
+    pallete,
+    psd3dRenderRocketIoslatedBackground,
+    rocketShipHalfShadow,
+    rocket,
+    tool,
+    work,
+  ];
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/3d-briefcase.png
+  AssetGenImage get a3dBriefcase =>
+      const AssetGenImage('assets/images/3d-briefcase.png');
+
+  /// File path: assets/images/analysis.png
+  AssetGenImage get analysis =>
+      const AssetGenImage('assets/images/analysis.png');
 
   /// File path: assets/images/back_pattern.png
   AssetGenImage get backPattern =>
       const AssetGenImage('assets/images/back_pattern.png');
 
+  /// File path: assets/images/group.png
+  AssetGenImage get group => const AssetGenImage('assets/images/group.png');
+
   /// File path: assets/images/magic_pattern.png
   AssetGenImage get magicPattern =>
       const AssetGenImage('assets/images/magic_pattern.png');
 
+  /// File path: assets/images/paint.png
+  AssetGenImage get paint => const AssetGenImage('assets/images/paint.png');
+
+  /// File path: assets/images/repair-tools.png
+  AssetGenImage get repairTools =>
+      const AssetGenImage('assets/images/repair-tools.png');
+
+  /// File path: assets/images/rocket.png
+  AssetGenImage get rocket => const AssetGenImage('assets/images/rocket.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [backPattern, magicPattern];
+  List<AssetGenImage> get values => [
+    a3dBriefcase,
+    analysis,
+    backPattern,
+    group,
+    magicPattern,
+    paint,
+    repairTools,
+    rocket,
+  ];
 }
 
 class Assets {
   const Assets._();
 
   static const String aEnv = '.env';
+  static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 
   /// List of all assets

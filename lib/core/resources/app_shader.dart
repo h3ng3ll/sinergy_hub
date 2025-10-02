@@ -7,6 +7,8 @@ abstract class AppShaders {
   static const simple = '${_base}simple$_ext';
   static const ve = '${_base}ve$_ext';
   static const myShader = '${_base}my_shader$_ext';
+  static const checkPulse = '${_base}check_pulse$_ext';
+  static const gradientSmooth = '${_base}gradient_smooth$_ext';
 }
 
 

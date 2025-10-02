@@ -7,6 +7,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
 
   /// Text style 10_140.400
   final TextStyle regular10;
+  final TextStyle regular8;
 
   /// Text style 12_140.400
   final TextStyle regular12;
@@ -127,6 +128,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
 
   AppTextTheme._({
     required this.light14,
+    required this.regular8,
     required this.regular10,
     required this.regular12,
     required this.regular13,
@@ -172,6 +174,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
   /// Base app text theme.
   AppTextTheme.base()
       : light14 = AppTextStyle.light14.value,
+        regular8 = AppTextStyle.regular8.value,
         regular10 = AppTextStyle.regular10.value,
         regular12 = AppTextStyle.regular12.value,
         regular13 = AppTextStyle.regular13.value,
@@ -217,6 +220,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
   // ignore: long-parameter-list
   ThemeExtension<AppTextTheme> copyWith({
     TextStyle? light14,
+    TextStyle? regular8,
     TextStyle? regular10,
     TextStyle? regular12,
     TextStyle? regular13,
@@ -260,6 +264,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
   }) {
     return AppTextTheme._(
       light14: light14 ?? this.light14,
+      regular8: regular8 ?? this.regular8,
       regular10: regular10 ?? this.regular10,
       regular12: regular12 ?? this.regular12,
       regular13: regular13 ?? this.regular13,
@@ -314,6 +319,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
 
     return copyWith(
       light14: TextStyle.lerp(light14, other.light14, t),
+      regular8: TextStyle.lerp(regular8, other.regular8, t),
       regular10: TextStyle.lerp(regular10, other.regular10, t),
       regular13: TextStyle.lerp(regular13, other.regular13, t),
       regular16: TextStyle.lerp(regular16, other.regular16, t),
