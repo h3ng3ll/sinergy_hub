@@ -17,11 +17,29 @@ class $AssetsIconsGen {
   /// File path: assets/icons/analytic.svg
   String get analytic => 'assets/icons/analytic.svg';
 
+  /// File path: assets/icons/bug.svg
+  String get bug => 'assets/icons/bug.svg';
+
+  /// File path: assets/icons/code.svg
+  String get code => 'assets/icons/code.svg';
+
   /// File path: assets/icons/community.svg
   String get community => 'assets/icons/community.svg';
 
+  /// File path: assets/icons/crown.svg
+  String get crown => 'assets/icons/crown.svg';
+
+  /// File path: assets/icons/engine.svg
+  String get engine => 'assets/icons/engine.svg';
+
+  /// File path: assets/icons/layer.svg
+  String get layer => 'assets/icons/layer.svg';
+
   /// File path: assets/icons/pallete.svg
   String get pallete => 'assets/icons/pallete.svg';
+
+  /// File path: assets/icons/phone.svg
+  String get phone => 'assets/icons/phone.svg';
 
   /// File path: assets/icons/psd-3d-render-rocket-ioslated-background.zip
   String get psd3dRenderRocketIoslatedBackground =>
@@ -33,6 +51,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/rocket.svg
   String get rocket => 'assets/icons/rocket.svg';
 
+  /// File path: assets/icons/server.svg
+  String get server => 'assets/icons/server.svg';
+
   /// File path: assets/icons/tool.svg
   String get tool => 'assets/icons/tool.svg';
 
@@ -42,11 +63,18 @@ class $AssetsIconsGen {
   /// List of all assets
   List<String> get values => [
     analytic,
+    bug,
+    code,
     community,
+    crown,
+    engine,
+    layer,
     pallete,
+    phone,
     psd3dRenderRocketIoslatedBackground,
     rocketShipHalfShadow,
     rocket,
+    server,
     tool,
     work,
   ];
@@ -67,12 +95,31 @@ class $AssetsImagesGen {
   AssetGenImage get backPattern =>
       const AssetGenImage('assets/images/back_pattern.png');
 
+  /// File path: assets/images/bug.png
+  AssetGenImage get bug => const AssetGenImage('assets/images/bug.png');
+
+  /// File path: assets/images/code.png
+  AssetGenImage get code => const AssetGenImage('assets/images/code.png');
+
+  /// File path: assets/images/crown.png
+  AssetGenImage get crown => const AssetGenImage('assets/images/crown.png');
+
+  /// File path: assets/images/engine.png
+  AssetGenImage get engine => const AssetGenImage('assets/images/engine.png');
+
   /// File path: assets/images/group.png
   AssetGenImage get group => const AssetGenImage('assets/images/group.png');
+
+  /// File path: assets/images/layer.png
+  AssetGenImage get layer => const AssetGenImage('assets/images/layer.png');
 
   /// File path: assets/images/magic_pattern.png
   AssetGenImage get magicPattern =>
       const AssetGenImage('assets/images/magic_pattern.png');
+
+  /// File path: assets/images/mobile-phone.png
+  AssetGenImage get mobilePhone =>
+      const AssetGenImage('assets/images/mobile-phone.png');
 
   /// File path: assets/images/paint.png
   AssetGenImage get paint => const AssetGenImage('assets/images/paint.png');
@@ -84,16 +131,26 @@ class $AssetsImagesGen {
   /// File path: assets/images/rocket.png
   AssetGenImage get rocket => const AssetGenImage('assets/images/rocket.png');
 
+  /// File path: assets/images/server.png
+  AssetGenImage get server => const AssetGenImage('assets/images/server.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     a3dBriefcase,
     analysis,
     backPattern,
+    bug,
+    code,
+    crown,
+    engine,
     group,
+    layer,
     magicPattern,
+    mobilePhone,
     paint,
     repairTools,
     rocket,
+    server,
   ];
 }
 

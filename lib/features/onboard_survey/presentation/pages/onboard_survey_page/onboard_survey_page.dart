@@ -9,10 +9,9 @@ import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/utils/shader_painter.dart';
-import '../../../../../core/widgets/btn/action_btn.dart';
-import '../../../../../core/widgets/btn/custom_text_btn.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../doman/models/role/role.dart';
+import '../../../doman/models/specialization/specialization.dart';
 import '../bloc/onboard_survey_page_bloc/onboard_survey_page_bloc.dart';
 import 'overlays/active_community_overlay/active_community_overlay.dart';
 import 'overlays/processing_overlay/processing_overlay.dart';
@@ -20,6 +19,7 @@ import 'stages/experience_stage/experience_stage.dart';
 import 'stages/goal_stage/goal_stage.dart';
 import 'stages/role_stage/role_stage.dart';
 import 'stages/specialization_stage/specialization_stage.dart';
+import 'widgets/build_onboard_bottom_actions.dart';
 
 class OnboardSurveyPage extends StatefulWidget {
   const OnboardSurveyPage({super.key});
@@ -37,6 +37,7 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
   OverlayEntry? overlayEntry;
 
   ERole? _selectedRole;
+  Specialization? _selectedSpecialization;
 
   @override
   void initState() {
@@ -93,13 +94,17 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
     );
   }
 
-  void onSelectSpecialization(
+  void onSelectRole(
     ERole role,
-  ) {
-    setState(
-      () => _selectedRole = role,
-    );
-  }
+  ) => setState(
+    () => _selectedRole = role,
+  );
+
+  void _onSelectSpecialization(
+    Specialization specialization,
+  ) => setState(
+    () => _selectedSpecialization = specialization,
+  );
 
   void _clearOverlay() {
     overlayEntry?.remove();
@@ -133,6 +138,15 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
         _clearOverlay();
       },
     );
+  }
+
+  void onSpecializationQueryChanged(String query) {}
+
+  void _onLongPressedSpecialization(
+    RenderBox renderBox,
+    Specialization specialization,
+  ) {
+
   }
 
   @override
@@ -233,47 +247,26 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
                         controller: pageController,
                         onPageChanged: onPageChanged,
                         children: [
-                          SpecializationStage(
-                            onTap: onSelectSpecialization,
+                          RoleStage(
+                            onTap: onSelectRole,
                             selectedRole: _selectedRole,
                             onLongPress: onLongPressed,
                           ),
-                          RoleStage(),
+                          SpecializationStage(
+                            onSpecializationChanged:
+                                onSpecializationQueryChanged,
+                            selectedSpecialization: _selectedSpecialization,
+                            onSelectSpecialization: _onSelectSpecialization,
+                            onLongPressed: _onLongPressedSpecialization,
+                          ),
                           ExperienceStage(),
                           GoalStage(),
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CustomTextBtn(
-                          text: 'Skip for now',
-                          onPressed: skipForNow,
-                        ),
-                        ActionBtn(
-                          onPressed: _selectedRole == null ? null : onContinue,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'Continue',
-                                style: textTheme.regular14.copyWith(
-                                  color: _selectedRole == null
-                                      ? colorScheme.secondary
-                                      : colorScheme.onSecondary,
-                                ),
-                              ),
-                              Icon(
-                                Icons.arrow_forward,
-                                color: _selectedRole == null
-                                    ? colorScheme.secondary
-                                    : colorScheme.onSecondary,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    BuildOnboardBottomActions(
+                      skipForNow: skipForNow,
+                      onPressed: _selectedRole == null ? null : onContinue,
                     ),
                   ],
                 );

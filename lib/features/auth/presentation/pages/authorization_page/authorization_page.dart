@@ -129,7 +129,7 @@ class _AuthorizationPageState extends State<AuthorizationPage>
                                 child: Text(
                                   'SIGN IN WITH GOOGLE',
                                   style: textTheme.medium16.copyWith(
-                                    color: colorScheme.onPrimary,
+                                    color: colorScheme.onSecondary,
                                   ),
                                 ),
                               ),
