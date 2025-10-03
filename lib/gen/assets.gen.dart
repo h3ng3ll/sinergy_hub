@@ -32,6 +32,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/engine.svg
   String get engine => 'assets/icons/engine.svg';
 
+  /// File path: assets/icons/herb.svg
+  String get herb => 'assets/icons/herb.svg';
+
   /// File path: assets/icons/layer.svg
   String get layer => 'assets/icons/layer.svg';
 
@@ -51,11 +54,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/rocket.svg
   String get rocket => 'assets/icons/rocket.svg';
 
+  /// File path: assets/icons/seedling.svg
+  String get seedling => 'assets/icons/seedling.svg';
+
   /// File path: assets/icons/server.svg
   String get server => 'assets/icons/server.svg';
 
   /// File path: assets/icons/tool.svg
   String get tool => 'assets/icons/tool.svg';
+
+  /// File path: assets/icons/tree.svg
+  String get tree => 'assets/icons/tree.svg';
 
   /// File path: assets/icons/work.svg
   String get work => 'assets/icons/work.svg';
@@ -68,14 +77,17 @@ class $AssetsIconsGen {
     community,
     crown,
     engine,
+    herb,
     layer,
     pallete,
     phone,
     psd3dRenderRocketIoslatedBackground,
     rocketShipHalfShadow,
     rocket,
+    seedling,
     server,
     tool,
+    tree,
     work,
   ];
 }

@@ -10,6 +10,7 @@ import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/utils/shader_painter.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
+import '../../../doman/models/experience/experience.dart';
 import '../../../doman/models/role/role.dart';
 import '../../../doman/models/specialization/specialization.dart';
 import '../bloc/onboard_survey_page_bloc/onboard_survey_page_bloc.dart';
@@ -38,6 +39,7 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
 
   ERole? _selectedRole;
   Specialization? _selectedSpecialization;
+  EExperience? _selectedExperience;
 
   @override
   void initState() {
@@ -106,6 +108,12 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
     () => _selectedSpecialization = specialization,
   );
 
+  void _onSelectExperience(
+    EExperience experience,
+  ) => setState(
+    () => _selectedExperience = experience,
+  );
+
   void _clearOverlay() {
     overlayEntry?.remove();
     overlayEntry = null;
@@ -145,9 +153,7 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
   void _onLongPressedSpecialization(
     RenderBox renderBox,
     Specialization specialization,
-  ) {
-
-  }
+  ) {}
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +265,10 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
                             onSelectSpecialization: _onSelectSpecialization,
                             onLongPressed: _onLongPressedSpecialization,
                           ),
-                          ExperienceStage(),
+                          ExperienceStage(
+                            onSelectExperience: _onSelectExperience,
+                            selectedExperience: _selectedExperience,
+                          ),
                           GoalStage(),
                         ],
                       ),

@@ -56,7 +56,7 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
       ),
       onSecondary = AppColors.mediumPurple.value,
       inactiveSecondary = AppColors.white.value,
-      surface = AppColors.ghostWhite.value,
+      surface = AppColors.black.value,
       onSurface = AppColors.jacarta.value,
       background = AppColors.pinkBakerMiller.value,
       onBackground = AppColors.blueGray.value,
