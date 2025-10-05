@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/app_shader.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
@@ -12,6 +13,7 @@ import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/utils/shader_painter.dart';
 import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
+import '../../../domain/repostories/i_auth_repository.dart';
 import '../../bloc/auth_cubit/auth_cubit.dart';
 
 class AuthorizationPage extends StatefulWidget {
@@ -29,17 +31,21 @@ class _AuthorizationPageState extends State<AuthorizationPage>
   @override
   void initState() {
     super.initState();
-    _authCubit = AuthCubit();
-    final isAuthorized = _authCubit.state.status == AuthStatus.authorized;
-    if (isAuthorized) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) {
+    _authCubit = AuthCubit(
+      authRepository: getIt<IAuthRepository>(),
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        final isAuthorized = await _authCubit.isAuthorized();
+        if (isAuthorized && mounted) {
           OnboardSurveyPageRoute().go(
             context,
           );
-        },
-      );
-    }
+        }
+      },
+    );
+
     _controller =
         AnimationController(
             vsync: this,

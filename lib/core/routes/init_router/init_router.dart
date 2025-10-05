@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../features/auth/presentation/pages/authorization_page/authorization_page.dart';
+import '../../../features/home/presentation/home_page/home_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
 import '../root_page/root_page.dart';
 
@@ -22,6 +23,9 @@ final GoRouter initRouter = GoRouter(
     ),
     TypedGoRoute<OnboardSurveyPageRoute>(
       path: '/onboard',
+    ),
+    TypedGoRoute<HomePageRoute>(
+      path: '/home',
     ),
   ],
 )
@@ -65,6 +69,15 @@ class OnboardSurveyPageRoute extends GoRouteData with _$OnboardSurveyPageRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       OnboardSurveyPage(),
+    );
+  }
+}
+
+class HomePageRoute extends GoRouteData with _$HomePageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      HomePage(),
     );
   }
 }

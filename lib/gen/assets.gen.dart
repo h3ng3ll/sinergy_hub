@@ -14,14 +14,29 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/alert_outlined.svg
+  String get alertOutlined => 'assets/icons/alert_outlined.svg';
+
+  /// File path: assets/icons/analitic_outlined.svg
+  String get analiticOutlined => 'assets/icons/analitic_outlined.svg';
+
   /// File path: assets/icons/analytic.svg
   String get analytic => 'assets/icons/analytic.svg';
+
+  /// File path: assets/icons/arrow_left_outlined.svg
+  String get arrowLeftOutlined => 'assets/icons/arrow_left_outlined.svg';
 
   /// File path: assets/icons/bug.svg
   String get bug => 'assets/icons/bug.svg';
 
+  /// File path: assets/icons/chart_outlined.svg
+  String get chartOutlined => 'assets/icons/chart_outlined.svg';
+
   /// File path: assets/icons/code.svg
   String get code => 'assets/icons/code.svg';
+
+  /// File path: assets/icons/code_outlined.svg
+  String get codeOutlined => 'assets/icons/code_outlined.svg';
 
   /// File path: assets/icons/community.svg
   String get community => 'assets/icons/community.svg';
@@ -29,8 +44,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/crown.svg
   String get crown => 'assets/icons/crown.svg';
 
+  /// File path: assets/icons/dashboard_outlined.svg
+  String get dashboardOutlined => 'assets/icons/dashboard_outlined.svg';
+
   /// File path: assets/icons/engine.svg
   String get engine => 'assets/icons/engine.svg';
+
+  /// File path: assets/icons/engine_outlined.svg
+  String get engineOutlined => 'assets/icons/engine_outlined.svg';
+
+  /// File path: assets/icons/handshake_outlined.svg
+  String get handshakeOutlined => 'assets/icons/handshake_outlined.svg';
 
   /// File path: assets/icons/herb.svg
   String get herb => 'assets/icons/herb.svg';
@@ -41,8 +65,23 @@ class $AssetsIconsGen {
   /// File path: assets/icons/pallete.svg
   String get pallete => 'assets/icons/pallete.svg';
 
+  /// File path: assets/icons/pallete_outlined.svg
+  String get palleteOutlined => 'assets/icons/pallete_outlined.svg';
+
+  /// File path: assets/icons/pan_outlined.svg
+  String get panOutlined => 'assets/icons/pan_outlined.svg';
+
+  /// File path: assets/icons/person_outlined.svg
+  String get personOutlined => 'assets/icons/person_outlined.svg';
+
   /// File path: assets/icons/phone.svg
   String get phone => 'assets/icons/phone.svg';
+
+  /// File path: assets/icons/phone_outlined.svg
+  String get phoneOutlined => 'assets/icons/phone_outlined.svg';
+
+  /// File path: assets/icons/portpolio_outlined.svg
+  String get portpolioOutlined => 'assets/icons/portpolio_outlined.svg';
 
   /// File path: assets/icons/psd-3d-render-rocket-ioslated-background.zip
   String get psd3dRenderRocketIoslatedBackground =>
@@ -54,11 +93,23 @@ class $AssetsIconsGen {
   /// File path: assets/icons/rocket.svg
   String get rocket => 'assets/icons/rocket.svg';
 
+  /// File path: assets/icons/rocket_outlined.svg
+  String get rocketOutlined => 'assets/icons/rocket_outlined.svg';
+
   /// File path: assets/icons/seedling.svg
   String get seedling => 'assets/icons/seedling.svg';
 
   /// File path: assets/icons/server.svg
   String get server => 'assets/icons/server.svg';
+
+  /// File path: assets/icons/server_outlined.svg
+  String get serverOutlined => 'assets/icons/server_outlined.svg';
+
+  /// File path: assets/icons/stack_outlined.svg
+  String get stackOutlined => 'assets/icons/stack_outlined.svg';
+
+  /// File path: assets/icons/start_outlined.svg
+  String get startOutlined => 'assets/icons/start_outlined.svg';
 
   /// File path: assets/icons/tool.svg
   String get tool => 'assets/icons/tool.svg';
@@ -71,21 +122,38 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
+    alertOutlined,
+    analiticOutlined,
     analytic,
+    arrowLeftOutlined,
     bug,
+    chartOutlined,
     code,
+    codeOutlined,
     community,
     crown,
+    dashboardOutlined,
     engine,
+    engineOutlined,
+    handshakeOutlined,
     herb,
     layer,
     pallete,
+    palleteOutlined,
+    panOutlined,
+    personOutlined,
     phone,
+    phoneOutlined,
+    portpolioOutlined,
     psd3dRenderRocketIoslatedBackground,
     rocketShipHalfShadow,
     rocket,
+    rocketOutlined,
     seedling,
     server,
+    serverOutlined,
+    stackOutlined,
+    startOutlined,
     tool,
     tree,
     work,

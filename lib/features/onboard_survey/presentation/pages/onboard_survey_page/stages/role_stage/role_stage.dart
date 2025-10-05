@@ -6,6 +6,7 @@ import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../gen/assets.gen.dart';
 import '../../../../../doman/models/role/role.dart';
+import '../../widgets/build_onboard_bottom_actions.dart';
 import '../../widgets/onboard_survey_header.dart';
 import '../../widgets/survey_card/survey_card.dart';
 
@@ -13,19 +14,20 @@ class RoleStage extends StatelessWidget {
   final Function(ERole) onTap;
   final ERole? selectedRole;
   final Function(RenderBox) onLongPress;
+  final VoidCallback? onTapContinue;
+  final VoidCallback skipForNow;
 
   const RoleStage({
     super.key,
     required this.onTap,
     required this.selectedRole,
     required this.onLongPress,
+    required this.onTapContinue,
+    required this.skipForNow,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = AppColorScheme.of(context);
-    final textTheme = AppTextTheme.of(context);
-
     return Column(
       children: [
         OnboardSurveyHeader(
@@ -111,6 +113,10 @@ class RoleStage extends StatelessWidget {
                 ERole.other,
               ),
               onLongPress: onLongPress,
+            ),
+            BuildOnboardBottomActions(
+              skipForNow: skipForNow,
+              onPressed: onTapContinue,
             ),
           ],
         ),

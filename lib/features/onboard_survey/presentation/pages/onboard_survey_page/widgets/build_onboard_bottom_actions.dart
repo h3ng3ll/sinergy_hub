@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/resources/colors/app_color_scheme.dart';
+import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../../core/widgets/btn/custom_text_btn.dart';
@@ -34,17 +35,17 @@ class BuildOnboardBottomActions extends StatelessWidget {
             children: [
               Text(
                 'Continue',
-                style: textTheme.regular14.copyWith(
+                style: textTheme.bold14.copyWith(
                   color: onPressed == null
                       ? colorScheme.secondary
-                      : colorScheme.onSecondary,
+                      : AppColors.black.value,
                 ),
               ),
               Icon(
                 Icons.arrow_forward,
                 color: onPressed == null
                     ? colorScheme.secondary
-                    : colorScheme.onSecondary,
+                    : AppColors.black.value,
               ),
             ],
           ),

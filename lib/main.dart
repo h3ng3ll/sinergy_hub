@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'core/bloc/app_observer.dart';
+import 'core/di/injection.dart';
 import 'core/resources/app_locale.dart';
 import 'core/resources/app_theme.dart';
-import 'core/resources/colors/app_colors.dart';
 import 'core/routes/init_router/init_router.dart';
 import 'features/auth/presentation/bloc/auth_cubit/auth_cubit.dart';
 import 'firebase_options.dart';
@@ -18,6 +18,8 @@ void main() async {
   await dotenv.load(
     fileName: '.env',
   );
+
+  await initDependencies();
 
   SystemChrome.setPreferredOrientations(
     [
@@ -40,14 +42,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AuthCubit(),
-      child: MaterialApp.router(
-        theme: AppThemeData.light,
-        supportedLocales: AppLocale.supportedLocales,
-        locale: AppLocale.startLocale,
-        routerConfig: initRouter,
-      ),
+    return MaterialApp.router(
+      theme: AppThemeData.light,
+      supportedLocales: AppLocale.supportedLocales,
+      locale: AppLocale.startLocale,
+      routerConfig: initRouter,
     );
   }
 }

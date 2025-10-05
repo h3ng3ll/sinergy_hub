@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAuthService {
-  static final instance = FirebaseAuthService._();
 
-  FirebaseAuthService._() {
+  FirebaseAuthService() {
     _firebaseAuth.setSettings(
       // appVerificationDisabledForTesting: true,
       // forceRecaptchaFlow: true

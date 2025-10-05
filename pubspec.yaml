@@ -60,6 +60,7 @@ dependencies:
   flutter_svg: ^2.2.1
   vector_math: ^2.2.0
   auto_size_text: ^3.0.0
+  get_it: ^8.2.0
 
 dev_dependencies:
   flutter_test:

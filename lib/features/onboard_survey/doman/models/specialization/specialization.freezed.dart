@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Specialization {
 
- String get name; List<String> get particulars;@ColorSerializable() List<Color> get colors; String get icon;
+ String get name; ESpecialization get specialization; List<String> get particulars;@ColorSerializable() List<Color> get colors; String get icon;
 /// Create a copy of Specialization
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $SpecializationCopyWith<Specialization> get copyWith => _$SpecializationCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Specialization&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other.particulars, particulars)&&const DeepCollectionEquality().equals(other.colors, colors)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Specialization&&(identical(other.name, name) || other.name == name)&&(identical(other.specialization, specialization) || other.specialization == specialization)&&const DeepCollectionEquality().equals(other.particulars, particulars)&&const DeepCollectionEquality().equals(other.colors, colors)&&(identical(other.icon, icon) || other.icon == icon));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,const DeepCollectionEquality().hash(particulars),const DeepCollectionEquality().hash(colors),icon);
+int get hashCode => Object.hash(runtimeType,name,specialization,const DeepCollectionEquality().hash(particulars),const DeepCollectionEquality().hash(colors),icon);
 
 @override
 String toString() {
-  return 'Specialization(name: $name, particulars: $particulars, colors: $colors, icon: $icon)';
+  return 'Specialization(name: $name, specialization: $specialization, particulars: $particulars, colors: $colors, icon: $icon)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $SpecializationCopyWith<$Res>  {
   factory $SpecializationCopyWith(Specialization value, $Res Function(Specialization) _then) = _$SpecializationCopyWithImpl;
 @useResult
 $Res call({
- String name, List<String> particulars,@ColorSerializable() List<Color> colors, String icon
+ String name, ESpecialization specialization, List<String> particulars,@ColorSerializable() List<Color> colors, String icon
 });
 
 
@@ -65,10 +65,11 @@ class _$SpecializationCopyWithImpl<$Res>
 
 /// Create a copy of Specialization
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? particulars = null,Object? colors = null,Object? icon = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? specialization = null,Object? particulars = null,Object? colors = null,Object? icon = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,particulars: null == particulars ? _self.particulars : particulars // ignore: cast_nullable_to_non_nullable
+as String,specialization: null == specialization ? _self.specialization : specialization // ignore: cast_nullable_to_non_nullable
+as ESpecialization,particulars: null == particulars ? _self.particulars : particulars // ignore: cast_nullable_to_non_nullable
 as List<String>,colors: null == colors ? _self.colors : colors // ignore: cast_nullable_to_non_nullable
 as List<Color>,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
 as String,
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  List<String> particulars, @ColorSerializable()  List<Color> colors,  String icon)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  ESpecialization specialization,  List<String> particulars, @ColorSerializable()  List<Color> colors,  String icon)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Specialization() when $default != null:
-return $default(_that.name,_that.particulars,_that.colors,_that.icon);case _:
+return $default(_that.name,_that.specialization,_that.particulars,_that.colors,_that.icon);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.name,_that.particulars,_that.colors,_that.icon);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  List<String> particulars, @ColorSerializable()  List<Color> colors,  String icon)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  ESpecialization specialization,  List<String> particulars, @ColorSerializable()  List<Color> colors,  String icon)  $default,) {final _that = this;
 switch (_that) {
 case _Specialization():
-return $default(_that.name,_that.particulars,_that.colors,_that.icon);}
+return $default(_that.name,_that.specialization,_that.particulars,_that.colors,_that.icon);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -191,10 +192,10 @@ return $default(_that.name,_that.particulars,_that.colors,_that.icon);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  List<String> particulars, @ColorSerializable()  List<Color> colors,  String icon)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  ESpecialization specialization,  List<String> particulars, @ColorSerializable()  List<Color> colors,  String icon)?  $default,) {final _that = this;
 switch (_that) {
 case _Specialization() when $default != null:
-return $default(_that.name,_that.particulars,_that.colors,_that.icon);case _:
+return $default(_that.name,_that.specialization,_that.particulars,_that.colors,_that.icon);case _:
   return null;
 
 }
@@ -206,10 +207,11 @@ return $default(_that.name,_that.particulars,_that.colors,_that.icon);case _:
 @JsonSerializable()
 
 class _Specialization implements Specialization {
-  const _Specialization({required this.name, required final  List<String> particulars, @ColorSerializable() final  List<Color> colors = const [], this.icon = ''}): _particulars = particulars,_colors = colors;
+  const _Specialization({required this.name, required this.specialization, required final  List<String> particulars, @ColorSerializable() final  List<Color> colors = const [], this.icon = ''}): _particulars = particulars,_colors = colors;
   factory _Specialization.fromJson(Map<String, dynamic> json) => _$SpecializationFromJson(json);
 
 @override final  String name;
+@override final  ESpecialization specialization;
  final  List<String> _particulars;
 @override List<String> get particulars {
   if (_particulars is EqualUnmodifiableListView) return _particulars;
@@ -239,16 +241,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Specialization&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other._particulars, _particulars)&&const DeepCollectionEquality().equals(other._colors, _colors)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Specialization&&(identical(other.name, name) || other.name == name)&&(identical(other.specialization, specialization) || other.specialization == specialization)&&const DeepCollectionEquality().equals(other._particulars, _particulars)&&const DeepCollectionEquality().equals(other._colors, _colors)&&(identical(other.icon, icon) || other.icon == icon));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,const DeepCollectionEquality().hash(_particulars),const DeepCollectionEquality().hash(_colors),icon);
+int get hashCode => Object.hash(runtimeType,name,specialization,const DeepCollectionEquality().hash(_particulars),const DeepCollectionEquality().hash(_colors),icon);
 
 @override
 String toString() {
-  return 'Specialization(name: $name, particulars: $particulars, colors: $colors, icon: $icon)';
+  return 'Specialization(name: $name, specialization: $specialization, particulars: $particulars, colors: $colors, icon: $icon)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$SpecializationCopyWith<$Res> implements $SpecializationCo
   factory _$SpecializationCopyWith(_Specialization value, $Res Function(_Specialization) _then) = __$SpecializationCopyWithImpl;
 @override @useResult
 $Res call({
- String name, List<String> particulars,@ColorSerializable() List<Color> colors, String icon
+ String name, ESpecialization specialization, List<String> particulars,@ColorSerializable() List<Color> colors, String icon
 });
 
 
@@ -276,10 +278,11 @@ class __$SpecializationCopyWithImpl<$Res>
 
 /// Create a copy of Specialization
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? particulars = null,Object? colors = null,Object? icon = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? specialization = null,Object? particulars = null,Object? colors = null,Object? icon = null,}) {
   return _then(_Specialization(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,particulars: null == particulars ? _self._particulars : particulars // ignore: cast_nullable_to_non_nullable
+as String,specialization: null == specialization ? _self.specialization : specialization // ignore: cast_nullable_to_non_nullable
+as ESpecialization,particulars: null == particulars ? _self._particulars : particulars // ignore: cast_nullable_to_non_nullable
 as List<String>,colors: null == colors ? _self._colors : colors // ignore: cast_nullable_to_non_nullable
 as List<Color>,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
 as String,

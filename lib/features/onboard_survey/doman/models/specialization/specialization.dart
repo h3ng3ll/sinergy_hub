@@ -17,12 +17,23 @@ enum ESpecialization {
   dataScientistMLEngineer,
   qaTestAutomation,
   techLeadCTO,
+  productManager,
+  productOwner,
+  uiUxDesigner,
+  productDesigner,
+  marketingManager,
+  growthManager,
+  salesManager,
+  businessDeveloper,
+  technicalCoFounder,
+  nonTechnicalCoFounder,
 }
 
 @freezed
 sealed class Specialization with _$Specialization {
   const factory Specialization({
     required String name,
+    required ESpecialization specialization,
     required List<String> particulars,
     @ColorSerializable() @Default([]) List<Color> colors,
     @Default('') String icon,
