@@ -19,7 +19,7 @@ class ExperienceCardActiveBg extends StatefulWidget {
 class _ExperienceCardActiveBgState extends State<ExperienceCardActiveBg>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
+  /// Todo: add animation to animate smooth movement
   @override
   void initState() {
     super.initState();

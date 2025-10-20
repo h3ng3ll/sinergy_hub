@@ -4,9 +4,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../features/auth/data/repositories/auth_repository/firebase_auth_repository.dart';
 import '../../features/auth/domain/repostories/i_auth_repository.dart';
+import '../../features/home/data/repositories/user_data_firebase_repository.dart';
+import '../../features/home/domain/repositories/i_user_data_repository.dart';
 import '../../features/onboard_survey/data/repositories/onboard_survey_firebase_repository.dart';
 import '../../features/onboard_survey/doman/repositories/i_onboard_survey_repository.dart';
-import '../services/firebase/firebase_auth_service.dart';
 import '../services/firebase/firebase_firestore_service.dart';
 
 final getIt = GetIt.instance;
@@ -27,6 +28,11 @@ Future<void> initDependencies() async {
 
   getIt.registerLazySingleton<IOnboardSurveyRepository>(
     () => OnboardSurveyFirebaseRepository(
+      firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
+    ),
+  );
+ getIt.registerLazySingleton<IUserDataRepository>(
+    () => UserDataFirebaseRepository(
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
     ),
   );

@@ -11,26 +11,29 @@ class OnboardSurveyFirebaseRepository extends IOnboardSurveyRepository {
 
   DocRef _onBoardDoc({
     required String uid,
-  }) => _firebaseFirestoreService
-      .userDocument(
-        uid,
-      )
-      .collection(
-        'onBoard',
-      )
-      .doc(
-        'onBoard',
-      );
+  }) => _firebaseFirestoreService.userDocument(
+    uid,
+  )
+  // .collection(
+  //   'onBoard',
+  // )
+  // .doc(
+  //   'onBoard',
+  // )
+  ;
 
   @override
-  Future<void> setUserProfileData({
+  Future<void> updateUserProfileData({
     required UserProfiler userProfiler,
     required String uid,
   }) async {
-    await _onBoardDoc(
-      uid: uid,
-    ).set(
-      userProfiler.toJson(),
+    await _firebaseFirestoreService.updateDocument(
+      _onBoardDoc(
+        uid: uid,
+      ),
+      {
+        'profiler': userProfiler.toJson(),
+      },
     );
   }
 
@@ -56,6 +59,15 @@ class OnboardSurveyFirebaseRepository extends IOnboardSurveyRepository {
         uid: uid,
       ),
     );
-    return isExists;
+    if (!isExists) return false;
+
+    final profiler = await _onBoardDoc(
+      uid: uid,
+    ).get();
+
+    return profiler.data()?.containsKey(
+          'profiler',
+        ) ??
+        false;
   }
 }

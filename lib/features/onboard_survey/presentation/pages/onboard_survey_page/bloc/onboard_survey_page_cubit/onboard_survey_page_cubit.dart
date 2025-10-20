@@ -58,7 +58,7 @@ class OnboardSurveyPageCubit extends Cubit<OnboardSurveyPageState> {
       );
       final user = (await _authRepository.getCurrentUser())!;
 
-      await _onboardSurveyRepository.setUserProfileData(
+      await _onboardSurveyRepository.updateUserProfileData(
         userProfiler: userProfiler,
         uid: user.uid,
       );

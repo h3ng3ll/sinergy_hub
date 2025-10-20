@@ -1,7 +1,7 @@
 import '../models/user_profiler/user_profiler.dart';
 
 abstract class IOnboardSurveyRepository {
-  Future<void> setUserProfileData({
+  Future<void> updateUserProfileData({
     required UserProfiler userProfiler,
     required String uid,
   });

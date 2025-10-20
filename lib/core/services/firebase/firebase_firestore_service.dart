@@ -11,19 +11,34 @@ class FirebaseFirestoreService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   /// References
+  ColRef get usersDocument => _firebaseFirestore.collection(
+    'users',
+  );
+
   DocRef userDocument(
     String uid,
-  ) => _firebaseFirestore
-      .collection(
-        'users',
-      )
-      .doc(
-        uid,
-      );
+  ) => usersDocument.doc(
+    uid,
+  );
 
   Future<bool> isExistsDocument(DocRef document) async {
     final col = await document.get();
     return col.exists;
+  }
+
+  Future<void> updateDocument(
+    DocRef document,
+    Map<String, Object?> data,
+  ) async {
+    final isExists = await isExistsDocument(
+      document,
+    );
+    if (!isExists) {
+      document.set({});
+    }
+    await document.update(
+      data,
+    );
   }
 
   ColRef _audioRecordCol(

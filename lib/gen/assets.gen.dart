@@ -32,6 +32,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/chart_outlined.svg
   String get chartOutlined => 'assets/icons/chart_outlined.svg';
 
+  /// File path: assets/icons/check.svg
+  String get check => 'assets/icons/check.svg';
+
+  /// File path: assets/icons/close.svg
+  String get close => 'assets/icons/close.svg';
+
   /// File path: assets/icons/code.svg
   String get code => 'assets/icons/code.svg';
 
@@ -59,8 +65,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/herb.svg
   String get herb => 'assets/icons/herb.svg';
 
+  /// File path: assets/icons/info.svg
+  String get info => 'assets/icons/info.svg';
+
   /// File path: assets/icons/layer.svg
   String get layer => 'assets/icons/layer.svg';
+
+  /// File path: assets/icons/liked.svg
+  String get liked => 'assets/icons/liked.svg';
 
   /// File path: assets/icons/pallete.svg
   String get pallete => 'assets/icons/pallete.svg';
@@ -128,6 +140,8 @@ class $AssetsIconsGen {
     arrowLeftOutlined,
     bug,
     chartOutlined,
+    check,
+    close,
     code,
     codeOutlined,
     community,
@@ -137,7 +151,9 @@ class $AssetsIconsGen {
     engineOutlined,
     handshakeOutlined,
     herb,
+    info,
     layer,
+    liked,
     pallete,
     palleteOutlined,
     panOutlined,

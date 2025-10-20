@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../features/auth/presentation/pages/authorization_page/authorization_page.dart';
-import '../../../features/home/presentation/home_page/home_page.dart';
+import '../../../features/home/presentation/home_bottom_bar/home_bottom_bar.dart';
+import '../../../features/home/presentation/tabs/home_tab/home_tab.dart';
+import '../../../features/home/presentation/tabs/matches_tab/matches_tab.dart';
+import '../../../features/home/presentation/tabs/profile_tab/profile_tab.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
 import '../root_page/root_page.dart';
 
@@ -17,15 +20,37 @@ final GoRouter initRouter = GoRouter(
 );
 
 @TypedShellRoute<RootPageRoute>(
-  routes: <TypedGoRoute<GoRouteData>>[
+  routes: [
     TypedGoRoute<AuthorizationPageRoute>(
       path: '/',
     ),
     TypedGoRoute<OnboardSurveyPageRoute>(
       path: '/onboard',
     ),
-    TypedGoRoute<HomePageRoute>(
-      path: '/home',
+    TypedStatefulShellRoute<HomeBottomBarRoute>(
+      branches: [
+        TypedStatefulShellBranch(
+          routes: [
+            TypedGoRoute<HomePageRoute>(
+              path: '/home',
+            ),
+          ],
+        ),
+        TypedStatefulShellBranch(
+          routes: [
+            TypedGoRoute<MatchesPageRoute>(
+              path: '/matches',
+            ),
+          ],
+        ),
+        TypedStatefulShellBranch(
+          routes: [
+            TypedGoRoute<ProfilePageRoute>(
+              path: '/profile',
+            ),
+          ],
+        ),
+      ],
     ),
   ],
 )
@@ -73,11 +98,43 @@ class OnboardSurveyPageRoute extends GoRouteData with _$OnboardSurveyPageRoute {
   }
 }
 
+class HomeBottomBarRoute extends StatefulShellRouteData {
+  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+
+  @override
+  Widget builder(
+    BuildContext context,
+    GoRouterState state,
+    StatefulNavigationShell navigationShell,
+  ) {
+    return HomeBottomBar(
+      navigationShell: navigationShell,
+    );
+  }
+}
+
 class HomePageRoute extends GoRouteData with _$HomePageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
-      HomePage(),
+      HomeTab(),
+    );
+  }
+}
+
+class MatchesPageRoute extends GoRouteData with _$MatchesPageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      MatchesTab(),
+    );
+  }
+}
+class ProfilePageRoute extends GoRouteData with _$ProfilePageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      ProfileTab(),
     );
   }
 }

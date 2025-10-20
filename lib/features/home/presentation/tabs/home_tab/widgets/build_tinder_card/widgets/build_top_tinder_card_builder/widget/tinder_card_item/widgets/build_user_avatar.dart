@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+
+import '../../../../../../../../../../../../core/resources/colors/app_colors.dart';
+import '../../../../../../../../../../../../core/widgets/build_image.dart';
+
+class BuildUserAvatar extends StatelessWidget {
+  final double? width;
+  final double? height;
+  final String? url;
+
+  const BuildUserAvatar({
+    super.key,
+    this.width,
+    this.height,
+    required this.url,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 150.0,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+
+      ),
+      child: BuildImage(
+        url: url,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: AppColors.white.value,
+          width: 3,
+        ),
+        width: width,
+        height: height,
+      ),
+    );
+  }
+}

@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../../../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../domain/repostories/i_auth_repository.dart';
 
