@@ -1,8 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/animation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../../../../gen/assets.gen.dart';
 import '../../../../../doman/models/specialization/specialization.dart';
 import '../../../../../doman/models/specializations/specializations.dart';
 

@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import '../../../../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../../doman/models/experience/experience.dart';
-import '../../../../../../../../doman/models/specialization/specialization.dart';
 
 class ExperienceCardContent extends StatelessWidget {
   final String icon;

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/app_shader.dart';

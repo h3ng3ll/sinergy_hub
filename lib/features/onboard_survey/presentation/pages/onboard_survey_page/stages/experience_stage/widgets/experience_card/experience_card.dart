@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../../../../../doman/models/experience/experience.dart';
-import '../../../../../../../doman/models/specialization/specialization.dart';
 import 'widgets/experience_card_active_bg.dart';
 import 'widgets/experience_card_content.dart';
 import 'widgets/experience_card_inactive_bg.dart';

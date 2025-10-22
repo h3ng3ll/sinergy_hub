@@ -4,15 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vector_math/vector_math_64.dart' hide Matrix4;
 
-import '../../../../../../../../../../../core/resources/colors/app_colors.dart';
-import '../../../../../../../../../../onboard_survey/doman/models/specialization/specialization.dart';
-import '../../../../../../../../../../onboard_survey/doman/models/specializations/specializations.dart';
-import '../../../../../../../../../domain/models/user_data/user_data.dart';
+import '../../../../../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../../bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../../build_tinder_status/build_tinder_status.dart';
-import '../../build_top_tinder_card_builder.dart';
 import 'tinder_card_static.dart';
-import 'widgets/tinder_card_personal_info/tinder_card_personal_info.dart';
 
 class TinderCardItem extends StatelessWidget {
   final UserData user;
@@ -54,31 +49,29 @@ class TinderCardItem extends StatelessWidget {
       );
     return Stack(
       children: [
-        Center(
-          child: GestureDetector(
-            onPanUpdate: onPanUpdate,
-            onPanEnd: onPanEnd,
-            onPanStart: onPanStart,
-            child: AnimatedContainer(
-              curve: Curves.easeInOut,
-              duration: Duration(
-                milliseconds: tinderCardCubit.isDragging ? 0 : 400,
-              ),
-              transform: rotatedMatrix
-                ..translateByVector3(
-                  Vector3(
-                    tinderCardCubit.position.dx,
-                    tinderCardCubit.position.dy,
-                    1,
-                  ),
+        GestureDetector(
+          onPanUpdate: onPanUpdate,
+          onPanEnd: onPanEnd,
+          onPanStart: onPanStart,
+          child: AnimatedContainer(
+            curve: Curves.easeInOut,
+            duration: Duration(
+              milliseconds: tinderCardCubit.isDragging ? 0 : 400,
+            ),
+            transform: rotatedMatrix
+              ..translateByVector3(
+                Vector3(
+                  tinderCardCubit.position.dx,
+                  tinderCardCubit.position.dy,
+                  1,
                 ),
-              child: Stack(
-                children: [
-                  TinderCardStatic(
-                    user: user,
-                  ),
-                ],
               ),
+            child: Stack(
+              children: [
+                TinderCardStatic(
+                  user: user,
+                ),
+              ],
             ),
           ),
         ),

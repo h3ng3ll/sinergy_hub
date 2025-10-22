@@ -7,7 +7,7 @@ import '../../../../../../../../../../../../../core/resources/text/app_text_them
 import '../../../../../../../../../../../../../core/widgets/btn/custom_chip.dart';
 import '../../../../../../../../../../../../onboard_survey/doman/models/experiences/experiences.dart';
 import '../../../../../../../../../../../../onboard_survey/doman/models/specialization/specialization.dart';
-import '../../../../../../../../../../../domain/models/user_data/user_data.dart';
+import '../../../../../../../../../../../../user/domain/models/user_data/user_data.dart';
 import 'widgets/build_specialization_names.dart';
 import 'widgets/specialization_info_bar.dart';
 
@@ -23,7 +23,6 @@ class TinderCardPersonalInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
     final experience = Experiences.get(
       user.profiler.experience,

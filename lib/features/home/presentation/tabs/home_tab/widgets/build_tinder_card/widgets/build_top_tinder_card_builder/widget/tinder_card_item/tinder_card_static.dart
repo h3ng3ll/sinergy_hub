@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vector_math/vector_math_64.dart' hide Matrix4;
 
 import '../../../../../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../../../../onboard_survey/doman/models/specialization/specialization.dart';
 import '../../../../../../../../../../onboard_survey/doman/models/specializations/specializations.dart';
-import '../../../../../../../../../domain/models/user_data/user_data.dart';
+import '../../../../../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../../bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../build_top_tinder_card_builder.dart';
 import 'widgets/tinder_card_personal_info/tinder_card_personal_info.dart';

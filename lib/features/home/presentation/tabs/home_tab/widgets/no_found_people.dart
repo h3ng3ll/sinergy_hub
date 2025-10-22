@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 
 import '../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
-import '../../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../../core/widgets/btn/translucent_btn.dart';
 
 class NoFoundPeople extends StatefulWidget {
@@ -52,6 +51,9 @@ class _NoFoundPeopleState extends State<NoFoundPeople>
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         AnimatedBuilder(
           animation: _controller,

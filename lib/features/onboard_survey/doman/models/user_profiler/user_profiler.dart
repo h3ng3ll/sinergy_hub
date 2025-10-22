@@ -1,8 +1,6 @@
-import 'dart:ui';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../../core/utils/converters/color_serializable.dart';
 import '../experience/experience.dart';
 import '../role/role.dart';
 import '../specialization/specialization.dart';

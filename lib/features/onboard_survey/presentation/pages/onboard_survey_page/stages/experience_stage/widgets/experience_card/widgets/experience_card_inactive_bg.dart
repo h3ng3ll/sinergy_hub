@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart' hide Matrix4;
 
 import '../../../../../../../../../../core/resources/colors/app_colors.dart';
 

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../core/resources/colors/app_colors.dart';
-import '../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../gen/assets.gen.dart';
 import '../../../../../doman/models/role/role.dart';
 import '../../widgets/build_onboard_bottom_actions.dart';

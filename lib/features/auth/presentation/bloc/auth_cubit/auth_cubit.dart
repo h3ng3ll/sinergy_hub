@@ -3,11 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
-import '../../../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../domain/repostories/i_auth_repository.dart';
 
 part 'auth_state.dart';
@@ -55,7 +52,6 @@ class AuthCubit extends Cubit<AuthState> {
         ),
       );
     } catch (e) {
-      debugPrint(e.toString());
       emit(
         state.copyWith(
           status: AuthStatus.failed,
@@ -82,7 +78,6 @@ class AuthCubit extends Cubit<AuthState> {
         ),
       );
     } catch (e) {
-      debugPrint(e.toString());
       emit(
         state.copyWith(
           status: AuthStatus.failed,

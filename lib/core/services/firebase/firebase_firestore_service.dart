@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../models/pageable/pageable.dart';
+
 typedef DocRef = DocumentReference<Map<String, dynamic>>;
 typedef DocSnap = DocumentSnapshot<Map<String, dynamic>>;
 typedef QuerySnap = QuerySnapshot<Map<String, dynamic>>;
@@ -40,6 +42,25 @@ class FirebaseFirestoreService {
       data,
     );
   }
+
+  WriteBatch batch() => _firebaseFirestore.batch();
+
+  // Query pagination({
+  //   required ColRef ref,
+  //   required Pageable pageable,
+  // }) {
+  //   Query query = ref
+  //       .sk limit(
+  //         pageable.pageSize,
+  //       );
+  //
+  //   if (lastDoc != null) {
+  //     query = query.startAfterDocument(
+  //       lastDoc,
+  //     );
+  //   }
+  //   return query;
+  // }
 
   ColRef _audioRecordCol(
     String uid,
