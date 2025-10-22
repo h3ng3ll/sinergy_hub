@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../models/pageable/pageable.dart';
 
 typedef DocRef = DocumentReference<Map<String, dynamic>>;
 typedef DocSnap = DocumentSnapshot<Map<String, dynamic>>;

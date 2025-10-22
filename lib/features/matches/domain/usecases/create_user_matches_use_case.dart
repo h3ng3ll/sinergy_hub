@@ -1,20 +1,72 @@
+import '../../../home/presentation/tabs/home_tab/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../models/user_match/user_match.dart';
-import '../repositories/i_user_matching_repository.dart';
+import '../repositories/i_user_matching_in_repository.dart';
+import '../repositories/i_user_matching_out_repository.dart';
 
 class CreateUserMatchesUseCase {
-  final IUserMatchingRepository _userMatchingRepository;
+  final IUserMatchingOutRepository _userMatchingOutRepository;
+  final IUserMatchingInRepository _userMatchingInRepository;
 
   CreateUserMatchesUseCase({
-    required IUserMatchingRepository userMatchingRepository,
-  }) : _userMatchingRepository = userMatchingRepository;
+    required IUserMatchingOutRepository userMatchingOutRepository,
+    required IUserMatchingInRepository userMatchingInRepository,
+  }) : _userMatchingOutRepository = userMatchingOutRepository,
+       _userMatchingInRepository = userMatchingInRepository;
 
-  Future<UserMatch> call({
+
+  Future<void> call({
     required String uid,
     required UserMatch match,
-  }) {
-    return _userMatchingRepository.create(
+  }) async {
+    if (match.matchStatus != TinderCardStatus.liked) {
+      /// create match record in actor
+       await _userMatchingOutRepository.create(
+        uid: uid,
+        match: match,
+      );
+       return ;
+    }
+
+    /// who   matched create record
+    /// process cases
+
+    final possibleMatch = await _userMatchingInRepository.getById(
       uid: uid,
-      match: match,
     );
+
+    /// other user not match current one
+    if (possibleMatch == null) {
+      await _userMatchingOutRepository.create(
+        uid: uid,
+        match: match.copyWith(
+          completeness: EUserMatchCompleteness.oneWayMatch,
+        ),
+      );
+      await _userMatchingInRepository.create(
+        uid: match.user.uid,
+        match: match.copyWith(
+          completeness: EUserMatchCompleteness.none,
+        ),
+      );
+
+
+    }
+    ///  has matching from both size
+    if(possibleMatch!.completeness == EUserMatchCompleteness.oneWayMatch){
+      await _userMatchingOutRepository.create(
+        uid: uid,
+        match: match.copyWith(
+          completeness: EUserMatchCompleteness.twoWayMatch,
+        ),
+      );
+      await _userMatchingInRepository.create(
+        uid: match.user.uid,
+        match: match.copyWith(
+          completeness: EUserMatchCompleteness.twoWayMatch,
+        ),
+      );
+    }
+
+
   }
 }

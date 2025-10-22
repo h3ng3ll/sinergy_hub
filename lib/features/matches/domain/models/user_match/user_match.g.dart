@@ -8,7 +8,13 @@ part of 'user_match.dart';
 
 _UserMatch _$UserMatchFromJson(Map<String, dynamic> json) => _UserMatch(
   user: UserData.fromJson(json['user'] as Map<String, dynamic>),
-  status: $enumDecode(_$TinderCardStatusEnumMap, json['status']),
+  matchStatus: $enumDecode(_$TinderCardStatusEnumMap, json['matchStatus']),
+  completeness:
+      $enumDecodeNullable(
+        _$EUserMatchCompletenessEnumMap,
+        json['completeness'],
+      ) ??
+      EUserMatchCompleteness.none,
   time: DateTime.parse(json['time'] as String),
   icon: json['icon'] as String? ?? '',
 );
@@ -16,7 +22,8 @@ _UserMatch _$UserMatchFromJson(Map<String, dynamic> json) => _UserMatch(
 Map<String, dynamic> _$UserMatchToJson(_UserMatch instance) =>
     <String, dynamic>{
       'user': instance.user,
-      'status': _$TinderCardStatusEnumMap[instance.status]!,
+      'matchStatus': _$TinderCardStatusEnumMap[instance.matchStatus]!,
+      'completeness': _$EUserMatchCompletenessEnumMap[instance.completeness]!,
       'time': instance.time.toIso8601String(),
       'icon': instance.icon,
     };
@@ -25,4 +32,10 @@ const _$TinderCardStatusEnumMap = {
   TinderCardStatus.none: 'none',
   TinderCardStatus.liked: 'liked',
   TinderCardStatus.reject: 'reject',
+};
+
+const _$EUserMatchCompletenessEnumMap = {
+  EUserMatchCompleteness.oneWayMatch: 'oneWayMatch',
+  EUserMatchCompleteness.twoWayMatch: 'twoWayMatch',
+  EUserMatchCompleteness.none: 'none',
 };

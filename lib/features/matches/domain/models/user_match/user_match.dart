@@ -13,12 +13,22 @@ part 'user_match.g.dart';
 part 'user_match.freezed.dart';
 
 
-
+enum EUserMatchCompleteness {
+  oneWayMatch,
+  twoWayMatch,
+  none,
+}
 @freezed
 sealed class UserMatch with _$UserMatch {
   const factory UserMatch({
     required UserData user,
-    required TinderCardStatus status,
+    required TinderCardStatus matchStatus,
+
+    /// If oneWayMatch it is mean one side
+    /// matched as liked and other side received as none
+    /// If other size confirm both completeness must
+    /// transform to twoWayMatch
+    @Default(EUserMatchCompleteness.none) EUserMatchCompleteness completeness,
     required DateTime time,
     @Default('') String icon,
   }) = _UserMatch;

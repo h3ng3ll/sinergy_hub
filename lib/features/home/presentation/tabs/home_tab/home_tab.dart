@@ -68,7 +68,7 @@ class _HomeTabState extends State<HomeTab> {
       /// save matching
       context.read<UserMatchingCubit>().create(
         match: UserMatch(
-          status: status,
+          matchStatus: status,
           user: _peopleDataBloc.state.users.last,
           time: DateTime.now(),
         ),

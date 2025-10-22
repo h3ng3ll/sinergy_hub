@@ -1,64 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../home/presentation/tabs/home_tab/bloc/tinder_card_cubit/tinder_card_cubit.dart';
+import '../../../user/domain/models/user_data/user_data.dart';
 import '../../../user/domain/repositories/i_user_repository.dart';
+import '../../data/models/user_match_dto/user_match_dto.dart';
 import '../models/user_match/user_match.dart';
-import '../repositories/i_user_matching_repository.dart';
+import '../repositories/i_user_matching_in_repository.dart';
+import '../repositories/i_user_matching_out_repository.dart';
 
 class GetUserMatchesUseCase {
-  final IUserMatchingRepository _userMatchingRepository;
+  final IUserMatchingInRepository _userMatchingInRepository;
   final IUserRepository _userRepository;
 
   GetUserMatchesUseCase({
-    required IUserMatchingRepository userMatchingRepository,
+    required IUserMatchingInRepository userMatchingInRepository,
     required IUserRepository userRepository,
-  }) : _userMatchingRepository = userMatchingRepository,
+  }) : _userMatchingInRepository = userMatchingInRepository,
        _userRepository = userRepository;
 
   Stream<List<UserMatch>> call(String uid) {
-    return _userMatchingRepository
+    return _userMatchingInRepository
         .get(
           uid: uid,
         )
         .asyncMap(
-          (matches) async {
-            // final List<Map<String, dynamic>> matches = data
-            //     .map(
-            //       (doc) => (doc['matches'] as List<dynamic>).map(
-            //         (match) => Map<String, dynamic>.from(match),
-            //       ),
-            //     )
-            //     .expand((x) => x) // flatten List<List<Map>>
-            //     .toList();
-
-            final uids = matches
-                .map((match) => match['user'] as String)
-                .toList();
-
+          (List<UserMatchDto> matchesRow) async {
             final users = await _userRepository.getUsersById(
-              ids: uids,
+              ids: matchesRow
+                  .map(
+                    (match) => match.userId,
+                  )
+                  .toList(),
             );
-
             // создаём словарь для быстрого поиска пользователя по uid
             final userById = {for (var u in users) u.uid: u};
 
-            // собираем UserMatch
-            final userMatches = matches.map((match) {
-              final uid = match['user'] as String;
-              final user =
+            final userMatches = matchesRow.map((UserMatchDto match) {
+              final uid = match.userId;
+              final UserData user =
                   userById[uid]!; // предполагаем, что пользователь точно есть
 
-              return UserMatch(
-                user: user,
-                time: (match['time'] as Timestamp).toDate(),
-                // если time это Timestamp
-                icon: match['icon'] ?? '',
-                status: TinderCardStatus.values.firstWhere(
-                  (e) => e.name == match['status'],
-                ),
+              return match.toDomain(
+                user,
               );
             }).toList();
-
             return userMatches;
           },
         );

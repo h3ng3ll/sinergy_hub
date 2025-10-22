@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
 import '../../../domain/models/user_match/user_match.dart';
-import '../../../domain/repositories/i_user_matching_repository.dart';
+import '../../../domain/repositories/i_user_matching_out_repository.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
 import '../../../domain/usecases/get_user_matches_use_case.dart';
 
@@ -57,11 +57,10 @@ class UserMatchingCubit extends Cubit<UserMatchingState> {
         ),
       );
 
-      await _createUserMatchesUseCase.call(
+     await _createUserMatchesUseCase.call(
         uid: uid,
         match: match,
       );
-
       emit(
         state.copyWith(
           status: UserMatchingStatus.initial,

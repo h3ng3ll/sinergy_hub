@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserMatch {
 
- UserData get user; TinderCardStatus get status; DateTime get time; String get icon;
+ UserData get user; TinderCardStatus get matchStatus; EUserMatchCompleteness get completeness; DateTime get time; String get icon;
 /// Create a copy of UserMatch
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $UserMatchCopyWith<UserMatch> get copyWith => _$UserMatchCopyWithImpl<UserMatch>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserMatch&&(identical(other.user, user) || other.user == user)&&(identical(other.status, status) || other.status == status)&&(identical(other.time, time) || other.time == time)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserMatch&&(identical(other.user, user) || other.user == user)&&(identical(other.matchStatus, matchStatus) || other.matchStatus == matchStatus)&&(identical(other.completeness, completeness) || other.completeness == completeness)&&(identical(other.time, time) || other.time == time)&&(identical(other.icon, icon) || other.icon == icon));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,user,status,time,icon);
+int get hashCode => Object.hash(runtimeType,user,matchStatus,completeness,time,icon);
 
 @override
 String toString() {
-  return 'UserMatch(user: $user, status: $status, time: $time, icon: $icon)';
+  return 'UserMatch(user: $user, matchStatus: $matchStatus, completeness: $completeness, time: $time, icon: $icon)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $UserMatchCopyWith<$Res>  {
   factory $UserMatchCopyWith(UserMatch value, $Res Function(UserMatch) _then) = _$UserMatchCopyWithImpl;
 @useResult
 $Res call({
- UserData user, TinderCardStatus status, DateTime time, String icon
+ UserData user, TinderCardStatus matchStatus, EUserMatchCompleteness completeness, DateTime time, String icon
 });
 
 
@@ -65,11 +65,12 @@ class _$UserMatchCopyWithImpl<$Res>
 
 /// Create a copy of UserMatch
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? user = null,Object? status = null,Object? time = null,Object? icon = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? user = null,Object? matchStatus = null,Object? completeness = null,Object? time = null,Object? icon = null,}) {
   return _then(_self.copyWith(
 user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserData,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as TinderCardStatus,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
+as UserData,matchStatus: null == matchStatus ? _self.matchStatus : matchStatus // ignore: cast_nullable_to_non_nullable
+as TinderCardStatus,completeness: null == completeness ? _self.completeness : completeness // ignore: cast_nullable_to_non_nullable
+as EUserMatchCompleteness,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as DateTime,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -162,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserData user,  TinderCardStatus status,  DateTime time,  String icon)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserData user,  TinderCardStatus matchStatus,  EUserMatchCompleteness completeness,  DateTime time,  String icon)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserMatch() when $default != null:
-return $default(_that.user,_that.status,_that.time,_that.icon);case _:
+return $default(_that.user,_that.matchStatus,_that.completeness,_that.time,_that.icon);case _:
   return orElse();
 
 }
@@ -183,10 +184,10 @@ return $default(_that.user,_that.status,_that.time,_that.icon);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserData user,  TinderCardStatus status,  DateTime time,  String icon)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserData user,  TinderCardStatus matchStatus,  EUserMatchCompleteness completeness,  DateTime time,  String icon)  $default,) {final _that = this;
 switch (_that) {
 case _UserMatch():
-return $default(_that.user,_that.status,_that.time,_that.icon);}
+return $default(_that.user,_that.matchStatus,_that.completeness,_that.time,_that.icon);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -200,10 +201,10 @@ return $default(_that.user,_that.status,_that.time,_that.icon);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserData user,  TinderCardStatus status,  DateTime time,  String icon)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserData user,  TinderCardStatus matchStatus,  EUserMatchCompleteness completeness,  DateTime time,  String icon)?  $default,) {final _that = this;
 switch (_that) {
 case _UserMatch() when $default != null:
-return $default(_that.user,_that.status,_that.time,_that.icon);case _:
+return $default(_that.user,_that.matchStatus,_that.completeness,_that.time,_that.icon);case _:
   return null;
 
 }
@@ -215,11 +216,12 @@ return $default(_that.user,_that.status,_that.time,_that.icon);case _:
 @JsonSerializable()
 
 class _UserMatch implements UserMatch {
-  const _UserMatch({required this.user, required this.status, required this.time, this.icon = ''});
+  const _UserMatch({required this.user, required this.matchStatus, this.completeness = EUserMatchCompleteness.none, required this.time, this.icon = ''});
   factory _UserMatch.fromJson(Map<String, dynamic> json) => _$UserMatchFromJson(json);
 
 @override final  UserData user;
-@override final  TinderCardStatus status;
+@override final  TinderCardStatus matchStatus;
+@override@JsonKey() final  EUserMatchCompleteness completeness;
 @override final  DateTime time;
 @override@JsonKey() final  String icon;
 
@@ -236,16 +238,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserMatch&&(identical(other.user, user) || other.user == user)&&(identical(other.status, status) || other.status == status)&&(identical(other.time, time) || other.time == time)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserMatch&&(identical(other.user, user) || other.user == user)&&(identical(other.matchStatus, matchStatus) || other.matchStatus == matchStatus)&&(identical(other.completeness, completeness) || other.completeness == completeness)&&(identical(other.time, time) || other.time == time)&&(identical(other.icon, icon) || other.icon == icon));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,user,status,time,icon);
+int get hashCode => Object.hash(runtimeType,user,matchStatus,completeness,time,icon);
 
 @override
 String toString() {
-  return 'UserMatch(user: $user, status: $status, time: $time, icon: $icon)';
+  return 'UserMatch(user: $user, matchStatus: $matchStatus, completeness: $completeness, time: $time, icon: $icon)';
 }
 
 
@@ -256,7 +258,7 @@ abstract mixin class _$UserMatchCopyWith<$Res> implements $UserMatchCopyWith<$Re
   factory _$UserMatchCopyWith(_UserMatch value, $Res Function(_UserMatch) _then) = __$UserMatchCopyWithImpl;
 @override @useResult
 $Res call({
- UserData user, TinderCardStatus status, DateTime time, String icon
+ UserData user, TinderCardStatus matchStatus, EUserMatchCompleteness completeness, DateTime time, String icon
 });
 
 
@@ -273,11 +275,12 @@ class __$UserMatchCopyWithImpl<$Res>
 
 /// Create a copy of UserMatch
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = null,Object? status = null,Object? time = null,Object? icon = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? user = null,Object? matchStatus = null,Object? completeness = null,Object? time = null,Object? icon = null,}) {
   return _then(_UserMatch(
 user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserData,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as TinderCardStatus,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
+as UserData,matchStatus: null == matchStatus ? _self.matchStatus : matchStatus // ignore: cast_nullable_to_non_nullable
+as TinderCardStatus,completeness: null == completeness ? _self.completeness : completeness // ignore: cast_nullable_to_non_nullable
+as EUserMatchCompleteness,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as DateTime,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
 as String,
   ));

@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/resources/app_shader.dart';
 import '../../../../core/utils/shader_painter.dart';
-import '../../../matches/domain/repositories/i_user_matching_repository.dart';
+import '../../../matches/domain/repositories/i_user_matching_out_repository.dart';
 import '../../../matches/domain/usecases/create_user_matches_use_case.dart';
 import '../../../matches/domain/usecases/get_user_matches_use_case.dart';
 import '../../../matches/presentation/bloc/user_matching_cubit/user_matching_cubit.dart';
