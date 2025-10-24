@@ -124,4 +124,7 @@ abstract class Specializations {
       icon: Assets.icons.crown,
     ),
   };
+
+  static Specialization get(ESpecialization key) => all[key]!;
+
 }

@@ -13,18 +13,20 @@ class CreateUserMatchesUseCase {
   }) : _userMatchingOutRepository = userMatchingOutRepository,
        _userMatchingInRepository = userMatchingInRepository;
 
-
-  Future<void> call({
+  /// return Status of Matching
+  Future<EUserMatchCompleteness> call({
     required String uid,
     required UserMatch match,
   }) async {
     if (match.matchStatus != TinderCardStatus.liked) {
       /// create match record in actor
-       await _userMatchingOutRepository.create(
+      await _userMatchingOutRepository.create(
         uid: uid,
-        match: match,
+        match: match.copyWith(
+          completeness: EUserMatchCompleteness.none,
+        ),
       );
-       return ;
+      return EUserMatchCompleteness.none;
     }
 
     /// who   matched create record
@@ -48,11 +50,11 @@ class CreateUserMatchesUseCase {
           completeness: EUserMatchCompleteness.none,
         ),
       );
-
-
+      return EUserMatchCompleteness.oneWayMatch;
     }
+
     ///  has matching from both size
-    if(possibleMatch!.completeness == EUserMatchCompleteness.oneWayMatch){
+    if (possibleMatch!.completeness == EUserMatchCompleteness.oneWayMatch) {
       await _userMatchingOutRepository.create(
         uid: uid,
         match: match.copyWith(
@@ -65,8 +67,11 @@ class CreateUserMatchesUseCase {
           completeness: EUserMatchCompleteness.twoWayMatch,
         ),
       );
+      return EUserMatchCompleteness.twoWayMatch;
     }
 
-
+    throw Exception(
+      'Unhandled matching result ',
+    );
   }
 }

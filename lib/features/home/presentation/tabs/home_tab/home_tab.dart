@@ -1,12 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/di/injection.dart';
 import '../../../../matches/domain/models/user_match/user_match.dart';
 import '../../../../matches/presentation/bloc/user_matching_cubit/user_matching_cubit.dart';
+import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../domain/use_cases/look_for_matches_use_case.dart';
 import 'bloc/people_data_bloc/people_data_bloc.dart';
 import 'bloc/tinder_card_cubit/tinder_card_cubit.dart';
+import 'widgets/build_has_match/build_has_match.dart';
 import 'widgets/build_tinder_card/build_tinder_card.dart';
 
 class HomeTab extends StatefulWidget {
@@ -48,6 +52,9 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   void onAdjustFilters() {}
+  void onKeepSwiping() {}
+
+  void onSendMessage(UserData matchedUser) {}
 
   void onPanUpdate(DragUpdateDetails details) {
     _tinderCardCubit.onPanUpdate(
@@ -66,7 +73,7 @@ class _HomeTabState extends State<HomeTab> {
       );
 
       /// save matching
-      context.read<UserMatchingCubit>().create(
+      final completeness = await context.read<UserMatchingCubit>().create(
         match: UserMatch(
           matchStatus: status,
           user: _peopleDataBloc.state.users.last,
@@ -95,11 +102,29 @@ class _HomeTabState extends State<HomeTab> {
             value: _tinderCardCubit,
           ),
         ],
-        child: BuildTinderCard(
-          onAdjustFilters: onAdjustFilters,
-          onPanUpdate: onPanUpdate,
-          onPanStart: onPanStart,
-          onPanEnd: onPanEnd,
+        child: Builder(
+          builder: (context) {
+            // final userMatchCubit = context.watch<UserMatchingCubit>();
+
+            return BuildHasMatch(
+              currentUser: _peopleDataBloc.state.users.first,
+              matchedUser: _peopleDataBloc.state.users.first,
+              onSendMessage: () => onSendMessage(
+                _peopleDataBloc.state.users.first,
+              ),
+                onKeepSwiping:onKeepSwiping,
+            );
+            // if(userMatchCubit.state == UserMatchingStatus.foundMatch){
+            //
+            // }
+
+            return BuildTinderCard(
+              onAdjustFilters: onAdjustFilters,
+              onPanUpdate: onPanUpdate,
+              onPanStart: onPanStart,
+              onPanEnd: onPanEnd,
+            );
+          },
         ),
       ),
     );

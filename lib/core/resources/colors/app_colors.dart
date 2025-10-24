@@ -19,6 +19,7 @@ enum AppColors {
   metallicOrange(Color(0xffe25b11)),
   jasperOrange(Color(0xffea894c)),
   pinkLace(Color(0xfff6e5f6)),
+  tartOrange(Color(0xfffc494a)),
 
   majorelleBlue(Color(0xff6E3EEA)),
   greenCrayola(Color(0xff0FBA81)),

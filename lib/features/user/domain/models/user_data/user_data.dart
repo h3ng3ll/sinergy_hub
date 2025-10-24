@@ -1,4 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../onboard_survey/doman/models/experience/experience.dart';
+import '../../../../onboard_survey/doman/models/role/role.dart';
+import '../../../../onboard_survey/doman/models/specialization/specialization.dart';
 import '../../../../onboard_survey/doman/models/user_profiler/user_profiler.dart';
 
 part 'user_data.g.dart';
@@ -20,6 +23,16 @@ sealed class UserData with _$UserData {
   factory UserData.fromJson(
     Map<String, dynamic> json,
   ) => _$UserDataFromJson(json);
+
+  factory UserData.none() => UserData(
+    uid: 'uid',
+    profiler: UserProfiler(
+      specialization: ESpecialization.fullStackDeveloper,
+      role: ERole.productManager,
+      experience: EExperience.senior,
+      searchingSpecializations: [],
+    ),
+  );
 
   @override
   String toString() {

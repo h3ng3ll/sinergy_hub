@@ -15,7 +15,11 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserMatch {
 
- UserData get user; TinderCardStatus get matchStatus; EUserMatchCompleteness get completeness; DateTime get time; String get icon;
+ UserData get user; TinderCardStatus get matchStatus;/// If oneWayMatch it is mean one side
+/// matched as liked and other side received as none
+/// If other size confirm both completeness must
+/// transform to twoWayMatch
+ EUserMatchCompleteness get completeness; DateTime get time; String get icon;
 /// Create a copy of UserMatch
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -221,6 +225,10 @@ class _UserMatch implements UserMatch {
 
 @override final  UserData user;
 @override final  TinderCardStatus matchStatus;
+/// If oneWayMatch it is mean one side
+/// matched as liked and other side received as none
+/// If other size confirm both completeness must
+/// transform to twoWayMatch
 @override@JsonKey() final  EUserMatchCompleteness completeness;
 @override final  DateTime time;
 @override@JsonKey() final  String icon;

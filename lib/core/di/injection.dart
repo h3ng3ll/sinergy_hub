@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../features/auth/di/auth_injection.dart';
+import '../../features/chat/di/chat_injection.dart';
 import '../../features/home/domain/di/home_injection.dart';
 import '../../features/matches/di/matches_injection.dart';
 import '../../features/onboard_survey/di/onboard_survery_injection.dart';
@@ -23,7 +24,7 @@ Future<void> initDependencies() async {
   initHomeFeature(
     getIt,
   );
-   initOnboardSurveyFeature(
+  initOnboardSurveyFeature(
     getIt,
   );
   initAuthFeature(
@@ -35,6 +36,9 @@ Future<void> initDependencies() async {
   );
 
   initMatchingFeature(
+    getIt,
+  );
+  initChatFeature(
     getIt,
   );
   // TODO: Add onboarding, profile, etc.

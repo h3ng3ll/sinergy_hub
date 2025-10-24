@@ -45,7 +45,7 @@ class UserMatchingCubit extends Cubit<UserMatchingState> {
     ),
   );
 
-  void create({
+  Future<void> create({
     required UserMatch match,
   }) async {
     try {
@@ -57,15 +57,23 @@ class UserMatchingCubit extends Cubit<UserMatchingState> {
         ),
       );
 
-     await _createUserMatchesUseCase.call(
+      final status = await _createUserMatchesUseCase.call(
         uid: uid,
         match: match,
       );
-      emit(
-        state.copyWith(
-          status: UserMatchingStatus.initial,
-        ),
-      );
+      if(status == EUserMatchCompleteness.twoWayMatch){
+        emit(
+          state.copyWith(
+            status: UserMatchingStatus.foundMatch,
+          ),
+        );
+      }else {
+        emit(
+          state.copyWith(
+            status: UserMatchingStatus.initial,
+          ),
+        );
+      }
     } catch (e) {
       emit(
         state.copyWith(
@@ -76,6 +84,13 @@ class UserMatchingCubit extends Cubit<UserMatchingState> {
     }
   }
 
+  void resetFoundMatch () {
+    emit(
+      state.copyWith(
+        status: UserMatchingStatus.initial,
+      ),
+    );
+  }
   @override
   Future<void> close() {
     _matchesSubscription.cancel();

@@ -12,6 +12,10 @@ abstract class IUserRepository {
     required List<String> ids,
   });
 
+  Future<UserData?>  getUserById({
+    required String id,
+  });
+
   Future<List<UserData>> get({
     required UserDataPgState userDataState,
   });

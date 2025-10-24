@@ -99,6 +99,9 @@ class $AssetsIconsGen {
   String get psd3dRenderRocketIoslatedBackground =>
       'assets/icons/psd-3d-render-rocket-ioslated-background.zip';
 
+  /// File path: assets/icons/recycle.svg
+  String get recycle => 'assets/icons/recycle.svg';
+
   /// File path: assets/icons/rocket-ship-half-shadow.zip
   String get rocketShipHalfShadow => 'assets/icons/rocket-ship-half-shadow.zip';
 
@@ -123,11 +126,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/start_outlined.svg
   String get startOutlined => 'assets/icons/start_outlined.svg';
 
+  /// File path: assets/icons/telegram.svg
+  String get telegram => 'assets/icons/telegram.svg';
+
   /// File path: assets/icons/tool.svg
   String get tool => 'assets/icons/tool.svg';
 
   /// File path: assets/icons/tree.svg
   String get tree => 'assets/icons/tree.svg';
+
+  /// File path: assets/icons/user.svg
+  String get user => 'assets/icons/user.svg';
 
   /// File path: assets/icons/work.svg
   String get work => 'assets/icons/work.svg';
@@ -162,6 +171,7 @@ class $AssetsIconsGen {
     phoneOutlined,
     portpolioOutlined,
     psd3dRenderRocketIoslatedBackground,
+    recycle,
     rocketShipHalfShadow,
     rocket,
     rocketOutlined,
@@ -170,8 +180,10 @@ class $AssetsIconsGen {
     serverOutlined,
     stackOutlined,
     startOutlined,
+    telegram,
     tool,
     tree,
+    user,
     work,
   ];
 }

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 typedef DocRef = DocumentReference<Map<String, dynamic>>;
 typedef DocSnap = DocumentSnapshot<Map<String, dynamic>>;
 typedef QuerySnap = QuerySnapshot<Map<String, dynamic>>;
@@ -21,6 +20,11 @@ class FirebaseFirestoreService {
   ) => usersDocument.doc(
     uid,
   );
+
+  ColRef chats() => _firebaseFirestore
+      .collection(
+        'chats',
+      );
 
   Future<bool> isExistsDocument(DocRef document) async {
     final col = await document.get();

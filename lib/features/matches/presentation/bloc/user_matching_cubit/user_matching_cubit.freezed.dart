@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserMatchingState {
 
- List<UserMatch> get userMatches; String get errorMessage; UserMatchingStatus get status;
+ List<UserMatch> get userMatches; String get errorMessage; UserMatch? get activeMatch; UserMatchingStatus get status;
 /// Create a copy of UserMatchingState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $UserMatchingStateCopyWith<UserMatchingState> get copyWith => _$UserMatchingStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserMatchingState&&const DeepCollectionEquality().equals(other.userMatches, userMatches)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserMatchingState&&const DeepCollectionEquality().equals(other.userMatches, userMatches)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.activeMatch, activeMatch) || other.activeMatch == activeMatch)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(userMatches),errorMessage,status);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(userMatches),errorMessage,activeMatch,status);
 
 @override
 String toString() {
-  return 'UserMatchingState(userMatches: $userMatches, errorMessage: $errorMessage, status: $status)';
+  return 'UserMatchingState(userMatches: $userMatches, errorMessage: $errorMessage, activeMatch: $activeMatch, status: $status)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $UserMatchingStateCopyWith<$Res>  {
   factory $UserMatchingStateCopyWith(UserMatchingState value, $Res Function(UserMatchingState) _then) = _$UserMatchingStateCopyWithImpl;
 @useResult
 $Res call({
- List<UserMatch> userMatches, String errorMessage, UserMatchingStatus status
+ List<UserMatch> userMatches, String errorMessage, UserMatch? activeMatch, UserMatchingStatus status
 });
 
 
-
+$UserMatchCopyWith<$Res>? get activeMatch;
 
 }
 /// @nodoc
@@ -62,15 +62,28 @@ class _$UserMatchingStateCopyWithImpl<$Res>
 
 /// Create a copy of UserMatchingState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? userMatches = null,Object? errorMessage = null,Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userMatches = null,Object? errorMessage = null,Object? activeMatch = freezed,Object? status = null,}) {
   return _then(_self.copyWith(
 userMatches: null == userMatches ? _self.userMatches : userMatches // ignore: cast_nullable_to_non_nullable
 as List<UserMatch>,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,activeMatch: freezed == activeMatch ? _self.activeMatch : activeMatch // ignore: cast_nullable_to_non_nullable
+as UserMatch?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as UserMatchingStatus,
   ));
 }
+/// Create a copy of UserMatchingState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserMatchCopyWith<$Res>? get activeMatch {
+    if (_self.activeMatch == null) {
+    return null;
+  }
 
+  return $UserMatchCopyWith<$Res>(_self.activeMatch!, (value) {
+    return _then(_self.copyWith(activeMatch: value));
+  });
+}
 }
 
 
@@ -149,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<UserMatch> userMatches,  String errorMessage,  UserMatchingStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<UserMatch> userMatches,  String errorMessage,  UserMatch? activeMatch,  UserMatchingStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserMatchingState() when $default != null:
-return $default(_that.userMatches,_that.errorMessage,_that.status);case _:
+return $default(_that.userMatches,_that.errorMessage,_that.activeMatch,_that.status);case _:
   return orElse();
 
 }
@@ -170,10 +183,10 @@ return $default(_that.userMatches,_that.errorMessage,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<UserMatch> userMatches,  String errorMessage,  UserMatchingStatus status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<UserMatch> userMatches,  String errorMessage,  UserMatch? activeMatch,  UserMatchingStatus status)  $default,) {final _that = this;
 switch (_that) {
 case _UserMatchingState():
-return $default(_that.userMatches,_that.errorMessage,_that.status);}
+return $default(_that.userMatches,_that.errorMessage,_that.activeMatch,_that.status);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -187,10 +200,10 @@ return $default(_that.userMatches,_that.errorMessage,_that.status);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<UserMatch> userMatches,  String errorMessage,  UserMatchingStatus status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<UserMatch> userMatches,  String errorMessage,  UserMatch? activeMatch,  UserMatchingStatus status)?  $default,) {final _that = this;
 switch (_that) {
 case _UserMatchingState() when $default != null:
-return $default(_that.userMatches,_that.errorMessage,_that.status);case _:
+return $default(_that.userMatches,_that.errorMessage,_that.activeMatch,_that.status);case _:
   return null;
 
 }
@@ -202,7 +215,7 @@ return $default(_that.userMatches,_that.errorMessage,_that.status);case _:
 
 
 class _UserMatchingState implements UserMatchingState {
-  const _UserMatchingState({final  List<UserMatch> userMatches = const [], this.errorMessage = '', this.status = UserMatchingStatus.loading}): _userMatches = userMatches;
+  const _UserMatchingState({final  List<UserMatch> userMatches = const [], this.errorMessage = '', this.activeMatch, this.status = UserMatchingStatus.loading}): _userMatches = userMatches;
   
 
  final  List<UserMatch> _userMatches;
@@ -213,6 +226,7 @@ class _UserMatchingState implements UserMatchingState {
 }
 
 @override@JsonKey() final  String errorMessage;
+@override final  UserMatch? activeMatch;
 @override@JsonKey() final  UserMatchingStatus status;
 
 /// Create a copy of UserMatchingState
@@ -225,16 +239,16 @@ _$UserMatchingStateCopyWith<_UserMatchingState> get copyWith => __$UserMatchingS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserMatchingState&&const DeepCollectionEquality().equals(other._userMatches, _userMatches)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserMatchingState&&const DeepCollectionEquality().equals(other._userMatches, _userMatches)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.activeMatch, activeMatch) || other.activeMatch == activeMatch)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_userMatches),errorMessage,status);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_userMatches),errorMessage,activeMatch,status);
 
 @override
 String toString() {
-  return 'UserMatchingState(userMatches: $userMatches, errorMessage: $errorMessage, status: $status)';
+  return 'UserMatchingState(userMatches: $userMatches, errorMessage: $errorMessage, activeMatch: $activeMatch, status: $status)';
 }
 
 
@@ -245,11 +259,11 @@ abstract mixin class _$UserMatchingStateCopyWith<$Res> implements $UserMatchingS
   factory _$UserMatchingStateCopyWith(_UserMatchingState value, $Res Function(_UserMatchingState) _then) = __$UserMatchingStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<UserMatch> userMatches, String errorMessage, UserMatchingStatus status
+ List<UserMatch> userMatches, String errorMessage, UserMatch? activeMatch, UserMatchingStatus status
 });
 
 
-
+@override $UserMatchCopyWith<$Res>? get activeMatch;
 
 }
 /// @nodoc
@@ -262,16 +276,29 @@ class __$UserMatchingStateCopyWithImpl<$Res>
 
 /// Create a copy of UserMatchingState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? userMatches = null,Object? errorMessage = null,Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userMatches = null,Object? errorMessage = null,Object? activeMatch = freezed,Object? status = null,}) {
   return _then(_UserMatchingState(
 userMatches: null == userMatches ? _self._userMatches : userMatches // ignore: cast_nullable_to_non_nullable
 as List<UserMatch>,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,activeMatch: freezed == activeMatch ? _self.activeMatch : activeMatch // ignore: cast_nullable_to_non_nullable
+as UserMatch?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as UserMatchingStatus,
   ));
 }
 
+/// Create a copy of UserMatchingState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserMatchCopyWith<$Res>? get activeMatch {
+    if (_self.activeMatch == null) {
+    return null;
+  }
 
+  return $UserMatchCopyWith<$Res>(_self.activeMatch!, (value) {
+    return _then(_self.copyWith(activeMatch: value));
+  });
+}
 }
 
 // dart format on

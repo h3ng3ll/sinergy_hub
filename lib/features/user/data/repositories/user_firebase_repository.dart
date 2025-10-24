@@ -58,8 +58,6 @@ class UserFirebaseRepository extends IUserRepository {
     return results;
   }
 
-
-
   @override
   Future<List<UserData>> get({
     required UserDataPgState userDataState,
@@ -79,5 +77,21 @@ class UserFirebaseRepository extends IUserRepository {
   @override
   Future<User?> currentUserFuture() async {
     return _firebaseAuthService.currentUser;
+  }
+
+  @override
+  Future<UserData?> getUserById({
+    required String id,
+  }) async {
+    final userRow = await _firebaseFirestoreService
+        .userDocument(
+          id,
+        )
+        .get();
+    if (userRow.data() == null) return null;
+    final user = UserData.fromJson(
+      userRow.data()!,
+    );
+    return user;
   }
 }

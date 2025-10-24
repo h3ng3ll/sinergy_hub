@@ -8,12 +8,16 @@ class IconStatus extends StatelessWidget {
   final Color color;
   final VoidCallback? onTap;
   final double? transparency;
+  final double? width;
+  final double? height;
 
   const IconStatus({
     super.key,
     required this.icon,
     required this.color,
+     this.width,
     this.onTap,
+    this.height,
     this.transparency,
   });
 
@@ -22,8 +26,8 @@ class IconStatus extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: 70.0,
-        height: 70.0,
+        width: width ?? 70.0,
+        height: height ?? 70.0,
         padding: EdgeInsets.all(
           15.0,
         ),
