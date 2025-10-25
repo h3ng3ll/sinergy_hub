@@ -2,7 +2,11 @@ import '../models/chat/chat.dart';
 import '../models/chat_message/chat_message.dart';
 
 abstract class IChatMessageRepository {
-  Future<void> create({
+  Future<ChatMessage> create({
+    required String chatId,
     required ChatMessage message,
+  });
+  Stream<List<ChatMessage>>  getLastMessagesStream({
+    required String chatId,
   });
 }

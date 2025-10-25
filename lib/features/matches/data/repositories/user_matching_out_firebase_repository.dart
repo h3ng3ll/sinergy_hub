@@ -40,6 +40,27 @@ class UserMatchingOutFirebaseRepository extends IUserMatchingOutRepository {
     return match;
   }
 
+  @override
+  Stream<List<UserMatchDto>> get({
+    required String uid,
+  }) {
+    return _matches(
+      uid,
+    ).snapshots().map(
+          (
+          querySnapshot,
+          ) {
+        return querySnapshot.docs
+            .map(
+              (doc) => UserMatchDto.fromJson(
+            doc.data(),
+          ),
+        )
+            .toList();
+      },
+    );
+  }
+
   // @override
   // Stream<List<Map<String, dynamic>>> get({
   //   required String uid,

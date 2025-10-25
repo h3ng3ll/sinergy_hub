@@ -8,28 +8,23 @@ import '../../../domain/models/chat/chat.dart';
 import '../../../domain/usecases/get_chats_use_case.dart';
 import '../../../domain/usecases/init_chat_use_case.dart';
 
-part 'chat_event.dart';
-
 part 'chat_state.dart';
 
-part 'chat_bloc.freezed.dart';
+part 'chat_cubit.freezed.dart';
 
-class ChatBloc extends Bloc<ChatEvent, ChatState> {
+class ChatCubit extends Cubit<ChatState> {
   final InitChatUseCase _initChatUseCase;
   final UserCubit _userCubit;
 
   StreamSubscription? _subscription;
 
-  ChatBloc({
+  ChatCubit({
     required GetChatsUseCase getChatsUseCase,
     required InitChatUseCase initChatUseCase,
     required UserCubit userCubit,
   }) : _initChatUseCase = initChatUseCase,
        _userCubit = userCubit,
        super(const ChatState()) {
-    on<_Update>(_update);
-    on<_Create>(_create);
-
     if (userCubit.uid == null) return;
     _subscription = getChatsUseCase
         .call(
@@ -39,36 +34,36 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           (
             chats,
           ) {
-            add(
-              ChatEvent.update(
-                chats: chats,
-              ),
+            _update(
+              chats: chats,
             );
           },
         );
   }
 
-  void _update(event, emit) {
-    final chats = event.chats;
+  void _update({
+    required List<Chat> chats,
+  }) {
     emit(
       state.copyWith(
         chats: chats,
+        status: ChatStatus.initial,
       ),
     );
   }
 
-  void _create(event, emit) async {
+  Future<String> create({
+    required String uid,
+  }) async {
     try {
-      final user = _userCubit.state.user;
-      if (user == null) return;
       emit(
         state.copyWith(
           status: ChatStatus.loading,
         ),
       );
-      final uid = event.uid;
+      final user = _userCubit.state.user!;
 
-      await _initChatUseCase.call(
+      final chat = await _initChatUseCase.call(
         participants: [
           user.uid,
           uid,
@@ -79,6 +74,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           status: ChatStatus.initial,
         ),
       );
+      return chat.chatId;
     } catch (e) {
       emit(
         state.copyWith(
@@ -86,6 +82,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           status: ChatStatus.failed,
         ),
       );
+      return '';
     }
   }
 

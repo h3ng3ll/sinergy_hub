@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../domain/models/user_data/user_data.dart';
 import '../../../domain/repositories/i_user_repository.dart';
 
 part 'user_state.dart';
@@ -13,7 +14,8 @@ part 'user_cubit.freezed.dart';
 class UserCubit extends Cubit<UserState> {
   final IUserRepository _userRepository;
 
-  StreamSubscription? _subscription;
+  StreamSubscription? _userSubscription;
+  StreamSubscription? _userDataSubscription;
 
   UserCubit({
     required User? preloadUser,
@@ -24,8 +26,16 @@ class UserCubit extends Cubit<UserState> {
            user: preloadUser,
          ),
        ) {
-    _subscription = _userRepository.currentUserStream().listen(
+    _userSubscription = _userRepository.currentUserStream().listen(
       (user) {
+        if (user != null && _userDataSubscription == null) {
+          _subscribeUserData(
+            user.uid,
+          );
+        } else {
+          _userDataSubscription?.cancel();
+        }
+
         emit(
           state.copyWith(
             user: user,
@@ -49,9 +59,27 @@ class UserCubit extends Cubit<UserState> {
     return state.user?.uid;
   }
 
+  void _subscribeUserData(
+    String uid,
+  ) {
+    _userDataSubscription?.cancel();
+    _userDataSubscription = _userRepository
+        .userDataStream(
+          uid,
+        )
+        .listen((userData) {
+          emit(
+            state.copyWith(
+              userData: userData,
+            ),
+          );
+        });
+  }
+
   @override
   Future<void> close() {
-    _subscription?.cancel();
+    _userDataSubscription?.cancel();
+    _userSubscription?.cancel();
     return super.close();
   }
 }

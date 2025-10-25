@@ -1,3 +1,4 @@
+import '../../data/models/user_match_dto/user_match_dto.dart';
 import '../models/user_match/user_match.dart';
 
 abstract class IUserMatchingOutRepository {
@@ -6,7 +7,8 @@ abstract class IUserMatchingOutRepository {
     required UserMatch match,
   });
 
-  // Stream<List<Map<String, dynamic>>>  get({
-  //   required String uid,
-  // });
+  Stream<List<UserMatchDto>> get({
+    required String uid,
+  });
+
 }

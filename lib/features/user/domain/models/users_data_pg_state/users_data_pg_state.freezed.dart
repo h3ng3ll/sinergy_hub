@@ -22,7 +22,7 @@ UserDataPgState _$UserDataPgStateFromJson(
 /// @nodoc
 mixin _$UserDataPgState {
 
- int get startIndex; int get pageSize; List<UserData> get items;
+ int get startIndex; int get pageSize; Set<String> get excludedUids; List<UserData> get items;
 /// Create a copy of UserDataPgState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -35,16 +35,16 @@ $UserDataPgStateCopyWith<UserDataPgState> get copyWith => _$UserDataPgStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserDataPgState&&(identical(other.startIndex, startIndex) || other.startIndex == startIndex)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&const DeepCollectionEquality().equals(other.items, items));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserDataPgState&&(identical(other.startIndex, startIndex) || other.startIndex == startIndex)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&const DeepCollectionEquality().equals(other.excludedUids, excludedUids)&&const DeepCollectionEquality().equals(other.items, items));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,startIndex,pageSize,const DeepCollectionEquality().hash(items));
+int get hashCode => Object.hash(runtimeType,startIndex,pageSize,const DeepCollectionEquality().hash(excludedUids),const DeepCollectionEquality().hash(items));
 
 @override
 String toString() {
-  return 'UserDataPgState(startIndex: $startIndex, pageSize: $pageSize, items: $items)';
+  return 'UserDataPgState(startIndex: $startIndex, pageSize: $pageSize, excludedUids: $excludedUids, items: $items)';
 }
 
 
@@ -55,7 +55,7 @@ abstract mixin class $UserDataPgStateCopyWith<$Res>  {
   factory $UserDataPgStateCopyWith(UserDataPgState value, $Res Function(UserDataPgState) _then) = _$UserDataPgStateCopyWithImpl;
 @useResult
 $Res call({
- int startIndex, int pageSize, List<UserData> items
+ int startIndex, int pageSize, Set<String> excludedUids, List<UserData> items
 });
 
 
@@ -72,11 +72,12 @@ class _$UserDataPgStateCopyWithImpl<$Res>
 
 /// Create a copy of UserDataPgState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? startIndex = null,Object? pageSize = null,Object? items = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? startIndex = null,Object? pageSize = null,Object? excludedUids = null,Object? items = null,}) {
   return _then(_self.copyWith(
 startIndex: null == startIndex ? _self.startIndex : startIndex // ignore: cast_nullable_to_non_nullable
 as int,pageSize: null == pageSize ? _self.pageSize : pageSize // ignore: cast_nullable_to_non_nullable
-as int,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
+as int,excludedUids: null == excludedUids ? _self.excludedUids : excludedUids // ignore: cast_nullable_to_non_nullable
+as Set<String>,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
 as List<UserData>,
   ));
 }
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int startIndex,  int pageSize,  List<UserData> items)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int startIndex,  int pageSize,  Set<String> excludedUids,  List<UserData> items)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UsersDataPgState() when $default != null:
-return $default(_that.startIndex,_that.pageSize,_that.items);case _:
+return $default(_that.startIndex,_that.pageSize,_that.excludedUids,_that.items);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.startIndex,_that.pageSize,_that.items);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int startIndex,  int pageSize,  List<UserData> items)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int startIndex,  int pageSize,  Set<String> excludedUids,  List<UserData> items)  $default,) {final _that = this;
 switch (_that) {
 case _UsersDataPgState():
-return $default(_that.startIndex,_that.pageSize,_that.items);}
+return $default(_that.startIndex,_that.pageSize,_that.excludedUids,_that.items);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -197,10 +198,10 @@ return $default(_that.startIndex,_that.pageSize,_that.items);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int startIndex,  int pageSize,  List<UserData> items)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int startIndex,  int pageSize,  Set<String> excludedUids,  List<UserData> items)?  $default,) {final _that = this;
 switch (_that) {
 case _UsersDataPgState() when $default != null:
-return $default(_that.startIndex,_that.pageSize,_that.items);case _:
+return $default(_that.startIndex,_that.pageSize,_that.excludedUids,_that.items);case _:
   return null;
 
 }
@@ -212,11 +213,18 @@ return $default(_that.startIndex,_that.pageSize,_that.items);case _:
 @JsonSerializable()
 
 class _UsersDataPgState implements UserDataPgState {
-  const _UsersDataPgState({this.startIndex = 0, this.pageSize = 10, final  List<UserData> items = const []}): _items = items;
+  const _UsersDataPgState({this.startIndex = 0, this.pageSize = 10, final  Set<String> excludedUids = const {}, final  List<UserData> items = const []}): _excludedUids = excludedUids,_items = items;
   factory _UsersDataPgState.fromJson(Map<String, dynamic> json) => _$UsersDataPgStateFromJson(json);
 
 @override@JsonKey() final  int startIndex;
 @override@JsonKey() final  int pageSize;
+ final  Set<String> _excludedUids;
+@override@JsonKey() Set<String> get excludedUids {
+  if (_excludedUids is EqualUnmodifiableSetView) return _excludedUids;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableSetView(_excludedUids);
+}
+
  final  List<UserData> _items;
 @override@JsonKey() List<UserData> get items {
   if (_items is EqualUnmodifiableListView) return _items;
@@ -238,16 +246,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UsersDataPgState&&(identical(other.startIndex, startIndex) || other.startIndex == startIndex)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&const DeepCollectionEquality().equals(other._items, _items));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UsersDataPgState&&(identical(other.startIndex, startIndex) || other.startIndex == startIndex)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&const DeepCollectionEquality().equals(other._excludedUids, _excludedUids)&&const DeepCollectionEquality().equals(other._items, _items));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,startIndex,pageSize,const DeepCollectionEquality().hash(_items));
+int get hashCode => Object.hash(runtimeType,startIndex,pageSize,const DeepCollectionEquality().hash(_excludedUids),const DeepCollectionEquality().hash(_items));
 
 @override
 String toString() {
-  return 'UserDataPgState(startIndex: $startIndex, pageSize: $pageSize, items: $items)';
+  return 'UserDataPgState(startIndex: $startIndex, pageSize: $pageSize, excludedUids: $excludedUids, items: $items)';
 }
 
 
@@ -258,7 +266,7 @@ abstract mixin class _$UsersDataPgStateCopyWith<$Res> implements $UserDataPgStat
   factory _$UsersDataPgStateCopyWith(_UsersDataPgState value, $Res Function(_UsersDataPgState) _then) = __$UsersDataPgStateCopyWithImpl;
 @override @useResult
 $Res call({
- int startIndex, int pageSize, List<UserData> items
+ int startIndex, int pageSize, Set<String> excludedUids, List<UserData> items
 });
 
 
@@ -275,11 +283,12 @@ class __$UsersDataPgStateCopyWithImpl<$Res>
 
 /// Create a copy of UserDataPgState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? startIndex = null,Object? pageSize = null,Object? items = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? startIndex = null,Object? pageSize = null,Object? excludedUids = null,Object? items = null,}) {
   return _then(_UsersDataPgState(
 startIndex: null == startIndex ? _self.startIndex : startIndex // ignore: cast_nullable_to_non_nullable
 as int,pageSize: null == pageSize ? _self.pageSize : pageSize // ignore: cast_nullable_to_non_nullable
-as int,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
+as int,excludedUids: null == excludedUids ? _self._excludedUids : excludedUids // ignore: cast_nullable_to_non_nullable
+as Set<String>,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
 as List<UserData>,
   ));
 }

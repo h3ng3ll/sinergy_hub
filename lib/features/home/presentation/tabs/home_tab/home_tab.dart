@@ -1,12 +1,14 @@
-import 'dart:async';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/di/injection.dart';
+import '../../../../../core/routes/init_router/init_router.dart';
+import '../../../../chat/presentation/bloc/chat_cubit/chat_cubit.dart';
 import '../../../../matches/domain/models/user_match/user_match.dart';
-import '../../../../matches/presentation/bloc/user_matching_cubit/user_matching_cubit.dart';
+import '../../../../matches/presentation/bloc/user_matches_outcome_cubit/user_matches_outcome_cubit.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
+import '../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
 import '../../../domain/use_cases/look_for_matches_use_case.dart';
 import 'bloc/people_data_bloc/people_data_bloc.dart';
 import 'bloc/tinder_card_cubit/tinder_card_cubit.dart';
@@ -34,13 +36,11 @@ class _HomeTabState extends State<HomeTab> {
         600.0,
       ),
     );
-    _peopleDataBloc =
-        PeopleDataBloc(
-          lookForMatchesUseCase: getIt<LookForMatchesUseCase>(),
-          userMatchingCubit: context.read<UserMatchingCubit>(),
-        )..add(
-          PeopleDataEvent.loadPeoples(),
-        );
+    _peopleDataBloc = PeopleDataBloc(
+      lookForMatchesUseCase: getIt<LookForMatchesUseCase>(),
+      userMatchesOutcomeCubit: context.read<UserMatchesOutcomeCubit>(),
+      userCubit: context.read<UserCubit>(),
+    );
     super.initState();
   }
 
@@ -52,9 +52,21 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   void onAdjustFilters() {}
+
   void onKeepSwiping() {}
 
-  void onSendMessage(UserData matchedUser) {}
+  Future<void> onSendMessage(UserData matchedUser) async {
+    final chatId = await context.read<ChatCubit>().create(
+      uid: matchedUser.uid,
+    );
+    if (!mounted) return;
+
+    ChatPageRoute(
+      chatId: chatId,
+    ).go(
+      context,
+    );
+  }
 
   void onPanUpdate(DragUpdateDetails details) {
     _tinderCardCubit.onPanUpdate(
@@ -73,7 +85,7 @@ class _HomeTabState extends State<HomeTab> {
       );
 
       /// save matching
-      final completeness = await context.read<UserMatchingCubit>().create(
+      final completeness = await context.read<UserMatchesOutcomeCubit>().create(
         match: UserMatch(
           matchStatus: status,
           user: _peopleDataBloc.state.users.last,
@@ -104,18 +116,19 @@ class _HomeTabState extends State<HomeTab> {
         ],
         child: Builder(
           builder: (context) {
-            // final userMatchCubit = context.watch<UserMatchingCubit>();
+            final userMatchCubit = context.watch<UserMatchesOutcomeCubit>();
+            final userCubit = context.watch<UserCubit>();
 
-            return BuildHasMatch(
-              currentUser: _peopleDataBloc.state.users.first,
-              matchedUser: _peopleDataBloc.state.users.first,
-              onSendMessage: () => onSendMessage(
-                _peopleDataBloc.state.users.first,
-              ),
-                onKeepSwiping:onKeepSwiping,
-            );
-            // if(userMatchCubit.state == UserMatchingStatus.foundMatch){
-            //
+            // if (userMatchCubit.state == UserMatchesOutcomeStatus.foundMatch) {
+
+            // return BuildHasMatch(
+            //   currentUser: userCubit.state.userData!,
+            //   matchedUser: _peopleDataBloc.state.users.first,
+            //   onSendMessage: () => onSendMessage(
+            //     _peopleDataBloc.state.users.first,
+            //   ),
+            //   onKeepSwiping: onKeepSwiping,
+            // );
             // }
 
             return BuildTinderCard(

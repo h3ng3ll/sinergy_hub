@@ -1,15 +1,16 @@
 //
 //
-// import 'package:flutter/material.dart';
-//
-// enum AppColors {
-//
-//   black(Colors.black),
-//
-//   goldCrayola(Color(0xffF1B488)),
-//
-//   white(Colors.white);
-//
-//   final Gradient value;
-//   const AppColors(this.value);
-// }
+import 'package:flutter/material.dart';
+
+import 'app_colors.dart';
+
+abstract class AppGradients {
+  static LinearGradient bluePurple = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      AppColors.royalBlue.value,
+      AppColors.darkOrchid.value,
+    ],
+  );
+}

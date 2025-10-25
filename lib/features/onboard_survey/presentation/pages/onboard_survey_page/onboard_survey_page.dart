@@ -165,6 +165,7 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
   );
 
   void _clearOverlay() {
+    if(!mounted) return;
     overlayEntry?.remove();
     overlayEntry = null;
   }

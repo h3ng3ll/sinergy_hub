@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../features/auth/presentation/pages/authorization_page/authorization_page.dart';
+import '../../../features/chat/presentation/pages/chat_page/chat_page.dart';
 import '../../../features/home/presentation/home_bottom_bar/home_bottom_bar.dart';
+import '../../../features/home/presentation/home_root/home_root.dart';
 import '../../../features/home/presentation/tabs/home_tab/home_tab.dart';
 import '../../../features/home/presentation/tabs/matches_tab/matches_tab.dart';
 import '../../../features/home/presentation/tabs/profile_tab/profile_tab.dart';
@@ -27,31 +29,48 @@ final GoRouter initRouter = GoRouter(
     TypedGoRoute<OnboardSurveyPageRoute>(
       path: '/onboard',
     ),
-    TypedStatefulShellRoute<HomeBottomBarRoute>(
+    TypedStatefulShellRoute<HomeRootRoute>(
       branches: [
         TypedStatefulShellBranch(
           routes: [
-            TypedGoRoute<HomePageRoute>(
-              path: '/home',
+            TypedStatefulShellRoute<HomeBottomBarRoute>(
+              branches: [
+                TypedStatefulShellBranch(
+                  routes: [
+                    TypedGoRoute<HomePageRoute>(
+                      path: '/home',
+                    ),
+                  ],
+                ),
+                TypedStatefulShellBranch(
+                  routes: [
+                    TypedGoRoute<MatchesPageRoute>(
+                      path: '/matches',
+                    ),
+                  ],
+                ),
+                TypedStatefulShellBranch(
+                  routes: [
+                    TypedGoRoute<ProfilePageRoute>(
+                      path: '/profile',
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ]
         ),
         TypedStatefulShellBranch(
           routes: [
-            TypedGoRoute<MatchesPageRoute>(
-              path: '/matches',
+            TypedGoRoute<ChatPageRoute>(
+              path: '/chat',
             ),
-          ],
-        ),
-        TypedStatefulShellBranch(
-          routes: [
-            TypedGoRoute<ProfilePageRoute>(
-              path: '/profile',
-            ),
-          ],
+          ]
         ),
       ],
     ),
+
+
   ],
 )
 class RootPageRoute extends ShellRouteData {
@@ -130,11 +149,44 @@ class MatchesPageRoute extends GoRouteData with _$MatchesPageRoute {
     );
   }
 }
+
 class ProfilePageRoute extends GoRouteData with _$ProfilePageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       ProfileTab(),
+    );
+  }
+}
+
+class HomeRootRoute extends StatefulShellRouteData {
+  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+
+  @override
+  Widget builder(
+      BuildContext context,
+      GoRouterState state,
+      Widget navigationShell,
+      ) {
+    return HomeRoot(
+      navigator: navigationShell,
+    );
+  }
+}
+
+class ChatPageRoute extends GoRouteData with _$ChatPageRoute {
+  final String chatId;
+
+  ChatPageRoute({
+    required this.chatId,
+  });
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      ChatPage(
+        chatId: chatId,
+      ),
     );
   }
 }

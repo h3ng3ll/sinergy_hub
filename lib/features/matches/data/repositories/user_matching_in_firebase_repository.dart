@@ -47,7 +47,9 @@ class UserMatchingInFirebaseRepository extends IUserMatchingInRepository {
   Stream<List<UserMatchDto>> get({
     required String uid,
   }) {
-    return _matches(uid).snapshots().map(
+    return _matches(
+      uid,
+    ).snapshots().map(
       (
         querySnapshot,
       ) {

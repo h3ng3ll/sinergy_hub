@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../resources/colors/app_colors.dart';
+import '../../resources/colors/app_gradients.dart';
 
 class CustomChip extends StatelessWidget {
   final bool selected;
@@ -39,16 +40,7 @@ class CustomChip extends StatelessWidget {
               : selected
               ? null
               : AppColors.white.value,
-          gradient: !selected
-              ? null
-              : LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    AppColors.royalBlue.value,
-                    AppColors.darkOrchid.value,
-                  ],
-                ),
+          gradient: !selected ? null : AppGradients.bluePurple,
         ),
         child: label,
       ),

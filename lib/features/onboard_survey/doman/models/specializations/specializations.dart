@@ -49,7 +49,7 @@ abstract class Specializations {
       ],
       colors: [
         Color(0xffa675dd),
-        Color(0xffac8afa),
+        Color(0xfff3e8ff),
       ],
       icon: Assets.icons.server,
     ),

@@ -7,7 +7,8 @@ import '../data/repositories/user_matching_out_firebase_repository.dart';
 import '../domain/repositories/i_user_matching_in_repository.dart';
 import '../domain/repositories/i_user_matching_out_repository.dart';
 import '../domain/usecases/create_user_matches_use_case.dart';
-import '../domain/usecases/get_user_matches_use_case.dart';
+import '../domain/usecases/get_user_matches_income_use_case.dart';
+import '../domain/usecases/get_user_matches_outcome_use_case.dart';
 
 void initMatchingFeature(GetIt getIt) {
   getIt.registerLazySingleton<IUserMatchingOutRepository>(
@@ -15,7 +16,7 @@ void initMatchingFeature(GetIt getIt) {
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
     ),
   );
-   getIt.registerLazySingleton<IUserMatchingInRepository>(
+  getIt.registerLazySingleton<IUserMatchingInRepository>(
     () => UserMatchingInFirebaseRepository(
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
     ),
@@ -26,9 +27,15 @@ void initMatchingFeature(GetIt getIt) {
       userMatchingInRepository: getIt<IUserMatchingInRepository>(),
     ),
   );
-  getIt.registerLazySingleton<GetUserMatchesUseCase>(
-    () => GetUserMatchesUseCase(
+  getIt.registerLazySingleton<GetUserMatchesIncomeUseCase>(
+    () => GetUserMatchesIncomeUseCase(
       userMatchingInRepository: getIt<IUserMatchingInRepository>(),
+      userRepository: getIt<IUserRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<GetUserMatchesOutcomeUseCase>(
+    () => GetUserMatchesOutcomeUseCase(
+      userMatchingOutRepository: getIt<IUserMatchingOutRepository>(),
       userRepository: getIt<IUserRepository>(),
     ),
   );

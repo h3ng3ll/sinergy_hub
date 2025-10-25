@@ -10,6 +10,9 @@ part 'user_data.freezed.dart';
 
 @freezed
 sealed class UserData with _$UserData {
+
+  const UserData._();
+
   const factory UserData({
     required String uid,
     String? avatarUrl,
@@ -24,7 +27,7 @@ sealed class UserData with _$UserData {
     Map<String, dynamic> json,
   ) => _$UserDataFromJson(json);
 
-  factory UserData.none() => UserData(
+   factory UserData.none() => UserData(
     uid: 'uid',
     profiler: UserProfiler(
       specialization: ESpecialization.fullStackDeveloper,

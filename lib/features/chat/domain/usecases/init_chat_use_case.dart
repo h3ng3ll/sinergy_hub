@@ -9,10 +9,10 @@ class InitChatUseCase {
     required IChatRepository chatRepository,
   }) : _chatRepository = chatRepository;
 
-  Future<void> call({
+  Future<Chat> call({
     required List<String> participants,
   }) async {
-    await _chatRepository.create(
+  return  await _chatRepository.create(
         Chat(
           user: UserData.none(),
           lastMessageSent: DateTime.now(),

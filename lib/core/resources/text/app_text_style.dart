@@ -41,21 +41,21 @@ enum AppTextStyle {
     TextStyle(
       fontSize: 14,
       fontFamily: 'Manrope',
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w400,
     ),
   ),
   regular16(
     TextStyle(
       fontSize: 16,
       fontFamily: 'Manrope',
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w400,
     ),
   ),
   regular20(
     TextStyle(
       fontSize: 20,
       fontFamily: 'Manrope',
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w400,
     ),
   ),
   medium10(

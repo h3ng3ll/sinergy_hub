@@ -8,11 +8,13 @@ class SendMessageUseCase {
     required IChatMessageRepository chatMessageRepository,
   }) : _chatMessageRepository = chatMessageRepository;
 
-  Future<void> send({
+  Future<void> call({
+    required String chatId,
     required ChatMessage message,
   }) async {
     _chatMessageRepository.create(
       message: message,
+      chatId: chatId,
     );
   }
 }

@@ -8,9 +8,12 @@ import '../../../../../../../../../../../../../onboard_survey/doman/models/speci
 class SpecializationInfoBar extends StatelessWidget {
   final Specialization specialization;
 
+  final bool includeIcon;
+
   const SpecializationInfoBar({
     super.key,
     required this.specialization,
+    this.includeIcon = true,
   });
 
   @override
@@ -19,34 +22,34 @@ class SpecializationInfoBar extends StatelessWidget {
     return Container(
       // width: 160.0,
       padding: EdgeInsets.symmetric(
-        vertical: 10.0,
-        horizontal: 15.0,
+        vertical: 5.0,
+        horizontal: 10.0,
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
           17.5,
         ),
-        color: specialization.colors[1].withValues(
-          alpha: 0.2,
-        ),
+        color: specialization.colors[1],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SvgPicture.asset(
-            specialization.icon,
-            width: 20.0,
-            height: 20.0,
-            colorFilter: ColorFilter.mode(
-              specialization.colors[1],
-              BlendMode.srcIn,
+          if (includeIcon) ...[
+            SvgPicture.asset(
+              specialization.icon,
+              width: 20.0,
+              height: 20.0,
+              colorFilter: ColorFilter.mode(
+                specialization.colors[0],
+                BlendMode.srcIn,
+              ),
             ),
-          ),
-          Gap(10.0),
+            Gap(10.0),
+          ],
           Text(
             specialization.name,
             style: textTheme.medium16.copyWith(
-              color: specialization.colors[1],
+              color: specialization.colors[0],
             ),
           ),
         ],

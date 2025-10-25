@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../../../matches/presentation/bloc/user_matching_cubit/user_matching_cubit.dart';
+import '../../../../../../matches/presentation/bloc/user_matches_outcome_cubit/user_matches_outcome_cubit.dart';
 import '../../../../../../user/domain/models/users_data_pg_state/users_data_pg_state.dart';
+import '../../../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
 import '../../../../../domain/enums/e_people_data_status.dart';
 import '../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../domain/use_cases/look_for_matches_use_case.dart';
@@ -17,19 +18,21 @@ part 'people_data_bloc.freezed.dart';
 
 class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
   final LookForMatchesUseCase _lookForMatchesUseCase;
-
+  final UserCubit _userCubit;
   StreamSubscription? _subscription;
 
   PeopleDataBloc({
-    required UserMatchingCubit userMatchingCubit,
+    required UserMatchesOutcomeCubit userMatchesOutcomeCubit,
     required LookForMatchesUseCase lookForMatchesUseCase,
+    required UserCubit userCubit,
   }) : _lookForMatchesUseCase = lookForMatchesUseCase,
+       _userCubit = userCubit,
        super(const PeopleDataState()) {
     on<_LoadPeoples>(_loadPeoples);
     on<_RemoveVisible>(_removeVisible);
     on<_UpdateViewedPeoples>(_updateViewedPeoples);
 
-    _subscription = userMatchingCubit.stream.listen(
+    _subscription = userMatchesOutcomeCubit.stream.listen(
       (e) {
         add(
           PeopleDataEvent.updateViewedPeoples(
@@ -49,8 +52,14 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
     emit(
       state.copyWith(
         viewedUids: uids,
+        status: EPeopleDataStatus.initial,
       ),
     );
+    if (!state.initialized) {
+      add(
+        PeopleDataEvent.loadPeoples(),
+      );
+    }
   }
 
   Future<void> _loadPeoples(event, emit) async {
@@ -60,11 +69,19 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
           status: EPeopleDataStatus.loading,
         ),
       );
+      /// fetch users and exclude already matched people if it
+      /// found include current user
       final List<UserData> users = await _lookForMatchesUseCase.call(
-        userDataState: UserDataPgState(),
+        userDataState: UserDataPgState(
+          excludedUids: {
+            _userCubit.uid!,
+            ...state.viewedUids,
+          },
+        ),
       );
       emit(
         state.copyWith(
+          initialized: true,
           status: EPeopleDataStatus.initial,
           users: users,
         ),
@@ -72,6 +89,7 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
     } catch (e) {
       emit(
         state.copyWith(
+          initialized: true,
           status: EPeopleDataStatus.failed,
           errorMessage: e.toString(),
         ),

@@ -5,38 +5,36 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
 import '../../../domain/models/user_match/user_match.dart';
-import '../../../domain/repositories/i_user_matching_out_repository.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
-import '../../../domain/usecases/get_user_matches_use_case.dart';
+import '../../../domain/usecases/get_user_matches_outcome_use_case.dart';
 
-part 'user_matching_state.dart';
+part 'user_matches_outcome_state.dart';
+part 'user_matches_outcome_cubit.freezed.dart';
 
-part 'user_matching_cubit.freezed.dart';
-
-class UserMatchingCubit extends Cubit<UserMatchingState> {
+class UserMatchesOutcomeCubit extends Cubit<UserMatchesOutcomeState> {
   final CreateUserMatchesUseCase _createUserMatchesUseCase;
-  final GetUserMatchesUseCase _getUserMatchesUseCase;
+  final GetUserMatchesOutcomeUseCase _getUserMatchesUseCase;
   final UserCubit _userCubit;
   late final StreamSubscription _matchesSubscription;
 
-  UserMatchingCubit({
+  UserMatchesOutcomeCubit({
     required UserCubit userCubit,
-    required GetUserMatchesUseCase getUserMatchesUseCase,
+    required GetUserMatchesOutcomeUseCase getUserMatchesOutcomeUseCase,
     required CreateUserMatchesUseCase createUserMatchesUseCase,
   }) : _userCubit = userCubit,
-       _getUserMatchesUseCase = getUserMatchesUseCase,
-       _createUserMatchesUseCase = createUserMatchesUseCase,
-       super(const UserMatchingState()) {
+        _getUserMatchesUseCase = getUserMatchesOutcomeUseCase,
+        _createUserMatchesUseCase = createUserMatchesUseCase,
+        super(const UserMatchesOutcomeState()) {
     final uid = _userCubit.uid;
     if (uid == null) return;
 
     _matchesSubscription = _getUserMatchesUseCase
         .call(
-          uid,
-        )
+      uid,
+    )
         .listen(
-          _update,
-        );
+      _update,
+    );
   }
 
   void _update(List<UserMatch> matches) => emit(
@@ -53,7 +51,7 @@ class UserMatchingCubit extends Cubit<UserMatchingState> {
       if (uid == null) return;
       emit(
         state.copyWith(
-          status: UserMatchingStatus.loading,
+          status: UserMatchesOutcomeStatus.loading,
         ),
       );
 
@@ -64,13 +62,13 @@ class UserMatchingCubit extends Cubit<UserMatchingState> {
       if(status == EUserMatchCompleteness.twoWayMatch){
         emit(
           state.copyWith(
-            status: UserMatchingStatus.foundMatch,
+            status: UserMatchesOutcomeStatus.foundMatch,
           ),
         );
       }else {
         emit(
           state.copyWith(
-            status: UserMatchingStatus.initial,
+            status: UserMatchesOutcomeStatus.initial,
           ),
         );
       }
@@ -78,7 +76,7 @@ class UserMatchingCubit extends Cubit<UserMatchingState> {
       emit(
         state.copyWith(
           errorMessage: e.toString(),
-          status: UserMatchingStatus.failed,
+          status: UserMatchesOutcomeStatus.failed,
         ),
       );
     }
@@ -87,7 +85,7 @@ class UserMatchingCubit extends Cubit<UserMatchingState> {
   void resetFoundMatch () {
     emit(
       state.copyWith(
-        status: UserMatchingStatus.initial,
+        status: UserMatchesOutcomeStatus.initial,
       ),
     );
   }
@@ -95,5 +93,4 @@ class UserMatchingCubit extends Cubit<UserMatchingState> {
   Future<void> close() {
     _matchesSubscription.cancel();
     return super.close();
-  }
-}
+  }}

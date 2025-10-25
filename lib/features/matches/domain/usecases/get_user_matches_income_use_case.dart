@@ -8,11 +8,11 @@ import '../models/user_match/user_match.dart';
 import '../repositories/i_user_matching_in_repository.dart';
 import '../repositories/i_user_matching_out_repository.dart';
 
-class GetUserMatchesUseCase {
+class GetUserMatchesIncomeUseCase {
   final IUserMatchingInRepository _userMatchingInRepository;
   final IUserRepository _userRepository;
 
-  GetUserMatchesUseCase({
+  GetUserMatchesIncomeUseCase({
     required IUserMatchingInRepository userMatchingInRepository,
     required IUserRepository userRepository,
   }) : _userMatchingInRepository = userMatchingInRepository,

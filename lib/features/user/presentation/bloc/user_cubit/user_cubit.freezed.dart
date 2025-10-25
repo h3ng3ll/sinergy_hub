@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserState {
 
- User? get user; String get errorMessage; UserStatus get status;
+ User? get user; UserData? get userData; String get errorMessage; UserStatus get status;
 /// Create a copy of UserState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $UserStateCopyWith<UserState> get copyWith => _$UserStateCopyWithImpl<UserState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserState&&(identical(other.user, user) || other.user == user)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserState&&(identical(other.user, user) || other.user == user)&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,errorMessage,status);
+int get hashCode => Object.hash(runtimeType,user,userData,errorMessage,status);
 
 @override
 String toString() {
-  return 'UserState(user: $user, errorMessage: $errorMessage, status: $status)';
+  return 'UserState(user: $user, userData: $userData, errorMessage: $errorMessage, status: $status)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $UserStateCopyWith<$Res>  {
   factory $UserStateCopyWith(UserState value, $Res Function(UserState) _then) = _$UserStateCopyWithImpl;
 @useResult
 $Res call({
- User? user, String errorMessage, UserStatus status
+ User? user, UserData? userData, String errorMessage, UserStatus status
 });
 
 
-
+$UserDataCopyWith<$Res>? get userData;
 
 }
 /// @nodoc
@@ -62,15 +62,28 @@ class _$UserStateCopyWithImpl<$Res>
 
 /// Create a copy of UserState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? errorMessage = null,Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? userData = freezed,Object? errorMessage = null,Object? status = null,}) {
   return _then(_self.copyWith(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as User?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as User?,userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
+as UserData?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as UserStatus,
   ));
 }
+/// Create a copy of UserState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserDataCopyWith<$Res>? get userData {
+    if (_self.userData == null) {
+    return null;
+  }
 
+  return $UserDataCopyWith<$Res>(_self.userData!, (value) {
+    return _then(_self.copyWith(userData: value));
+  });
+}
 }
 
 
@@ -149,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( User? user,  String errorMessage,  UserStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( User? user,  UserData? userData,  String errorMessage,  UserStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserState() when $default != null:
-return $default(_that.user,_that.errorMessage,_that.status);case _:
+return $default(_that.user,_that.userData,_that.errorMessage,_that.status);case _:
   return orElse();
 
 }
@@ -170,10 +183,10 @@ return $default(_that.user,_that.errorMessage,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( User? user,  String errorMessage,  UserStatus status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( User? user,  UserData? userData,  String errorMessage,  UserStatus status)  $default,) {final _that = this;
 switch (_that) {
 case _UserState():
-return $default(_that.user,_that.errorMessage,_that.status);}
+return $default(_that.user,_that.userData,_that.errorMessage,_that.status);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -187,10 +200,10 @@ return $default(_that.user,_that.errorMessage,_that.status);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( User? user,  String errorMessage,  UserStatus status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( User? user,  UserData? userData,  String errorMessage,  UserStatus status)?  $default,) {final _that = this;
 switch (_that) {
 case _UserState() when $default != null:
-return $default(_that.user,_that.errorMessage,_that.status);case _:
+return $default(_that.user,_that.userData,_that.errorMessage,_that.status);case _:
   return null;
 
 }
@@ -202,10 +215,11 @@ return $default(_that.user,_that.errorMessage,_that.status);case _:
 
 
 class _UserState implements UserState {
-  const _UserState({this.user, this.errorMessage = '', this.status = UserStatus.loading});
+  const _UserState({this.user, this.userData, this.errorMessage = '', this.status = UserStatus.loading});
   
 
 @override final  User? user;
+@override final  UserData? userData;
 @override@JsonKey() final  String errorMessage;
 @override@JsonKey() final  UserStatus status;
 
@@ -219,16 +233,16 @@ _$UserStateCopyWith<_UserState> get copyWith => __$UserStateCopyWithImpl<_UserSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserState&&(identical(other.user, user) || other.user == user)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserState&&(identical(other.user, user) || other.user == user)&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,errorMessage,status);
+int get hashCode => Object.hash(runtimeType,user,userData,errorMessage,status);
 
 @override
 String toString() {
-  return 'UserState(user: $user, errorMessage: $errorMessage, status: $status)';
+  return 'UserState(user: $user, userData: $userData, errorMessage: $errorMessage, status: $status)';
 }
 
 
@@ -239,11 +253,11 @@ abstract mixin class _$UserStateCopyWith<$Res> implements $UserStateCopyWith<$Re
   factory _$UserStateCopyWith(_UserState value, $Res Function(_UserState) _then) = __$UserStateCopyWithImpl;
 @override @useResult
 $Res call({
- User? user, String errorMessage, UserStatus status
+ User? user, UserData? userData, String errorMessage, UserStatus status
 });
 
 
-
+@override $UserDataCopyWith<$Res>? get userData;
 
 }
 /// @nodoc
@@ -256,16 +270,29 @@ class __$UserStateCopyWithImpl<$Res>
 
 /// Create a copy of UserState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? errorMessage = null,Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? userData = freezed,Object? errorMessage = null,Object? status = null,}) {
   return _then(_UserState(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as User?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as User?,userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
+as UserData?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as UserStatus,
   ));
 }
 
+/// Create a copy of UserState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserDataCopyWith<$Res>? get userData {
+    if (_self.userData == null) {
+    return null;
+  }
 
+  return $UserDataCopyWith<$Res>(_self.userData!, (value) {
+    return _then(_self.copyWith(userData: value));
+  });
+}
 }
 
 // dart format on

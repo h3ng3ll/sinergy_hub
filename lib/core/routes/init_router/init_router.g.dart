@@ -19,32 +19,50 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
       factory: _$OnboardSurveyPageRoute._fromState,
     ),
     StatefulShellRouteData.$route(
-      factory: $HomeBottomBarRouteExtension._fromState,
+      factory: $HomeRootRouteExtension._fromState,
       branches: [
         StatefulShellBranchData.$branch(
           routes: [
-            GoRouteData.$route(
-              path: '/home',
+            StatefulShellRouteData.$route(
+              factory: $HomeBottomBarRouteExtension._fromState,
+              branches: [
+                StatefulShellBranchData.$branch(
+                  routes: [
+                    GoRouteData.$route(
+                      path: '/home',
 
-              factory: _$HomePageRoute._fromState,
+                      factory: _$HomePageRoute._fromState,
+                    ),
+                  ],
+                ),
+                StatefulShellBranchData.$branch(
+                  routes: [
+                    GoRouteData.$route(
+                      path: '/matches',
+
+                      factory: _$MatchesPageRoute._fromState,
+                    ),
+                  ],
+                ),
+                StatefulShellBranchData.$branch(
+                  routes: [
+                    GoRouteData.$route(
+                      path: '/profile',
+
+                      factory: _$ProfilePageRoute._fromState,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
-              path: '/matches',
+              path: '/chat',
 
-              factory: _$MatchesPageRoute._fromState,
-            ),
-          ],
-        ),
-        StatefulShellBranchData.$branch(
-          routes: [
-            GoRouteData.$route(
-              path: '/profile',
-
-              factory: _$ProfilePageRoute._fromState,
+              factory: _$ChatPageRoute._fromState,
             ),
           ],
         ),
@@ -99,6 +117,10 @@ mixin _$OnboardSurveyPageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
+extension $HomeRootRouteExtension on HomeRootRoute {
+  static HomeRootRoute _fromState(GoRouterState state) => HomeRootRoute();
+}
+
 extension $HomeBottomBarRouteExtension on HomeBottomBarRoute {
   static HomeBottomBarRoute _fromState(GoRouterState state) =>
       HomeBottomBarRoute();
@@ -149,6 +171,30 @@ mixin _$ProfilePageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/profile');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$ChatPageRoute on GoRouteData {
+  static ChatPageRoute _fromState(GoRouterState state) =>
+      ChatPageRoute(chatId: state.uri.queryParameters['chat-id']!);
+
+  ChatPageRoute get _self => this as ChatPageRoute;
+
+  @override
+  String get location =>
+      GoRouteData.$location('/chat', queryParams: {'chat-id': _self.chatId});
 
   @override
   void go(BuildContext context) => context.go(location);

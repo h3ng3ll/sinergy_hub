@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatMessage {
 
- UserData get user; String get message; String get sentUid; DateTime get createdAt; String get icon;
+ String get id; String get message; String get sentUid; DateTime get createdAt;
 /// Create a copy of ChatMessage
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ChatMessageCopyWith<ChatMessage> get copyWith => _$ChatMessageCopyWithImpl<Chat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatMessage&&(identical(other.user, user) || other.user == user)&&(identical(other.message, message) || other.message == message)&&(identical(other.sentUid, sentUid) || other.sentUid == sentUid)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatMessage&&(identical(other.id, id) || other.id == id)&&(identical(other.message, message) || other.message == message)&&(identical(other.sentUid, sentUid) || other.sentUid == sentUid)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,user,message,sentUid,createdAt,icon);
+int get hashCode => Object.hash(runtimeType,id,message,sentUid,createdAt);
 
 @override
 String toString() {
-  return 'ChatMessage(user: $user, message: $message, sentUid: $sentUid, createdAt: $createdAt, icon: $icon)';
+  return 'ChatMessage(id: $id, message: $message, sentUid: $sentUid, createdAt: $createdAt)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $ChatMessageCopyWith<$Res>  {
   factory $ChatMessageCopyWith(ChatMessage value, $Res Function(ChatMessage) _then) = _$ChatMessageCopyWithImpl;
 @useResult
 $Res call({
- UserData user, String message, String sentUid, DateTime createdAt, String icon
+ String id, String message, String sentUid, DateTime createdAt
 });
 
 
-$UserDataCopyWith<$Res> get user;
+
 
 }
 /// @nodoc
@@ -65,26 +65,16 @@ class _$ChatMessageCopyWithImpl<$Res>
 
 /// Create a copy of ChatMessage
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? user = null,Object? message = null,Object? sentUid = null,Object? createdAt = null,Object? icon = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? message = null,Object? sentUid = null,Object? createdAt = null,}) {
   return _then(_self.copyWith(
-user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserData,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,sentUid: null == sentUid ? _self.sentUid : sentUid // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String,
+as DateTime,
   ));
 }
-/// Create a copy of ChatMessage
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$UserDataCopyWith<$Res> get user {
-  
-  return $UserDataCopyWith<$Res>(_self.user, (value) {
-    return _then(_self.copyWith(user: value));
-  });
-}
+
 }
 
 
@@ -163,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserData user,  String message,  String sentUid,  DateTime createdAt,  String icon)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String message,  String sentUid,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatMessage() when $default != null:
-return $default(_that.user,_that.message,_that.sentUid,_that.createdAt,_that.icon);case _:
+return $default(_that.id,_that.message,_that.sentUid,_that.createdAt);case _:
   return orElse();
 
 }
@@ -184,10 +174,10 @@ return $default(_that.user,_that.message,_that.sentUid,_that.createdAt,_that.ico
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserData user,  String message,  String sentUid,  DateTime createdAt,  String icon)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String message,  String sentUid,  DateTime createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _ChatMessage():
-return $default(_that.user,_that.message,_that.sentUid,_that.createdAt,_that.icon);}
+return $default(_that.id,_that.message,_that.sentUid,_that.createdAt);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -201,10 +191,10 @@ return $default(_that.user,_that.message,_that.sentUid,_that.createdAt,_that.ico
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserData user,  String message,  String sentUid,  DateTime createdAt,  String icon)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String message,  String sentUid,  DateTime createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatMessage() when $default != null:
-return $default(_that.user,_that.message,_that.sentUid,_that.createdAt,_that.icon);case _:
+return $default(_that.id,_that.message,_that.sentUid,_that.createdAt);case _:
   return null;
 
 }
@@ -216,14 +206,13 @@ return $default(_that.user,_that.message,_that.sentUid,_that.createdAt,_that.ico
 @JsonSerializable()
 
 class _ChatMessage implements ChatMessage {
-  const _ChatMessage({required this.user, this.message = '', this.sentUid = '', required this.createdAt, this.icon = ''});
+  const _ChatMessage({this.id = '', this.message = '', this.sentUid = '', required this.createdAt});
   factory _ChatMessage.fromJson(Map<String, dynamic> json) => _$ChatMessageFromJson(json);
 
-@override final  UserData user;
+@override@JsonKey() final  String id;
 @override@JsonKey() final  String message;
 @override@JsonKey() final  String sentUid;
 @override final  DateTime createdAt;
-@override@JsonKey() final  String icon;
 
 /// Create a copy of ChatMessage
 /// with the given fields replaced by the non-null parameter values.
@@ -238,16 +227,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatMessage&&(identical(other.user, user) || other.user == user)&&(identical(other.message, message) || other.message == message)&&(identical(other.sentUid, sentUid) || other.sentUid == sentUid)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatMessage&&(identical(other.id, id) || other.id == id)&&(identical(other.message, message) || other.message == message)&&(identical(other.sentUid, sentUid) || other.sentUid == sentUid)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,user,message,sentUid,createdAt,icon);
+int get hashCode => Object.hash(runtimeType,id,message,sentUid,createdAt);
 
 @override
 String toString() {
-  return 'ChatMessage(user: $user, message: $message, sentUid: $sentUid, createdAt: $createdAt, icon: $icon)';
+  return 'ChatMessage(id: $id, message: $message, sentUid: $sentUid, createdAt: $createdAt)';
 }
 
 
@@ -258,11 +247,11 @@ abstract mixin class _$ChatMessageCopyWith<$Res> implements $ChatMessageCopyWith
   factory _$ChatMessageCopyWith(_ChatMessage value, $Res Function(_ChatMessage) _then) = __$ChatMessageCopyWithImpl;
 @override @useResult
 $Res call({
- UserData user, String message, String sentUid, DateTime createdAt, String icon
+ String id, String message, String sentUid, DateTime createdAt
 });
 
 
-@override $UserDataCopyWith<$Res> get user;
+
 
 }
 /// @nodoc
@@ -275,27 +264,17 @@ class __$ChatMessageCopyWithImpl<$Res>
 
 /// Create a copy of ChatMessage
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = null,Object? message = null,Object? sentUid = null,Object? createdAt = null,Object? icon = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? message = null,Object? sentUid = null,Object? createdAt = null,}) {
   return _then(_ChatMessage(
-user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserData,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,sentUid: null == sentUid ? _self.sentUid : sentUid // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String,
+as DateTime,
   ));
 }
 
-/// Create a copy of ChatMessage
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$UserDataCopyWith<$Res> get user {
-  
-  return $UserDataCopyWith<$Res>(_self.user, (value) {
-    return _then(_self.copyWith(user: value));
-  });
-}
+
 }
 
 // dart format on

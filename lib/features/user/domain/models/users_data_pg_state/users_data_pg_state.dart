@@ -12,6 +12,7 @@ sealed class UserDataPgState with _$UserDataPgState implements  Pageable<UserDat
   const factory UserDataPgState({
     @Default(0) int startIndex,
     @Default(10) int pageSize,
+    @Default({}) Set<String> excludedUids,
     @Default([]) List<UserData> items,
   }) = _UsersDataPgState;
 

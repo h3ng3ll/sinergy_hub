@@ -322,7 +322,7 @@ as List<String>,
 /// @nodoc
 mixin _$PeopleDataState {
 
- List<UserData> get users; List<String> get viewedUids; EPeopleDataStatus get status; String get errorMessage;
+ List<UserData> get users; List<String> get viewedUids; bool get initialized; EPeopleDataStatus get status; String get errorMessage;
 /// Create a copy of PeopleDataState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -333,16 +333,16 @@ $PeopleDataStateCopyWith<PeopleDataState> get copyWith => _$PeopleDataStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PeopleDataState&&const DeepCollectionEquality().equals(other.users, users)&&const DeepCollectionEquality().equals(other.viewedUids, viewedUids)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PeopleDataState&&const DeepCollectionEquality().equals(other.users, users)&&const DeepCollectionEquality().equals(other.viewedUids, viewedUids)&&(identical(other.initialized, initialized) || other.initialized == initialized)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(users),const DeepCollectionEquality().hash(viewedUids),status,errorMessage);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(users),const DeepCollectionEquality().hash(viewedUids),initialized,status,errorMessage);
 
 @override
 String toString() {
-  return 'PeopleDataState(users: $users, viewedUids: $viewedUids, status: $status, errorMessage: $errorMessage)';
+  return 'PeopleDataState(users: $users, viewedUids: $viewedUids, initialized: $initialized, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -353,7 +353,7 @@ abstract mixin class $PeopleDataStateCopyWith<$Res>  {
   factory $PeopleDataStateCopyWith(PeopleDataState value, $Res Function(PeopleDataState) _then) = _$PeopleDataStateCopyWithImpl;
 @useResult
 $Res call({
- List<UserData> users, List<String> viewedUids, EPeopleDataStatus status, String errorMessage
+ List<UserData> users, List<String> viewedUids, bool initialized, EPeopleDataStatus status, String errorMessage
 });
 
 
@@ -370,11 +370,12 @@ class _$PeopleDataStateCopyWithImpl<$Res>
 
 /// Create a copy of PeopleDataState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? users = null,Object? viewedUids = null,Object? status = null,Object? errorMessage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? users = null,Object? viewedUids = null,Object? initialized = null,Object? status = null,Object? errorMessage = null,}) {
   return _then(_self.copyWith(
 users: null == users ? _self.users : users // ignore: cast_nullable_to_non_nullable
 as List<UserData>,viewedUids: null == viewedUids ? _self.viewedUids : viewedUids // ignore: cast_nullable_to_non_nullable
-as List<String>,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as List<String>,initialized: null == initialized ? _self.initialized : initialized // ignore: cast_nullable_to_non_nullable
+as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EPeopleDataStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -458,10 +459,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<UserData> users,  List<String> viewedUids,  EPeopleDataStatus status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<UserData> users,  List<String> viewedUids,  bool initialized,  EPeopleDataStatus status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PeopleDataState() when $default != null:
-return $default(_that.users,_that.viewedUids,_that.status,_that.errorMessage);case _:
+return $default(_that.users,_that.viewedUids,_that.initialized,_that.status,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -479,10 +480,10 @@ return $default(_that.users,_that.viewedUids,_that.status,_that.errorMessage);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<UserData> users,  List<String> viewedUids,  EPeopleDataStatus status,  String errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<UserData> users,  List<String> viewedUids,  bool initialized,  EPeopleDataStatus status,  String errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _PeopleDataState():
-return $default(_that.users,_that.viewedUids,_that.status,_that.errorMessage);}
+return $default(_that.users,_that.viewedUids,_that.initialized,_that.status,_that.errorMessage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -496,10 +497,10 @@ return $default(_that.users,_that.viewedUids,_that.status,_that.errorMessage);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<UserData> users,  List<String> viewedUids,  EPeopleDataStatus status,  String errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<UserData> users,  List<String> viewedUids,  bool initialized,  EPeopleDataStatus status,  String errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _PeopleDataState() when $default != null:
-return $default(_that.users,_that.viewedUids,_that.status,_that.errorMessage);case _:
+return $default(_that.users,_that.viewedUids,_that.initialized,_that.status,_that.errorMessage);case _:
   return null;
 
 }
@@ -511,7 +512,7 @@ return $default(_that.users,_that.viewedUids,_that.status,_that.errorMessage);ca
 
 
 class _PeopleDataState implements PeopleDataState {
-  const _PeopleDataState({final  List<UserData> users = const [], final  List<String> viewedUids = const [], this.status = EPeopleDataStatus.loading, this.errorMessage = ''}): _users = users,_viewedUids = viewedUids;
+  const _PeopleDataState({final  List<UserData> users = const [], final  List<String> viewedUids = const [], this.initialized = false, this.status = EPeopleDataStatus.loading, this.errorMessage = ''}): _users = users,_viewedUids = viewedUids;
   
 
  final  List<UserData> _users;
@@ -528,6 +529,7 @@ class _PeopleDataState implements PeopleDataState {
   return EqualUnmodifiableListView(_viewedUids);
 }
 
+@override@JsonKey() final  bool initialized;
 @override@JsonKey() final  EPeopleDataStatus status;
 @override@JsonKey() final  String errorMessage;
 
@@ -541,16 +543,16 @@ _$PeopleDataStateCopyWith<_PeopleDataState> get copyWith => __$PeopleDataStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PeopleDataState&&const DeepCollectionEquality().equals(other._users, _users)&&const DeepCollectionEquality().equals(other._viewedUids, _viewedUids)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PeopleDataState&&const DeepCollectionEquality().equals(other._users, _users)&&const DeepCollectionEquality().equals(other._viewedUids, _viewedUids)&&(identical(other.initialized, initialized) || other.initialized == initialized)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_users),const DeepCollectionEquality().hash(_viewedUids),status,errorMessage);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_users),const DeepCollectionEquality().hash(_viewedUids),initialized,status,errorMessage);
 
 @override
 String toString() {
-  return 'PeopleDataState(users: $users, viewedUids: $viewedUids, status: $status, errorMessage: $errorMessage)';
+  return 'PeopleDataState(users: $users, viewedUids: $viewedUids, initialized: $initialized, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -561,7 +563,7 @@ abstract mixin class _$PeopleDataStateCopyWith<$Res> implements $PeopleDataState
   factory _$PeopleDataStateCopyWith(_PeopleDataState value, $Res Function(_PeopleDataState) _then) = __$PeopleDataStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<UserData> users, List<String> viewedUids, EPeopleDataStatus status, String errorMessage
+ List<UserData> users, List<String> viewedUids, bool initialized, EPeopleDataStatus status, String errorMessage
 });
 
 
@@ -578,11 +580,12 @@ class __$PeopleDataStateCopyWithImpl<$Res>
 
 /// Create a copy of PeopleDataState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? users = null,Object? viewedUids = null,Object? status = null,Object? errorMessage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? users = null,Object? viewedUids = null,Object? initialized = null,Object? status = null,Object? errorMessage = null,}) {
   return _then(_PeopleDataState(
 users: null == users ? _self._users : users // ignore: cast_nullable_to_non_nullable
 as List<UserData>,viewedUids: null == viewedUids ? _self._viewedUids : viewedUids // ignore: cast_nullable_to_non_nullable
-as List<String>,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as List<String>,initialized: null == initialized ? _self.initialized : initialized // ignore: cast_nullable_to_non_nullable
+as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EPeopleDataStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,
   ));

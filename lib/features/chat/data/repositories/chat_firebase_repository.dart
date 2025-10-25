@@ -11,9 +11,9 @@ class ChatFirebaseRepository implements IChatRepository {
   }) : _firebaseFirestoreService = firebaseFirestoreService;
 
   @override
-  Future<void> create(Chat chat) async {
-    final String id = _firebaseFirestoreService.chats().id;
-    _firebaseFirestoreService
+  Future<Chat> create(Chat chat) async {
+    final String id = _firebaseFirestoreService.chats().doc().id;
+    await _firebaseFirestoreService
         .chats()
         .doc(
           id,
@@ -27,12 +27,20 @@ class ChatFirebaseRepository implements IChatRepository {
               )
               .toJson(),
         );
+    return chat.copyWith(
+      chatId: id,
+    );
   }
 
   @override
-  Stream<List<ChatDto>> get(String uid) {
+  Stream<List<ChatDto>> getStream(String uid) {
     return _firebaseFirestoreService.chats().snapshots().map(
       (e) => e.docs
+          .where(
+            (e) => (e.data()['participants'] as List).contains(
+              uid,
+            ),
+          )
           .map(
             (doc) => ChatDto.fromJson(
               doc.data(),
@@ -40,5 +48,26 @@ class ChatFirebaseRepository implements IChatRepository {
           )
           .toList(),
     );
+  }
+
+  @override
+  Stream<ChatDto> getByIdStream({
+    required String uid,
+    required String chatId,
+  }) {
+   return _firebaseFirestoreService
+        .chats()
+        .doc(
+          chatId,
+        )
+        .snapshots()
+        .map(
+          (e) {
+            final dto = ChatDto.fromJson(
+              e.data()!,
+            );
+            return dto;
+          },
+        );
   }
 }

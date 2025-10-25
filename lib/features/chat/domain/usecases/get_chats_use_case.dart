@@ -18,7 +18,7 @@ class GetChatsUseCase {
     String uid,
   ) {
     return _chatRepository
-        .get(
+        .getStream(
           uid,
         )
         .asyncMap(
@@ -30,14 +30,14 @@ class GetChatsUseCase {
                   ),
                 )
                 .toList();
-            final users = await _userRepository.getUsersById(
+            final List<UserData> users = await _userRepository.getUsersById(
               ids: uids,
             );
 
             final userById = {for (var u in users) u.uid: u};
 
             final chats = chatsDto.map((ChatDto chat) {
-              final UserData user = userById[uid]!;
+              final UserData user = userById[uids.first]!;
 
               return chat.toDomain(
                 user,

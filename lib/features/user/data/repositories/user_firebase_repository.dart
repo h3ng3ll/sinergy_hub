@@ -65,11 +65,18 @@ class UserFirebaseRepository extends IUserRepository {
     final res = await _firebaseFirestoreService.usersDocument.get();
 
     final userData = List<UserData>.from(
-      res.docs.map(
-        (e) => UserData.fromJson(
-          e.data(),
-        ),
-      ),
+      res.docs
+          .map(
+            (e) => UserData.fromJson(
+              e.data(),
+            ),
+          )
+          .where(
+            (e) => !userDataState.excludedUids.contains(
+              e.uid,
+            ),
+          )
+          .toList(),
     );
     return userData;
   }
@@ -93,5 +100,24 @@ class UserFirebaseRepository extends IUserRepository {
       userRow.data()!,
     );
     return user;
+  }
+
+  @override
+  Stream<UserData?> userDataStream(
+    String uid,
+  ) {
+    return _firebaseFirestoreService.usersDocument
+        .doc(
+          uid,
+        )
+        .snapshots()
+        .map(
+          (snapshot) {
+            if (!snapshot.exists) return null;
+            return UserData.fromJson(
+              snapshot.data()!,
+            );
+          },
+        );
   }
 }
