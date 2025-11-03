@@ -27,5 +27,5 @@ Map<String, dynamic> _$UsersDataPgStateToJson(_UsersDataPgState instance) =>
       'startIndex': instance.startIndex,
       'pageSize': instance.pageSize,
       'excludedUids': instance.excludedUids.toList(),
-      'items': instance.items,
+      'items': instance.items.map((e) => e.toJson()).toList(),
     };

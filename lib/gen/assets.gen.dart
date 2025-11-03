@@ -26,6 +26,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/arrow_left_outlined.svg
   String get arrowLeftOutlined => 'assets/icons/arrow_left_outlined.svg';
 
+  /// File path: assets/icons/arrow_right_outlined.svg
+  String get arrowRightOutlined => 'assets/icons/arrow_right_outlined.svg';
+
   /// File path: assets/icons/bug.svg
   String get bug => 'assets/icons/bug.svg';
 
@@ -74,6 +77,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/liked.svg
   String get liked => 'assets/icons/liked.svg';
 
+  /// File path: assets/icons/log_out.svg
+  String get logOut => 'assets/icons/log_out.svg';
+
+  /// File path: assets/icons/notification.svg
+  String get notification => 'assets/icons/notification.svg';
+
   /// File path: assets/icons/pallete.svg
   String get pallete => 'assets/icons/pallete.svg';
 
@@ -94,6 +103,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/portpolio_outlined.svg
   String get portpolioOutlined => 'assets/icons/portpolio_outlined.svg';
+
+  /// File path: assets/icons/privacy.svg
+  String get privacy => 'assets/icons/privacy.svg';
 
   /// File path: assets/icons/psd-3d-render-rocket-ioslated-background.zip
   String get psd3dRenderRocketIoslatedBackground =>
@@ -147,6 +159,7 @@ class $AssetsIconsGen {
     analiticOutlined,
     analytic,
     arrowLeftOutlined,
+    arrowRightOutlined,
     bug,
     chartOutlined,
     check,
@@ -163,6 +176,8 @@ class $AssetsIconsGen {
     info,
     layer,
     liked,
+    logOut,
+    notification,
     pallete,
     palleteOutlined,
     panOutlined,
@@ -170,6 +185,7 @@ class $AssetsIconsGen {
     phone,
     phoneOutlined,
     portpolioOutlined,
+    privacy,
     psd3dRenderRocketIoslatedBackground,
     recycle,
     rocketShipHalfShadow,

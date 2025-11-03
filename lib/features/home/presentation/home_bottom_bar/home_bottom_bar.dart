@@ -3,10 +3,14 @@ import 'package:flutter_shaders/flutter_shaders.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/resources/app_shader.dart';
+import '../../../../core/resources/colors/app_color_scheme.dart';
+import '../../../../core/resources/text/app_text_theme.dart';
 import '../../../../core/utils/shader_painter.dart';
+import '../home_drawer/home_drawer.dart';
+import 'widgets/build_animated_background/build_animated_background.dart';
 import 'widgets/custom_bottom_bar_container.dart';
 
-class HomeBottomBar extends StatefulWidget {
+class HomeBottomBar extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
   const HomeBottomBar({
@@ -14,83 +18,57 @@ class HomeBottomBar extends StatefulWidget {
     required this.navigationShell,
   });
 
-  @override
-  State<HomeBottomBar> createState() => _HomeBottomBarState();
-}
+  void onTapNotifications () {
 
-class _HomeBottomBarState extends State<HomeBottomBar>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    _controller =
-        AnimationController(
-            vsync: this,
-            duration: const Duration(
-              seconds: 5,
-            ),
-          )
-          ..repeat(
-            reverse: true,
-          )
-          ..addListener(
-            () {
-              if (mounted) {
-                setState(() {});
-              }
-            },
-          );
-
-    super.initState();
   }
+  void onTapAccount () {
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  }
+  void onTapPrivacyPolicy () {
+
+  }
+  void onTapLogOut () {
+
   }
 
   void _goBranch(
     int index,
-  ) => widget.navigationShell.goBranch(
+  ) => navigationShell.goBranch(
     index,
-    initialLocation: index == widget.navigationShell.currentIndex,
+    initialLocation: index == navigationShell.currentIndex,
   );
 
   @override
   Widget build(BuildContext context) {
-    return ShaderBuilder(
-      (context, shader, child) {
-        return CustomPaint(
-          painter: ShaderPainter(
-            repaint: _controller,
-            shader: shader,
-            parameters: [
-              ShaderType(
-                shaderType: EShaderDataType.floatShader,
-                value: _controller.lastElapsedDuration!.inMilliseconds / 1000,
-              ),
-              ShaderType(
-                shaderType: EShaderDataType.floatShader,
-                value: MediaQuery.of(context).size.width,
-              ),
-              ShaderType(
-                shaderType: EShaderDataType.floatShader,
-                value: MediaQuery.of(context).size.height,
-              ),
-            ],
-          ),
-          child: child,
-        );
-      },
-      assetKey: AppShaders.ve,
-      child: Scaffold(
-        body: widget.navigationShell,
+    final colorScheme = AppColorScheme.of(context);
+    final textTheme = AppTextTheme.of(context);
 
+    return BuildAnimatedBackground(
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            InkWell(
+              onTap: onTapNotifications,
+              child: Icon(
+                Icons.notifications,
+                color: colorScheme.secondary,
+              ),
+            ),
+            Icon(
+              Icons.more_vert,
+            ),
+          ],
+        ),
+        body: navigationShell,
+        drawer: HomeDrawer(
+            onTapNotifications: onTapNotifications,
+            onTapAccount: onTapAccount,
+            onTapPrivacyPolicy: onTapPrivacyPolicy,
+            onTapLogOut: onTapLogOut,
+        ),
         backgroundColor: Colors.transparent,
         bottomNavigationBar: CustomBottomBarContainer(
-          selectedIndex: widget.navigationShell.currentIndex,
+          selectedIndex: navigationShell.currentIndex,
           onTapItem: _goBranch,
         ),
       ),

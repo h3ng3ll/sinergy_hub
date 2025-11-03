@@ -23,4 +23,8 @@ abstract class IUserRepository {
   Future<List<UserData>> get({
     required UserDataPgState userDataState,
   });
+
+  Future<void> update({
+    required UserData userData,
+  });
 }

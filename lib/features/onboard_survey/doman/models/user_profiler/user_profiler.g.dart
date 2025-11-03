@@ -15,6 +15,11 @@ _UserProfiler _$UserProfilerFromJson(
   searchingSpecializations: (json['searchingSpecializations'] as List<dynamic>)
       .map((e) => $enumDecode(_$ESpecializationEnumMap, e))
       .toList(),
+  skills:
+      (json['skills'] as List<dynamic>?)
+          ?.map((e) => Skill.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$UserProfilerToJson(_UserProfiler instance) =>
@@ -25,6 +30,7 @@ Map<String, dynamic> _$UserProfilerToJson(_UserProfiler instance) =>
       'searchingSpecializations': instance.searchingSpecializations
           .map((e) => _$ESpecializationEnumMap[e]!)
           .toList(),
+      'skills': instance.skills.map((e) => e.toJson()).toList(),
     };
 
 const _$ESpecializationEnumMap = {

@@ -7,6 +7,8 @@ class TranslucentCardContainer extends StatelessWidget {
   final double? height;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+  final BorderRadius? borderRadius;
+  final EdgeInsets? padding;
 
   const TranslucentCardContainer({
     super.key,
@@ -14,6 +16,8 @@ class TranslucentCardContainer extends StatelessWidget {
     this.height,
     this.onTap,
     this.onLongPress,
+    this.borderRadius,
+    this.padding,
   });
 
   @override
@@ -23,13 +27,18 @@ class TranslucentCardContainer extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: height,
-        padding: EdgeInsets.all(
-          17.5,
-        ),
+        padding:
+            padding ??
+            EdgeInsets.all(
+              17.5,
+            ),
+
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            12.0,
-          ),
+          borderRadius:
+              borderRadius ??
+              BorderRadius.circular(
+                12.0,
+              ),
           color: AppColors.white.value.withValues(
             alpha: 0.15,
           ),

@@ -20,7 +20,7 @@ _Chat _$ChatFromJson(Map<String, dynamic> json) => _Chat(
 
 Map<String, dynamic> _$ChatToJson(_Chat instance) => <String, dynamic>{
   'chatId': instance.chatId,
-  'user': instance.user,
+  'user': instance.user.toJson(),
   'lastMessage': instance.lastMessage,
   'lastMessageSent': instance.lastMessageSent.toIso8601String(),
   'participants': instance.participants,

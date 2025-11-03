@@ -17,7 +17,7 @@ class MatchesTab extends StatefulWidget {
 }
 
 class _MatchesTabState extends State<MatchesTab> {
-  void onTapNotifications() {}
+
 
   void onReachChatsToEnd() {}
 
@@ -36,20 +36,7 @@ class _MatchesTabState extends State<MatchesTab> {
     return HorizontalPadding(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          actions: [
-            InkWell(
-              onTap: onTapNotifications,
-              child: Icon(
-                Icons.notifications,
-                color: colorScheme.secondary,
-              ),
-            ),
-            Icon(
-              Icons.more_vert,
-            ),
-          ],
-        ),
+
         body: Column(
           children: [
             SearchInput(

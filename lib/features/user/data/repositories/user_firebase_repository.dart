@@ -120,4 +120,20 @@ class UserFirebaseRepository extends IUserRepository {
           },
         );
   }
+
+  @override
+  Future<void> update({
+    required UserData userData,
+  }) async {
+    final userJson = Map<String, dynamic>.from(
+      userData.toJson(),
+    );
+    await _firebaseFirestoreService
+        .userDocument(
+          userData.uid,
+        )
+        .set(
+          userJson,
+        );
+  }
 }

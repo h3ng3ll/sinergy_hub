@@ -6,12 +6,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/models/user_data/user_data.dart';
 import '../../../domain/repositories/i_user_repository.dart';
+import '../../../domain/usecases/update_user_usecase.dart';
 
 part 'user_state.dart';
 
 part 'user_cubit.freezed.dart';
 
 class UserCubit extends Cubit<UserState> {
+  final UpdateUserUseCase _updateUserUseCase;
+
   final IUserRepository _userRepository;
 
   StreamSubscription? _userSubscription;
@@ -20,7 +23,9 @@ class UserCubit extends Cubit<UserState> {
   UserCubit({
     required User? preloadUser,
     required IUserRepository userRepository,
+    required UpdateUserUseCase updateUserUseCase,
   }) : _userRepository = userRepository,
+       _updateUserUseCase = updateUserUseCase,
        super(
          UserState(
            user: preloadUser,
@@ -57,6 +62,14 @@ class UserCubit extends Cubit<UserState> {
   String? get uid {
     final state = this.state;
     return state.user?.uid;
+  }
+
+  /// Set userData on the view of given
+  /// UserData instance
+  void update(UserData user) {
+    _updateUserUseCase.call(
+      user,
+    );
   }
 
   void _subscribeUserData(

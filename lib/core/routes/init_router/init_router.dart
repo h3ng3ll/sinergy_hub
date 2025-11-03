@@ -9,6 +9,7 @@ import '../../../features/home/presentation/home_bottom_bar/home_bottom_bar.dart
 import '../../../features/home/presentation/home_root/home_root.dart';
 import '../../../features/home/presentation/tabs/home_tab/home_tab.dart';
 import '../../../features/home/presentation/tabs/matches_tab/matches_tab.dart';
+import '../../../features/home/presentation/tabs/profile_tab/pages/edit_profile_page/edit_profile_page.dart';
 import '../../../features/home/presentation/tabs/profile_tab/profile_tab.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
 import '../root_page/root_page.dart';
@@ -58,19 +59,20 @@ final GoRouter initRouter = GoRouter(
                 ),
               ],
             ),
-          ]
+          ],
         ),
         TypedStatefulShellBranch(
           routes: [
             TypedGoRoute<ChatPageRoute>(
               path: '/chat',
             ),
-          ]
+            TypedGoRoute<EditProfilePageRoute>(
+              path: '/edit-profile-page',
+            ),
+          ],
         ),
       ],
     ),
-
-
   ],
 )
 class RootPageRoute extends ShellRouteData {
@@ -164,10 +166,10 @@ class HomeRootRoute extends StatefulShellRouteData {
 
   @override
   Widget builder(
-      BuildContext context,
-      GoRouterState state,
-      Widget navigationShell,
-      ) {
+    BuildContext context,
+    GoRouterState state,
+    Widget navigationShell,
+  ) {
     return HomeRoot(
       navigator: navigationShell,
     );
@@ -187,6 +189,16 @@ class ChatPageRoute extends GoRouteData with _$ChatPageRoute {
       ChatPage(
         chatId: chatId,
       ),
+    );
+  }
+}
+
+class EditProfilePageRoute extends GoRouteData with _$EditProfilePageRoute {
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      EditProfilePage(),
     );
   }
 }

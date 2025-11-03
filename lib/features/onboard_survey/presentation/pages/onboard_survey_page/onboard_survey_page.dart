@@ -210,6 +210,7 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
         role: _selectedRole!,
         experience: _selectedExperience!,
         searchingSpecializations: _searchingSpecializations,
+        skills: [],
       ),
     );
     if (mounted) {

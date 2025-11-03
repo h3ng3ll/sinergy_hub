@@ -34,6 +34,7 @@ sealed class UserData with _$UserData {
       role: ERole.productManager,
       experience: EExperience.senior,
       searchingSpecializations: [],
+      skills: [],
     ),
   );
 

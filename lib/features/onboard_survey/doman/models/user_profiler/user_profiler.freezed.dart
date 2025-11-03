@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserProfiler {
 
- ESpecialization get specialization; ERole get role; EExperience get experience; List<ESpecialization> get searchingSpecializations;
+ ESpecialization get specialization; ERole get role; EExperience get experience; List<ESpecialization> get searchingSpecializations; List<Skill> get skills;
 /// Create a copy of UserProfiler
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $UserProfilerCopyWith<UserProfiler> get copyWith => _$UserProfilerCopyWithImpl<U
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserProfiler&&(identical(other.specialization, specialization) || other.specialization == specialization)&&(identical(other.role, role) || other.role == role)&&(identical(other.experience, experience) || other.experience == experience)&&const DeepCollectionEquality().equals(other.searchingSpecializations, searchingSpecializations));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserProfiler&&(identical(other.specialization, specialization) || other.specialization == specialization)&&(identical(other.role, role) || other.role == role)&&(identical(other.experience, experience) || other.experience == experience)&&const DeepCollectionEquality().equals(other.searchingSpecializations, searchingSpecializations)&&const DeepCollectionEquality().equals(other.skills, skills));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,specialization,role,experience,const DeepCollectionEquality().hash(searchingSpecializations));
+int get hashCode => Object.hash(runtimeType,specialization,role,experience,const DeepCollectionEquality().hash(searchingSpecializations),const DeepCollectionEquality().hash(skills));
 
 @override
 String toString() {
-  return 'UserProfiler(specialization: $specialization, role: $role, experience: $experience, searchingSpecializations: $searchingSpecializations)';
+  return 'UserProfiler(specialization: $specialization, role: $role, experience: $experience, searchingSpecializations: $searchingSpecializations, skills: $skills)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $UserProfilerCopyWith<$Res>  {
   factory $UserProfilerCopyWith(UserProfiler value, $Res Function(UserProfiler) _then) = _$UserProfilerCopyWithImpl;
 @useResult
 $Res call({
- ESpecialization specialization, ERole role, EExperience experience, List<ESpecialization> searchingSpecializations
+ ESpecialization specialization, ERole role, EExperience experience, List<ESpecialization> searchingSpecializations, List<Skill> skills
 });
 
 
@@ -65,13 +65,14 @@ class _$UserProfilerCopyWithImpl<$Res>
 
 /// Create a copy of UserProfiler
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? specialization = null,Object? role = null,Object? experience = null,Object? searchingSpecializations = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? specialization = null,Object? role = null,Object? experience = null,Object? searchingSpecializations = null,Object? skills = null,}) {
   return _then(_self.copyWith(
 specialization: null == specialization ? _self.specialization : specialization // ignore: cast_nullable_to_non_nullable
 as ESpecialization,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as ERole,experience: null == experience ? _self.experience : experience // ignore: cast_nullable_to_non_nullable
 as EExperience,searchingSpecializations: null == searchingSpecializations ? _self.searchingSpecializations : searchingSpecializations // ignore: cast_nullable_to_non_nullable
-as List<ESpecialization>,
+as List<ESpecialization>,skills: null == skills ? _self.skills : skills // ignore: cast_nullable_to_non_nullable
+as List<Skill>,
   ));
 }
 
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ESpecialization specialization,  ERole role,  EExperience experience,  List<ESpecialization> searchingSpecializations)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ESpecialization specialization,  ERole role,  EExperience experience,  List<ESpecialization> searchingSpecializations,  List<Skill> skills)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserProfiler() when $default != null:
-return $default(_that.specialization,_that.role,_that.experience,_that.searchingSpecializations);case _:
+return $default(_that.specialization,_that.role,_that.experience,_that.searchingSpecializations,_that.skills);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.specialization,_that.role,_that.experience,_that.searching
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ESpecialization specialization,  ERole role,  EExperience experience,  List<ESpecialization> searchingSpecializations)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ESpecialization specialization,  ERole role,  EExperience experience,  List<ESpecialization> searchingSpecializations,  List<Skill> skills)  $default,) {final _that = this;
 switch (_that) {
 case _UserProfiler():
-return $default(_that.specialization,_that.role,_that.experience,_that.searchingSpecializations);}
+return $default(_that.specialization,_that.role,_that.experience,_that.searchingSpecializations,_that.skills);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -191,10 +192,10 @@ return $default(_that.specialization,_that.role,_that.experience,_that.searching
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ESpecialization specialization,  ERole role,  EExperience experience,  List<ESpecialization> searchingSpecializations)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ESpecialization specialization,  ERole role,  EExperience experience,  List<ESpecialization> searchingSpecializations,  List<Skill> skills)?  $default,) {final _that = this;
 switch (_that) {
 case _UserProfiler() when $default != null:
-return $default(_that.specialization,_that.role,_that.experience,_that.searchingSpecializations);case _:
+return $default(_that.specialization,_that.role,_that.experience,_that.searchingSpecializations,_that.skills);case _:
   return null;
 
 }
@@ -206,7 +207,7 @@ return $default(_that.specialization,_that.role,_that.experience,_that.searching
 @JsonSerializable()
 
 class _UserProfiler implements UserProfiler {
-  const _UserProfiler({required this.specialization, required this.role, required this.experience, required final  List<ESpecialization> searchingSpecializations}): _searchingSpecializations = searchingSpecializations;
+  const _UserProfiler({required this.specialization, required this.role, required this.experience, required final  List<ESpecialization> searchingSpecializations, final  List<Skill> skills = const []}): _searchingSpecializations = searchingSpecializations,_skills = skills;
   factory _UserProfiler.fromJson(Map<String, dynamic> json) => _$UserProfilerFromJson(json);
 
 @override final  ESpecialization specialization;
@@ -217,6 +218,13 @@ class _UserProfiler implements UserProfiler {
   if (_searchingSpecializations is EqualUnmodifiableListView) return _searchingSpecializations;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_searchingSpecializations);
+}
+
+ final  List<Skill> _skills;
+@override@JsonKey() List<Skill> get skills {
+  if (_skills is EqualUnmodifiableListView) return _skills;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_skills);
 }
 
 
@@ -233,16 +241,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserProfiler&&(identical(other.specialization, specialization) || other.specialization == specialization)&&(identical(other.role, role) || other.role == role)&&(identical(other.experience, experience) || other.experience == experience)&&const DeepCollectionEquality().equals(other._searchingSpecializations, _searchingSpecializations));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserProfiler&&(identical(other.specialization, specialization) || other.specialization == specialization)&&(identical(other.role, role) || other.role == role)&&(identical(other.experience, experience) || other.experience == experience)&&const DeepCollectionEquality().equals(other._searchingSpecializations, _searchingSpecializations)&&const DeepCollectionEquality().equals(other._skills, _skills));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,specialization,role,experience,const DeepCollectionEquality().hash(_searchingSpecializations));
+int get hashCode => Object.hash(runtimeType,specialization,role,experience,const DeepCollectionEquality().hash(_searchingSpecializations),const DeepCollectionEquality().hash(_skills));
 
 @override
 String toString() {
-  return 'UserProfiler(specialization: $specialization, role: $role, experience: $experience, searchingSpecializations: $searchingSpecializations)';
+  return 'UserProfiler(specialization: $specialization, role: $role, experience: $experience, searchingSpecializations: $searchingSpecializations, skills: $skills)';
 }
 
 
@@ -253,7 +261,7 @@ abstract mixin class _$UserProfilerCopyWith<$Res> implements $UserProfilerCopyWi
   factory _$UserProfilerCopyWith(_UserProfiler value, $Res Function(_UserProfiler) _then) = __$UserProfilerCopyWithImpl;
 @override @useResult
 $Res call({
- ESpecialization specialization, ERole role, EExperience experience, List<ESpecialization> searchingSpecializations
+ ESpecialization specialization, ERole role, EExperience experience, List<ESpecialization> searchingSpecializations, List<Skill> skills
 });
 
 
@@ -270,13 +278,14 @@ class __$UserProfilerCopyWithImpl<$Res>
 
 /// Create a copy of UserProfiler
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? specialization = null,Object? role = null,Object? experience = null,Object? searchingSpecializations = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? specialization = null,Object? role = null,Object? experience = null,Object? searchingSpecializations = null,Object? skills = null,}) {
   return _then(_UserProfiler(
 specialization: null == specialization ? _self.specialization : specialization // ignore: cast_nullable_to_non_nullable
 as ESpecialization,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as ERole,experience: null == experience ? _self.experience : experience // ignore: cast_nullable_to_non_nullable
 as EExperience,searchingSpecializations: null == searchingSpecializations ? _self._searchingSpecializations : searchingSpecializations // ignore: cast_nullable_to_non_nullable
-as List<ESpecialization>,
+as List<ESpecialization>,skills: null == skills ? _self._skills : skills // ignore: cast_nullable_to_non_nullable
+as List<Skill>,
   ));
 }
 

@@ -21,7 +21,7 @@ _UserMatch _$UserMatchFromJson(Map<String, dynamic> json) => _UserMatch(
 
 Map<String, dynamic> _$UserMatchToJson(_UserMatch instance) =>
     <String, dynamic>{
-      'user': instance.user,
+      'user': instance.user.toJson(),
       'matchStatus': _$TinderCardStatusEnumMap[instance.matchStatus]!,
       'completeness': _$EUserMatchCompletenessEnumMap[instance.completeness]!,
       'time': instance.time.toIso8601String(),
