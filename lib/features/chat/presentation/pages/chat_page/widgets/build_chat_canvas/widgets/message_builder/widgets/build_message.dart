@@ -1,26 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../../../../core/resources/colors/app_gradients.dart';
 import '../../../../../../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../../../../../../gen/assets.gen.dart';
 import '../../../../../../../../../home/presentation/tabs/home_tab/widgets/build_tinder_card/widgets/build_top_tinder_card_builder/widget/tinder_card_item/widgets/build_user_avatar.dart';
 import '../../../../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../../../../domain/models/chat_message/chat_message.dart';
 
 class BuildMessage extends StatelessWidget {
-  final ChatMessage message;
+  final ChatMessage? message;
   final UserData user;
   final bool isSentByCurUser;
+  final bool isLoadingStub;
 
   const BuildMessage({
     super.key,
-    required this.message,
+    this.message,
     required this.isSentByCurUser,
     required this.user,
+    this.isLoadingStub = false,
   });
+
+  factory BuildMessage.loading({
+    required UserData user,
+  }) => BuildMessage(
+    isSentByCurUser: false,
+    user: user,
+    isLoadingStub: true,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +65,15 @@ class BuildMessage extends StatelessWidget {
                         ? MainAxisAlignment.end
                         : MainAxisAlignment.start,
                     children: [
-                      if (!isSentByCurUser)...[
+                      if (!isSentByCurUser) ...[
                         BuildUserAvatar(
                           url: user.avatarUrl,
                           width: 50.0,
                           height: 50.0,
                         ),
                         Gap(10.0),
-                     ], Container(
+                      ],
+                      Container(
                         padding: EdgeInsets.all(
                           15.0,
                         ),
@@ -94,25 +107,36 @@ class BuildMessage extends StatelessWidget {
                                   topRight: radius,
                                 ),
                         ),
-                        child: Text(
-                          message.message,
-                          style: textTheme.regular16.copyWith(
-                            color: isSentByCurUser
-                                ? colorScheme.onPrimary
-                                : AppColors.black.value,
-                          ),
-                        ),
+                        child: isLoadingStub
+                            ? SizedBox(
+                          // width: 80.0,
+                          height: 20.0,
+                              child: Lottie.asset(
+                                  fit: BoxFit.cover,
+                                  Assets.lottie.loadingDots,
+
+                                ),
+                            )
+                            : Text(
+                                message!.message,
+                                style: textTheme.regular16.copyWith(
+                                  color: isSentByCurUser
+                                      ? colorScheme.onPrimary
+                                      : AppColors.black.value,
+                                ),
+                              ),
                       ),
                     ],
                   ),
-                  Text(
-                    DateFormat('HH:mm').format(
-                      message.createdAt,
+                  if (!isLoadingStub)
+                    Text(
+                      DateFormat('HH:mm').format(
+                        message!.createdAt,
+                      ),
+                      textAlign: isSentByCurUser
+                          ? TextAlign.end
+                          : TextAlign.start,
                     ),
-                    textAlign: isSentByCurUser
-                        ? TextAlign.end
-                        : TextAlign.start,
-                  ),
                 ],
               ),
             ),

@@ -55,7 +55,7 @@ class ChatFirebaseRepository implements IChatRepository {
     required String uid,
     required String chatId,
   }) {
-   return _firebaseFirestoreService
+    return _firebaseFirestoreService
         .chats()
         .doc(
           chatId,
@@ -68,6 +68,20 @@ class ChatFirebaseRepository implements IChatRepository {
             );
             return dto;
           },
+        );
+  }
+
+  @override
+  Future<void> update({
+    required ChatDto chat,
+  }) async {
+    return await _firebaseFirestoreService
+        .chats()
+        .doc(
+          chat.chatId,
+        )
+        .update(
+          chat.toJson(),
         );
   }
 }

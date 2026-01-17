@@ -4,7 +4,6 @@ import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../user/domain/repositories/i_user_repository.dart';
 import '../data/repositories/chat_firebase_repository.dart';
 import '../data/repositories/chat_message_firebase_repository.dart';
-import '../domain/models/chat_message/chat_message.dart';
 import '../domain/repositories/i_chat_message_repository.dart';
 import '../domain/repositories/i_chat_repository.dart';
 import '../domain/usecases/get_chat_by_id_use_case.dart';
@@ -44,9 +43,10 @@ void initChatFeature(GetIt getIt) {
   getIt.registerLazySingleton<SendMessageUseCase>(
     () => SendMessageUseCase(
       chatMessageRepository: getIt<IChatMessageRepository>(),
+      chatRepository: getIt<IChatRepository>(),
     ),
   );
- getIt.registerLazySingleton<GetChatByIdUseCase>(
+  getIt.registerLazySingleton<GetChatByIdUseCase>(
     () => GetChatByIdUseCase(
       chatRepository: getIt<IChatRepository>(),
       userRepository: getIt<IUserRepository>(),

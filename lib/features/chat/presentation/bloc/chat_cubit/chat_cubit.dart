@@ -14,6 +14,7 @@ part 'chat_cubit.freezed.dart';
 
 class ChatCubit extends Cubit<ChatState> {
   final InitChatUseCase _initChatUseCase;
+  final GetChatsUseCase _getChatsUseCase;
   final UserCubit _userCubit;
 
   StreamSubscription? _subscription;
@@ -24,11 +25,14 @@ class ChatCubit extends Cubit<ChatState> {
     required UserCubit userCubit,
   }) : _initChatUseCase = initChatUseCase,
        _userCubit = userCubit,
-       super(const ChatState()) {
-    if (userCubit.uid == null) return;
-    _subscription = getChatsUseCase
+       _getChatsUseCase = getChatsUseCase,
+       super(const ChatState());
+
+  void init() {
+    if (_userCubit.uid == null) return;
+    _subscription = _getChatsUseCase
         .call(
-          userCubit.uid!,
+          _userCubit.uid!,
         )
         .listen(
           (

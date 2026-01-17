@@ -8,13 +8,13 @@ part 'chat_dto.g.dart';
 part 'chat_dto.freezed.dart';
 
 @freezed
-sealed class ChatDto with _$ChatDto {
-
+abstract class ChatDto with _$ChatDto {
   const ChatDto._();
 
   const factory ChatDto({
     @Default('') String chatId,
     @Default('') String lastMessage,
+    @Default([]) List<String> typingUsers,
     required DateTime lastMessageSent,
 
     /// who access this chat
@@ -35,13 +35,15 @@ sealed class ChatDto with _$ChatDto {
     lastMessageSent: lastMessageSent,
     participants: participants,
     createdAt: createdAt,
+    typingUsers: typingUsers,
   );
 
   factory ChatDto.fromDomain(
     Chat chat,
   ) => ChatDto(
-
     chatId: chat.chatId,
+    lastMessage: chat.lastMessage,
+    typingUsers: chat.typingUsers,
     lastMessageSent: chat.lastMessageSent,
     participants: chat.participants,
     createdAt: chat.createdAt,

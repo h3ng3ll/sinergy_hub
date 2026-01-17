@@ -24,6 +24,8 @@ class ChatInput extends StatelessWidget {
       style: textTheme.regular14.copyWith(
         color: colorScheme.onSecondary,
       ),
+      maxLines: 5,
+      minLines: 1,
       hintStyle: textTheme.regular14.copyWith(
         color: AppColors.black.value.withValues(
           alpha: 0.4

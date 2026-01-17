@@ -32,7 +32,7 @@ class _HomeRootState extends State<HomeRoot> {
       getChatsUseCase: getIt(),
       initChatUseCase: getIt(),
       userCubit: userCubit,
-    );
+    )..init();
 
     _userMatchingOutcomeCubit = UserMatchesOutcomeCubit(
       userCubit: userCubit,

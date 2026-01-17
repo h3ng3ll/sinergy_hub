@@ -23,6 +23,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/analytic.svg
   String get analytic => 'assets/icons/analytic.svg';
 
+  /// File path: assets/icons/archive.svg
+  String get archive => 'assets/icons/archive.svg';
+
   /// File path: assets/icons/arrow_left_outlined.svg
   String get arrowLeftOutlined => 'assets/icons/arrow_left_outlined.svg';
 
@@ -61,6 +64,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/engine_outlined.svg
   String get engineOutlined => 'assets/icons/engine_outlined.svg';
+
+  /// File path: assets/icons/group.svg
+  String get group => 'assets/icons/group.svg';
 
   /// File path: assets/icons/handshake_outlined.svg
   String get handshakeOutlined => 'assets/icons/handshake_outlined.svg';
@@ -135,11 +141,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/stack_outlined.svg
   String get stackOutlined => 'assets/icons/stack_outlined.svg';
 
+  /// File path: assets/icons/star.svg
+  String get star => 'assets/icons/star.svg';
+
   /// File path: assets/icons/start_outlined.svg
   String get startOutlined => 'assets/icons/start_outlined.svg';
 
   /// File path: assets/icons/telegram.svg
   String get telegram => 'assets/icons/telegram.svg';
+
+  /// File path: assets/icons/time.svg
+  String get time => 'assets/icons/time.svg';
 
   /// File path: assets/icons/tool.svg
   String get tool => 'assets/icons/tool.svg';
@@ -158,6 +170,7 @@ class $AssetsIconsGen {
     alertOutlined,
     analiticOutlined,
     analytic,
+    archive,
     arrowLeftOutlined,
     arrowRightOutlined,
     bug,
@@ -171,6 +184,7 @@ class $AssetsIconsGen {
     dashboardOutlined,
     engine,
     engineOutlined,
+    group,
     handshakeOutlined,
     herb,
     info,
@@ -195,8 +209,10 @@ class $AssetsIconsGen {
     server,
     serverOutlined,
     stackOutlined,
+    star,
     startOutlined,
     telegram,
+    time,
     tool,
     tree,
     user,
@@ -278,12 +294,23 @@ class $AssetsImagesGen {
   ];
 }
 
+class $AssetsLottieGen {
+  const $AssetsLottieGen();
+
+  /// File path: assets/lottie/loading_dots.json
+  String get loadingDots => 'assets/lottie/loading_dots.json';
+
+  /// List of all assets
+  List<String> get values => [loadingDots];
+}
+
 class Assets {
   const Assets._();
 
   static const String aEnv = '.env';
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsLottieGen lottie = $AssetsLottieGen();
 
   /// List of all assets
   static List<String> get values => [aEnv];

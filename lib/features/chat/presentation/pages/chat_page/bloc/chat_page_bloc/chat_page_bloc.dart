@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'dart:collection';
 
 import '../../../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
 import '../../../../../domain/models/chat/chat.dart';
@@ -133,7 +132,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       //   ),
       // );
       _sendMessageUseCase.call(
-        chatId: state.chat!.chatId,
+        chat: state.chat!,
         message: ChatMessage(
           createdAt: DateTime.now(),
           sentUid: _userCubit.uid!,

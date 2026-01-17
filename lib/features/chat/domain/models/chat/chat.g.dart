@@ -11,6 +11,11 @@ _Chat _$ChatFromJson(Map<String, dynamic> json) => _Chat(
   user: UserData.fromJson(json['user'] as Map<String, dynamic>),
   lastMessage: json['lastMessage'] as String? ?? '',
   lastMessageSent: DateTime.parse(json['lastMessageSent'] as String),
+  typingUsers:
+      (json['typingUsers'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
   participants: (json['participants'] as List<dynamic>)
       .map((e) => e as String)
       .toList(),
@@ -23,6 +28,7 @@ Map<String, dynamic> _$ChatToJson(_Chat instance) => <String, dynamic>{
   'user': instance.user.toJson(),
   'lastMessage': instance.lastMessage,
   'lastMessageSent': instance.lastMessageSent.toIso8601String(),
+  'typingUsers': instance.typingUsers,
   'participants': instance.participants,
   'createdAt': instance.createdAt.toIso8601String(),
   'icon': instance.icon,

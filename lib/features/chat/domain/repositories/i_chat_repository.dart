@@ -9,7 +9,11 @@ abstract class IChatRepository {
   Stream<List<ChatDto>> getStream(String uid);
 
   Stream<ChatDto> getByIdStream({
-  required  String uid,
-  required  String chatId,
+    required String uid,
+    required String chatId,
+  });
+
+  Future<void> update({
+    required ChatDto chat,
   });
 }
