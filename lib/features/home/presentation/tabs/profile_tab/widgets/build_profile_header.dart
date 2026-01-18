@@ -11,10 +11,12 @@ import '../../home_tab/widgets/build_tinder_card/widgets/build_top_tinder_card_b
 
 class BuildProfileHeader extends StatelessWidget {
   final UserData userData;
+  final VoidCallback onTapAvatar;
 
   const BuildProfileHeader({
     super.key,
     required this.userData,
+    required this.onTapAvatar,
   });
 
   @override
@@ -30,6 +32,7 @@ class BuildProfileHeader extends StatelessWidget {
           BuildUserAvatar(
             width: 100.0,
             height: 100.0,
+            onTap: onTapAvatar,
             url: userData.avatarUrl,
           ),
           Gap(20.0),

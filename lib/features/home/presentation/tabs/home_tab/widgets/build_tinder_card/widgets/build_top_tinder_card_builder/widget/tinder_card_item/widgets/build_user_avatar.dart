@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import '../../../../../../../../../../../../core/resources/colors/app_colors.dart';
@@ -7,13 +9,16 @@ class BuildUserAvatar extends StatelessWidget {
   final double? width;
   final double? height;
   final String? url;
+  final Uint8List? cacheImg;
   final VoidCallback? onTap;
 
   const BuildUserAvatar({
     super.key,
     this.width,
     this.height,
-    required this.url, this.onTap,
+    required this.url,
+    this.onTap,
+    this.cacheImg,
   });
 
   @override
@@ -25,10 +30,10 @@ class BuildUserAvatar extends StatelessWidget {
         height: height ?? 150.0,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-
         ),
         child: BuildImage(
           url: url,
+          cacheImg: cacheImg,
           shape: BoxShape.circle,
           border: Border.all(
             color: AppColors.white.value,

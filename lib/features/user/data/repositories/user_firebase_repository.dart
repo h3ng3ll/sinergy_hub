@@ -1,8 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
+import '../../../../core/services/firebase/firebase_storage_service.dart';
 import '../../domain/models/user_data/user_data.dart';
 import '../../domain/models/users_data_pg_state/users_data_pg_state.dart';
 import '../../domain/repositories/i_user_repository.dart';
@@ -10,12 +16,22 @@ import '../../domain/repositories/i_user_repository.dart';
 class UserFirebaseRepository extends IUserRepository {
   final FirebaseAuthService _firebaseAuthService;
   final FirebaseFirestoreService _firebaseFirestoreService;
+  final FirebaseStorageService _firebaseStorageService;
+
+  final String path = 'user_avatars';
+
+  String _avatarStoragePath(
+    String uid,
+    String name,
+  ) => 'users/$uid/$name';
 
   UserFirebaseRepository({
     required FirebaseAuthService firebaseAuthService,
     required FirebaseFirestoreService firebaseFirestoreService,
+    required FirebaseStorageService firebaseStorageService,
   }) : _firebaseAuthService = firebaseAuthService,
-       _firebaseFirestoreService = firebaseFirestoreService;
+       _firebaseFirestoreService = firebaseFirestoreService,
+       _firebaseStorageService = firebaseStorageService;
 
   @override
   Stream<User?> currentUserStream() => _firebaseAuthService.userStream;
@@ -135,5 +151,44 @@ class UserFirebaseRepository extends IUserRepository {
         .set(
           userJson,
         );
+  }
+
+  @override
+  Future<String> updateAvatar({
+    required String uid,
+    required Uint8List avatar,
+  }) async {
+    final path = _avatarStoragePath(
+      uid,
+      'avatar_${DateTime.now().millisecondsSinceEpoch}.png',
+    );
+
+    final UploadTask uploadTask = _firebaseStorageService.uploadBytes(
+      path: path,
+      bytes: avatar,
+      metadata: SettableMetadata(
+        contentType: 'image/png',
+      ),
+    );
+    final TaskSnapshot snapshot = await uploadTask;
+
+    final String downloadUrl = await snapshot.ref.getDownloadURL();
+
+    return downloadUrl;
+  }
+
+  @override
+  Future<void> deleteAvatar({
+    required String uid,
+    required String name,
+  }) async {
+    final path = _avatarStoragePath(
+      uid,
+      name,
+    );
+
+    await _firebaseStorageService.delete(
+      path,
+    );
   }
 }

@@ -50,13 +50,7 @@ final GoRouter initRouter = GoRouter(
                     ),
                   ],
                 ),
-                TypedStatefulShellBranch(
-                  routes: [
-                    TypedGoRoute<ProfilePageRoute>(
-                      path: '/profile',
-                    ),
-                  ],
-                ),
+
               ],
             ),
           ],
@@ -68,6 +62,9 @@ final GoRouter initRouter = GoRouter(
             ),
             TypedGoRoute<EditProfilePageRoute>(
               path: '/edit-profile-page',
+            ),
+            TypedGoRoute<ProfilePageRoute>(
+              path: '/profile',
             ),
           ],
         ),

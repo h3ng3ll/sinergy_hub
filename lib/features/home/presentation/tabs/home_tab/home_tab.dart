@@ -56,8 +56,10 @@ class _HomeTabState extends State<HomeTab> {
   void onKeepSwiping() {}
 
   Future<void> onSendMessage(UserData matchedUser) async {
+    final uid = context.read<UserCubit>().uid;
     final chatId = await context.read<ChatCubit>().create(
       uid: matchedUser.uid,
+      currentUid: uid!,
     );
     if (!mounted) return;
 

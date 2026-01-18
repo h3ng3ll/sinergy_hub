@@ -9,6 +9,7 @@ import 'core/di/injection.dart';
 import 'core/resources/app_locale.dart';
 import 'core/resources/app_theme.dart';
 import 'core/routes/init_router/init_router.dart';
+import 'features/auth/presentation/bloc/auth_cubit/auth_cubit.dart';
 import 'features/user/domain/repositories/i_user_repository.dart';
 import 'features/user/domain/usecases/update_user_usecase.dart';
 import 'features/user/presentation/bloc/user_cubit/user_cubit.dart';
@@ -72,8 +73,17 @@ class _MyAppState extends State<MyApp> {
     if (!initialized) {
       return Container();
     }
-    return BlocProvider<UserCubit>.value(
-      value: userCubit,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<UserCubit>.value(
+          value: userCubit,
+        ),
+        BlocProvider<AuthCubit>(
+          create: (_) => AuthCubit(
+            authRepository: getIt(),
+          ),
+        ),
+      ],
       child: MaterialApp.router(
         theme: AppThemeData.light,
         supportedLocales: AppLocale.supportedLocales,

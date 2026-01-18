@@ -4,6 +4,7 @@ enum EditProfilePageStatus {
   initial,
   loading,
   failed,
+  updated,
 }
 
 @freezed

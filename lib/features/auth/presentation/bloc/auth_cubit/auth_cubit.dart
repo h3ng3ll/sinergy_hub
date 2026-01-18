@@ -14,8 +14,6 @@ part 'auth_cubit.freezed.dart';
 class AuthCubit extends Cubit<AuthState> {
   final IAuthRepository _authRepository;
 
-  // final FirebaseAuthService _firebaseAuthService = FirebaseAuthService.instance;
-
   AuthCubit({
     required IAuthRepository authRepository,
   })
@@ -29,7 +27,6 @@ class AuthCubit extends Cubit<AuthState> {
       emit(
         state.copyWith(
           status: AuthStatus.authorized,
-          // user: _firebaseAuthService.currentUser,
         ),
       );
     }
@@ -43,11 +40,10 @@ class AuthCubit extends Cubit<AuthState> {
         ),
       );
 
-      final authRes = await _authRepository.signInWithGoogle();
+      await _authRepository.signInWithGoogle();
 
       emit(
         state.copyWith(
-          user: authRes.user,
           status: AuthStatus.initial,
         ),
       );
@@ -73,7 +69,6 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(
         state.copyWith(
-          user: null,
           status: AuthStatus.initial,
         ),
       );
@@ -99,7 +94,6 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(
         state.copyWith(
-          user: null,
           status: AuthStatus.initial,
         ),
       );

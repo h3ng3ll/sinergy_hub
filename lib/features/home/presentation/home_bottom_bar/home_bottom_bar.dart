@@ -5,12 +5,13 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/resources/app_shader.dart';
 import '../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../core/resources/text/app_text_theme.dart';
+import '../../../../core/routes/init_router/init_router.dart';
 import '../../../../core/utils/shader_painter.dart';
 import '../home_drawer/home_drawer.dart';
 import 'widgets/build_animated_background/build_animated_background.dart';
 import 'widgets/custom_bottom_bar_container.dart';
 
-class HomeBottomBar extends StatelessWidget {
+class HomeBottomBar extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
 
   const HomeBottomBar({
@@ -18,24 +19,28 @@ class HomeBottomBar extends StatelessWidget {
     required this.navigationShell,
   });
 
-  void onTapNotifications () {
+  @override
+  State<HomeBottomBar> createState() => _HomeBottomBarState();
+}
 
-  }
-  void onTapAccount () {
+class _HomeBottomBarState extends State<HomeBottomBar> {
+  void onTapNotifications() {}
 
+  void onTapAccount() {
+    ProfilePageRoute().push(
+      context,
+    );
   }
-  void onTapPrivacyPolicy () {
 
-  }
-  void onTapLogOut () {
+  void onTapPrivacyPolicy() {}
 
-  }
+  void onTapLogOut() {}
 
   void _goBranch(
     int index,
-  ) => navigationShell.goBranch(
+  ) => widget.navigationShell.goBranch(
     index,
-    initialLocation: index == navigationShell.currentIndex,
+    initialLocation: index == widget.navigationShell.currentIndex,
   );
 
   @override
@@ -59,16 +64,16 @@ class HomeBottomBar extends StatelessWidget {
             ),
           ],
         ),
-        body: navigationShell,
+        body: widget.navigationShell,
         drawer: HomeDrawer(
-            onTapNotifications: onTapNotifications,
-            onTapAccount: onTapAccount,
-            onTapPrivacyPolicy: onTapPrivacyPolicy,
-            onTapLogOut: onTapLogOut,
+          onTapNotifications: onTapNotifications,
+          onTapAccount: onTapAccount,
+          onTapPrivacyPolicy: onTapPrivacyPolicy,
+          onTapLogOut: onTapLogOut,
         ),
         backgroundColor: Colors.transparent,
         bottomNavigationBar: CustomBottomBarContainer(
-          selectedIndex: navigationShell.currentIndex,
+          selectedIndex: widget.navigationShell.currentIndex,
           onTapItem: _goBranch,
         ),
       ),

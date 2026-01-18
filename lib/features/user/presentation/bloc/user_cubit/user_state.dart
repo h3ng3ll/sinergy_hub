@@ -4,6 +4,7 @@ enum UserStatus {
   loaded,
   loading,
   failed,
+  updated,
 }
 
 @freezed

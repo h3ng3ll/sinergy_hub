@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AuthState implements DiagnosticableTreeMixin {
 
- AuthStatus get status; User? get user; String get errorMessage; String get loadingMessage; AuthCredential? get authCredential;/// verificationPart
+ AuthStatus get status;// User? user,
+ String get errorMessage; String get loadingMessage; AuthCredential? get authCredential;/// verificationPart
  String? get verificationId; int? get resendToken;
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
@@ -27,21 +28,21 @@ $AuthStateCopyWith<AuthState> get copyWith => _$AuthStateCopyWithImpl<AuthState>
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'AuthState'))
-    ..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('user', user))..add(DiagnosticsProperty('errorMessage', errorMessage))..add(DiagnosticsProperty('loadingMessage', loadingMessage))..add(DiagnosticsProperty('authCredential', authCredential))..add(DiagnosticsProperty('verificationId', verificationId))..add(DiagnosticsProperty('resendToken', resendToken));
+    ..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('errorMessage', errorMessage))..add(DiagnosticsProperty('loadingMessage', loadingMessage))..add(DiagnosticsProperty('authCredential', authCredential))..add(DiagnosticsProperty('verificationId', verificationId))..add(DiagnosticsProperty('resendToken', resendToken));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.status, status) || other.status == status)&&(identical(other.user, user) || other.user == user)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.loadingMessage, loadingMessage) || other.loadingMessage == loadingMessage)&&(identical(other.authCredential, authCredential) || other.authCredential == authCredential)&&(identical(other.verificationId, verificationId) || other.verificationId == verificationId)&&(identical(other.resendToken, resendToken) || other.resendToken == resendToken));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.loadingMessage, loadingMessage) || other.loadingMessage == loadingMessage)&&(identical(other.authCredential, authCredential) || other.authCredential == authCredential)&&(identical(other.verificationId, verificationId) || other.verificationId == verificationId)&&(identical(other.resendToken, resendToken) || other.resendToken == resendToken));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,user,errorMessage,loadingMessage,authCredential,verificationId,resendToken);
+int get hashCode => Object.hash(runtimeType,status,errorMessage,loadingMessage,authCredential,verificationId,resendToken);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'AuthState(status: $status, user: $user, errorMessage: $errorMessage, loadingMessage: $loadingMessage, authCredential: $authCredential, verificationId: $verificationId, resendToken: $resendToken)';
+  return 'AuthState(status: $status, errorMessage: $errorMessage, loadingMessage: $loadingMessage, authCredential: $authCredential, verificationId: $verificationId, resendToken: $resendToken)';
 }
 
 
@@ -52,7 +53,7 @@ abstract mixin class $AuthStateCopyWith<$Res>  {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) _then) = _$AuthStateCopyWithImpl;
 @useResult
 $Res call({
- AuthStatus status, User? user, String errorMessage, String loadingMessage, AuthCredential? authCredential, String? verificationId, int? resendToken
+ AuthStatus status, String errorMessage, String loadingMessage, AuthCredential? authCredential, String? verificationId, int? resendToken
 });
 
 
@@ -69,11 +70,10 @@ class _$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? user = freezed,Object? errorMessage = null,Object? loadingMessage = null,Object? authCredential = freezed,Object? verificationId = freezed,Object? resendToken = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? errorMessage = null,Object? loadingMessage = null,Object? authCredential = freezed,Object? verificationId = freezed,Object? resendToken = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as AuthStatus,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as User?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as AuthStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,loadingMessage: null == loadingMessage ? _self.loadingMessage : loadingMessage // ignore: cast_nullable_to_non_nullable
 as String,authCredential: freezed == authCredential ? _self.authCredential : authCredential // ignore: cast_nullable_to_non_nullable
 as AuthCredential?,verificationId: freezed == verificationId ? _self.verificationId : verificationId // ignore: cast_nullable_to_non_nullable
@@ -160,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AuthStatus status,  User? user,  String errorMessage,  String loadingMessage,  AuthCredential? authCredential,  String? verificationId,  int? resendToken)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AuthStatus status,  String errorMessage,  String loadingMessage,  AuthCredential? authCredential,  String? verificationId,  int? resendToken)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.status,_that.user,_that.errorMessage,_that.loadingMessage,_that.authCredential,_that.verificationId,_that.resendToken);case _:
+return $default(_that.status,_that.errorMessage,_that.loadingMessage,_that.authCredential,_that.verificationId,_that.resendToken);case _:
   return orElse();
 
 }
@@ -181,10 +181,10 @@ return $default(_that.status,_that.user,_that.errorMessage,_that.loadingMessage,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AuthStatus status,  User? user,  String errorMessage,  String loadingMessage,  AuthCredential? authCredential,  String? verificationId,  int? resendToken)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AuthStatus status,  String errorMessage,  String loadingMessage,  AuthCredential? authCredential,  String? verificationId,  int? resendToken)  $default,) {final _that = this;
 switch (_that) {
 case _AuthState():
-return $default(_that.status,_that.user,_that.errorMessage,_that.loadingMessage,_that.authCredential,_that.verificationId,_that.resendToken);}
+return $default(_that.status,_that.errorMessage,_that.loadingMessage,_that.authCredential,_that.verificationId,_that.resendToken);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -198,10 +198,10 @@ return $default(_that.status,_that.user,_that.errorMessage,_that.loadingMessage,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AuthStatus status,  User? user,  String errorMessage,  String loadingMessage,  AuthCredential? authCredential,  String? verificationId,  int? resendToken)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AuthStatus status,  String errorMessage,  String loadingMessage,  AuthCredential? authCredential,  String? verificationId,  int? resendToken)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.status,_that.user,_that.errorMessage,_that.loadingMessage,_that.authCredential,_that.verificationId,_that.resendToken);case _:
+return $default(_that.status,_that.errorMessage,_that.loadingMessage,_that.authCredential,_that.verificationId,_that.resendToken);case _:
   return null;
 
 }
@@ -213,11 +213,11 @@ return $default(_that.status,_that.user,_that.errorMessage,_that.loadingMessage,
 
 
 class _AuthState with DiagnosticableTreeMixin implements AuthState {
-  const _AuthState({this.status = AuthStatus.initial, this.user, this.errorMessage = '', this.loadingMessage = '', this.authCredential, this.verificationId, this.resendToken});
+  const _AuthState({this.status = AuthStatus.initial, this.errorMessage = '', this.loadingMessage = '', this.authCredential, this.verificationId, this.resendToken});
   
 
 @override@JsonKey() final  AuthStatus status;
-@override final  User? user;
+// User? user,
 @override@JsonKey() final  String errorMessage;
 @override@JsonKey() final  String loadingMessage;
 @override final  AuthCredential? authCredential;
@@ -236,21 +236,21 @@ _$AuthStateCopyWith<_AuthState> get copyWith => __$AuthStateCopyWithImpl<_AuthSt
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'AuthState'))
-    ..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('user', user))..add(DiagnosticsProperty('errorMessage', errorMessage))..add(DiagnosticsProperty('loadingMessage', loadingMessage))..add(DiagnosticsProperty('authCredential', authCredential))..add(DiagnosticsProperty('verificationId', verificationId))..add(DiagnosticsProperty('resendToken', resendToken));
+    ..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('errorMessage', errorMessage))..add(DiagnosticsProperty('loadingMessage', loadingMessage))..add(DiagnosticsProperty('authCredential', authCredential))..add(DiagnosticsProperty('verificationId', verificationId))..add(DiagnosticsProperty('resendToken', resendToken));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.status, status) || other.status == status)&&(identical(other.user, user) || other.user == user)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.loadingMessage, loadingMessage) || other.loadingMessage == loadingMessage)&&(identical(other.authCredential, authCredential) || other.authCredential == authCredential)&&(identical(other.verificationId, verificationId) || other.verificationId == verificationId)&&(identical(other.resendToken, resendToken) || other.resendToken == resendToken));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.loadingMessage, loadingMessage) || other.loadingMessage == loadingMessage)&&(identical(other.authCredential, authCredential) || other.authCredential == authCredential)&&(identical(other.verificationId, verificationId) || other.verificationId == verificationId)&&(identical(other.resendToken, resendToken) || other.resendToken == resendToken));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,user,errorMessage,loadingMessage,authCredential,verificationId,resendToken);
+int get hashCode => Object.hash(runtimeType,status,errorMessage,loadingMessage,authCredential,verificationId,resendToken);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'AuthState(status: $status, user: $user, errorMessage: $errorMessage, loadingMessage: $loadingMessage, authCredential: $authCredential, verificationId: $verificationId, resendToken: $resendToken)';
+  return 'AuthState(status: $status, errorMessage: $errorMessage, loadingMessage: $loadingMessage, authCredential: $authCredential, verificationId: $verificationId, resendToken: $resendToken)';
 }
 
 
@@ -261,7 +261,7 @@ abstract mixin class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Re
   factory _$AuthStateCopyWith(_AuthState value, $Res Function(_AuthState) _then) = __$AuthStateCopyWithImpl;
 @override @useResult
 $Res call({
- AuthStatus status, User? user, String errorMessage, String loadingMessage, AuthCredential? authCredential, String? verificationId, int? resendToken
+ AuthStatus status, String errorMessage, String loadingMessage, AuthCredential? authCredential, String? verificationId, int? resendToken
 });
 
 
@@ -278,11 +278,10 @@ class __$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? user = freezed,Object? errorMessage = null,Object? loadingMessage = null,Object? authCredential = freezed,Object? verificationId = freezed,Object? resendToken = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? errorMessage = null,Object? loadingMessage = null,Object? authCredential = freezed,Object? verificationId = freezed,Object? resendToken = freezed,}) {
   return _then(_AuthState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as AuthStatus,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as User?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as AuthStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,loadingMessage: null == loadingMessage ? _self.loadingMessage : loadingMessage // ignore: cast_nullable_to_non_nullable
 as String,authCredential: freezed == authCredential ? _self.authCredential : authCredential // ignore: cast_nullable_to_non_nullable
 as AuthCredential?,verificationId: freezed == verificationId ? _self.verificationId : verificationId // ignore: cast_nullable_to_non_nullable

@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../../../../onboard_survey/doman/models/skill/skill.dart';
-import '../../../../../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
+import '../../../../../../../../user/domain/repositories/i_user_repository.dart';
 
 part 'edit_profile_page_event.dart';
 
@@ -14,32 +14,16 @@ part 'edit_profile_page_bloc.freezed.dart';
 
 class EditProfilePageBloc
     extends Bloc<EditProfilePageEvent, EditProfilePageState> {
-  final UserCubit _userCubit;
-  StreamSubscription? _userSubscription;
+  final IUserRepository _userRepository;
 
   EditProfilePageBloc({
-    required UserCubit userCubit,
-  }) : _userCubit = userCubit,
+    required IUserRepository userRepository,
+  }) : _userRepository = userRepository,
        super(const EditProfilePageState()) {
     on<_AddSkill>(_addSkill);
     on<_Initialize>(_initialize);
     on<_RemoveSkill>(_removeSkill);
     on<_ApplyChanges>(_applyChanges);
-
-    // _userSubscription = _userCubit.stream.listen((userState) {
-    //   if (userState.userData?.profiler.skills != state.skills) {
-    //     add(
-    //       EditProfilePageEvent.initialize(
-    //         skills: userState.userData?.profiler.skills ?? [],
-    //       ),
-    //     );
-    //   }
-    // });
-    add(
-      EditProfilePageEvent.initialize(
-        skills: _userCubit.state.userData?.profiler.skills ?? [],
-      ),
-    );
   }
 
   void _addSkill(event, emit) {
@@ -95,13 +79,18 @@ class EditProfilePageBloc
     }
   }
 
-  void _initialize(event, emit) {
+  Future<void> _initialize(
+    event,
+    Emitter<EditProfilePageState> emit,
+  ) async {
     try {
-      final List<Skill> skills = event.skills;
-      emit(
-        state.copyWith(
-          skills: skills,
-          status: EditProfilePageStatus.initial,
+      await emit.forEach(
+        _userRepository.userDataStream(
+          event.uid,
+        ),
+        onData: (userData) => state.copyWith(
+          skills: userData?.profiler.skills ?? state.skills,
+          status: EditProfilePageStatus.updated,
         ),
       );
     } catch (e) {
@@ -136,11 +125,5 @@ class EditProfilePageBloc
         ),
       );
     }
-  }
-
-  @override
-  Future<void> close() {
-    _userSubscription?.cancel();
-    return super.close();
   }
 }

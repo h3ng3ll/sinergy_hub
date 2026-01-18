@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/user_data/user_data.dart';
@@ -26,5 +29,15 @@ abstract class IUserRepository {
 
   Future<void> update({
     required UserData userData,
+  });
+
+  Future<String> updateAvatar({
+    required String uid,
+    required Uint8List avatar,
+  });
+
+  Future<void> deleteAvatar({
+    required String uid,
+    required String name,
   });
 }

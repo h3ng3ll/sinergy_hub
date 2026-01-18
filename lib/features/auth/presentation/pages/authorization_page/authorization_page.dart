@@ -25,19 +25,15 @@ class AuthorizationPage extends StatefulWidget {
 
 class _AuthorizationPageState extends State<AuthorizationPage>
     with SingleTickerProviderStateMixin {
-  late final AuthCubit _authCubit;
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _authCubit = AuthCubit(
-      authRepository: getIt<IAuthRepository>(),
-    );
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        final isAuthorized = await _authCubit.isAuthorized();
+        final isAuthorized = await context.read<AuthCubit>().isAuthorized();
         if (isAuthorized && mounted) {
           OnboardSurveyPageRoute().go(
             context,
@@ -67,7 +63,6 @@ class _AuthorizationPageState extends State<AuthorizationPage>
 
   @override
   void dispose() {
-    _authCubit.close();
     _controller.dispose();
     super.dispose();
   }
@@ -85,73 +80,70 @@ class _AuthorizationPageState extends State<AuthorizationPage>
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
 
-    return BlocProvider<AuthCubit>.value(
-      value: _authCubit,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: BlocBuilder<AuthCubit, AuthState>(
-          builder: (context, state) {
-            return Stack(
-              children: [
-                ShaderBuilder(
-                  (context, shader, child) {
-                    return CustomPaint(
-                      painter: ShaderPainter(
-                        repaint: _controller,
-                        shader: shader,
-                        parameters: [
-                          ShaderType(
-                            shaderType: EShaderDataType.floatShader,
-                            value:
-                                _controller
-                                    .lastElapsedDuration!
-                                    .inMilliseconds /
-                                1000,
-                          ),
-                          ShaderType(
-                            shaderType: EShaderDataType.floatShader,
-                            value: MediaQuery.of(context).size.width,
-                          ),
-                          ShaderType(
-                            shaderType: EShaderDataType.floatShader,
-                            value: MediaQuery.of(context).size.height,
-                          ),
-                        ],
-                      ),
-                      child: HorizontalPadding(
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (state.status == AuthStatus.failed)
-                                ErrorMessageWidget(message: state.errorMessage),
-                              Gap(24.0),
-                              ActionBtn(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 15.0,
-                                  horizontal: 20.0,
-                                ),
-                                onPressed: () => onAuthWithGoogle(context),
-                                child: Text(
-                                  'SIGN IN WITH GOOGLE',
-                                  style: textTheme.medium16.copyWith(
-                                    color: colorScheme.onSecondary,
-                                  ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, state) {
+          return Stack(
+            children: [
+              ShaderBuilder(
+                (context, shader, child) {
+                  return CustomPaint(
+                    painter: ShaderPainter(
+                      repaint: _controller,
+                      shader: shader,
+                      parameters: [
+                        ShaderType(
+                          shaderType: EShaderDataType.floatShader,
+                          value:
+                              _controller
+                                  .lastElapsedDuration!
+                                  .inMilliseconds /
+                              1000,
+                        ),
+                        ShaderType(
+                          shaderType: EShaderDataType.floatShader,
+                          value: MediaQuery.of(context).size.width,
+                        ),
+                        ShaderType(
+                          shaderType: EShaderDataType.floatShader,
+                          value: MediaQuery.of(context).size.height,
+                        ),
+                      ],
+                    ),
+                    child: HorizontalPadding(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (state.status == AuthStatus.failed)
+                              ErrorMessageWidget(message: state.errorMessage),
+                            Gap(24.0),
+                            ActionBtn(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 15.0,
+                                horizontal: 20.0,
+                              ),
+                              onPressed: () => onAuthWithGoogle(context),
+                              child: Text(
+                                'SIGN IN WITH GOOGLE',
+                                style: textTheme.medium16.copyWith(
+                                  color: colorScheme.onSecondary,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                  assetKey: AppShaders.ve,
-                ),
-                if (state.status == AuthStatus.loading) LoadingDataWidget(),
-              ],
-            );
-          },
-        ),
+                    ),
+                  );
+                },
+                assetKey: AppShaders.ve,
+              ),
+              if (state.status == AuthStatus.loading) LoadingDataWidget(),
+            ],
+          );
+        },
       ),
     );
   }

@@ -44,12 +44,12 @@ class CustomBottomBarContainer extends StatelessWidget {
                 text: 'Matches',
                 isSelected: selectedIndex == 1,
               ),
-              CustomBottomBarItem(
-                onTapItem: () => onTapItem(2),
-                icon: Icons.person,
-                text: 'Profile',
-                isSelected: selectedIndex == 2,
-              ),
+              // CustomBottomBarItem(
+              //   onTapItem: () => onTapItem(2),
+              //   icon: Icons.person,
+              //   text: 'Profile',
+              //   isSelected: selectedIndex == 2,
+              // ),
             ],
           ),
         ),

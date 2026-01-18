@@ -9,6 +9,8 @@ import '../../features/onboard_survey/di/onboard_survery_injection.dart';
 import '../../features/user/di/user_injection.dart';
 import '../services/firebase/firebase_auth_service.dart';
 import '../services/firebase/firebase_firestore_service.dart';
+import '../services/firebase/firebase_storage_service.dart';
+import '../services/permission_requester_service.dart';
 
 final getIt = GetIt.instance;
 
@@ -18,7 +20,8 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => FirebaseFirestoreService());
   getIt.registerLazySingleton(() => FirebaseAuth.instance);
   getIt.registerLazySingleton(() => FirebaseAuthService());
-
+  getIt.registerLazySingleton(() => PermissionRequester());
+  getIt.registerLazySingleton(() => FirebaseStorageService());
   // Auth feature
 
   initHomeFeature(

@@ -125,11 +125,11 @@ return applyChanges(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name)?  addSkill,TResult Function( List<Skill> skills)?  initialize,TResult Function( Skill skill)?  removeSkill,TResult Function( String name,  String bio)?  applyChanges,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name)?  addSkill,TResult Function( String uid)?  initialize,TResult Function( Skill skill)?  removeSkill,TResult Function( String name,  String bio)?  applyChanges,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AddSkill() when addSkill != null:
 return addSkill(_that.name);case _Initialize() when initialize != null:
-return initialize(_that.skills);case _RemoveSkill() when removeSkill != null:
+return initialize(_that.uid);case _RemoveSkill() when removeSkill != null:
 return removeSkill(_that.skill);case _ApplyChanges() when applyChanges != null:
 return applyChanges(_that.name,_that.bio);case _:
   return orElse();
@@ -149,11 +149,11 @@ return applyChanges(_that.name,_that.bio);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name)  addSkill,required TResult Function( List<Skill> skills)  initialize,required TResult Function( Skill skill)  removeSkill,required TResult Function( String name,  String bio)  applyChanges,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name)  addSkill,required TResult Function( String uid)  initialize,required TResult Function( Skill skill)  removeSkill,required TResult Function( String name,  String bio)  applyChanges,}) {final _that = this;
 switch (_that) {
 case _AddSkill():
 return addSkill(_that.name);case _Initialize():
-return initialize(_that.skills);case _RemoveSkill():
+return initialize(_that.uid);case _RemoveSkill():
 return removeSkill(_that.skill);case _ApplyChanges():
 return applyChanges(_that.name,_that.bio);}
 }
@@ -169,11 +169,11 @@ return applyChanges(_that.name,_that.bio);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name)?  addSkill,TResult? Function( List<Skill> skills)?  initialize,TResult? Function( Skill skill)?  removeSkill,TResult? Function( String name,  String bio)?  applyChanges,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name)?  addSkill,TResult? Function( String uid)?  initialize,TResult? Function( Skill skill)?  removeSkill,TResult? Function( String name,  String bio)?  applyChanges,}) {final _that = this;
 switch (_that) {
 case _AddSkill() when addSkill != null:
 return addSkill(_that.name);case _Initialize() when initialize != null:
-return initialize(_that.skills);case _RemoveSkill() when removeSkill != null:
+return initialize(_that.uid);case _RemoveSkill() when removeSkill != null:
 return removeSkill(_that.skill);case _ApplyChanges() when applyChanges != null:
 return applyChanges(_that.name,_that.bio);case _:
   return null;
@@ -253,16 +253,10 @@ as String,
 
 
 class _Initialize implements EditProfilePageEvent {
-  const _Initialize({required final  List<Skill> skills}): _skills = skills;
+  const _Initialize({required this.uid});
   
 
- final  List<Skill> _skills;
- List<Skill> get skills {
-  if (_skills is EqualUnmodifiableListView) return _skills;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_skills);
-}
-
+ final  String uid;
 
 /// Create a copy of EditProfilePageEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -274,16 +268,16 @@ _$InitializeCopyWith<_Initialize> get copyWith => __$InitializeCopyWithImpl<_Ini
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initialize&&const DeepCollectionEquality().equals(other._skills, _skills));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initialize&&(identical(other.uid, uid) || other.uid == uid));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_skills));
+int get hashCode => Object.hash(runtimeType,uid);
 
 @override
 String toString() {
-  return 'EditProfilePageEvent.initialize(skills: $skills)';
+  return 'EditProfilePageEvent.initialize(uid: $uid)';
 }
 
 
@@ -294,7 +288,7 @@ abstract mixin class _$InitializeCopyWith<$Res> implements $EditProfilePageEvent
   factory _$InitializeCopyWith(_Initialize value, $Res Function(_Initialize) _then) = __$InitializeCopyWithImpl;
 @useResult
 $Res call({
- List<Skill> skills
+ String uid
 });
 
 
@@ -311,10 +305,10 @@ class __$InitializeCopyWithImpl<$Res>
 
 /// Create a copy of EditProfilePageEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? skills = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? uid = null,}) {
   return _then(_Initialize(
-skills: null == skills ? _self._skills : skills // ignore: cast_nullable_to_non_nullable
-as List<Skill>,
+uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

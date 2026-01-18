@@ -28,11 +28,14 @@ class _HomeRootState extends State<HomeRoot> {
     super.initState();
     final userCubit = context.read<UserCubit>();
 
-    _chatBloc = ChatCubit(
-      getChatsUseCase: getIt(),
-      initChatUseCase: getIt(),
-      userCubit: userCubit,
-    )..init();
+    _chatBloc =
+        ChatCubit(
+          getChatsUseCase: getIt(),
+          initChatUseCase: getIt(),
+          userCubit: userCubit,
+        )..init(
+          userCubit.uid!,
+        );
 
     _userMatchingOutcomeCubit = UserMatchesOutcomeCubit(
       userCubit: userCubit,
@@ -45,8 +48,12 @@ class _HomeRootState extends State<HomeRoot> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: _chatBloc),
-        BlocProvider.value(value: _userMatchingOutcomeCubit),
+        BlocProvider.value(
+          value: _chatBloc,
+        ),
+        BlocProvider.value(
+          value: _userMatchingOutcomeCubit,
+        ),
       ],
       child: widget.navigator,
     );

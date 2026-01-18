@@ -11,7 +11,7 @@ enum AuthStatus {
 sealed class AuthState with _$AuthState {
   const factory AuthState({
     @Default(AuthStatus.initial) AuthStatus status,
-    User? user,
+    // User? user,
     @Default('') String errorMessage,
     @Default('') String loadingMessage,
     AuthCredential? authCredential,

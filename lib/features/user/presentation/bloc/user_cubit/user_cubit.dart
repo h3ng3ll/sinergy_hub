@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,10 +67,29 @@ class UserCubit extends Cubit<UserState> {
 
   /// Set userData on the view of given
   /// UserData instance
-  void update(UserData user) {
-    _updateUserUseCase.call(
-      user,
-    );
+  Future<void> update(
+    UserData user,
+    Uint8List? img,
+  ) async {
+    try {
+      emit(
+        state.copyWith(
+          status: UserStatus.loading,
+        ),
+      );
+      await _updateUserUseCase.call(
+        user,
+        img,
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.toString(),
+          status: UserStatus.failed,
+        ),
+      );
+      rethrow;
+    }
   }
 
   void _subscribeUserData(
@@ -80,13 +100,16 @@ class UserCubit extends Cubit<UserState> {
         .userDataStream(
           uid,
         )
-        .listen((userData) {
-          emit(
-            state.copyWith(
-              userData: userData,
-            ),
-          );
-        });
+        .listen(
+          (userData) {
+            emit(
+              state.copyWith(
+                userData: userData,
+                status: UserStatus.updated,
+              ),
+            );
+          },
+        );
   }
 
   @override

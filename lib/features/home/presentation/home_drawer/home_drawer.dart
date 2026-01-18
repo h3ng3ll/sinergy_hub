@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/resources/colors/app_colors.dart';
+import '../../../../core/resources/text/app_text_theme.dart';
 import '../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../gen/assets.gen.dart';
 import 'widgets/build_menu_item.dart';
@@ -21,12 +22,22 @@ class HomeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     // final colorScheme = AppColorScheme.of(context);
+      final textTheme  = AppTextTheme.of(context);
     return Drawer(
       backgroundColor: AppColors.white.value,
       child: SafeArea(
         child: HorizontalPadding(
           child: Column(
             children: [
+              Center(
+                child: Text(
+                  'Sinergy Hub',
+                  style: textTheme.bold32.copyWith(
+
+                  ),
+                ),
+              ),
               BuildMenuItem(
                 icon: Assets.icons.notification,
                 text: 'Notifications',
@@ -35,17 +46,17 @@ class HomeDrawer extends StatelessWidget {
               BuildMenuItem(
                 icon: Assets.icons.personOutlined,
                 text: 'Account',
-                onTap: onTapNotifications,
+                onTap: onTapAccount,
               ),
               BuildMenuItem(
                 icon: Assets.icons.privacy,
-                text: 'Notifications',
-                onTap: onTapNotifications,
+                text: 'Privacy Policy',
+                onTap: onTapPrivacyPolicy,
               ),
               BuildMenuItem(
                 icon: Assets.icons.logOut,
                 text: 'Log Out',
-                onTap: onTapNotifications,
+                onTap: onTapLogOut,
                 color: AppColors.tartOrange.value,
               ),
             ],

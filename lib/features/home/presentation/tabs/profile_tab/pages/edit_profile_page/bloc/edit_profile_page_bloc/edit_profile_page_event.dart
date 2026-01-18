@@ -7,7 +7,7 @@ sealed class EditProfilePageEvent with _$EditProfilePageEvent {
   }) = _AddSkill;
 
   const factory EditProfilePageEvent.initialize({
-    required List<Skill> skills,
+    required String uid,
   }) = _Initialize;
 
   const factory EditProfilePageEvent.removeSkill({

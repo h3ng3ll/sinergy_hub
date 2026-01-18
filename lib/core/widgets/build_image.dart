@@ -1,12 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'dart:typed_data';
 
 class BuildImage extends StatelessWidget {
-  final String? url;
+  final Uint8List? cacheImg;
+  final String? img;
+  final BoxShape shape;
+  final BoxFit fit;
   final double? width;
   final double? height;
-  final BoxShape shape;
+  final BorderRadius? borderRadius;
   final Border? border;
+  final String? url;
 
   const BuildImage({
     super.key,
@@ -15,11 +20,15 @@ class BuildImage extends StatelessWidget {
     this.height,
     this.shape = BoxShape.rectangle,
     this.border,
+    this.cacheImg,
+    this.img,
+    this.fit = BoxFit.cover,
+    this.borderRadius,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (url == null) {
+    if (url == null && cacheImg == null) {
       return Placeholder();
     }
     return Container(
@@ -28,11 +37,19 @@ class BuildImage extends StatelessWidget {
       decoration: BoxDecoration(
         shape: shape,
         border: border,
-        image: DecorationImage(
-          image: CachedNetworkImageProvider(
-            url!,
-          ),
-        ),
+        borderRadius: borderRadius,
+        image: url != null || cacheImg != null
+            ? DecorationImage(
+                fit: fit,
+                image: cacheImg != null
+                    ? MemoryImage(
+                        cacheImg!,
+                      )
+                    : CachedNetworkImageProvider(
+                        url!,
+                      ),
+              )
+            : null,
       ),
     );
   }
