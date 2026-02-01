@@ -16,7 +16,9 @@ abstract class Chat with _$Chat {
     @Default([]) List<String> typingUsers,
     /// who access this chat
     required List<String> participants,
-
+    @Default(false) bool hasRead ,
+    @Default(false) bool isArchived ,
+    @Default(false) bool isFavorite ,
     required DateTime createdAt,
     @Default('') String icon,
   }) = _Chat;

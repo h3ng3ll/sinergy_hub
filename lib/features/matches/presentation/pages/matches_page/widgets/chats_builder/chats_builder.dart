@@ -11,12 +11,14 @@ import 'widgets/chat_tile_item.dart';
 
 class ChatsBuilder extends StatefulWidget {
   final VoidCallback onReachToEnd;
+  final List<Chat> chats;
   final Function(Chat chat) onTapChat;
 
   const ChatsBuilder({
     super.key,
     required this.onReachToEnd,
     required this.onTapChat,
+    required this.chats,
   });
 
   @override
@@ -53,9 +55,9 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
 
         return ListView.builder(
           controller: _scrollController,
-          itemCount: state.chats.length,
+          itemCount: widget.chats.length,
           itemBuilder: (context, index) {
-            final chat = state.chats[index];
+            final chat = widget.chats[index];
             return ChatTileItem(
               chat: chat,
               onTap: () => widget.onTapChat(

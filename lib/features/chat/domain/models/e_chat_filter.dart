@@ -3,7 +3,7 @@
 enum EChatFilter {
   recent,
   unread,
-  groups,
+  all,
   favorite,
   archived,
 }

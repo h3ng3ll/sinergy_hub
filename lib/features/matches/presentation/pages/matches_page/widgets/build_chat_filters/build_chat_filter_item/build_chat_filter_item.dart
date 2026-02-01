@@ -18,13 +18,16 @@ class BuildChatFilterItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!isSelected) {
-      return BuildChatFilterItemStatic(
-        child: child,
-      );
-    }
-    return BuildChatFilterItemAnimated(
-      child: child,
+    return Center(
+      child: isSelected
+          ? BuildChatFilterItemAnimated(
+              onTap: onTap,
+              child: child,
+            )
+          : BuildChatFilterItemStatic(
+              onTap: onTap,
+              child: child,
+            ),
     );
   }
 }

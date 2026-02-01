@@ -5,10 +5,12 @@ import 'build_chat_filter_item_static.dart';
 
 class BuildChatFilterItemAnimated extends StatefulWidget {
   final Widget child;
+  final VoidCallback onTap;
 
   const BuildChatFilterItemAnimated({
     super.key,
     required this.child,
+    required this.onTap,
   });
 
   @override
@@ -52,14 +54,13 @@ class _BuildChatFilterItemAnimatedState
       animation: animation,
       builder: (BuildContext context, Widget? child) {
         return Container(
-
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
               17.5,
             ),
             border: Border.all(
               color: AppColors.lavenderFloral.value,
-              width: 1.5
+              width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
@@ -73,6 +74,7 @@ class _BuildChatFilterItemAnimatedState
         );
       },
       child: BuildChatFilterItemStatic(
+        onTap: widget.onTap,
         child: widget.child,
       ),
     );
