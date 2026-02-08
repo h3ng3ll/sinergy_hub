@@ -12,10 +12,18 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
   navigatorKey: RootPageRoute.$navigatorKey,
   factory: $RootPageRouteExtension._fromState,
   routes: [
-    GoRouteData.$route(path: '/', factory: _$AuthorizationPageRoute._fromState),
+    GoRouteData.$route(
+      path: '/',
+      factory: _$AuthorizationPageRoute._fromState,
+      routes: [
+        GoRouteData.$route(
+          path: '/sign-out',
+          factory: _$RegisterPageRoute._fromState,
+        ),
+      ],
+    ),
     GoRouteData.$route(
       path: '/onboard',
-
       factory: _$OnboardSurveyPageRoute._fromState,
     ),
     StatefulShellRouteData.$route(
@@ -30,7 +38,6 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                   routes: [
                     GoRouteData.$route(
                       path: '/home',
-
                       factory: _$HomePageRoute._fromState,
                     ),
                   ],
@@ -39,7 +46,6 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                   routes: [
                     GoRouteData.$route(
                       path: '/matches',
-
                       factory: _$MatchesPageRoute._fromState,
                     ),
                   ],
@@ -52,18 +58,19 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
           routes: [
             GoRouteData.$route(
               path: '/chat',
-
               factory: _$ChatPageRoute._fromState,
             ),
             GoRouteData.$route(
               path: '/edit-profile-page',
-
               factory: _$EditProfilePageRoute._fromState,
             ),
             GoRouteData.$route(
               path: '/profile',
-
               factory: _$ProfilePageRoute._fromState,
+            ),
+            GoRouteData.$route(
+              path: '/notification',
+              factory: _$NotificationPageRoute._fromState,
             ),
           ],
         ),
@@ -82,6 +89,27 @@ mixin _$AuthorizationPageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$RegisterPageRoute on GoRouteData {
+  static RegisterPageRoute _fromState(GoRouterState state) =>
+      RegisterPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/sign-out');
 
   @override
   void go(BuildContext context) => context.go(location);
@@ -217,6 +245,27 @@ mixin _$ProfilePageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/profile');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$NotificationPageRoute on GoRouteData {
+  static NotificationPageRoute _fromState(GoRouterState state) =>
+      NotificationPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/notification');
 
   @override
   void go(BuildContext context) => context.go(location);

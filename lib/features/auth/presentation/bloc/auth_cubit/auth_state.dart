@@ -1,16 +1,16 @@
 part of 'auth_cubit.dart';
 
 enum AuthStatus {
-  initial,
   loading,
   authorized,
+  logout,
   failed,
 }
 
 @freezed
 sealed class AuthState with _$AuthState {
   const factory AuthState({
-    @Default(AuthStatus.initial) AuthStatus status,
+    @Default(AuthStatus.logout) AuthStatus status,
     // User? user,
     @Default('') String errorMessage,
     @Default('') String loadingMessage,

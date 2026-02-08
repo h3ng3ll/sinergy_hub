@@ -8,4 +8,8 @@ abstract class IAuthRepository {
   Future<UserCredential> signInWithGoogle();
   Future<void> signOut();
   Future<void> deleteAccount();
+  Future<void> register({
+    required String email,
+    required String password,
+  });
 }

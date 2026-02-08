@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../data/repositories/auth_repository/firebase_auth_repository.dart';
 import '../domain/repostories/i_auth_repository.dart';
+import '../domain/use_cases/register_use_case.dart';
 
 void initAuthFeature(GetIt getIt) {
   getIt.registerLazySingleton<IAuthRepository>(
@@ -12,6 +13,12 @@ void initAuthFeature(GetIt getIt) {
       auth: getIt<FirebaseAuth>(),
       googleSignIn: GoogleSignIn.instance,
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
+    ),
+  );
+
+  getIt.registerFactory(
+    () => RegisterUseCase(
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
 }

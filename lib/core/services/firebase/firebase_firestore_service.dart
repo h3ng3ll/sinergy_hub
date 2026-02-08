@@ -26,6 +26,11 @@ class FirebaseFirestoreService {
         'chats',
       );
 
+  ColRef notifications() => _firebaseFirestore
+      .collection(
+    'notifications',
+  );
+
   Future<bool> isExistsDocument(DocRef document) async {
     final col = await document.get();
     return col.exists;

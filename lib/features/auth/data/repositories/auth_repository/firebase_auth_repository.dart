@@ -75,4 +75,25 @@ class FirebaseAuthRepository extends IAuthRepository {
   Future<void> deleteAccount() async {
     await _auth.currentUser?.delete();
   }
+
+  @override
+  Future<void> register({
+    required String email,
+    required String password,
+  }) async {
+    await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+  }
+
+  Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+  }
 }

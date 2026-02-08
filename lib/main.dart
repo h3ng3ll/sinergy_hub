@@ -9,7 +9,11 @@ import 'core/di/injection.dart';
 import 'core/resources/app_locale.dart';
 import 'core/resources/app_theme.dart';
 import 'core/routes/init_router/init_router.dart';
+import 'features/auth/domain/repostories/i_auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_cubit/auth_cubit.dart';
+import 'features/notifications/domain/usecases/get_notifications_use_case.dart';
+import 'features/notifications/domain/usecases/save_notification_use_case.dart';
+import 'features/notifications/presentation/bloc/notification_bloc/notification_bloc.dart';
 import 'features/user/domain/repositories/i_user_repository.dart';
 import 'features/user/domain/usecases/update_user_usecase.dart';
 import 'features/user/presentation/bloc/user_cubit/user_cubit.dart';
@@ -80,8 +84,17 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<AuthCubit>(
           create: (_) => AuthCubit(
-            authRepository: getIt(),
+            authRepository: getIt<IAuthRepository>(),
           ),
+        ),
+        BlocProvider<NotificationBloc>(
+          create: (_) =>
+              NotificationBloc(
+                getNotificationsUseCase: getIt<GetNotificationsUseCase>(),
+                saveNotificationUseCase: getIt<SaveNotificationUseCase>(),
+              )..add(
+                NotificationEvent.get(),
+              ),
         ),
       ],
       child: MaterialApp.router(

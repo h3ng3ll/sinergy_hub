@@ -44,7 +44,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(
         state.copyWith(
-          status: AuthStatus.initial,
+          status: AuthStatus.authorized,
         ),
       );
     } catch (e) {
@@ -69,7 +69,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(
         state.copyWith(
-          status: AuthStatus.initial,
+          status: AuthStatus.logout,
         ),
       );
     } catch (e) {
@@ -83,32 +83,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<bool> isAuthorized() async {
-    try {
-      emit(
-        state.copyWith(
-          status: AuthStatus.loading,
-        ),
-      );
-    final res =   await _authRepository.isAuthorized();
-
-      emit(
-        state.copyWith(
-          status: AuthStatus.initial,
-        ),
-      );
-      return res;
-    } catch (e) {
-      debugPrint(e.toString());
-      emit(
-        state.copyWith(
-          status: AuthStatus.failed,
-          errorMessage: e.toString(),
-        ),
-      );
-      rethrow;
-    }
-  }
 // Future<void> signAnonymously() async {
 //   try {
 //     emit(

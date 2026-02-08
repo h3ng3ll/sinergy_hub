@@ -213,7 +213,7 @@ return $default(_that.status,_that.errorMessage,_that.loadingMessage,_that.authC
 
 
 class _AuthState with DiagnosticableTreeMixin implements AuthState {
-  const _AuthState({this.status = AuthStatus.initial, this.errorMessage = '', this.loadingMessage = '', this.authCredential, this.verificationId, this.resendToken});
+  const _AuthState({this.status = AuthStatus.logout, this.errorMessage = '', this.loadingMessage = '', this.authCredential, this.verificationId, this.resendToken});
   
 
 @override@JsonKey() final  AuthStatus status;

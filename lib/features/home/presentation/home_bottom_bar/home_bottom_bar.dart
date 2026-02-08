@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,6 +8,7 @@ import '../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../core/resources/text/app_text_theme.dart';
 import '../../../../core/routes/init_router/init_router.dart';
 import '../../../../core/utils/shader_painter.dart';
+import '../../../auth/presentation/bloc/auth_cubit/auth_cubit.dart';
 import '../home_drawer/home_drawer.dart';
 import 'widgets/build_animated_background/build_animated_background.dart';
 import 'widgets/custom_bottom_bar_container.dart';
@@ -24,7 +26,11 @@ class HomeBottomBar extends StatefulWidget {
 }
 
 class _HomeBottomBarState extends State<HomeBottomBar> {
-  void onTapNotifications() {}
+  void onTapNotifications() {
+    NotificationPageRoute().push(
+      context,
+    );
+  }
 
   void onTapAccount() {
     ProfilePageRoute().push(
@@ -34,7 +40,7 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
 
   void onTapPrivacyPolicy() {}
 
-  void onTapLogOut() {}
+  void onTapLogOut() => context.read<AuthCubit>().signOut();
 
   void _goBranch(
     int index,
@@ -48,33 +54,40 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
 
-    return BuildAnimatedBackground(
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            InkWell(
-              onTap: onTapNotifications,
-              child: Icon(
-                Icons.notifications,
-                color: colorScheme.secondary,
+    return BlocListener<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state.status == AuthStatus.logout) {
+          AuthorizationPageRoute().go(context);
+        }
+      },
+      child: BuildAnimatedBackground(
+        child: Scaffold(
+          appBar: AppBar(
+            actions: [
+              InkWell(
+                onTap: onTapNotifications,
+                child: Icon(
+                  Icons.notifications,
+                  color: colorScheme.secondary,
+                ),
               ),
-            ),
-            Icon(
-              Icons.more_vert,
-            ),
-          ],
-        ),
-        body: widget.navigationShell,
-        drawer: HomeDrawer(
-          onTapNotifications: onTapNotifications,
-          onTapAccount: onTapAccount,
-          onTapPrivacyPolicy: onTapPrivacyPolicy,
-          onTapLogOut: onTapLogOut,
-        ),
-        backgroundColor: Colors.transparent,
-        bottomNavigationBar: CustomBottomBarContainer(
-          selectedIndex: widget.navigationShell.currentIndex,
-          onTapItem: _goBranch,
+              Icon(
+                Icons.more_vert,
+              ),
+            ],
+          ),
+          body: widget.navigationShell,
+          drawer: HomeDrawer(
+            onTapNotifications: onTapNotifications,
+            onTapAccount: onTapAccount,
+            onTapPrivacyPolicy: onTapPrivacyPolicy,
+            onTapLogOut: onTapLogOut,
+          ),
+          backgroundColor: Colors.transparent,
+          bottomNavigationBar: CustomBottomBarContainer(
+            selectedIndex: widget.navigationShell.currentIndex,
+            onTapItem: _goBranch,
+          ),
         ),
       ),
     );

@@ -5,6 +5,7 @@ import '../../features/auth/di/auth_injection.dart';
 import '../../features/chat/di/chat_injection.dart';
 import '../../features/home/domain/di/home_injection.dart';
 import '../../features/matches/di/matches_injection.dart';
+import '../../features/notifications/di/notifications_injection.dart';
 import '../../features/onboard_survey/di/onboard_survery_injection.dart';
 import '../../features/user/di/user_injection.dart';
 import '../services/firebase/firebase_auth_service.dart';
@@ -42,6 +43,9 @@ Future<void> initDependencies() async {
     getIt,
   );
   initChatFeature(
+    getIt,
+  );
+  initNotificationFeature(
     getIt,
   );
   // TODO: Add onboarding, profile, etc.
