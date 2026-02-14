@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Notification;
 
 import '../../../../../domain/models/notification/notification.dart';
 
+
 class NotificationBuilder extends StatefulWidget {
   final List<Notification> notifications;
 

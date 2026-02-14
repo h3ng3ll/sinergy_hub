@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/injection.dart';
+import '../../../../core/services/firebase/firebase_messaging_service.dart';
 import '../../../chat/presentation/bloc/chat_cubit/chat_cubit.dart';
 import '../../../matches/domain/usecases/get_user_matches_outcome_use_case.dart';
 import '../../../matches/presentation/bloc/user_matches_outcome_cubit/user_matches_outcome_cubit.dart';
+import '../../../notifications/domain/usecases/get_notification_config_use_case.dart';
+import '../../../notifications/domain/usecases/save_notification_config_use_case.dart';
+import '../../../notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
 import '../../../user/presentation/bloc/user_cubit/user_cubit.dart';
 
 class HomeRoot extends StatefulWidget {
@@ -53,6 +57,18 @@ class _HomeRootState extends State<HomeRoot> {
         ),
         BlocProvider.value(
           value: _userMatchingOutcomeCubit,
+        ),
+        BlocProvider(
+          create: (_) =>
+              NotificationConfigBloc(
+                getNotificationsConfigUseCase:
+                    getIt<GetNotificationsConfigUseCase>(),
+                saveNotificationsConfigUseCase:
+                    getIt<SaveNotificationsConfigUseCase>(),
+                firebaseMessagingService: getIt<FirebaseMessagingService>(),
+              )..add(
+                NotificationConfigEvent.init(),
+              ),
         ),
       ],
       child: widget.navigator,

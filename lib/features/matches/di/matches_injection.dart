@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 
 import '../../../core/services/firebase/firebase_firestore_service.dart';
+import '../../notifications/domain/repositories/i_notification_repository.dart';
 import '../../user/domain/repositories/i_user_repository.dart';
 import '../data/repositories/user_matching_in_firebase_repository.dart';
 import '../data/repositories/user_matching_out_firebase_repository.dart';
@@ -25,6 +26,7 @@ void initMatchingFeature(GetIt getIt) {
     () => CreateUserMatchesUseCase(
       userMatchingOutRepository: getIt<IUserMatchingOutRepository>(),
       userMatchingInRepository: getIt<IUserMatchingInRepository>(),
+      notificationRepository: getIt<INotificationRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetUserMatchesIncomeUseCase>(

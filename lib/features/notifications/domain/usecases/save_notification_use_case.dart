@@ -1,5 +1,5 @@
-import '../repositories/i_notification_repository.dart';
 import '../models/notification/notification.dart';
+import '../repositories/i_notification_repository.dart';
 
 class SaveNotificationUseCase {
   final INotificationRepository _notificationRepository;

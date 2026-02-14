@@ -1,8 +1,11 @@
 import '../models/notification/notification.dart';
 
 abstract class INotificationRepository {
-  Future<List<Notification>> get();
+  Future<List<Notification>> get({
+    required String uid,
+  });
+
   Future<Notification> create({
-    required Notification notification
-});
+    required Notification notification,
+  });
 }

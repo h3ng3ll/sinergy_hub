@@ -30,9 +30,11 @@ class NotificationFirebaseRepository implements INotificationRepository {
   }
 
   @override
-  Future<List<Notification>> get() async {
+  Future<List<Notification>> get({
+    required String uid,
+  }) async {
     final snapshots = await _firebaseFirestoreService
-        .notifications()
+        .notifications(uid: uid)
         .snapshots()
         .last;
 

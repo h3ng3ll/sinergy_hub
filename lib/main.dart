@@ -9,6 +9,8 @@ import 'core/di/injection.dart';
 import 'core/resources/app_locale.dart';
 import 'core/resources/app_theme.dart';
 import 'core/routes/init_router/init_router.dart';
+import 'core/services/firebase/firebase_messaging_service.dart';
+import 'core/services/local_notification_service.dart';
 import 'features/auth/domain/repostories/i_auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_cubit/auth_cubit.dart';
 import 'features/notifications/domain/usecases/get_notifications_use_case.dart';
@@ -40,8 +42,14 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await getIt<LocalNotificationService>().init();
+  await getIt<FirebaseMessagingService>().init();
+
   Bloc.observer = AppObserver.instance();
-  runApp(const MyApp());
+
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatefulWidget {

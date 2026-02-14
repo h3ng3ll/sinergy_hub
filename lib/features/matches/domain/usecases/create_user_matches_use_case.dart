@@ -1,4 +1,6 @@
 import '../../../home/presentation/tabs/home_tab/bloc/tinder_card_cubit/tinder_card_cubit.dart';
+import '../../../notifications/domain/models/notification/notification.dart';
+import '../../../notifications/domain/repositories/i_notification_repository.dart';
 import '../models/user_match/user_match.dart';
 import '../repositories/i_user_matching_in_repository.dart';
 import '../repositories/i_user_matching_out_repository.dart';
@@ -6,12 +8,15 @@ import '../repositories/i_user_matching_out_repository.dart';
 class CreateUserMatchesUseCase {
   final IUserMatchingOutRepository _userMatchingOutRepository;
   final IUserMatchingInRepository _userMatchingInRepository;
+  final INotificationRepository _notificationRepository;
 
   CreateUserMatchesUseCase({
     required IUserMatchingOutRepository userMatchingOutRepository,
     required IUserMatchingInRepository userMatchingInRepository,
+    required INotificationRepository notificationRepository,
   }) : _userMatchingOutRepository = userMatchingOutRepository,
-       _userMatchingInRepository = userMatchingInRepository;
+       _userMatchingInRepository = userMatchingInRepository,
+       _notificationRepository = notificationRepository;
 
   /// return Status of Matching
   Future<EUserMatchCompleteness> call({
@@ -50,11 +55,21 @@ class CreateUserMatchesUseCase {
           completeness: EUserMatchCompleteness.none,
         ),
       );
+
+      /// Save notification for other user
+      await _notificationRepository.create(
+        notification: Notification(
+          uid: match.user.uid,
+          title: 'New Interest 🚀',
+          description: 'A potential co-founder liked your profile',
+          createdAt: DateTime.now(),
+        ),
+      );
       return EUserMatchCompleteness.oneWayMatch;
     }
 
     ///  has matching from both size
-    if (possibleMatch!.completeness == EUserMatchCompleteness.oneWayMatch) {
+    if (possibleMatch.completeness == EUserMatchCompleteness.oneWayMatch) {
       await _userMatchingOutRepository.create(
         uid: uid,
         match: match.copyWith(
@@ -65,6 +80,27 @@ class CreateUserMatchesUseCase {
         uid: match.user.uid,
         match: match.copyWith(
           completeness: EUserMatchCompleteness.twoWayMatch,
+        ),
+      );
+      final now = DateTime.now();
+
+      /// Notify current user
+      await _notificationRepository.create(
+        notification: Notification(
+          uid: uid,
+          title: 'It’s a Match! 🎉',
+          description: 'You’ve connected with a startup partner',
+          createdAt: now,
+        ),
+      );
+
+      /// Notify other user
+      await _notificationRepository.create(
+        notification: Notification(
+          uid: match.user.uid,
+          title: 'It’s a Match! 🎉',
+          description: 'You’ve connected with a startup partner',
+          createdAt: now,
         ),
       );
       return EUserMatchCompleteness.twoWayMatch;

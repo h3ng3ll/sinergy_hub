@@ -12,6 +12,7 @@ sealed class Notification with _$Notification {
   const factory Notification({
     @Default('') String id,
     @Default('') String uid,
+    @Default('') String deviceToken,
     @Default('') String title,
     @Default('') String description,
     required DateTime createdAt,

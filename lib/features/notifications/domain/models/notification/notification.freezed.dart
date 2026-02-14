@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Notification {
 
- String get id; String get uid; String get title; String get description; DateTime get createdAt;
+ String get id; String get uid; String get deviceToken; String get title; String get description; DateTime get createdAt;
 /// Create a copy of Notification
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $NotificationCopyWith<Notification> get copyWith => _$NotificationCopyWithImpl<N
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Notification&&(identical(other.id, id) || other.id == id)&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Notification&&(identical(other.id, id) || other.id == id)&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.deviceToken, deviceToken) || other.deviceToken == deviceToken)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,uid,title,description,createdAt);
+int get hashCode => Object.hash(runtimeType,id,uid,deviceToken,title,description,createdAt);
 
 @override
 String toString() {
-  return 'Notification(id: $id, uid: $uid, title: $title, description: $description, createdAt: $createdAt)';
+  return 'Notification(id: $id, uid: $uid, deviceToken: $deviceToken, title: $title, description: $description, createdAt: $createdAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $NotificationCopyWith<$Res>  {
   factory $NotificationCopyWith(Notification value, $Res Function(Notification) _then) = _$NotificationCopyWithImpl;
 @useResult
 $Res call({
- String id, String uid, String title, String description, DateTime createdAt
+ String id, String uid, String deviceToken, String title, String description, DateTime createdAt
 });
 
 
@@ -65,10 +65,11 @@ class _$NotificationCopyWithImpl<$Res>
 
 /// Create a copy of Notification
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? uid = null,Object? title = null,Object? description = null,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? uid = null,Object? deviceToken = null,Object? title = null,Object? description = null,Object? createdAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
+as String,deviceToken: null == deviceToken ? _self.deviceToken : deviceToken // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String uid,  String title,  String description,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String uid,  String deviceToken,  String title,  String description,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Notification() when $default != null:
-return $default(_that.id,_that.uid,_that.title,_that.description,_that.createdAt);case _:
+return $default(_that.id,_that.uid,_that.deviceToken,_that.title,_that.description,_that.createdAt);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.id,_that.uid,_that.title,_that.description,_that.createdAt
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String uid,  String title,  String description,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String uid,  String deviceToken,  String title,  String description,  DateTime createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Notification():
-return $default(_that.id,_that.uid,_that.title,_that.description,_that.createdAt);}
+return $default(_that.id,_that.uid,_that.deviceToken,_that.title,_that.description,_that.createdAt);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -192,10 +193,10 @@ return $default(_that.id,_that.uid,_that.title,_that.description,_that.createdAt
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String uid,  String title,  String description,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String uid,  String deviceToken,  String title,  String description,  DateTime createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Notification() when $default != null:
-return $default(_that.id,_that.uid,_that.title,_that.description,_that.createdAt);case _:
+return $default(_that.id,_that.uid,_that.deviceToken,_that.title,_that.description,_that.createdAt);case _:
   return null;
 
 }
@@ -207,11 +208,12 @@ return $default(_that.id,_that.uid,_that.title,_that.description,_that.createdAt
 @JsonSerializable()
 
 class _Notification implements Notification {
-  const _Notification({this.id = '', this.uid = '', this.title = '', this.description = '', required this.createdAt});
+  const _Notification({this.id = '', this.uid = '', this.deviceToken = '', this.title = '', this.description = '', required this.createdAt});
   factory _Notification.fromJson(Map<String, dynamic> json) => _$NotificationFromJson(json);
 
 @override@JsonKey() final  String id;
 @override@JsonKey() final  String uid;
+@override@JsonKey() final  String deviceToken;
 @override@JsonKey() final  String title;
 @override@JsonKey() final  String description;
 @override final  DateTime createdAt;
@@ -229,16 +231,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Notification&&(identical(other.id, id) || other.id == id)&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Notification&&(identical(other.id, id) || other.id == id)&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.deviceToken, deviceToken) || other.deviceToken == deviceToken)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,uid,title,description,createdAt);
+int get hashCode => Object.hash(runtimeType,id,uid,deviceToken,title,description,createdAt);
 
 @override
 String toString() {
-  return 'Notification(id: $id, uid: $uid, title: $title, description: $description, createdAt: $createdAt)';
+  return 'Notification(id: $id, uid: $uid, deviceToken: $deviceToken, title: $title, description: $description, createdAt: $createdAt)';
 }
 
 
@@ -249,7 +251,7 @@ abstract mixin class _$NotificationCopyWith<$Res> implements $NotificationCopyWi
   factory _$NotificationCopyWith(_Notification value, $Res Function(_Notification) _then) = __$NotificationCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String uid, String title, String description, DateTime createdAt
+ String id, String uid, String deviceToken, String title, String description, DateTime createdAt
 });
 
 
@@ -266,10 +268,11 @@ class __$NotificationCopyWithImpl<$Res>
 
 /// Create a copy of Notification
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? uid = null,Object? title = null,Object? description = null,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? uid = null,Object? deviceToken = null,Object? title = null,Object? description = null,Object? createdAt = null,}) {
   return _then(_Notification(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
+as String,deviceToken: null == deviceToken ? _self.deviceToken : deviceToken // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
