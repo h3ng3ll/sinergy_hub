@@ -28,7 +28,7 @@ class NotificationConfigBloc
 
        super(const NotificationConfigState()) {
     on<_Init>(_init);
-    on<_Init>(_save);
+    on<_Save>(_save);
   }
 
   Future<NotificationConfig> _primarySetup(NotificationConfig config) async {

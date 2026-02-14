@@ -14,12 +14,15 @@ class NotificationConfigFirebaseRepository
   Future<NotificationConfig?> get({
     required String uid,
   }) async {
-    final configData = await _firebaseFirestoreService
-        .notificationConfig(
-          uid: uid,
-        )
-        .get();
-    if (configData.data() == null) return null;
+    final doc =  _firebaseFirestoreService.notificationConfig(
+      uid: uid,
+    );
+    final isExists = await _firebaseFirestoreService.isExistsDocument(
+      doc,
+    );
+    if (!isExists) return null;
+
+    final configData = await doc.get();
 
     final config = NotificationConfig.fromJson(
       configData.data()!,
@@ -36,7 +39,7 @@ class NotificationConfigFirebaseRepository
         .notificationConfig(
           uid: uid,
         )
-        .update(
+        .set(
           config.toJson(),
         );
   }

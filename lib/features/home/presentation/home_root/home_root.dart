@@ -59,6 +59,7 @@ class _HomeRootState extends State<HomeRoot> {
           value: _userMatchingOutcomeCubit,
         ),
         BlocProvider(
+          lazy: false,
           create: (_) =>
               NotificationConfigBloc(
                 getNotificationsConfigUseCase:
