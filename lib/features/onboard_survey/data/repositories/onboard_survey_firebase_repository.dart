@@ -1,6 +1,7 @@
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
-import '../../doman/models/user_profiler/user_profiler.dart';
-import '../../doman/repositories/i_onboard_survey_repository.dart';
+import '../../domain/models/onboard_status/onboard_status.dart';
+import '../../domain/models/user_profiler/user_profiler.dart';
+import '../../domain/repositories/i_onboard_survey_repository.dart';
 
 class OnboardSurveyFirebaseRepository extends IOnboardSurveyRepository {
   final FirebaseFirestoreService _firebaseFirestoreService;
@@ -69,5 +70,36 @@ class OnboardSurveyFirebaseRepository extends IOnboardSurveyRepository {
           'profiler',
         ) ??
         false;
+  }
+
+  @override
+  Future<void> setCompletionStatus({
+    required OnboardStatus status,
+    required String uid,
+  }) async {
+    await _firebaseFirestoreService
+        .userOnboard(
+          uid,
+        )
+        .set(
+          status.toJson(),
+        );
+  }
+
+  @override
+  Future<OnboardStatus?> getCompletionStatus({
+    required String uid,
+  }) async {
+    final res = await _firebaseFirestoreService
+        .userOnboard(
+          uid,
+        )
+        .get();
+    final data = res.data();
+    if (data == null) return null;
+    final status = OnboardStatus.fromJson(
+      data,
+    );
+    return status;
   }
 }

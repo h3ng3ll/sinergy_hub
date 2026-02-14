@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../../../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../../../../../../../core/resources/text/app_text_theme.dart';
-import '../../../../../../../../../../../../../core/widgets/btn/custom_chip.dart';
-import '../../../../../../../../../../../../onboard_survey/doman/models/experiences/experiences.dart';
-import '../../../../../../../../../../../../onboard_survey/doman/models/specialization/specialization.dart';
+import '../../../../../../../../../../../../onboard_survey/domain/models/experiences/experiences.dart';
+import '../../../../../../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import '../../../../../../../../../../../../user/domain/models/user_data/user_data.dart';
 import 'widgets/build_specialization_names.dart';
 import 'widgets/specialization_info_bar.dart';

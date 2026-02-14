@@ -5,11 +5,10 @@ import 'package:gap/gap.dart';
 import '../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
-import '../../../../../../../core/widgets/btn/action_btn.dart';
-import '../../../../../../../core/widgets/btn/custom_chip.dart';
+
 import '../../../../../../../core/widgets/btn/custom_text_btn.dart';
 import '../../../../../../../gen/assets.gen.dart';
-import '../../../../../../onboard_survey/doman/models/specializations/specializations.dart';
+import '../../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 import '../../../../../../user/domain/models/user_data/user_data.dart';
 import '../build_tinder_card/widgets/build_tinder_status/widgets/icon_status/status/liked_status.dart';
 import '../build_tinder_card/widgets/build_top_tinder_card_builder/widget/tinder_card_item/widgets/build_user_avatar.dart';

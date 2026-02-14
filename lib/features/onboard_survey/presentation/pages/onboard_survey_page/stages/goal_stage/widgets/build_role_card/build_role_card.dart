@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import '../../../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../../../core/widgets/btn/custom_chip.dart';
-import '../../../../../../../doman/models/specialization/specialization.dart';
+import '../../../../../../../domain/models/specialization/specialization.dart';
 
 class BuildRoleCard extends StatelessWidget {
   final ESpecialization specialization;

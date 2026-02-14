@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
+
 
 import '../../../../../../../../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../../core/resources/colors/app_color_scheme.dart';
-import '../../../../../../../onboard_survey/doman/models/specialization/specialization.dart';
+import '../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 
 class SpecializationContainer extends StatelessWidget {
   final Specialization specialization;

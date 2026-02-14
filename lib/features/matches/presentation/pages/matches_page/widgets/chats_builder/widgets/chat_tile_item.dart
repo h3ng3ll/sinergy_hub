@@ -4,9 +4,8 @@ import 'package:gap/gap.dart';
 import '../../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../chat/domain/models/chat/chat.dart';
-import '../../../../../../../onboard_survey/doman/models/specializations/specializations.dart';
+import '../../../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 import '../../../../../../../onboard_survey/presentation/pages/onboard_survey_page/widgets/translucent_card_container.dart';
-import '../../../../../../../home/presentation/tabs/home_tab/widgets/build_has_match/widgets/specialization_container.dart';
 import '../../../../../../../home/presentation/tabs/home_tab/widgets/build_tinder_card/widgets/build_top_tinder_card_builder/widget/tinder_card_item/widgets/build_user_avatar.dart';
 import '../../../../../../../home/presentation/tabs/home_tab/widgets/build_tinder_card/widgets/build_top_tinder_card_builder/widget/tinder_card_item/widgets/tinder_card_personal_info/widgets/specialization_info_bar.dart';
 

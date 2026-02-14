@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../../../../../../../../../core/widgets/btn/custom_chip.dart';
-import '../../../../../../../../../../../../../onboard_survey/doman/models/specialization/specialization.dart';
+import '../../../../../../../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 
 class BuildSpecializationNames extends StatelessWidget {
   final List<ESpecialization> searchingSpecializations;

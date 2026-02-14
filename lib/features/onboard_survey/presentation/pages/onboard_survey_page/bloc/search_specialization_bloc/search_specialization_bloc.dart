@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../../doman/models/specialization/specialization.dart';
-import '../../../../../doman/models/specializations/specializations.dart';
+import '../../../../../domain/models/specialization/specialization.dart';
+import '../../../../../domain/models/specializations/specializations.dart';
 
 part 'search_specialization_event.dart';
 

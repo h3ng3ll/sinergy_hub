@@ -21,13 +21,24 @@ class FirebaseFirestoreService {
     uid,
   );
 
-  ColRef chats() => _firebaseFirestore
+  DocRef userOnboard(
+    String uid,
+  ) => usersDocument
+      .doc(
+        uid,
+      )
       .collection(
-        'chats',
+        'onboardStatus',
+      )
+      .doc(
+        'primary',
       );
 
-  ColRef notifications() => _firebaseFirestore
-      .collection(
+  ColRef chats() => _firebaseFirestore.collection(
+    'chats',
+  );
+
+  ColRef notifications() => _firebaseFirestore.collection(
     'notifications',
   );
 
@@ -69,24 +80,6 @@ class FirebaseFirestoreService {
   //   }
   //   return query;
   // }
-
-  ColRef _audioRecordCol(
-    String uid,
-  ) =>
-      userDocument(
-        uid,
-      ).collection(
-        'audio_record',
-      );
-
-  ColRef _audioCollectionsCol(
-    String uid,
-  ) =>
-      userDocument(
-        uid,
-      ).collection(
-        'audio_collection',
-      );
 
   ColRef _subscriptionCol(
     String uid,

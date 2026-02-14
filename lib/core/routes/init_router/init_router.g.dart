@@ -22,9 +22,18 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
         ),
       ],
     ),
-    GoRouteData.$route(
-      path: '/onboard',
-      factory: _$OnboardSurveyPageRoute._fromState,
+    ShellRouteData.$route(
+      factory: $OnboardShellPageRouteExtension._fromState,
+      routes: [
+        GoRouteData.$route(
+          path: '/onboard',
+          factory: _$OnboardSurveyPageRoute._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/onboard-about',
+          factory: _$OnboardAboutYouPageRoute._fromState,
+        ),
+      ],
     ),
     StatefulShellRouteData.$route(
       factory: $HomeRootRouteExtension._fromState,
@@ -125,12 +134,38 @@ mixin _$RegisterPageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
+extension $OnboardShellPageRouteExtension on OnboardShellPageRoute {
+  static OnboardShellPageRoute _fromState(GoRouterState state) =>
+      OnboardShellPageRoute();
+}
+
 mixin _$OnboardSurveyPageRoute on GoRouteData {
   static OnboardSurveyPageRoute _fromState(GoRouterState state) =>
       OnboardSurveyPageRoute();
 
   @override
   String get location => GoRouteData.$location('/onboard');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$OnboardAboutYouPageRoute on GoRouteData {
+  static OnboardAboutYouPageRoute _fromState(GoRouterState state) =>
+      OnboardAboutYouPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/onboard-about');
 
   @override
   void go(BuildContext context) => context.go(location);

@@ -1,28 +1,22 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/features/home/presentation/tabs/home_tab/bloc/tinder_card_cubit/tinder_card_cubit.dart';
-import 'package:sinergy_hub/features/matches/data/models/user_match_dto/user_match_dto.dart';
 import 'package:sinergy_hub/features/matches/domain/models/user_match/user_match.dart';
-import 'package:sinergy_hub/features/matches/domain/repositories/i_user_matching_in_repository.dart';
 import 'package:sinergy_hub/features/matches/domain/repositories/i_user_matching_out_repository.dart';
 import 'package:sinergy_hub/features/matches/domain/usecases/create_user_matches_use_case.dart';
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
 
-class MockUserMatchingInRepository extends Mock
-    implements IUserMatchingInRepository {}
-
-class MockUserMatchingOutRepository extends Mock
-    implements IUserMatchingOutRepository {}
+import '../../data/repositories/user_matching_in_repository_mock.dart';
+import '../../data/repositories/user_matching_out_repository_mock.dart';
 
 void main() {
   late CreateUserMatchesUseCase useCase;
-  late MockUserMatchingInRepository mockInRepo;
-  late MockUserMatchingOutRepository mockOutRepo;
+  late UserMatchingInRepositoryMock mockInRepo;
+  late UserMatchingOutRepositoryMock mockOutRepo;
 
   setUp(() {
-    mockInRepo = MockUserMatchingInRepository();
-    mockOutRepo = MockUserMatchingOutRepository();
+    mockInRepo = UserMatchingInRepositoryMock();
+    mockOutRepo = UserMatchingOutRepositoryMock();
 
     useCase = CreateUserMatchesUseCase(
       userMatchingOutRepository: mockOutRepo,
@@ -43,6 +37,16 @@ void main() {
     final match = tMatch.copyWith(
       matchStatus: TinderCardStatus.reject,
     );
+
+    when(
+      () => mockOutRepo.create(
+        uid: tUid,
+        match: match,
+      ),
+    ).thenAnswer(
+      (_) async => match,
+    );
+
     final result = await useCase(
       uid: tUid,
       match: match,
@@ -68,5 +72,3 @@ void main() {
     );
   });
 }
-
-class CreateUserMatchesUseCaseTest {}

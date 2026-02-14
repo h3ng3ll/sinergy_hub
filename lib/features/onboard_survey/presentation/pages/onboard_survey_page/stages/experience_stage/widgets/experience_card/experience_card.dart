@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../../doman/models/experience/experience.dart';
+import '../../../../../../../domain/models/experience/experience.dart';
 import 'widgets/experience_card_active_bg.dart';
 import 'widgets/experience_card_content.dart';
 import 'widgets/experience_card_inactive_bg.dart';

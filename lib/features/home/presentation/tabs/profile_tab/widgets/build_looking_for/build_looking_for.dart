@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../core/resources/colors/app_gradients.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
-import '../../../../../../onboard_survey/doman/models/experiences/experiences.dart';
-import '../../../../../../onboard_survey/doman/models/specializations/specializations.dart';
+import '../../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 import '../../../../../../user/domain/models/user_data/user_data.dart';
 import '../build_user_title_widget.dart';
 import '../shadow_container.dart';

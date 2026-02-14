@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../../../../../core/resources/colors/app_colors.dart';
-import '../../../../../../../../../../onboard_survey/doman/models/specialization/specialization.dart';
-import '../../../../../../../../../../onboard_survey/doman/models/specializations/specializations.dart';
+import '../../../../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
+import '../../../../../../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 import '../../../../../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../../bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../build_top_tinder_card_builder.dart';

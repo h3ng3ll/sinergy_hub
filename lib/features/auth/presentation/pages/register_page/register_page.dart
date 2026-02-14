@@ -77,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
           bloc: _registerBloc,
           listener: (context, state) {
             if (state.status == RegisterStatus.authorized) {
-              OnboardSurveyPageRoute().go(
+              OnboardAboutYouPageRoute().go(
                 context,
               );
             } else if (state.status == RegisterStatus.failed) {

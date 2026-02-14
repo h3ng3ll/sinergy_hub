@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../../onboard_survey/doman/models/experience/experience.dart';
-import '../../../../onboard_survey/doman/models/role/role.dart';
-import '../../../../onboard_survey/doman/models/specialization/specialization.dart';
-import '../../../../onboard_survey/doman/models/user_profiler/user_profiler.dart';
+import '../../../../onboard_survey/domain/models/experience/experience.dart';
+import '../../../../onboard_survey/domain/models/role/role.dart';
+import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
+import '../../../../onboard_survey/domain/models/user_profiler/user_profiler.dart';
 
 part 'user_data.g.dart';
 

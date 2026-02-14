@@ -5,7 +5,6 @@ import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../../core/widgets/btn/custom_text_btn.dart';
-import '../../../../doman/models/role/role.dart';
 
 class BuildOnboardBottomActions extends StatelessWidget {
   final VoidCallback skipForNow;

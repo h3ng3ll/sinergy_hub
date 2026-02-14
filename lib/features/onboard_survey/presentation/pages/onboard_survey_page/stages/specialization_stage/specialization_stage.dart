@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../../core/widgets/padding/horizontal_padding.dart';
-import '../../../../../doman/models/specialization/specialization.dart';
+import '../../../../../domain/models/specialization/specialization.dart';
 import '../../bloc/search_specialization_bloc/search_specialization_bloc.dart';
 import '../../widgets/build_onboard_bottom_actions.dart';
 import '../../widgets/onboard_survey_header.dart';

@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/services/firebase/firebase_firestore_service.dart';
+import '../../../domain/failures/auth_failures.dart';
 import '../../../domain/repostories/i_auth_repository.dart';
 
 class FirebaseAuthRepository extends IAuthRepository {
@@ -95,5 +96,17 @@ class FirebaseAuthRepository extends IAuthRepository {
       email: email,
       password: password,
     );
+  }
+
+  @override
+  Future<String> requireUserId() async {
+    final user = await getCurrentUser();
+    final uid = user?.uid;
+
+    if (uid == null) {
+      throw AuthFailure();
+    }
+
+    return uid;
   }
 }

@@ -12,4 +12,5 @@ abstract class IAuthRepository {
     required String email,
     required String password,
   });
+  Future<String> requireUserId();
 }

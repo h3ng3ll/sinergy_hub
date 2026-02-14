@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../../gen/assets.gen.dart';
-import '../../../../../doman/models/specialization/specialization.dart';
+import '../../../../../domain/models/specialization/specialization.dart';
 import '../../widgets/onboard_survey_header.dart';
 import 'widgets/build_role_card/build_role_card.dart';
 import 'widgets/complete_setup_btn.dart';

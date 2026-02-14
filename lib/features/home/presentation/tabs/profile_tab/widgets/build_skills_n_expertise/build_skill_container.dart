@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../../core/resources/colors/app_colors.dart';
-import '../../../../../../onboard_survey/doman/models/skill/skill.dart';
+import '../../../../../../onboard_survey/domain/models/skill/skill.dart';
 
 class BuildSkillContainer extends StatelessWidget {
   final VoidCallback? onTap;

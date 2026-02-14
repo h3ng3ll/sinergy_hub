@@ -42,7 +42,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
         body: BlocListener<AuthCubit, AuthState>(
           listener: (context, state) {
             if (state.status == AuthStatus.authorized) {
-              OnboardSurveyPageRoute().go(
+              OnboardAboutYouPageRoute().go(
                 context,
               );
             }

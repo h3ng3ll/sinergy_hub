@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../../../../../../../../../core/resources/text/app_text_theme.dart';
-import '../../../../../../../../../../../../../onboard_survey/doman/models/specialization/specialization.dart';
+import '../../../../../../../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 
 class SpecializationInfoBar extends StatelessWidget {
   final Specialization specialization;

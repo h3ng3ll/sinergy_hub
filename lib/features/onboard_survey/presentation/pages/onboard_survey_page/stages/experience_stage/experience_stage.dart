@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 
 import '../../../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../../../../gen/assets.gen.dart';
-import '../../../../../doman/models/experience/experience.dart';
+import '../../../../../domain/models/experience/experience.dart';
 import '../../widgets/build_onboard_bottom_actions.dart';
 import '../../widgets/onboard_survey_header.dart';
 import 'widgets/experience_card/experience_card.dart';

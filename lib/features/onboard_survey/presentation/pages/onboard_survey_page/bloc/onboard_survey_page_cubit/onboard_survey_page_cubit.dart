@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../../auth/domain/repostories/i_auth_repository.dart';
-import '../../../../../doman/models/user_profiler/user_profiler.dart';
-import '../../../../../doman/repositories/i_onboard_survey_repository.dart';
+import '../../../../../domain/models/user_profiler/user_profiler.dart';
+import '../../../../../domain/repositories/i_onboard_survey_repository.dart';
 
 part 'onboard_survey_page_state.dart';
 

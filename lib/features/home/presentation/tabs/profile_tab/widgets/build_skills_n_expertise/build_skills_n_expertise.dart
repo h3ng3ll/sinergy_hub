@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../../../core/widgets/btn/custom_chip.dart';
-import '../../../../../../onboard_survey/doman/models/skill/skill.dart';
-import '../../../../../../onboard_survey/doman/models/skills/skills.dart';
 import '../../../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
 import '../build_user_title_widget.dart';
 import '../shadow_container.dart';

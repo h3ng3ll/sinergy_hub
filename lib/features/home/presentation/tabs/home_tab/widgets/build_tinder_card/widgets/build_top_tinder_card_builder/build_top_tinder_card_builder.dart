@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../../../gen/assets.gen.dart';
-import '../../../../../../../../onboard_survey/doman/models/specialization/specialization.dart';
+import '../../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import 'widget/tinder_card_item/widgets/build_user_avatar.dart';
 
 class BuildTopTinderCard extends StatelessWidget {

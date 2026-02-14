@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_shaders/flutter_shaders.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../core/di/injection.dart';
-import '../../../../../core/resources/app_shader.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
-import '../../../../../core/utils/shader_painter.dart';
 import '../../../../../core/widgets/btn/custom_back_btn.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../auth/domain/repostories/i_auth_repository.dart';
-import '../../../doman/models/experience/experience.dart';
-import '../../../doman/models/role/role.dart';
-import '../../../doman/models/specialization/specialization.dart';
-import '../../../doman/models/user_profiler/user_profiler.dart';
-import '../../../doman/repositories/i_onboard_survey_repository.dart';
+
+import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
+import '../../../domain/models/experience/experience.dart';
+import '../../../domain/models/role/role.dart';
+import '../../../domain/models/specialization/specialization.dart';
+import '../../../domain/models/user_profiler/user_profiler.dart';
+import '../../../domain/repositories/i_onboard_survey_repository.dart';
+import '../../bloc/onboard_bloc/onboard_bloc.dart';
 import 'bloc/onboard_survey_page_cubit/onboard_survey_page_cubit.dart';
 import 'overlays/active_community_overlay/active_community_overlay.dart';
 import 'overlays/perfect_choice_overlay/perfect_choice_overlay.dart';
@@ -165,7 +165,7 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
   );
 
   void _clearOverlay() {
-    if(!mounted) return;
+    if (!mounted) return;
     overlayEntry?.remove();
     overlayEntry = null;
   }
@@ -213,8 +213,13 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
         skills: [],
       ),
     );
+    context.read<OnboardBloc>().add(
+      OnboardEvent.update(
+        completeSpecialization: true,
+      ),
+    );
     if (mounted) {
-      HomePageRoute().go(
+      OnboardAboutYouPageRoute().go(
         context,
       );
     }
@@ -236,31 +241,7 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
   Widget build(BuildContext context) {
     return BlocProvider<OnboardSurveyPageCubit>.value(
       value: _onboardSurveyPageCubit,
-      child: ShaderBuilder(
-        assetKey: AppShaders.ve,
-        (context, shader, child) {
-          return CustomPaint(
-            painter: ShaderPainter(
-              repaint: _animation,
-              shader: shader,
-              parameters: [
-                ShaderType(
-                  shaderType: EShaderDataType.floatShader,
-                  value: _animation.lastElapsedDuration!.inMilliseconds / 1000,
-                ),
-                ShaderType(
-                  shaderType: EShaderDataType.floatShader,
-                  value: MediaQuery.of(context).size.width,
-                ),
-                ShaderType(
-                  shaderType: EShaderDataType.floatShader,
-                  value: MediaQuery.of(context).size.height,
-                ),
-              ],
-            ),
-            child: child,
-          );
-        },
+      child: BuildAnimatedBackground(
         child: BlocBuilder<OnboardSurveyPageCubit, OnboardSurveyPageState>(
           builder: (context, state) {
             return Stack(
