@@ -8,10 +8,12 @@ import 'widgets/build_chat_user_info.dart';
 
 class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onTapUser;
+  final VoidCallback onTapVideoCall;
 
   const ChatAppBar({
     super.key,
     required this.onTapUser,
+    required this.onTapVideoCall,
   });
 
   @override
@@ -53,6 +55,12 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           Spacer(),
           InkWell(
+            onTap: onTapVideoCall,
+            child: Icon(
+              Icons.video_call,
+            ),
+          ),
+         InkWell(
             child: Icon(
               Icons.more_vert,
             ),

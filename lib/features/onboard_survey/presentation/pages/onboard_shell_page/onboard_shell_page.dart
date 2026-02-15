@@ -34,7 +34,7 @@ class _OnboardShellPageState extends State<OnboardShellPage> {
       child: BlocListener<OnboardBloc, OnboardState>(
         listener: (context, state) {
           if (state.onboardStatus.completeSpecialization) {
-            HomePageRoute().go(
+            DiscoveryPageRoute().go(
               context,
             );
           }

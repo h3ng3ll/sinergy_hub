@@ -25,6 +25,7 @@ void initNotificationFeature(GetIt getIt) {
   getIt.registerLazySingleton<SaveNotificationUseCase>(
     () => SaveNotificationUseCase(
       notificationRepository: getIt<INotificationRepository>(),
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetNotificationsUseCase>(

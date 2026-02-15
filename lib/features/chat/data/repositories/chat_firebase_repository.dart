@@ -37,9 +37,14 @@ class ChatFirebaseRepository implements IChatRepository {
     return _firebaseFirestoreService.chats().snapshots().map(
       (e) => e.docs
           .where(
-            (e) => (e.data()['participants'] as List).contains(
-              uid,
-            ),
+            (e) {
+              if (!e.data().containsKey('participants')) {
+                return false;
+              }
+              return (e.data()['participants'] as List).contains(
+                uid,
+              );
+            },
           )
           .map(
             (doc) => ChatDto.fromJson(

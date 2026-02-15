@@ -1,0 +1,16 @@
+part of 'call_bloc.dart';
+
+@freezed
+class CallEvent with _$CallEvent {
+  const factory CallEvent.ring({
+    required String calleeId,
+  }) = _Ring;
+
+  const factory CallEvent.accept({
+    required Call ring,
+  }) = _Accept;
+
+  const factory CallEvent.remoteStream({
+    required MediaStream stream,
+  }) = _RemoteStream;
+}

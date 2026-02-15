@@ -11,14 +11,19 @@ class NotificationFirebaseRepository implements INotificationRepository {
 
   @override
   Future<Notification> create({
+    required String uid,
     required Notification notification,
   }) async {
-    final String id = _firebaseFirestoreService.chats().doc().id;
+    final notificationsDoc = _firebaseFirestoreService.notifications(
+      uid: uid,
+    );
+
+    final String id = notificationsDoc.doc().id;
+
     notification = notification.copyWith(
       id: id,
     );
-    await _firebaseFirestoreService
-        .chats()
+    await notificationsDoc
         .doc(
           id,
         )

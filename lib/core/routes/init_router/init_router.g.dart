@@ -46,8 +46,8 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                 StatefulShellBranchData.$branch(
                   routes: [
                     GoRouteData.$route(
-                      path: '/home',
-                      factory: _$HomePageRoute._fromState,
+                      path: '/discovery',
+                      factory: _$DiscoveryPageRoute._fromState,
                     ),
                   ],
                 ),
@@ -68,6 +68,12 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
             GoRouteData.$route(
               path: '/chat',
               factory: _$ChatPageRoute._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: 'call',
+                  factory: _$CallPageRoute._fromState,
+                ),
+              ],
             ),
             GoRouteData.$route(
               path: '/edit-profile-page',
@@ -190,11 +196,12 @@ extension $HomeBottomBarRouteExtension on HomeBottomBarRoute {
       HomeBottomBarRoute();
 }
 
-mixin _$HomePageRoute on GoRouteData {
-  static HomePageRoute _fromState(GoRouterState state) => HomePageRoute();
+mixin _$DiscoveryPageRoute on GoRouteData {
+  static DiscoveryPageRoute _fromState(GoRouterState state) =>
+      DiscoveryPageRoute();
 
   @override
-  String get location => GoRouteData.$location('/home');
+  String get location => GoRouteData.$location('/discovery');
 
   @override
   void go(BuildContext context) => context.go(location);
@@ -239,6 +246,26 @@ mixin _$ChatPageRoute on GoRouteData {
   @override
   String get location =>
       GoRouteData.$location('/chat', queryParams: {'chat-id': _self.chatId});
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$CallPageRoute on GoRouteData {
+  static CallPageRoute _fromState(GoRouterState state) => CallPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/chat/call');
 
   @override
   void go(BuildContext context) => context.go(location);

@@ -7,8 +7,8 @@ import '../../../../../../../../../../core/resources/colors/app_color_scheme.dar
 import '../../../../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../../../../core/resources/colors/app_gradients.dart';
 import '../../../../../../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../../../../../../core/widgets/build_user_avatar.dart';
 import '../../../../../../../../../../gen/assets.gen.dart';
-import '../../../../../../../../../home/presentation/tabs/home_tab/widgets/build_tinder_card/widgets/build_top_tinder_card_builder/widget/tinder_card_item/widgets/build_user_avatar.dart';
 import '../../../../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../../../../domain/models/chat_message/chat_message.dart';
 

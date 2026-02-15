@@ -47,6 +47,10 @@ class FirebaseFirestoreService {
         'notifications',
       );
 
+  ColRef calls() => _firebaseFirestore.collection(
+    'calls',
+  );
+
   DocRef notificationConfig({
     required String uid,
   }) =>

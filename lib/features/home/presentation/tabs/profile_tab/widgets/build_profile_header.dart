@@ -3,10 +3,10 @@ import 'package:gap/gap.dart';
 
 import '../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../../core/widgets/build_user_avatar.dart';
 import '../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 import '../../../../../onboard_survey/presentation/pages/onboard_survey_page/widgets/translucent_card_container.dart';
 import '../../../../../user/domain/models/user_data/user_data.dart';
-import '../../home_tab/widgets/build_tinder_card/widgets/build_top_tinder_card_builder/widget/tinder_card_item/widgets/build_user_avatar.dart';
 
 class BuildProfileHeader extends StatelessWidget {
   final UserData userData;

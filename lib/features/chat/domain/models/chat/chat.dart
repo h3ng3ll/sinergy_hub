@@ -14,14 +14,34 @@ abstract class Chat with _$Chat {
     @Default('') String lastMessage,
     required DateTime lastMessageSent,
     @Default([]) List<String> typingUsers,
+
     /// who access this chat
     required List<String> participants,
-    @Default(false) bool hasRead ,
-    @Default(false) bool isArchived ,
-    @Default(false) bool isFavorite ,
+    @Default(false) bool hasRead,
+    @Default(false) bool isArchived,
+    @Default(false) bool isFavorite,
     required DateTime createdAt,
     @Default('') String icon,
   }) = _Chat;
 
-  factory Chat.fromJson(Map<String, Object?> json) => _$ChatFromJson(json);
+  @visibleForTesting
+  factory Chat.empty() => Chat(
+    chatId: '',
+    user: UserData.none(),
+    lastMessage: '',
+    lastMessageSent: DateTime.now(),
+    typingUsers: [],
+    participants: [],
+    hasRead: false,
+    isArchived: false,
+    isFavorite: false,
+    createdAt: DateTime.now(),
+    icon: '',
+  );
+
+  factory Chat.fromJson(
+    Map<String, Object?> json,
+  ) => _$ChatFromJson(
+    json,
+  );
 }

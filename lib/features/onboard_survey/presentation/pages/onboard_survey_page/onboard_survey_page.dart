@@ -57,7 +57,7 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
       (_) async {
         final hasSaved = await _onboardSurveyPageCubit.hasSavedResults();
         if (hasSaved && mounted) {
-          HomePageRoute().go(
+          DiscoveryPageRoute().go(
             context,
           );
         }

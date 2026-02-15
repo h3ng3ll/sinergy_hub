@@ -1,4 +1,5 @@
-import '../../../home/presentation/tabs/home_tab/bloc/tinder_card_cubit/tinder_card_cubit.dart';
+import '../../../chat/domain/usecases/init_chat_use_case.dart';
+import '../../presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../../notifications/domain/models/notification/notification.dart';
 import '../../../notifications/domain/repositories/i_notification_repository.dart';
 import '../models/user_match/user_match.dart';
@@ -9,13 +10,16 @@ class CreateUserMatchesUseCase {
   final IUserMatchingOutRepository _userMatchingOutRepository;
   final IUserMatchingInRepository _userMatchingInRepository;
   final INotificationRepository _notificationRepository;
+  final InitChatUseCase _initChatUseCase;
 
   CreateUserMatchesUseCase({
     required IUserMatchingOutRepository userMatchingOutRepository,
     required IUserMatchingInRepository userMatchingInRepository,
     required INotificationRepository notificationRepository,
+    required InitChatUseCase initChatUseCase,
   }) : _userMatchingOutRepository = userMatchingOutRepository,
        _userMatchingInRepository = userMatchingInRepository,
+       _initChatUseCase = initChatUseCase,
        _notificationRepository = notificationRepository;
 
   /// return Status of Matching
@@ -23,6 +27,7 @@ class CreateUserMatchesUseCase {
     required String uid,
     required UserMatch match,
   }) async {
+
     if (match.matchStatus != TinderCardStatus.liked) {
       /// create match record in actor
       await _userMatchingOutRepository.create(
@@ -33,6 +38,14 @@ class CreateUserMatchesUseCase {
       );
       return EUserMatchCompleteness.none;
     }
+
+    /// Initialize chat for matched users
+    await _initChatUseCase.call(
+      participants: [
+        uid,
+        match.user.uid,
+      ],
+    );
 
     /// who   matched create record
     /// process cases
@@ -58,6 +71,7 @@ class CreateUserMatchesUseCase {
 
       /// Save notification for other user
       await _notificationRepository.create(
+        uid: uid,
         notification: Notification(
           uid: match.user.uid,
           title: 'New Interest 🚀',
@@ -86,6 +100,7 @@ class CreateUserMatchesUseCase {
 
       /// Notify current user
       await _notificationRepository.create(
+        uid: uid,
         notification: Notification(
           uid: uid,
           title: 'It’s a Match! 🎉',
@@ -96,6 +111,7 @@ class CreateUserMatchesUseCase {
 
       /// Notify other user
       await _notificationRepository.create(
+        uid: uid,
         notification: Notification(
           uid: match.user.uid,
           title: 'It’s a Match! 🎉',
@@ -107,7 +123,7 @@ class CreateUserMatchesUseCase {
     }
 
     throw Exception(
-      'Unhandled matching result ',
+      'Unhandled matching result',
     );
   }
 }

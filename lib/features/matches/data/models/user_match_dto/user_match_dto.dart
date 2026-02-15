@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../home/presentation/tabs/home_tab/bloc/tinder_card_cubit/tinder_card_cubit.dart';
+import '../../../presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../domain/models/user_match/user_match.dart';
 

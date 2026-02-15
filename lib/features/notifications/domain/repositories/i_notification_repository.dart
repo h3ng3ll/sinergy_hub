@@ -6,6 +6,7 @@ abstract class INotificationRepository {
   });
 
   Future<Notification> create({
+    required String uid,
     required Notification notification,
   });
 }

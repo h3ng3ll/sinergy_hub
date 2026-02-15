@@ -1,5 +1,5 @@
 
-import '../../../home/presentation/tabs/home_tab/bloc/tinder_card_cubit/tinder_card_cubit.dart';
+import '../../presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../../user/domain/models/user_data/user_data.dart';
 import '../../../user/domain/repositories/i_user_repository.dart';
 import '../../data/models/user_match_dto/user_match_dto.dart';

@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/injection.dart';
 import '../../../../core/services/firebase/firebase_messaging_service.dart';
+import '../../../auth/domain/services/i_webrtc_service.dart';
+import '../../../calls/domain/use_cases/accept_call_use_case.dart';
+import '../../../calls/domain/use_cases/start_call_use_case.dart';
+import '../../../calls/presentation/bloc/call_bloc/call_bloc.dart';
 import '../../../chat/presentation/bloc/chat_cubit/chat_cubit.dart';
 import '../../../matches/domain/usecases/get_user_matches_outcome_use_case.dart';
 import '../../../matches/presentation/bloc/user_matches_outcome_cubit/user_matches_outcome_cubit.dart';
@@ -70,6 +74,13 @@ class _HomeRootState extends State<HomeRoot> {
               )..add(
                 NotificationConfigEvent.init(),
               ),
+        ),
+        BlocProvider(
+          create: (_) => CallBloc(
+            startCallUseCase: getIt<StartCallUseCase>(),
+            acceptCallUseCase: getIt<AcceptCallUseCase>(),
+            webRtcService: getIt<IWebRtcService>(),
+          ),
         ),
       ],
       child: widget.navigator,

@@ -6,10 +6,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../../features/auth/presentation/pages/authorization_page/authorization_page.dart';
 import '../../../features/auth/presentation/pages/register_page/register_page.dart';
+import '../../../features/calls/presentation/pages/call_page/call_page.dart';
 import '../../../features/chat/presentation/pages/chat_page/chat_page.dart';
 import '../../../features/home/presentation/home_bottom_bar/home_bottom_bar.dart';
 import '../../../features/home/presentation/home_root/home_root.dart';
-import '../../../features/home/presentation/tabs/home_tab/home_tab.dart';
+import '../../../features/matches/presentation/pages/discovery_page/discovery_page.dart';
 import '../../../features/matches/presentation/pages/matches_page/matches_page.dart';
 import '../../../features/home/presentation/edit_profile_page/edit_profile_page.dart';
 import '../../../features/home/presentation/tabs/profile_tab/profile_tab.dart';
@@ -55,8 +56,8 @@ final GoRouter initRouter = GoRouter(
               branches: [
                 TypedStatefulShellBranch(
                   routes: [
-                    TypedGoRoute<HomePageRoute>(
-                      path: '/home',
+                    TypedGoRoute<DiscoveryPageRoute>(
+                      path: '/discovery',
                     ),
                   ],
                 ),
@@ -75,6 +76,11 @@ final GoRouter initRouter = GoRouter(
           routes: [
             TypedGoRoute<ChatPageRoute>(
               path: '/chat',
+              routes: [
+                TypedGoRoute<CallPageRoute>(
+                  path: 'call',
+                ),
+              ],
             ),
             TypedGoRoute<EditProfilePageRoute>(
               path: '/edit-profile-page',
@@ -188,11 +194,11 @@ class HomeBottomBarRoute extends StatefulShellRouteData {
   }
 }
 
-class HomePageRoute extends GoRouteData with _$HomePageRoute {
+class DiscoveryPageRoute extends GoRouteData with _$DiscoveryPageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
-      HomeTab(),
+      DiscoveryPage(),
     );
   }
 }
@@ -263,6 +269,15 @@ class EditProfilePageRoute extends GoRouteData with _$EditProfilePageRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       EditProfilePage(),
+    );
+  }
+}
+
+class CallPageRoute extends GoRouteData with _$CallPageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      CallPage(),
     );
   }
 }
