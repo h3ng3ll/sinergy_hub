@@ -14,7 +14,7 @@ sealed class  ChatPageState with _$ChatPageState {
    factory  ChatPageState({
     Chat? chat,
     @Default([]) List<ChatMessage> messages,
-    @Default( ChatPageStatus.initial)  ChatPageStatus status,
+    @Default( ChatPageStatus.loading)  ChatPageStatus status,
     @Default(true) bool isOnlineUser,
     @Default('') errorMessage,
   }) = _ChatPageState;

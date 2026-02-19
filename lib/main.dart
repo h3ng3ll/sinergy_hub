@@ -95,15 +95,7 @@ class _MyAppState extends State<MyApp> {
             authRepository: getIt<IAuthRepository>(),
           ),
         ),
-        BlocProvider<NotificationBloc>(
-          create: (_) =>
-              NotificationBloc(
-                getNotificationsUseCase: getIt<GetNotificationsUseCase>(),
-                saveNotificationUseCase: getIt<SaveNotificationUseCase>(),
-              )..add(
-                NotificationEvent.get(),
-              ),
-        ),
+
       ],
       child: MaterialApp.router(
         theme: AppThemeData.light,

@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
+import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
@@ -41,6 +42,11 @@ class _ProfileTabState extends State<ProfileTab> {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
+
+        if(state.status == UserStatus.loading) {
+          return LoadingDataWidget();
+        }
+        
         final userData = state.userData!;
         return BuildAnimatedBackground(
           child: Scaffold(

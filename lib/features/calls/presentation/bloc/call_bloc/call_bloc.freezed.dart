@@ -55,12 +55,14 @@ extension CallEventPatterns on CallEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Ring value)?  ring,TResult Function( _Accept value)?  accept,TResult Function( _RemoteStream value)?  remoteStream,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ListenCalls value)?  listenCalls,TResult Function( _Ring value)?  ring,TResult Function( _Accept value)?  accept,TResult Function( _HangUp value)?  hangUp,TResult Function( _RemoteStream value)?  remoteStream,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Ring() when ring != null:
+case _ListenCalls() when listenCalls != null:
+return listenCalls(_that);case _Ring() when ring != null:
 return ring(_that);case _Accept() when accept != null:
-return accept(_that);case _RemoteStream() when remoteStream != null:
+return accept(_that);case _HangUp() when hangUp != null:
+return hangUp(_that);case _RemoteStream() when remoteStream != null:
 return remoteStream(_that);case _:
   return orElse();
 
@@ -79,12 +81,14 @@ return remoteStream(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Ring value)  ring,required TResult Function( _Accept value)  accept,required TResult Function( _RemoteStream value)  remoteStream,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ListenCalls value)  listenCalls,required TResult Function( _Ring value)  ring,required TResult Function( _Accept value)  accept,required TResult Function( _HangUp value)  hangUp,required TResult Function( _RemoteStream value)  remoteStream,}){
 final _that = this;
 switch (_that) {
-case _Ring():
+case _ListenCalls():
+return listenCalls(_that);case _Ring():
 return ring(_that);case _Accept():
-return accept(_that);case _RemoteStream():
+return accept(_that);case _HangUp():
+return hangUp(_that);case _RemoteStream():
 return remoteStream(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -102,12 +106,14 @@ return remoteStream(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Ring value)?  ring,TResult? Function( _Accept value)?  accept,TResult? Function( _RemoteStream value)?  remoteStream,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ListenCalls value)?  listenCalls,TResult? Function( _Ring value)?  ring,TResult? Function( _Accept value)?  accept,TResult? Function( _HangUp value)?  hangUp,TResult? Function( _RemoteStream value)?  remoteStream,}){
 final _that = this;
 switch (_that) {
-case _Ring() when ring != null:
+case _ListenCalls() when listenCalls != null:
+return listenCalls(_that);case _Ring() when ring != null:
 return ring(_that);case _Accept() when accept != null:
-return accept(_that);case _RemoteStream() when remoteStream != null:
+return accept(_that);case _HangUp() when hangUp != null:
+return hangUp(_that);case _RemoteStream() when remoteStream != null:
 return remoteStream(_that);case _:
   return null;
 
@@ -125,11 +131,13 @@ return remoteStream(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String calleeId)?  ring,TResult Function( Call ring)?  accept,TResult Function( MediaStream stream)?  remoteStream,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  listenCalls,TResult Function( String calleeId)?  ring,TResult Function( Call ring)?  accept,TResult Function()?  hangUp,TResult Function( MediaStream stream)?  remoteStream,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Ring() when ring != null:
+case _ListenCalls() when listenCalls != null:
+return listenCalls();case _Ring() when ring != null:
 return ring(_that.calleeId);case _Accept() when accept != null:
-return accept(_that.ring);case _RemoteStream() when remoteStream != null:
+return accept(_that.ring);case _HangUp() when hangUp != null:
+return hangUp();case _RemoteStream() when remoteStream != null:
 return remoteStream(_that.stream);case _:
   return orElse();
 
@@ -148,11 +156,13 @@ return remoteStream(_that.stream);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String calleeId)  ring,required TResult Function( Call ring)  accept,required TResult Function( MediaStream stream)  remoteStream,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  listenCalls,required TResult Function( String calleeId)  ring,required TResult Function( Call ring)  accept,required TResult Function()  hangUp,required TResult Function( MediaStream stream)  remoteStream,}) {final _that = this;
 switch (_that) {
-case _Ring():
+case _ListenCalls():
+return listenCalls();case _Ring():
 return ring(_that.calleeId);case _Accept():
-return accept(_that.ring);case _RemoteStream():
+return accept(_that.ring);case _HangUp():
+return hangUp();case _RemoteStream():
 return remoteStream(_that.stream);case _:
   throw StateError('Unexpected subclass');
 
@@ -170,11 +180,13 @@ return remoteStream(_that.stream);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String calleeId)?  ring,TResult? Function( Call ring)?  accept,TResult? Function( MediaStream stream)?  remoteStream,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  listenCalls,TResult? Function( String calleeId)?  ring,TResult? Function( Call ring)?  accept,TResult? Function()?  hangUp,TResult? Function( MediaStream stream)?  remoteStream,}) {final _that = this;
 switch (_that) {
-case _Ring() when ring != null:
+case _ListenCalls() when listenCalls != null:
+return listenCalls();case _Ring() when ring != null:
 return ring(_that.calleeId);case _Accept() when accept != null:
-return accept(_that.ring);case _RemoteStream() when remoteStream != null:
+return accept(_that.ring);case _HangUp() when hangUp != null:
+return hangUp();case _RemoteStream() when remoteStream != null:
 return remoteStream(_that.stream);case _:
   return null;
 
@@ -182,6 +194,38 @@ return remoteStream(_that.stream);case _:
 }
 
 }
+
+/// @nodoc
+
+
+class _ListenCalls implements CallEvent {
+  const _ListenCalls();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListenCalls);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CallEvent.listenCalls()';
+}
+
+
+}
+
+
+
 
 /// @nodoc
 
@@ -327,6 +371,38 @@ $CallCopyWith<$Res> get ring {
 /// @nodoc
 
 
+class _HangUp implements CallEvent {
+  const _HangUp();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HangUp);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CallEvent.hangUp()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
 class _RemoteStream implements CallEvent {
   const _RemoteStream({required this.stream});
   
@@ -393,7 +469,7 @@ as MediaStream,
 /// @nodoc
 mixin _$CallState {
 
- MediaStream? get localStream; MediaStream? get remoteStream; bool get isConnected; ECallStatus get status; String get errorMessage;
+ MediaStream? get localStream; MediaStream? get remoteStream; Call? get aCall; bool get isConnected; ECallStatus get status; String get errorMessage;
 /// Create a copy of CallState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -404,16 +480,16 @@ $CallStateCopyWith<CallState> get copyWith => _$CallStateCopyWithImpl<CallState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallState&&(identical(other.localStream, localStream) || other.localStream == localStream)&&(identical(other.remoteStream, remoteStream) || other.remoteStream == remoteStream)&&(identical(other.isConnected, isConnected) || other.isConnected == isConnected)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallState&&(identical(other.localStream, localStream) || other.localStream == localStream)&&(identical(other.remoteStream, remoteStream) || other.remoteStream == remoteStream)&&(identical(other.aCall, aCall) || other.aCall == aCall)&&(identical(other.isConnected, isConnected) || other.isConnected == isConnected)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,localStream,remoteStream,isConnected,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,localStream,remoteStream,aCall,isConnected,status,errorMessage);
 
 @override
 String toString() {
-  return 'CallState(localStream: $localStream, remoteStream: $remoteStream, isConnected: $isConnected, status: $status, errorMessage: $errorMessage)';
+  return 'CallState(localStream: $localStream, remoteStream: $remoteStream, aCall: $aCall, isConnected: $isConnected, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -424,11 +500,11 @@ abstract mixin class $CallStateCopyWith<$Res>  {
   factory $CallStateCopyWith(CallState value, $Res Function(CallState) _then) = _$CallStateCopyWithImpl;
 @useResult
 $Res call({
- MediaStream? localStream, MediaStream? remoteStream, bool isConnected, ECallStatus status, String errorMessage
+ MediaStream? localStream, MediaStream? remoteStream, Call? aCall, bool isConnected, ECallStatus status, String errorMessage
 });
 
 
-
+$CallCopyWith<$Res>? get aCall;
 
 }
 /// @nodoc
@@ -441,17 +517,30 @@ class _$CallStateCopyWithImpl<$Res>
 
 /// Create a copy of CallState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? localStream = freezed,Object? remoteStream = freezed,Object? isConnected = null,Object? status = null,Object? errorMessage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? localStream = freezed,Object? remoteStream = freezed,Object? aCall = freezed,Object? isConnected = null,Object? status = null,Object? errorMessage = null,}) {
   return _then(_self.copyWith(
 localStream: freezed == localStream ? _self.localStream : localStream // ignore: cast_nullable_to_non_nullable
 as MediaStream?,remoteStream: freezed == remoteStream ? _self.remoteStream : remoteStream // ignore: cast_nullable_to_non_nullable
-as MediaStream?,isConnected: null == isConnected ? _self.isConnected : isConnected // ignore: cast_nullable_to_non_nullable
+as MediaStream?,aCall: freezed == aCall ? _self.aCall : aCall // ignore: cast_nullable_to_non_nullable
+as Call?,isConnected: null == isConnected ? _self.isConnected : isConnected // ignore: cast_nullable_to_non_nullable
 as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ECallStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
+/// Create a copy of CallState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CallCopyWith<$Res>? get aCall {
+    if (_self.aCall == null) {
+    return null;
+  }
 
+  return $CallCopyWith<$Res>(_self.aCall!, (value) {
+    return _then(_self.copyWith(aCall: value));
+  });
+}
 }
 
 
@@ -530,10 +619,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MediaStream? localStream,  MediaStream? remoteStream,  bool isConnected,  ECallStatus status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MediaStream? localStream,  MediaStream? remoteStream,  Call? aCall,  bool isConnected,  ECallStatus status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CallState() when $default != null:
-return $default(_that.localStream,_that.remoteStream,_that.isConnected,_that.status,_that.errorMessage);case _:
+return $default(_that.localStream,_that.remoteStream,_that.aCall,_that.isConnected,_that.status,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -551,10 +640,10 @@ return $default(_that.localStream,_that.remoteStream,_that.isConnected,_that.sta
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MediaStream? localStream,  MediaStream? remoteStream,  bool isConnected,  ECallStatus status,  String errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MediaStream? localStream,  MediaStream? remoteStream,  Call? aCall,  bool isConnected,  ECallStatus status,  String errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _CallState():
-return $default(_that.localStream,_that.remoteStream,_that.isConnected,_that.status,_that.errorMessage);}
+return $default(_that.localStream,_that.remoteStream,_that.aCall,_that.isConnected,_that.status,_that.errorMessage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -568,10 +657,10 @@ return $default(_that.localStream,_that.remoteStream,_that.isConnected,_that.sta
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MediaStream? localStream,  MediaStream? remoteStream,  bool isConnected,  ECallStatus status,  String errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MediaStream? localStream,  MediaStream? remoteStream,  Call? aCall,  bool isConnected,  ECallStatus status,  String errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _CallState() when $default != null:
-return $default(_that.localStream,_that.remoteStream,_that.isConnected,_that.status,_that.errorMessage);case _:
+return $default(_that.localStream,_that.remoteStream,_that.aCall,_that.isConnected,_that.status,_that.errorMessage);case _:
   return null;
 
 }
@@ -583,11 +672,12 @@ return $default(_that.localStream,_that.remoteStream,_that.isConnected,_that.sta
 
 
 class _CallState implements CallState {
-  const _CallState({this.localStream, this.remoteStream, this.isConnected = false, this.status = ECallStatus.idle, this.errorMessage = ''});
+  const _CallState({this.localStream, this.remoteStream, this.aCall, this.isConnected = false, this.status = ECallStatus.idle, this.errorMessage = ''});
   
 
 @override final  MediaStream? localStream;
 @override final  MediaStream? remoteStream;
+@override final  Call? aCall;
 @override@JsonKey() final  bool isConnected;
 @override@JsonKey() final  ECallStatus status;
 @override@JsonKey() final  String errorMessage;
@@ -602,16 +692,16 @@ _$CallStateCopyWith<_CallState> get copyWith => __$CallStateCopyWithImpl<_CallSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CallState&&(identical(other.localStream, localStream) || other.localStream == localStream)&&(identical(other.remoteStream, remoteStream) || other.remoteStream == remoteStream)&&(identical(other.isConnected, isConnected) || other.isConnected == isConnected)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CallState&&(identical(other.localStream, localStream) || other.localStream == localStream)&&(identical(other.remoteStream, remoteStream) || other.remoteStream == remoteStream)&&(identical(other.aCall, aCall) || other.aCall == aCall)&&(identical(other.isConnected, isConnected) || other.isConnected == isConnected)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,localStream,remoteStream,isConnected,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,localStream,remoteStream,aCall,isConnected,status,errorMessage);
 
 @override
 String toString() {
-  return 'CallState(localStream: $localStream, remoteStream: $remoteStream, isConnected: $isConnected, status: $status, errorMessage: $errorMessage)';
+  return 'CallState(localStream: $localStream, remoteStream: $remoteStream, aCall: $aCall, isConnected: $isConnected, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -622,11 +712,11 @@ abstract mixin class _$CallStateCopyWith<$Res> implements $CallStateCopyWith<$Re
   factory _$CallStateCopyWith(_CallState value, $Res Function(_CallState) _then) = __$CallStateCopyWithImpl;
 @override @useResult
 $Res call({
- MediaStream? localStream, MediaStream? remoteStream, bool isConnected, ECallStatus status, String errorMessage
+ MediaStream? localStream, MediaStream? remoteStream, Call? aCall, bool isConnected, ECallStatus status, String errorMessage
 });
 
 
-
+@override $CallCopyWith<$Res>? get aCall;
 
 }
 /// @nodoc
@@ -639,18 +729,31 @@ class __$CallStateCopyWithImpl<$Res>
 
 /// Create a copy of CallState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? localStream = freezed,Object? remoteStream = freezed,Object? isConnected = null,Object? status = null,Object? errorMessage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? localStream = freezed,Object? remoteStream = freezed,Object? aCall = freezed,Object? isConnected = null,Object? status = null,Object? errorMessage = null,}) {
   return _then(_CallState(
 localStream: freezed == localStream ? _self.localStream : localStream // ignore: cast_nullable_to_non_nullable
 as MediaStream?,remoteStream: freezed == remoteStream ? _self.remoteStream : remoteStream // ignore: cast_nullable_to_non_nullable
-as MediaStream?,isConnected: null == isConnected ? _self.isConnected : isConnected // ignore: cast_nullable_to_non_nullable
+as MediaStream?,aCall: freezed == aCall ? _self.aCall : aCall // ignore: cast_nullable_to_non_nullable
+as Call?,isConnected: null == isConnected ? _self.isConnected : isConnected // ignore: cast_nullable_to_non_nullable
 as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ECallStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
 
+/// Create a copy of CallState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CallCopyWith<$Res>? get aCall {
+    if (_self.aCall == null) {
+    return null;
+  }
 
+  return $CallCopyWith<$Res>(_self.aCall!, (value) {
+    return _then(_self.copyWith(aCall: value));
+  });
+}
 }
 
 // dart format on

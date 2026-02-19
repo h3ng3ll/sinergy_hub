@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../features/auth/presentation/pages/authorization_page/authorization_page.dart';
@@ -76,11 +75,6 @@ final GoRouter initRouter = GoRouter(
           routes: [
             TypedGoRoute<ChatPageRoute>(
               path: '/chat',
-              routes: [
-                TypedGoRoute<CallPageRoute>(
-                  path: 'call',
-                ),
-              ],
             ),
             TypedGoRoute<EditProfilePageRoute>(
               path: '/edit-profile-page',
@@ -90,6 +84,9 @@ final GoRouter initRouter = GoRouter(
             ),
             TypedGoRoute<NotificationPageRoute>(
               path: '/notification',
+            ),
+            TypedGoRoute<CallPageRoute>(
+              path: '/call',
             ),
           ],
         ),
@@ -274,10 +271,18 @@ class EditProfilePageRoute extends GoRouteData with _$EditProfilePageRoute {
 }
 
 class CallPageRoute extends GoRouteData with _$CallPageRoute {
+  final String calleeId;
+
+  CallPageRoute({
+    required this.calleeId,
+  });
+
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
-      CallPage(),
+      CallPage(
+        calleeId: calleeId,
+      ),
     );
   }
 }

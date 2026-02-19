@@ -57,9 +57,15 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         _getChatByIdUseCase(
           chatId: chatId,
           uid: _userCubit.uid!,
-        ).listen((chat) {
-          add(ChatPageEvent.updateChat(chat: chat));
-        });
+        ).listen(
+          (chat) {
+            add(
+              ChatPageEvent.updateChat(
+                chat: chat,
+              ),
+            );
+          },
+        );
 
     _messagesBlocSubscription = getLastMessageUseCase
         .call(
@@ -89,6 +95,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     emit(
       state.copyWith(
         chat: event.chat,
+        status: ChatPageStatus.initial,
       ),
     );
   }

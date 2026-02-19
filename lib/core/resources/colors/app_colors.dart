@@ -43,6 +43,7 @@ enum AppColors {
   pinkBakerMiller(Color(0xffFF90AF)),
   pinkCandy(Color(0xffE27777)),
   goldCrayola(Color(0xffF1B488)),
+  whiteLilac(Color(0xffF8F7FC)),
 
   white(Colors.white);
 

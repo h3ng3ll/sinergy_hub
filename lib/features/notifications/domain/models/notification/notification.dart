@@ -15,6 +15,7 @@ sealed class Notification with _$Notification {
     @Default('') String deviceToken,
     @Default('') String title,
     @Default('') String description,
+    @Default(false) bool hasRead,
     required DateTime createdAt,
   }) = _Notification;
 

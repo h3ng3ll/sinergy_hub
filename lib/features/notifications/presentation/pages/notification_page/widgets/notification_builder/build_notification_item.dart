@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide Notification;
 
+import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../domain/models/notification/notification.dart';
 
@@ -16,11 +17,32 @@ class BuildNotificationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = AppTextTheme.of(context);
-    
+
     return Container(
+      padding: .all(
+        16.0,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.whiteLilac.value,
+        borderRadius: .circular(
+          25.0,
+        ),
+
+      ),
       child: Row(
         children: [
-          // BuildUserAvatar(url: url)
+          Column(
+            crossAxisAlignment: .start,
+            children: [
+              Text(
+                notification.title,
+                  style: textTheme.medium14,
+              ),
+              Text(
+                notification.description,
+              ),
+            ],
+          ),
         ],
       ),
     );

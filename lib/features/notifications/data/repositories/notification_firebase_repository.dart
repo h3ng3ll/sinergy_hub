@@ -39,9 +39,9 @@ class NotificationFirebaseRepository implements INotificationRepository {
     required String uid,
   }) async {
     final snapshots = await _firebaseFirestoreService
-        .notifications(uid: uid)
-        .snapshots()
-        .last;
+        .notifications(
+          uid: uid,
+        ).get();
 
     final notifications = snapshots.docs
         .map(

@@ -10,6 +10,7 @@ part 'call.freezed.dart';
 enum ECallStatus {
   idle,
   calling,
+  loading,
   ringing,
   accepted,
   ended,

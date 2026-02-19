@@ -5,7 +5,12 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import '../../bloc/call_bloc/call_bloc.dart';
 
 class CallPage extends StatefulWidget {
-  const CallPage({super.key});
+  final String calleeId;
+
+  const CallPage({
+    super.key,
+    required this.calleeId,
+  });
 
   @override
   State<CallPage> createState() => _CallPageState();
@@ -14,10 +19,12 @@ class CallPage extends StatefulWidget {
 class _CallPageState extends State<CallPage> {
   final _localRenderer = RTCVideoRenderer();
   final _remoteRenderer = RTCVideoRenderer();
+  late final CallBloc _callBloc;
 
   @override
   void initState() {
     super.initState();
+    _callBloc = context.read<CallBloc>();
 
     _initRenderers();
   }
@@ -25,12 +32,21 @@ class _CallPageState extends State<CallPage> {
   Future<void> _initRenderers() async {
     await _localRenderer.initialize();
     await _remoteRenderer.initialize();
+    _callBloc.add(
+      CallEvent.ring(
+        calleeId: widget.calleeId,
+      ),
+    );
   }
 
   @override
   void dispose() {
+    _callBloc.add(
+      CallEvent.hangUp(),
+    );
     _localRenderer.dispose();
     _remoteRenderer.dispose();
+
     super.dispose();
   }
 

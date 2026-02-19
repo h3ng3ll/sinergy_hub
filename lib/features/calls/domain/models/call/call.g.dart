@@ -35,6 +35,7 @@ Map<String, dynamic> _$CallToJson(_Call instance) => <String, dynamic>{
 const _$ECallStatusEnumMap = {
   ECallStatus.idle: 'idle',
   ECallStatus.calling: 'calling',
+  ECallStatus.loading: 'loading',
   ECallStatus.ringing: 'ringing',
   ECallStatus.accepted: 'accepted',
   ECallStatus.ended: 'ended',

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/di/injection.dart';
 
 import '../../../../../core/routes/init_router/init_router.dart';
+import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
 import '../../../domain/usecases/get_chat_by_id_use_case.dart';
 import '../../../domain/usecases/get_last_messages_use_case.dart';
@@ -58,8 +59,10 @@ class _ChatPageState extends State<ChatPage> {
 
   void onTapUser() {}
 
-  void onTapVideoCall() {
-    CallPageRoute().go(
+  void onTapVideoCall(String calleeId) {
+    CallPageRoute(
+      calleeId: calleeId,
+    ).push(
       context,
     );
   }
@@ -79,27 +82,41 @@ class _ChatPageState extends State<ChatPage> {
         top: false,
         child: Builder(
           builder: (context) {
-            return Scaffold(
-              appBar: ChatAppBar(
-                onTapVideoCall: onTapVideoCall,
-                onTapUser: onTapUser,
-              ),
-              body: Column(
-                children: [
-                  Expanded(
-                    child: BuildChatCanvas(
-                      onReachToEnd: onReachToEndMessages,
+
+
+            return BlocBuilder<ChatPageBloc, ChatPageState>(
+              builder: (context, state) {
+                if(state.status == ChatPageStatus.loading){
+                  return LoadingDataWidget();
+                }
+                final uidOfChat = state.chat!.participants.firstWhere(
+                      (member) => member != context.read<UserCubit>().uid,
+                );
+                return Scaffold(
+                  appBar: ChatAppBar(
+                    onTapVideoCall: () => onTapVideoCall(
+                      uidOfChat,
                     ),
+                    onTapUser: onTapUser,
                   ),
-                  BuildChatBottom(
-                    onSendMessage: () => onSendMessage(
-                      context,
-                    ),
-                    onAttachMedia: onAttachMedia,
-                    chatController: _textEditingController,
+                  body: Column(
+                    children: [
+                      Expanded(
+                        child: BuildChatCanvas(
+                          onReachToEnd: onReachToEndMessages,
+                        ),
+                      ),
+                      BuildChatBottom(
+                        onSendMessage: () => onSendMessage(
+                          context,
+                        ),
+                        onAttachMedia: onAttachMedia,
+                        chatController: _textEditingController,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             );
           },
         ),

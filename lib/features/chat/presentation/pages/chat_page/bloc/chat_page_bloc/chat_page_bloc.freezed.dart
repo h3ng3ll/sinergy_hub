@@ -633,7 +633,7 @@ return $default(_that.chat,_that.messages,_that.status,_that.isOnlineUser,_that.
 
 
 class _ChatPageState implements ChatPageState {
-   _ChatPageState({this.chat, final  List<ChatMessage> messages = const [], this.status = ChatPageStatus.initial, this.isOnlineUser = true, this.errorMessage = ''}): _messages = messages;
+   _ChatPageState({this.chat, final  List<ChatMessage> messages = const [], this.status = ChatPageStatus.loading, this.isOnlineUser = true, this.errorMessage = ''}): _messages = messages;
   
 
 @override final  Chat? chat;
