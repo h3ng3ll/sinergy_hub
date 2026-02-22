@@ -1,3 +1,4 @@
+import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../../../chat/domain/usecases/init_chat_use_case.dart';
 import '../../presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../../notifications/domain/models/notification/notification.dart';
@@ -10,6 +11,8 @@ class CreateUserMatchesUseCase {
   final IUserMatchingOutRepository _userMatchingOutRepository;
   final IUserMatchingInRepository _userMatchingInRepository;
   final INotificationRepository _notificationRepository;
+  final IAuthRepository _authRepository;
+
   final InitChatUseCase _initChatUseCase;
 
   CreateUserMatchesUseCase({
@@ -17,16 +20,19 @@ class CreateUserMatchesUseCase {
     required IUserMatchingInRepository userMatchingInRepository,
     required INotificationRepository notificationRepository,
     required InitChatUseCase initChatUseCase,
+    required IAuthRepository authRepository,
   }) : _userMatchingOutRepository = userMatchingOutRepository,
        _userMatchingInRepository = userMatchingInRepository,
        _initChatUseCase = initChatUseCase,
-       _notificationRepository = notificationRepository;
+       _notificationRepository = notificationRepository,
+       _authRepository = authRepository;
 
   /// return Status of Matching
   Future<EUserMatchCompleteness> call({
-    required String uid,
     required UserMatch match,
   }) async {
+
+    final uid = await _authRepository.requireUserId();
 
     if (match.matchStatus != TinderCardStatus.liked) {
       /// create match record in actor

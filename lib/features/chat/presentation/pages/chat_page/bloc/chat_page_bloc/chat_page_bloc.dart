@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
 import '../../../../../domain/models/chat/chat.dart';
 import '../../../../../domain/models/chat_message/chat_message.dart';
 import '../../../../../domain/usecases/get_chat_by_id_use_case.dart';
@@ -20,7 +19,7 @@ part 'chat_page_bloc.freezed.dart';
 
 class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   final SendMessageUseCase _sendMessageUseCase;
-  final UserCubit _userCubit;
+
   final GetChatByIdUseCase _getChatByIdUseCase;
 
   StreamSubscription? _chatSubscription;
@@ -32,10 +31,8 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     required GetLastMessagesUseCase getLastMessageUseCase,
     required SendMessageUseCase sendMessageUseCase,
     required GetChatByIdUseCase getChatByIdUseCase,
-    required UserCubit userCubit,
   }) : _sendMessageUseCase = sendMessageUseCase,
        _getChatByIdUseCase = getChatByIdUseCase,
-       _userCubit = userCubit,
        super(ChatPageState()) {
     on<_Load>(_load);
     on<_UpdateChat>(_updateChat);
@@ -56,7 +53,6 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     _chatSubscription =
         _getChatByIdUseCase(
           chatId: chatId,
-          uid: _userCubit.uid!,
         ).listen(
           (chat) {
             add(
@@ -140,11 +136,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       // );
       _sendMessageUseCase.call(
         chat: state.chat!,
-        message: ChatMessage(
-          createdAt: DateTime.now(),
-          sentUid: _userCubit.uid!,
-          message: event.message,
-        ),
+        message: event.message,
       );
       // emit(
       //   state.copyWith(

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../../presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../../user/domain/models/user_data/user_data.dart';
 import '../../../user/domain/repositories/i_user_repository.dart';
@@ -11,15 +12,20 @@ import '../repositories/i_user_matching_out_repository.dart';
 class GetUserMatchesOutcomeUseCase {
   final IUserMatchingOutRepository _userMatchingOutRepository;
   final IUserRepository _userRepository;
+  final IAuthRepository _authRepository;
 
   GetUserMatchesOutcomeUseCase({
     required IUserMatchingOutRepository userMatchingOutRepository,
     required IUserRepository userRepository,
+    required IAuthRepository authRepository,
   }) : _userMatchingOutRepository = userMatchingOutRepository,
+       _authRepository = authRepository,
        _userRepository = userRepository;
 
-  Stream<List<UserMatch>> call(String uid) {
-    return _userMatchingOutRepository
+  Stream<List<UserMatch>> call() async* {
+    final uid = await _authRepository.requireUserId();
+
+    yield* _userMatchingOutRepository
         .get(
           uid: uid,
         )

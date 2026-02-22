@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
+import '../../../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../build_user_title_widget.dart';
 import '../shadow_container.dart';
 import 'build_skill_item.dart';
@@ -24,7 +24,7 @@ class _BuildSkillsNExpertiseState extends State<BuildSkillsNExpertise> {
 
   @override
   Widget build(BuildContext context) {
-    final userCubit = context.watch<UserCubit>();
+    final userCubit = context.watch<UserBloc>();
     final skills = userCubit.state.userData?.profiler.skills ?? [];
     return ShadowContainer(
       child: Column(

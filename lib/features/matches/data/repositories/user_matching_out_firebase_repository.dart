@@ -47,52 +47,32 @@ class UserMatchingOutFirebaseRepository extends IUserMatchingOutRepository {
     return _matches(
       uid,
     ).snapshots().map(
-          (
-          querySnapshot,
-          ) {
+      (
+        querySnapshot,
+      ) {
         return querySnapshot.docs
             .map(
               (doc) => UserMatchDto.fromJson(
-            doc.data(),
-          ),
-        )
+                doc.data(),
+              ),
+            )
             .toList();
       },
     );
   }
 
-  // @override
-  // Stream<List<Map<String, dynamic>>> get({
-  //   required String uid,
-  // }) {
-  //   return _matches(uid).snapshots().map((querySnapshot) {
-  //     // для каждого документа берём его список matches
-  //     final allMatches = querySnapshot.docs
-  //         .map(
-  //           (doc) => (doc.data()['matches'] as List<dynamic>).map(
-  //             (match) => Map<String, dynamic>.from(match),
-  //           ),
-  //         )
-  //         .expand((x) => x) // flatten List<List<Map>> -> List<Map>
-  //         .toList();
-  //
-  //     return allMatches;
-  //   });
-  //   // }
-  //   // return _matches(
-  //   //   uid,
-  //   // ).snapshots().asyncMap(
-  //   //   (querySnapshot) async {
-  //   //
-  //   //     // final data  = querySnapshot.docs.
-  //   //     // return querySnapshot.docs
-  //   //     //     .map(
-  //   //     //       (doc) => UserMatch.fromJson(
-  //   //     //     doc.data(),
-  //   //     //   ),
-  //   //     // )
-  //   //     //     .toList();
-  //   //   }
-  //   // );
-  // }
+  @override
+  Future<List<String>> getUids({
+    required String uid,
+  }) async {
+    final snapshot = await _matches(
+      uid,
+    ).get();
+    return snapshot.docs
+        .map(
+          (e) => e.id,
+        )
+        .toList();
+  }
+
 }

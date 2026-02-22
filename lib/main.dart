@@ -12,13 +12,9 @@ import 'core/routes/init_router/init_router.dart';
 import 'core/services/firebase/firebase_messaging_service.dart';
 import 'core/services/local_notification_service.dart';
 import 'features/auth/domain/repostories/i_auth_repository.dart';
-import 'features/auth/presentation/bloc/auth_cubit/auth_cubit.dart';
-import 'features/notifications/domain/usecases/get_notifications_use_case.dart';
-import 'features/notifications/domain/usecases/save_notification_use_case.dart';
-import 'features/notifications/presentation/bloc/notification_bloc/notification_bloc.dart';
+import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'features/user/domain/repositories/i_user_repository.dart';
-import 'features/user/domain/usecases/update_user_usecase.dart';
-import 'features/user/presentation/bloc/user_cubit/user_cubit.dart';
+import 'features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -61,8 +57,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool initialized = false;
-  late final UserCubit userCubit;
+  late final UserBloc userBloc;
 
+  // late final
   @override
   void initState() {
     super.initState();
@@ -70,11 +67,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void loadData() async {
-    final user = await getIt<IUserRepository>().currentUserFuture();
-    userCubit = UserCubit(
-      preloadUser: user,
+    userBloc = UserBloc(
       userRepository: getIt<IUserRepository>(),
-      updateUserUseCase: getIt<UpdateUserUseCase>(),
     );
     initialized = true;
     setState(() {});
@@ -87,21 +81,37 @@ class _MyAppState extends State<MyApp> {
     }
     return MultiBlocProvider(
       providers: [
-        BlocProvider<UserCubit>.value(
-          value: userCubit,
+        BlocProvider<UserBloc>.value(
+          value: userBloc,
         ),
-        BlocProvider<AuthCubit>(
-          create: (_) => AuthCubit(
-            authRepository: getIt<IAuthRepository>(),
-          ),
+        BlocProvider<AuthBloc>(
+          create: (_) =>
+              AuthBloc(
+                  authRepository: getIt<IAuthRepository>(),
+                )
+                ..add(
+                  AuthEvent.init(),
+                )
+                ..add(
+                  AuthEvent.listen(),
+                ),
         ),
-
       ],
-      child: MaterialApp.router(
-        theme: AppThemeData.light,
-        supportedLocales: AppLocale.supportedLocales,
-        locale: AppLocale.startLocale,
-        routerConfig: initRouter,
+      child: BlocListener<AuthBloc, AuthState>(
+        listenWhen: (p, n) =>
+            p.status == AuthStatus.loading && p.status == AuthStatus.authorized,
+
+        listener: (context, state) {
+          if (state.status == AuthStatus.authorized) {
+            OnboardAboutYouPageRoute().go(context);
+          }
+        },
+        child: MaterialApp.router(
+          theme: AppThemeData.light,
+          supportedLocales: AppLocale.supportedLocales,
+          locale: AppLocale.startLocale,
+          routerConfig: initRouter,
+        ),
       ),
     );
   }

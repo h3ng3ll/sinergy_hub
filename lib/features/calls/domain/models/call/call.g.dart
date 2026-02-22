@@ -36,7 +36,7 @@ const _$ECallStatusEnumMap = {
   ECallStatus.idle: 'idle',
   ECallStatus.calling: 'calling',
   ECallStatus.loading: 'loading',
-  ECallStatus.ringing: 'ringing',
   ECallStatus.accepted: 'accepted',
   ECallStatus.ended: 'ended',
+  ECallStatus.declined: 'declined',
 };

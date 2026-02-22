@@ -59,21 +59,28 @@ class CallsFirebaseRepository implements ICallsRepository {
   }
 
   @override
-  Stream<Call> listenCall(String callId) {
-    final doc = _calls.doc(
-      callId,
-    );
-    return doc.snapshots().map(
-      (snapshot) {
-        final data = snapshot.data();
-        if (data == null) {
-          throw Exception('Call not found');
-        }
-        return Call.fromJson(
-          data,
+  Stream<Call?> listenCall(String uid) {
+    return _calls
+        .where(
+          'calleeId',
+          isEqualTo: uid,
+        )
+        .where(
+          'status',
+          isEqualTo: ECallStatus.calling.name,
+        )
+        .limit(
+          2,
+        )
+        .snapshots()
+        .map(
+          (snapshot) {
+            if (snapshot.docs.isEmpty) return null;
+            return Call.fromJson(
+              snapshot.docs.first.data(),
+            );
+          },
         );
-      },
-    );
   }
 
   @override

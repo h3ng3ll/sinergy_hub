@@ -11,9 +11,9 @@ enum ECallStatus {
   idle,
   calling,
   loading,
-  ringing,
   accepted,
   ended,
+  declined,
 }
 
 @freezed

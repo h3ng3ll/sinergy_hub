@@ -7,7 +7,7 @@ import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
-import '../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
+import '../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import 'widgets/build_about.dart';
 import 'widgets/build_looking_for/build_looking_for.dart';
@@ -40,7 +40,7 @@ class _ProfileTabState extends State<ProfileTab> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCubit, UserState>(
+    return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
 
         if(state.status == UserStatus.loading) {

@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 
 import '../../../core/services/firebase/firebase_firestore_service.dart';
+import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../user/domain/repositories/i_user_repository.dart';
 import '../data/repositories/chat_firebase_repository.dart';
 import '../data/repositories/chat_message_firebase_repository.dart';
@@ -28,6 +29,7 @@ void initChatFeature(GetIt getIt) {
     () => GetChatsUseCase(
       chatRepository: getIt<IChatRepository>(),
       userRepository: getIt<IUserRepository>(),
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetLastMessagesUseCase>(
@@ -38,18 +40,21 @@ void initChatFeature(GetIt getIt) {
   getIt.registerLazySingleton<InitChatUseCase>(
     () => InitChatUseCase(
       chatRepository: getIt<IChatRepository>(),
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
   getIt.registerLazySingleton<SendMessageUseCase>(
     () => SendMessageUseCase(
       chatMessageRepository: getIt<IChatMessageRepository>(),
       chatRepository: getIt<IChatRepository>(),
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetChatByIdUseCase>(
     () => GetChatByIdUseCase(
       chatRepository: getIt<IChatRepository>(),
       userRepository: getIt<IUserRepository>(),
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
 }

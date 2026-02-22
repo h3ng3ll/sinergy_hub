@@ -11,7 +11,7 @@ class ListenCallUseCase {
     required this.authRepository,
   });
 
-  Stream<Call> execute() async* {
+  Stream<Call?> execute() async* {
     final uid = await authRepository.requireUserId();
     yield* callsRepository.listenCall(
       uid,

@@ -28,9 +28,6 @@ class BuildTinderCard extends StatelessWidget {
       builder: (context, state) {
         if (state.status == EPeopleDataStatus.loading) {
           return LoadingDataWidget();
-        }
-        if (state.status == EPeopleDataStatus.loading) {
-          return LoadingDataWidget();
         } else if (state.status == EPeopleDataStatus.failed) {
           return ErrorMessageWidget(
             message: state.errorMessage,

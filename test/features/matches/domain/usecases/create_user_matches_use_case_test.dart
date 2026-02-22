@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:sinergy_hub/features/auth/domain/repostories/i_auth_repository.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/matches/presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import 'package:sinergy_hub/features/matches/domain/models/user_match/user_match.dart';
@@ -7,6 +8,7 @@ import 'package:sinergy_hub/features/matches/domain/usecases/create_user_matches
 import 'package:sinergy_hub/features/notifications/domain/models/notification/notification.dart';
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
 
+import '../../../auth/data/repositories/auth_repository_mock.dart';
 import '../../../chats/data/usecases/init_chat_use_case_mock.dart';
 import '../../../notifications/data/repositories/notification_repository_mock.dart';
 import '../../data/repositories/user_matching_in_repository_mock.dart';
@@ -18,18 +20,21 @@ void main() {
   late UserMatchingOutRepositoryMock mockOutRepo;
   late NotificationRepositoryMock notificationRepository;
   late InitChatUseCaseMock initChatUseCaseMock;
+  late AuthRepositoryMock authRepositoryMock;
 
   setUp(() {
     mockInRepo = UserMatchingInRepositoryMock();
     mockOutRepo = UserMatchingOutRepositoryMock();
     notificationRepository = NotificationRepositoryMock();
     initChatUseCaseMock = InitChatUseCaseMock();
+    authRepositoryMock = AuthRepositoryMock();
 
     useCase = CreateUserMatchesUseCase(
       userMatchingOutRepository: mockOutRepo,
       userMatchingInRepository: mockInRepo,
       notificationRepository: notificationRepository,
       initChatUseCase: initChatUseCaseMock,
+      authRepository: authRepositoryMock,
     );
   });
 
@@ -54,6 +59,11 @@ void main() {
       );
       final chat = Chat.empty();
 
+      when(
+        () => authRepositoryMock.requireUserId(),
+      ).thenAnswer(
+        (_) async => tUid,
+      );
       when(
         () => initChatUseCaseMock.call(
           participants: [],
@@ -83,7 +93,6 @@ void main() {
       );
 
       final result = await useCase(
-        uid: tUid,
         match: match,
       );
       expect(

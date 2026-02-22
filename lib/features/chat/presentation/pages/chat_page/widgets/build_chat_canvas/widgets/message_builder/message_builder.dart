@@ -2,14 +2,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
+
 
 import '../../../../../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../../../../../core/utils/extensions/scroll_controller_ext.dart';
-import '../../../../../../../../../core/widgets/padding/horizontal_padding.dart';
-import '../../../../../../../../../gen/assets.gen.dart';
-import '../../../../../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
+
+import '../../../../../../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../../../../../../../domain/models/chat_message/chat_message.dart';
 import '../../../../bloc/chat_page_bloc/chat_page_bloc.dart';
 import 'widgets/build_chat_separator.dart';
@@ -47,7 +45,6 @@ class _MessageBuilderState extends State<MessageBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    final userCubit = context.watch<UserCubit>();
     return BlocBuilder<ChatPageBloc, ChatPageState>(
       builder: (context, state) {
         if (state.status == ChatPageStatus.loading) {
@@ -58,9 +55,13 @@ class _MessageBuilderState extends State<MessageBuilder> {
         }
 
         final typingUid = state.chat!.typingUsers.firstWhereOrNull(
-              (e) => state.chat!.user.uid == e,
+          (e) => state.chat!.user.uid == e,
         );
-        final elements = List<ChatMessage>.from(state.messages);
+        final elements = List<ChatMessage>.from(
+          state.messages,
+        );
+        final uid = context.read<AuthBloc>().state.uid;
+
         if (typingUid != null) {
           elements.add(
             ChatMessage(
@@ -73,12 +74,11 @@ class _MessageBuilderState extends State<MessageBuilder> {
           elements: elements,
           reverse: true,
           order: GroupedListOrder.DESC,
-          groupBy: (message) =>
-              DateTime(
-                message.createdAt.year,
-                message.createdAt.month,
-                message.createdAt.day,
-              ),
+          groupBy: (message) => DateTime(
+            message.createdAt.year,
+            message.createdAt.month,
+            message.createdAt.day,
+          ),
           controller: _scrollController,
           groupSeparatorBuilder: (time) {
             return BuildChatSeparator(
@@ -97,10 +97,9 @@ class _MessageBuilderState extends State<MessageBuilder> {
             return BuildMessage(
               message: message,
               user: state.chat!.user,
-              isSentByCurUser: message.sentUid == userCubit.uid,
+              isSentByCurUser: message.sentUid == uid,
             );
           },
-
         );
       },
     );

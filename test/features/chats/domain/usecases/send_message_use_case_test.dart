@@ -8,6 +8,8 @@ import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_repository.
 import 'package:sinergy_hub/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
 
+import '../../../auth/data/repositories/auth_repository_mock.dart';
+
 class ChatMessageRepositoryMock extends IChatMessageRepository with Mock {}
 
 class ChatRepositoryMock extends IChatRepository with Mock {}
@@ -36,6 +38,7 @@ void main() {
       /// arrange
       final chatMessageRepo = ChatMessageRepositoryMock();
       final chatRepo = ChatRepositoryMock();
+      final authRepo = AuthRepositoryMock();
 
       final message = ChatMessage(
         id: 'msg1',
@@ -57,8 +60,14 @@ void main() {
       final useCase = SendMessageUseCase(
         chatMessageRepository: chatMessageRepo,
         chatRepository: chatRepo,
+        authRepository: authRepo,
       );
 
+      when(
+        () => authRepo.requireUserId(),
+      ).thenAnswer(
+        (_) async => '',
+      );
       when(
         () => chatMessageRepo.create(
           chatId: 'chatId',
@@ -82,8 +91,7 @@ void main() {
       /// act
 
       await useCase.call(
-
-        message: message,
+        message: 'message',
         chat: chat,
       );
 

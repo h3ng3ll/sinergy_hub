@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'user_cubit.dart';
+part of 'user_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -11,6 +11,281 @@ part of 'user_cubit.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+/// @nodoc
+mixin _$UserEvent {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserEvent);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'UserEvent()';
+}
+
+
+}
+
+/// @nodoc
+class $UserEventCopyWith<$Res>  {
+$UserEventCopyWith(UserEvent _, $Res Function(UserEvent) __);
+}
+
+
+/// Adds pattern-matching-related methods to [UserEvent].
+extension UserEventPatterns on UserEvent {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Init value)?  init,TResult Function( _Update value)?  update,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Init() when init != null:
+return init(_that);case _Update() when update != null:
+return update(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Init value)  init,required TResult Function( _Update value)  update,}){
+final _that = this;
+switch (_that) {
+case _Init():
+return init(_that);case _Update():
+return update(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Init value)?  init,TResult? Function( _Update value)?  update,}){
+final _that = this;
+switch (_that) {
+case _Init() when init != null:
+return init(_that);case _Update() when update != null:
+return update(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  init,TResult Function( UserData user,  Uint8List? img)?  update,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Init() when init != null:
+return init();case _Update() when update != null:
+return update(_that.user,_that.img);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  init,required TResult Function( UserData user,  Uint8List? img)  update,}) {final _that = this;
+switch (_that) {
+case _Init():
+return init();case _Update():
+return update(_that.user,_that.img);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  init,TResult? Function( UserData user,  Uint8List? img)?  update,}) {final _that = this;
+switch (_that) {
+case _Init() when init != null:
+return init();case _Update() when update != null:
+return update(_that.user,_that.img);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _Init implements UserEvent {
+  const _Init();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Init);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'UserEvent.init()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _Update implements UserEvent {
+  const _Update({required this.user, this.img});
+  
+
+ final  UserData user;
+ final  Uint8List? img;
+
+/// Create a copy of UserEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateCopyWith<_Update> get copyWith => __$UpdateCopyWithImpl<_Update>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Update&&(identical(other.user, user) || other.user == user)&&const DeepCollectionEquality().equals(other.img, img));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,user,const DeepCollectionEquality().hash(img));
+
+@override
+String toString() {
+  return 'UserEvent.update(user: $user, img: $img)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateCopyWith<$Res> implements $UserEventCopyWith<$Res> {
+  factory _$UpdateCopyWith(_Update value, $Res Function(_Update) _then) = __$UpdateCopyWithImpl;
+@useResult
+$Res call({
+ UserData user, Uint8List? img
+});
+
+
+$UserDataCopyWith<$Res> get user;
+
+}
+/// @nodoc
+class __$UpdateCopyWithImpl<$Res>
+    implements _$UpdateCopyWith<$Res> {
+  __$UpdateCopyWithImpl(this._self, this._then);
+
+  final _Update _self;
+  final $Res Function(_Update) _then;
+
+/// Create a copy of UserEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? user = null,Object? img = freezed,}) {
+  return _then(_Update(
+user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as UserData,img: freezed == img ? _self.img : img // ignore: cast_nullable_to_non_nullable
+as Uint8List?,
+  ));
+}
+
+/// Create a copy of UserEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserDataCopyWith<$Res> get user {
+  
+  return $UserDataCopyWith<$Res>(_self.user, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}
+}
+
 /// @nodoc
 mixin _$UserState {
 

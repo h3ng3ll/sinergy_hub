@@ -5,7 +5,7 @@ import '../../../../../core/di/injection.dart';
 
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
-import '../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
+import '../../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../../../domain/usecases/get_chat_by_id_use_case.dart';
 import '../../../domain/usecases/get_last_messages_use_case.dart';
 import '../../../domain/usecases/send_message_use_case.dart';
@@ -75,22 +75,19 @@ class _ChatPageState extends State<ChatPage> {
         chatCubit: context.read<ChatCubit>(),
         getLastMessageUseCase: getIt<GetLastMessagesUseCase>(),
         sendMessageUseCase: getIt<SendMessageUseCase>(),
-        userCubit: context.read<UserCubit>(),
         getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
       ),
       child: SafeArea(
         top: false,
         child: Builder(
           builder: (context) {
-
-
             return BlocBuilder<ChatPageBloc, ChatPageState>(
               builder: (context, state) {
-                if(state.status == ChatPageStatus.loading){
+                if (state.status == ChatPageStatus.loading) {
                   return LoadingDataWidget();
                 }
                 final uidOfChat = state.chat!.participants.firstWhere(
-                      (member) => member != context.read<UserCubit>().uid,
+                  (member) => member != context.read<AuthBloc>().state.uid,
                 );
                 return Scaffold(
                   appBar: ChatAppBar(

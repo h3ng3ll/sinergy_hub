@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
@@ -10,6 +11,7 @@ import '../../../../../../../core/widgets/btn/custom_text_btn.dart';
 import '../../../../../../../gen/assets.gen.dart';
 import '../../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 import '../../../../../../user/domain/models/user_data/user_data.dart';
+import '../../../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../build_tinder_card/widgets/build_tinder_status/widgets/icon_status/status/liked_status.dart';
 import '../../../../../../../core/widgets/build_user_avatar.dart';
 import 'widgets/build_send_msg_btn.dart';
@@ -17,14 +19,12 @@ import 'widgets/keep_swiping_btn.dart';
 import 'widgets/specialization_container.dart';
 
 class BuildHasMatch extends StatelessWidget {
-  final UserData currentUser;
   final UserData matchedUser;
   final VoidCallback onSendMessage;
   final VoidCallback onKeepSwiping;
 
   const BuildHasMatch({
     super.key,
-    required this.currentUser,
     required this.matchedUser,
     required this.onSendMessage,
     required this.onKeepSwiping,
@@ -34,6 +34,7 @@ class BuildHasMatch extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
+    final currentUser = context.watch<UserBloc>().state.userData!;
 
     return Center(
       child: SizedBox(
@@ -105,28 +106,31 @@ class BuildHasMatch extends StatelessWidget {
             KeepSwipingBtn(
               onKeepSwiping: onKeepSwiping,
             ),
-            CustomTextBtn(child: Row(
-              spacing: 10.0,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  Assets.icons.user,
-                  width: 20.0,
-                  height: 20.0,
-                  colorFilter: ColorFilter.mode(
-                    colorScheme.onPrimary,
-                    BlendMode.srcIn,
+            CustomTextBtn(
+              child: Row(
+                spacing: 10.0,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    Assets.icons.user,
+                    width: 20.0,
+                    height: 20.0,
+                    colorFilter: ColorFilter.mode(
+                      colorScheme.onPrimary,
+                      BlendMode.srcIn,
+                    ),
                   ),
-                ),
 
-                Text(
-                  'View All Profile',
-                  style: textTheme.medium16.copyWith(
-                    color: colorScheme.secondary,
+                  Text(
+                    'View All Profile',
+                    style: textTheme.medium16.copyWith(
+                      color: colorScheme.secondary,
+                    ),
                   ),
-                ),
-              ],
-            ), onPressed: () {})
+                ],
+              ),
+              onPressed: () {},
+            ),
           ],
         ),
       ),

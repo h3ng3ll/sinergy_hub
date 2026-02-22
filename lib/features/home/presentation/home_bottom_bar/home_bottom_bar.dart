@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_shaders/flutter_shaders.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/resources/app_shader.dart';
 import '../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../core/resources/text/app_text_theme.dart';
 import '../../../../core/routes/init_router/init_router.dart';
-import '../../../../core/utils/shader_painter.dart';
-import '../../../auth/presentation/bloc/auth_cubit/auth_cubit.dart';
+import '../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../home_drawer/home_drawer.dart';
 import 'widgets/build_animated_background/build_animated_background.dart';
 import 'widgets/custom_bottom_bar_container.dart';
@@ -40,7 +37,9 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
 
   void onTapPrivacyPolicy() {}
 
-  void onTapLogOut() => context.read<AuthCubit>().signOut();
+  void onTapLogOut() => context.read<AuthBloc>().add(
+    AuthEvent.signOut(),
+  );
 
   void _goBranch(
     int index,
@@ -54,7 +53,7 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
 
-    return BlocListener<AuthCubit, AuthState>(
+    return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state.status == AuthStatus.logout) {
           AuthorizationPageRoute().go(context);

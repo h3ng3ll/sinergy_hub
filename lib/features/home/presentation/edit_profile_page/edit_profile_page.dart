@@ -17,7 +17,7 @@ import '../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../core/widgets/build_user_avatar.dart';
 import '../../../onboard_survey/domain/models/skill/skill.dart';
 import '../../../user/domain/repositories/i_user_repository.dart';
-import '../../../user/presentation/bloc/user_cubit/user_cubit.dart';
+import '../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import 'bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import 'widgets/build_grouped_input.dart';
@@ -44,16 +44,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   void initState() {
-    final userCubit = context.read<UserCubit>();
-    final uid = userCubit.state.user!.uid;
-    _editProfilePageBloc =
-        EditProfilePageBloc(
-          userRepository: getIt<IUserRepository>(),
-        )..add(
-          EditProfilePageEvent.initialize(
-            uid: uid,
-          ),
-        );
+    final userCubit = context.read<UserBloc>();
+    // final uid = userCubit.state.user!.uid;
+    _editProfilePageBloc = EditProfilePageBloc(
+      userRepository: getIt<IUserRepository>(),
+    );
 
     _firstNameController.text =
         userCubit.state.userData?.firstName ?? _firstNameController.text;
@@ -95,19 +90,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void onSaveChanges() {
     final skills = _editProfilePageBloc.state.skills;
-    final userData = context.read<UserCubit>().state.userData!;
+    final userData = context.read<UserBloc>().state.userData!;
 
-    context.read<UserCubit>().update(
-      userData.copyWith(
-        firstName: _firstNameController.text,
-        lastName: _lastNameController.text,
-        aboutMe: _bioController.text,
-        profiler: userData.profiler.copyWith(
-          skills: skills,
-        ),
-      ),
-      image,
-    );
+    // context.read<UserBloc>().update(
+    //   userData.copyWith(
+    //     firstName: _firstNameController.text,
+    //     lastName: _lastNameController.text,
+    //     aboutMe: _bioController.text,
+    //     profiler: userData.profiler.copyWith(
+    //       skills: skills,
+    //     ),
+    //   ),
+    //   image,
+    // );
   }
 
   Future<void> onTapAvatar() async {
@@ -127,10 +122,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
-    final userData = context.read<UserCubit>().state.userData;
+    final userData = context.read<UserBloc>().state.userData;
     return BlocProvider<EditProfilePageBloc>.value(
       value: _editProfilePageBloc,
-      child: BlocListener<UserCubit, UserState>(
+      child: BlocListener<UserBloc, UserState>(
         listener: (context, state) {
           if (state.status == UserStatus.failed) {
             UiMessageService.showError(
@@ -161,58 +156,59 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   Spacer(),
                 ],
               ),
-              body: HorizontalPadding(
-                child: Column(
-                  spacing: 20,
-                  children: [
-                    BuildUserAvatar(
-                      width: 100.0,
-                      height: 100.0,
-                      onTap: onTapAvatar,
-                      url: userData?.avatarUrl,
-                      cacheImg: image,
-                    ),
-                    BuildGroupedInput(
-                      title: 'FirstName',
-                      child: FirstNameInput(
-                        controller: _firstNameController,
+              body: SingleChildScrollView(
+                child: HorizontalPadding(
+                  child: Column(
+                    spacing: 20,
+                    children: [
+                      BuildUserAvatar(
+                        width: 100.0,
+                        height: 100.0,
+                        onTap: onTapAvatar,
+                        url: userData?.avatarUrl,
+                        cacheImg: image,
                       ),
-                    ),
-                    BuildGroupedInput(
-                      title: 'LastName',
-                      child: LastNameInput(
-                        controller: _lastNameController,
-                      ),
-                    ),
-                    BuildGroupedInput(
-                      title: 'Bio',
-                      child: BioInput(
-                        controller: _bioController,
-                      ),
-                    ),
-                    BuildSkillsSection(
-                      onRemoveExistingSkill: onRemoveExistingSkill,
-                      skillController: _skillController,
-                      onSubmitSkill: onSubmitSkill,
-                    ),
-                    Spacer(),
-                    Row(
-                      spacing: 20.0,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomTextBtn(
-                          onPressed: onCancel,
-                          text: 'Cancel',
+                      BuildGroupedInput(
+                        title: 'FirstName',
+                        child: FirstNameInput(
+                          controller: _firstNameController,
                         ),
-                        TranslucentBtn(
-                          onPressed: onSaveChanges,
-                          child: Text(
-                            'Save Changes',
+                      ),
+                      BuildGroupedInput(
+                        title: 'LastName',
+                        child: LastNameInput(
+                          controller: _lastNameController,
+                        ),
+                      ),
+                      BuildGroupedInput(
+                        title: 'Bio',
+                        child: BioInput(
+                          controller: _bioController,
+                        ),
+                      ),
+                      BuildSkillsSection(
+                        onRemoveExistingSkill: onRemoveExistingSkill,
+                        skillController: _skillController,
+                        onSubmitSkill: onSubmitSkill,
+                      ),
+                      Row(
+                        spacing: 20.0,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomTextBtn(
+                            onPressed: onCancel,
+                            text: 'Cancel',
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          TranslucentBtn(
+                            onPressed: onSaveChanges,
+                            child: Text(
+                              'Save Changes',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

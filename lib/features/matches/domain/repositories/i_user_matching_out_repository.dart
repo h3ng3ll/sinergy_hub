@@ -11,4 +11,9 @@ abstract class IUserMatchingOutRepository {
     required String uid,
   });
 
+  /// return Uids of matched users
+  /// accept uid of current user
+  Future<List<String>> getUids({
+    required String uid,
+  });
 }

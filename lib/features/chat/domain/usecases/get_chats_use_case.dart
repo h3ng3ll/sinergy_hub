@@ -1,3 +1,4 @@
+import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../../../user/domain/models/user_data/user_data.dart';
 import '../../../user/domain/repositories/i_user_repository.dart';
 import '../../data/models/chat_dto/chat_dto.dart';
@@ -7,17 +8,19 @@ import '../repositories/i_chat_repository.dart';
 class GetChatsUseCase {
   final IChatRepository _chatRepository;
   final IUserRepository _userRepository;
+  final IAuthRepository _authRepository;
 
   GetChatsUseCase({
     required IChatRepository chatRepository,
     required IUserRepository userRepository,
+    required IAuthRepository authRepository,
   }) : _chatRepository = chatRepository,
+       _authRepository = authRepository,
        _userRepository = userRepository;
 
-  Stream<List<Chat>> call(
-    String uid,
-  ) {
-    return _chatRepository
+  Stream<List<Chat>> call() async* {
+    final uid = await _authRepository.requireUserId();
+    yield* _chatRepository
         .getStream(
           uid,
         )

@@ -11,7 +11,7 @@ import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
-import '../../bloc/auth_cubit/auth_cubit.dart';
+import '../../bloc/auth_bloc/auth_bloc.dart';
 
 class AuthorizationPage extends StatefulWidget {
   const AuthorizationPage({super.key});
@@ -21,8 +21,10 @@ class AuthorizationPage extends StatefulWidget {
 }
 
 class _AuthorizationPageState extends State<AuthorizationPage> {
-  Future<void> onAuthWithGoogle() async {
-    await context.read<AuthCubit>().signInViaGoogle();
+  void onAuthWithGoogle() {
+    context.read<AuthBloc>().add(
+      AuthEvent.signInViaGoogle(),
+    );
   }
 
   void onRegister() {
@@ -39,7 +41,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
     return BuildAnimatedBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: BlocListener<AuthCubit, AuthState>(
+        body: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state.status == AuthStatus.authorized) {
               OnboardAboutYouPageRoute().go(
@@ -47,7 +49,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
               );
             }
           },
-          child: BlocBuilder<AuthCubit, AuthState>(
+          child: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
               return Stack(
                 children: [

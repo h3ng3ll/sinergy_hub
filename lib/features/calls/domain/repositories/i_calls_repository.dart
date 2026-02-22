@@ -7,7 +7,7 @@ abstract class ICallsRepository {
     String calleeId,
   );
 
-  Stream<Call> listenCall(
+  Stream<Call?> listenCall(
     String callId,
   );
 

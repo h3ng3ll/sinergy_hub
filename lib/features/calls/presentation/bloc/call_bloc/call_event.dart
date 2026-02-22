@@ -4,14 +4,13 @@ part of 'call_bloc.dart';
 class CallEvent with _$CallEvent {
   const factory CallEvent.listenCalls() = _ListenCalls;
 
-
   const factory CallEvent.ring({
     required String calleeId,
   }) = _Ring;
 
-  const factory CallEvent.accept({
-    required Call ring,
-  }) = _Accept;
+  const factory CallEvent.accept() = _Accept;
+
+  const factory CallEvent.decline() = _Decline;
 
   const factory CallEvent.hangUp() = _HangUp;
 

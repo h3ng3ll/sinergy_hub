@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 
 import '../../../core/services/firebase/firebase_firestore_service.dart';
+import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../chat/domain/usecases/init_chat_use_case.dart';
 import '../../notifications/domain/repositories/i_notification_repository.dart';
 import '../../user/domain/repositories/i_user_repository.dart';
@@ -30,6 +31,7 @@ void initMatchingFeature(GetIt getIt) {
       userMatchingInRepository: getIt<IUserMatchingInRepository>(),
       notificationRepository: getIt<INotificationRepository>(),
       initChatUseCase: getIt<InitChatUseCase>(),
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetUserMatchesIncomeUseCase>(
@@ -42,11 +44,14 @@ void initMatchingFeature(GetIt getIt) {
     () => GetUserMatchesOutcomeUseCase(
       userMatchingOutRepository: getIt<IUserMatchingOutRepository>(),
       userRepository: getIt<IUserRepository>(),
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
   getIt.registerLazySingleton<LookForMatchesUseCase>(
-        () => LookForMatchesUseCase(
+    () => LookForMatchesUseCase(
       userRepository: getIt<IUserRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+      matchingOutRepository: getIt<IUserMatchingOutRepository>(),
     ),
   );
 }

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../user/presentation/bloc/user_cubit/user_cubit.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/usecases/get_chats_use_case.dart';
 import '../../../domain/usecases/init_chat_use_case.dart';
@@ -21,25 +20,18 @@ class ChatCubit extends Cubit<ChatState> {
   ChatCubit({
     required GetChatsUseCase getChatsUseCase,
     required InitChatUseCase initChatUseCase,
-    required UserCubit userCubit,
   }) : _initChatUseCase = initChatUseCase,
        _getChatsUseCase = getChatsUseCase,
        super(const ChatState());
 
-  void init(String uid) {
-    _subscription = _getChatsUseCase
-        .call(
-      uid,
-        )
-        .listen(
-          (
-            chats,
-          ) {
-            _update(
-              chats: chats,
-            );
-          },
-        );
+  void init() {
+    _subscription = _getChatsUseCase.call().listen(
+      (
+        chats,
+      ) => _update(
+        chats: chats,
+      ),
+    );
   }
 
   void _update({
@@ -55,7 +47,6 @@ class ChatCubit extends Cubit<ChatState> {
 
   Future<String> create({
     required String uid,
-    required String currentUid,
   }) async {
     try {
       emit(
@@ -66,7 +57,6 @@ class ChatCubit extends Cubit<ChatState> {
 
       final chat = await _initChatUseCase.call(
         participants: [
-          currentUid,
           uid,
         ],
       );
