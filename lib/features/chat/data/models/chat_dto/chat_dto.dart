@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../domain/models/chat/chat.dart';
+import '../../../domain/models/chat_info/chat_info.dart';
 
 part 'chat_dto.g.dart';
 
@@ -16,6 +17,7 @@ abstract class ChatDto with _$ChatDto {
     @Default('') String lastMessage,
     @Default([]) List<String> typingUsers,
     required DateTime lastMessageSent,
+    required ChatInfo info,
 
     /// who access this chat
     required List<String> participants,
@@ -30,12 +32,12 @@ abstract class ChatDto with _$ChatDto {
 
   Chat toDomain(UserData user) => Chat(
     chatId: chatId,
-    user: user,
     lastMessage: lastMessage,
     lastMessageSent: lastMessageSent,
     participants: participants,
     createdAt: createdAt,
     typingUsers: typingUsers,
+    info: info,
   );
 
   factory ChatDto.fromDomain(
@@ -47,5 +49,6 @@ abstract class ChatDto with _$ChatDto {
     lastMessageSent: chat.lastMessageSent,
     participants: chat.participants,
     createdAt: chat.createdAt,
+    info: chat.info,
   );
 }

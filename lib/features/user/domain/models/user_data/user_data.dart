@@ -29,13 +29,7 @@ sealed class UserData with _$UserData {
 
    factory UserData.none() => UserData(
     uid: 'uid',
-    profiler: UserProfiler(
-      specialization: ESpecialization.fullStackDeveloper,
-      role: ERole.productManager,
-      experience: EExperience.senior,
-      searchingSpecializations: [],
-      skills: [],
-    ),
+    profiler: UserProfiler.none(),
   );
 
   @override

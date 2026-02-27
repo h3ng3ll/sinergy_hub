@@ -3,20 +3,20 @@ import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/e_chat_filter.dart';
 
 extension ChatsFilterStateExt on ChatsFilterState {
-  Iterable<Chat> _filterByQuery(Iterable<Chat> chats) {
-    if (query.trim().isEmpty) return chats;
-
-    final q = query.toLowerCase().trim();
-
-    return chats.where((e) {
-      final first = e.user.firstName ?? '';
-      final last = e.user.lastName ?? '';
-
-      final fullName = '$first $last'.toLowerCase();
-
-      return fullName.contains(q);
-    });
-  }
+  // Iterable<Chat> _filterByQuery(Iterable<Chat> chats) {
+  //   if (query.trim().isEmpty) return chats;
+  //
+  //   final q = query.toLowerCase().trim();
+  //
+  //   return chats.where((e) {
+  //     final first = e.user.firstName ?? '';
+  //     final last = e.user.lastName ?? '';
+  //
+  //     final fullName = '$first $last'.toLowerCase();
+  //
+  //     return fullName.contains(q);
+  //   });
+  // }
 
   Iterable<Chat> _filterByType(Iterable<Chat> chats) {
     switch (filter) {
@@ -44,10 +44,11 @@ extension ChatsFilterStateExt on ChatsFilterState {
   }
 
   List<Chat> applyfilter(List<Chat> chats) {
-    return _filterByType(
-      _filterByQuery(
-        chats,
-      ),
-    ).toList();
+    return [];
+    // return _filterByType(
+    //   // _filterByQuery(
+    //   //   chats,
+    //   // ),
+    // ).toList();
   }
 }

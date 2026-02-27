@@ -23,9 +23,13 @@ import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_bac
 import '../../../../home/presentation/edit_profile_page/bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import '../../../../home/presentation/edit_profile_page/widgets/build_grouped_input.dart';
 import '../../../../home/presentation/edit_profile_page/widgets/build_skills_section/build_skills_section.dart';
+import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../user/domain/repositories/i_user_repository.dart';
+import '../../../../user/domain/usecases/update_user_usecase.dart';
 import '../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
+import '../../../../user/presentation/bloc/user_update_cubit/user_update_cubit.dart';
 import '../../../domain/models/skill/skill.dart';
+import '../../../domain/models/user_profiler/user_profiler.dart';
 import '../../bloc/onboard_bloc/onboard_bloc.dart';
 
 class OnboardAboutYouPage extends StatefulWidget {
@@ -43,21 +47,17 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
   Uint8List? image;
   final GlobalKey<FormState> _formKey = GlobalKey();
   late final EditProfilePageBloc _editProfilePageBloc;
+  late final UserUpdateCubit _userUpdateCubit;
 
   @override
   void initState() {
     final userCubit = context.read<UserBloc>();
-    // final uid = userCubit.state.user!.uid;
-    _editProfilePageBloc =
-        EditProfilePageBloc(
-          userRepository: getIt<IUserRepository>(),
-        )
-        //   ..add(
-        //   EditProfilePageEvent.initialize(
-        //     uid: uid,
-        //   ),
-        // )
-    ;
+    _editProfilePageBloc = EditProfilePageBloc(
+      userRepository: getIt<IUserRepository>(),
+    );
+    _userUpdateCubit = UserUpdateCubit(
+      updateUserUseCase: getIt<UpdateUserUseCase>(),
+    );
 
     _firstNameController.text =
         userCubit.state.userData?.firstName ?? _firstNameController.text;
@@ -100,19 +100,27 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
   void onNext() {
     if (!_formKey.currentState!.validate()) return;
     final skills = _editProfilePageBloc.state.skills;
-    final userData = context.read<UserBloc>().state.userData!;
+    final userData = context.read<UserBloc>().state.userData;
 
-    // context.read<UserBloc>().update(
-    //   userData.copyWith(
-    //     firstName: _firstNameController.text,
-    //     lastName: _lastNameController.text,
-    //     aboutMe: _bioController.text,
-    //     profiler: userData.profiler.copyWith(
-    //       skills: skills,
-    //     ),
-    //   ),
-    //   image,
-    // );
+    _userUpdateCubit.update(
+      userData != null
+          ? userData.copyWith(
+              firstName: _firstNameController.text,
+              lastName: _lastNameController.text,
+              aboutMe: _bioController.text,
+              profiler: userData.profiler.copyWith(
+                skills: skills,
+              ),
+            )
+          : UserData.none().copyWith(
+              firstName: _firstNameController.text,
+              lastName: _lastNameController.text,
+              aboutMe: _bioController.text,
+              profiler: UserProfiler.none(),
+            ),
+      image,
+    );
+
     context.read<OnboardBloc>().add(
       OnboardEvent.update(
         toldAboutYourself: true,

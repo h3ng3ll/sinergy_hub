@@ -53,4 +53,10 @@ class NotificationFirebaseRepository implements INotificationRepository {
 
     return notifications;
   }
+
+  @override
+  Stream<Notification> listen({required String uid}) {
+    // TODO: implement listen
+    throw UnimplementedError();
+  }
 }

@@ -8,7 +8,7 @@ part of 'chat.dart';
 
 _Chat _$ChatFromJson(Map<String, dynamic> json) => _Chat(
   chatId: json['chatId'] as String? ?? '',
-  user: UserData.fromJson(json['user'] as Map<String, dynamic>),
+  info: ChatInfo.fromJson(json['info'] as Map<String, dynamic>),
   lastMessage: json['lastMessage'] as String? ?? '',
   lastMessageSent: DateTime.parse(json['lastMessageSent'] as String),
   typingUsers:
@@ -28,7 +28,7 @@ _Chat _$ChatFromJson(Map<String, dynamic> json) => _Chat(
 
 Map<String, dynamic> _$ChatToJson(_Chat instance) => <String, dynamic>{
   'chatId': instance.chatId,
-  'user': instance.user.toJson(),
+  'info': instance.info.toJson(),
   'lastMessage': instance.lastMessage,
   'lastMessageSent': instance.lastMessageSent.toIso8601String(),
   'typingUsers': instance.typingUsers,

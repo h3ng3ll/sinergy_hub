@@ -33,90 +33,97 @@ class RoleStage extends StatelessWidget {
           description: 'Help us find your perfect co-founder match',
         ),
         Gap(15.0),
-        Column(
-          spacing: 15.0,
-          children: [
-            SurveyCard(
-              isSelected: selectedRole == ERole.technicalDevelopment,
-              colors: [
-                AppColors.buttonBlue.value,
-                AppColors.royalBlue.value,
-              ],
-              icon: Assets.icons.tool,
-              title: 'Technical/Development',
-              description:
-                  'Software development , engineering, and technical architecture',
-              onTap: () => onTap(
-                ERole.technicalDevelopment,
-              ),
-              onLongPress: onLongPress,
-            ),
-            SurveyCard(
-              isSelected: selectedRole == ERole.productManager,
-              colors: [
-                AppColors.lavenderFloral.value.withValues(
-                  // alpha: 0.3,
+        Expanded(
+          child: ListView(
+            // spacing: 15.0,
+            children: [
+              SurveyCard(
+                isSelected: selectedRole == ERole.technicalDevelopment,
+                colors: [
+                  AppColors.buttonBlue.value,
+                  AppColors.royalBlue.value,
+                ],
+                icon: Assets.icons.tool,
+                title: 'Technical/Development',
+                description:
+                    'Software development , engineering, and technical architecture',
+                onTap: () => onTap(
+                  ERole.technicalDevelopment,
                 ),
-                AppColors.darkOrchid.value,
-              ],
-              icon: Assets.icons.work,
-              title: 'Product Management',
-              description:
-                  'Product strategy , roadmap planning and market analysis',
-              onTap: () => onTap(
-                ERole.productManager,
+                onLongPress: onLongPress,
               ),
-              onLongPress: onLongPress,
-            ),
-            SurveyCard(
-              isSelected: selectedRole == ERole.design,
-              colors: [
-                AppColors.hotPink.value,
-                AppColors.telemagenta.value,
-              ],
-              icon: Assets.icons.pallete,
-              title: 'Design',
-              description: 'UI/UX design , visual design , and user experience',
-              onTap: () => onTap(
-                ERole.design,
+              Gap(15.0),
+              SurveyCard(
+                isSelected: selectedRole == ERole.productManager,
+                colors: [
+                  AppColors.lavenderFloral.value.withValues(
+                    // alpha: 0.3,
+                  ),
+                  AppColors.darkOrchid.value,
+                ],
+                icon: Assets.icons.work,
+                title: 'Product Management',
+                description:
+                    'Product strategy , roadmap planning and market analysis',
+                onTap: () => onTap(
+                  ERole.productManager,
+                ),
+                onLongPress: onLongPress,
               ),
-              onLongPress: onLongPress,
-            ),
-            SurveyCard(
-              isSelected: selectedRole == ERole.businessMarketing,
-              colors: [
-                AppColors.uFOGreen.value,
-                AppColors.seaGreen.value,
-              ],
-              icon: Assets.icons.analytic,
-              title: 'Business/Marketing',
-              description:
-                  'Growth strategy,sales , marketing, and business development',
-              onTap: () => onTap(
-                ERole.businessMarketing,
+              Gap(15.0),
+              SurveyCard(
+                isSelected: selectedRole == ERole.design,
+                colors: [
+                  AppColors.hotPink.value,
+                  AppColors.telemagenta.value,
+                ],
+                icon: Assets.icons.pallete,
+                title: 'Design',
+                description: 'UI/UX design , visual design , and user experience',
+                onTap: () => onTap(
+                  ERole.design,
+                ),
+                onLongPress: onLongPress,
               ),
-              onLongPress: onLongPress,
-            ),
-            SurveyCard(
-              isSelected: selectedRole == ERole.other,
-              colors: [
-                AppColors.metallicOrange.value,
-                AppColors.jasperOrange.value,
-              ],
-              icon: Assets.icons.rocket,
-              title: 'Other',
-              description:
-                  'Entrepreneurship , leadership , consulting , and specialized roles',
-              onTap: () => onTap(
-                ERole.other,
+              Gap(15.0),
+              SurveyCard(
+                isSelected: selectedRole == ERole.businessMarketing,
+                colors: [
+                  AppColors.uFOGreen.value,
+                  AppColors.seaGreen.value,
+                ],
+                icon: Assets.icons.analytic,
+                title: 'Business/Marketing',
+                description:
+                    'Growth strategy,sales , marketing, and business development',
+                onTap: () => onTap(
+                  ERole.businessMarketing,
+                ),
+                onLongPress: onLongPress,
               ),
-              onLongPress: onLongPress,
-            ),
-            BuildOnboardBottomActions(
-              skipForNow: skipForNow,
-              onPressed: onTapContinue,
-            ),
-          ],
+              Gap(15.0),
+              SurveyCard(
+                isSelected: selectedRole == ERole.other,
+                colors: [
+                  AppColors.metallicOrange.value,
+                  AppColors.jasperOrange.value,
+                ],
+                icon: Assets.icons.rocket,
+                title: 'Other',
+                description:
+                    'Entrepreneurship , leadership , consulting , and specialized roles',
+                onTap: () => onTap(
+                  ERole.other,
+                ),
+                onLongPress: onLongPress,
+              ),
+              Gap(15.0),
+            ],
+          ),
+        ),
+        BuildOnboardBottomActions(
+          skipForNow: skipForNow,
+          onPressed: onTapContinue,
         ),
       ],
     );

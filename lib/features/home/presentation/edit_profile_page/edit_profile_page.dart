@@ -17,7 +17,9 @@ import '../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../core/widgets/build_user_avatar.dart';
 import '../../../onboard_survey/domain/models/skill/skill.dart';
 import '../../../user/domain/repositories/i_user_repository.dart';
+import '../../../user/domain/usecases/update_user_usecase.dart';
 import '../../../user/presentation/bloc/user_bloc/user_bloc.dart';
+import '../../../user/presentation/bloc/user_update_cubit/user_update_cubit.dart';
 import '../home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import 'bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import 'widgets/build_grouped_input.dart';
@@ -41,15 +43,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Uint8List? image;
 
   late final EditProfilePageBloc _editProfilePageBloc;
+  late final UserUpdateCubit _userUpdateCubit;
 
   @override
   void initState() {
     final userCubit = context.read<UserBloc>();
-    // final uid = userCubit.state.user!.uid;
     _editProfilePageBloc = EditProfilePageBloc(
       userRepository: getIt<IUserRepository>(),
     );
-
+    _userUpdateCubit = UserUpdateCubit(
+      updateUserUseCase: getIt<UpdateUserUseCase>(),
+    );
     _firstNameController.text =
         userCubit.state.userData?.firstName ?? _firstNameController.text;
     _lastNameController.text =
@@ -92,17 +96,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final skills = _editProfilePageBloc.state.skills;
     final userData = context.read<UserBloc>().state.userData!;
 
-    // context.read<UserBloc>().update(
-    //   userData.copyWith(
-    //     firstName: _firstNameController.text,
-    //     lastName: _lastNameController.text,
-    //     aboutMe: _bioController.text,
-    //     profiler: userData.profiler.copyWith(
-    //       skills: skills,
-    //     ),
-    //   ),
-    //   image,
-    // );
+    _userUpdateCubit.update(
+      userData.copyWith(
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        aboutMe: _bioController.text,
+        profiler: userData.profiler.copyWith(
+          skills: skills,
+        ),
+      ),
+      image,
+    );
   }
 
   Future<void> onTapAvatar() async {

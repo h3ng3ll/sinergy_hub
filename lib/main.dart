@@ -99,11 +99,21 @@ class _MyAppState extends State<MyApp> {
       ],
       child: BlocListener<AuthBloc, AuthState>(
         listenWhen: (p, n) =>
-            p.status == AuthStatus.loading && p.status == AuthStatus.authorized,
+            (p.status == AuthStatus.authorized) ||
+            (p.status == AuthStatus.logout),
 
         listener: (context, state) {
           if (state.status == AuthStatus.authorized) {
-            OnboardAboutYouPageRoute().go(context);
+            userBloc.add(
+              UserEvent.init(
+                uid: state.uid!,
+              ),
+            );
+            // OnboardAboutYouPageRoute().go(context);
+          } else if (state.status == AuthStatus.logout) {
+            userBloc.add(
+              UserEvent.reset(),
+            );
           }
         },
         child: MaterialApp.router(

@@ -78,6 +78,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
       details,
     );
     if (status != TinderCardStatus.none && mounted) {
+      final lastUser = _peopleDataBloc.state.users.last;
       /// remove from visible
       _peopleDataBloc.add(
         PeopleDataEvent.removeVisible(),
@@ -87,7 +88,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
       await context.read<UserMatchesOutcomeCubit>().create(
         match: UserMatch(
           matchStatus: status,
-          user: _peopleDataBloc.state.users.last,
+          user: lastUser,
           time: DateTime.now(),
         ),
       );

@@ -1,14 +1,18 @@
 import 'dart:typed_data';
 
+import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../models/user_data/user_data.dart';
 import '../repositories/i_user_repository.dart';
 
 class UpdateUserUseCase {
   final IUserRepository _userRepository;
+  final IAuthRepository _authRepository;
 
   UpdateUserUseCase({
     required IUserRepository userRepository,
-  }) : _userRepository = userRepository;
+    required IAuthRepository authRepository,
+  }) : _userRepository = userRepository,
+       _authRepository = authRepository;
 
   Future<void> call(
     UserData userData,
@@ -25,7 +29,10 @@ class UpdateUserUseCase {
           name: userData.avatarUrl!,
         );
       }
+      final uid = await _authRepository.requireUserId();
+
       userData = userData.copyWith(
+        uid: uid,
         avatarUrl: avatarUrl,
       );
     }

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -37,7 +38,7 @@ class BuildRoleCard extends StatelessWidget {
         ? colorScheme.surface
         : colorScheme.onPrimary;
     return CustomChip(
-      width: 178.0,
+      width: 150.0,
       label: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -52,10 +53,15 @@ class BuildRoleCard extends StatelessWidget {
             ),
           ),
           Gap(10.0),
-          Text(
-            name,
-            style: textTheme.medium12.copyWith(
-              color: color,
+          Flexible(
+            child: AutoSizeText(
+              name,
+              style: textTheme.medium12.copyWith(
+                color: color,
+              ),
+              minFontSize: 8.0,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
         ],

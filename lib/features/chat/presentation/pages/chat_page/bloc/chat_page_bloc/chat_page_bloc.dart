@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../domain/models/chat/chat.dart';
 import '../../../../../domain/models/chat_message/chat_message.dart';
 import '../../../../../domain/usecases/get_chat_by_id_use_case.dart';

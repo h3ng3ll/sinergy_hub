@@ -55,11 +55,12 @@ extension UserEventPatterns on UserEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Init value)?  init,TResult Function( _Update value)?  update,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Init value)?  init,TResult Function( _Reset value)?  reset,TResult Function( _Update value)?  update,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Init() when init != null:
-return init(_that);case _Update() when update != null:
+return init(_that);case _Reset() when reset != null:
+return reset(_that);case _Update() when update != null:
 return update(_that);case _:
   return orElse();
 
@@ -78,11 +79,12 @@ return update(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Init value)  init,required TResult Function( _Update value)  update,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Init value)  init,required TResult Function( _Reset value)  reset,required TResult Function( _Update value)  update,}){
 final _that = this;
 switch (_that) {
 case _Init():
-return init(_that);case _Update():
+return init(_that);case _Reset():
+return reset(_that);case _Update():
 return update(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -100,11 +102,12 @@ return update(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Init value)?  init,TResult? Function( _Update value)?  update,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Init value)?  init,TResult? Function( _Reset value)?  reset,TResult? Function( _Update value)?  update,}){
 final _that = this;
 switch (_that) {
 case _Init() when init != null:
-return init(_that);case _Update() when update != null:
+return init(_that);case _Reset() when reset != null:
+return reset(_that);case _Update() when update != null:
 return update(_that);case _:
   return null;
 
@@ -122,10 +125,11 @@ return update(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  init,TResult Function( UserData user,  Uint8List? img)?  update,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String uid)?  init,TResult Function()?  reset,TResult Function( UserData user,  Uint8List? img)?  update,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Init() when init != null:
-return init();case _Update() when update != null:
+return init(_that.uid);case _Reset() when reset != null:
+return reset();case _Update() when update != null:
 return update(_that.user,_that.img);case _:
   return orElse();
 
@@ -144,10 +148,11 @@ return update(_that.user,_that.img);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  init,required TResult Function( UserData user,  Uint8List? img)  update,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String uid)  init,required TResult Function()  reset,required TResult Function( UserData user,  Uint8List? img)  update,}) {final _that = this;
 switch (_that) {
 case _Init():
-return init();case _Update():
+return init(_that.uid);case _Reset():
+return reset();case _Update():
 return update(_that.user,_that.img);case _:
   throw StateError('Unexpected subclass');
 
@@ -165,10 +170,11 @@ return update(_that.user,_that.img);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  init,TResult? Function( UserData user,  Uint8List? img)?  update,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String uid)?  init,TResult? Function()?  reset,TResult? Function( UserData user,  Uint8List? img)?  update,}) {final _that = this;
 switch (_that) {
 case _Init() when init != null:
-return init();case _Update() when update != null:
+return init(_that.uid);case _Reset() when reset != null:
+return reset();case _Update() when update != null:
 return update(_that.user,_that.img);case _:
   return null;
 
@@ -181,7 +187,73 @@ return update(_that.user,_that.img);case _:
 
 
 class _Init implements UserEvent {
-  const _Init();
+  const _Init({required this.uid});
+  
+
+ final  String uid;
+
+/// Create a copy of UserEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$InitCopyWith<_Init> get copyWith => __$InitCopyWithImpl<_Init>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Init&&(identical(other.uid, uid) || other.uid == uid));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,uid);
+
+@override
+String toString() {
+  return 'UserEvent.init(uid: $uid)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$InitCopyWith<$Res> implements $UserEventCopyWith<$Res> {
+  factory _$InitCopyWith(_Init value, $Res Function(_Init) _then) = __$InitCopyWithImpl;
+@useResult
+$Res call({
+ String uid
+});
+
+
+
+
+}
+/// @nodoc
+class __$InitCopyWithImpl<$Res>
+    implements _$InitCopyWith<$Res> {
+  __$InitCopyWithImpl(this._self, this._then);
+
+  final _Init _self;
+  final $Res Function(_Init) _then;
+
+/// Create a copy of UserEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? uid = null,}) {
+  return _then(_Init(
+uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _Reset implements UserEvent {
+  const _Reset();
   
 
 
@@ -191,7 +263,7 @@ class _Init implements UserEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Init);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Reset);
 }
 
 
@@ -200,7 +272,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'UserEvent.init()';
+  return 'UserEvent.reset()';
 }
 
 
@@ -289,7 +361,7 @@ $UserDataCopyWith<$Res> get user {
 /// @nodoc
 mixin _$UserState {
 
- User? get user; UserData? get userData; String get errorMessage; UserStatus get status;
+ UserData? get userData; String get errorMessage; UserStatus get status;
 /// Create a copy of UserState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -300,16 +372,16 @@ $UserStateCopyWith<UserState> get copyWith => _$UserStateCopyWithImpl<UserState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserState&&(identical(other.user, user) || other.user == user)&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserState&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,userData,errorMessage,status);
+int get hashCode => Object.hash(runtimeType,userData,errorMessage,status);
 
 @override
 String toString() {
-  return 'UserState(user: $user, userData: $userData, errorMessage: $errorMessage, status: $status)';
+  return 'UserState(userData: $userData, errorMessage: $errorMessage, status: $status)';
 }
 
 
@@ -320,7 +392,7 @@ abstract mixin class $UserStateCopyWith<$Res>  {
   factory $UserStateCopyWith(UserState value, $Res Function(UserState) _then) = _$UserStateCopyWithImpl;
 @useResult
 $Res call({
- User? user, UserData? userData, String errorMessage, UserStatus status
+ UserData? userData, String errorMessage, UserStatus status
 });
 
 
@@ -337,10 +409,9 @@ class _$UserStateCopyWithImpl<$Res>
 
 /// Create a copy of UserState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? userData = freezed,Object? errorMessage = null,Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userData = freezed,Object? errorMessage = null,Object? status = null,}) {
   return _then(_self.copyWith(
-user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as User?,userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
+userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
 as UserData?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as UserStatus,
@@ -437,10 +508,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( User? user,  UserData? userData,  String errorMessage,  UserStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserData? userData,  String errorMessage,  UserStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserState() when $default != null:
-return $default(_that.user,_that.userData,_that.errorMessage,_that.status);case _:
+return $default(_that.userData,_that.errorMessage,_that.status);case _:
   return orElse();
 
 }
@@ -458,10 +529,10 @@ return $default(_that.user,_that.userData,_that.errorMessage,_that.status);case 
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( User? user,  UserData? userData,  String errorMessage,  UserStatus status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserData? userData,  String errorMessage,  UserStatus status)  $default,) {final _that = this;
 switch (_that) {
 case _UserState():
-return $default(_that.user,_that.userData,_that.errorMessage,_that.status);}
+return $default(_that.userData,_that.errorMessage,_that.status);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -475,10 +546,10 @@ return $default(_that.user,_that.userData,_that.errorMessage,_that.status);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( User? user,  UserData? userData,  String errorMessage,  UserStatus status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserData? userData,  String errorMessage,  UserStatus status)?  $default,) {final _that = this;
 switch (_that) {
 case _UserState() when $default != null:
-return $default(_that.user,_that.userData,_that.errorMessage,_that.status);case _:
+return $default(_that.userData,_that.errorMessage,_that.status);case _:
   return null;
 
 }
@@ -490,10 +561,9 @@ return $default(_that.user,_that.userData,_that.errorMessage,_that.status);case 
 
 
 class _UserState implements UserState {
-  const _UserState({this.user, this.userData, this.errorMessage = '', this.status = UserStatus.loading});
+  const _UserState({this.userData, this.errorMessage = '', this.status = UserStatus.loading});
   
 
-@override final  User? user;
 @override final  UserData? userData;
 @override@JsonKey() final  String errorMessage;
 @override@JsonKey() final  UserStatus status;
@@ -508,16 +578,16 @@ _$UserStateCopyWith<_UserState> get copyWith => __$UserStateCopyWithImpl<_UserSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserState&&(identical(other.user, user) || other.user == user)&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserState&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,userData,errorMessage,status);
+int get hashCode => Object.hash(runtimeType,userData,errorMessage,status);
 
 @override
 String toString() {
-  return 'UserState(user: $user, userData: $userData, errorMessage: $errorMessage, status: $status)';
+  return 'UserState(userData: $userData, errorMessage: $errorMessage, status: $status)';
 }
 
 
@@ -528,7 +598,7 @@ abstract mixin class _$UserStateCopyWith<$Res> implements $UserStateCopyWith<$Re
   factory _$UserStateCopyWith(_UserState value, $Res Function(_UserState) _then) = __$UserStateCopyWithImpl;
 @override @useResult
 $Res call({
- User? user, UserData? userData, String errorMessage, UserStatus status
+ UserData? userData, String errorMessage, UserStatus status
 });
 
 
@@ -545,10 +615,9 @@ class __$UserStateCopyWithImpl<$Res>
 
 /// Create a copy of UserState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? userData = freezed,Object? errorMessage = null,Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userData = freezed,Object? errorMessage = null,Object? status = null,}) {
   return _then(_UserState(
-user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as User?,userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
+userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
 as UserData?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as UserStatus,

@@ -1,23 +1,23 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../../../auth/domain/repostories/i_auth_repository.dart';
+import '../../../../../../user/domain/usecases/update_user_profiler_use_case.dart';
 import '../../../../../domain/models/user_profiler/user_profiler.dart';
-import '../../../../../domain/repositories/i_onboard_survey_repository.dart';
+import '../../../../../domain/use_cases/get_completion_status_use_case.dart';
 
 part 'onboard_survey_page_state.dart';
 
 part 'onboard_survey_page_cubit.freezed.dart';
 
 class OnboardSurveyPageCubit extends Cubit<OnboardSurveyPageState> {
-  final IOnboardSurveyRepository _onboardSurveyRepository;
-  final IAuthRepository _authRepository;
+  final UpdateUserProfilerUseCase _updateUserProfilerUseCase;
+  final GetCompletionStatusUseCase _getCompletionStatusUseCase;
 
   OnboardSurveyPageCubit({
-    required IOnboardSurveyRepository onboardSurveyRepository,
-    required IAuthRepository authRepository,
-  }) : _onboardSurveyRepository = onboardSurveyRepository,
-       _authRepository = authRepository,
+    required UpdateUserProfilerUseCase updateUserProfilerUseCase,
+    required GetCompletionStatusUseCase getCompletionStatusUseCase,
+  }) : _getCompletionStatusUseCase = getCompletionStatusUseCase,
+       _updateUserProfilerUseCase = updateUserProfilerUseCase,
        super(
          const OnboardSurveyPageState(),
        );
@@ -49,18 +49,14 @@ class OnboardSurveyPageCubit extends Cubit<OnboardSurveyPageState> {
   void saveResults({
     required UserProfiler userProfiler,
   }) async {
-
     try {
       emit(
         state.copyWith(
           status: OnboardSurveyPageStatus.loading,
         ),
       );
-      final user = (await _authRepository.getCurrentUser())!;
-
-      await _onboardSurveyRepository.updateUserProfileData(
-        userProfiler: userProfiler,
-        uid: user.uid,
+      await _updateUserProfilerUseCase.call(
+        userProfiler,
       );
 
       emit(
@@ -68,7 +64,6 @@ class OnboardSurveyPageCubit extends Cubit<OnboardSurveyPageState> {
           status: OnboardSurveyPageStatus.initial,
         ),
       );
-
     } catch (e) {
       emit(
         state.copyWith(
@@ -86,11 +81,8 @@ class OnboardSurveyPageCubit extends Cubit<OnboardSurveyPageState> {
           status: OnboardSurveyPageStatus.loading,
         ),
       );
-      final user = (await _authRepository.getCurrentUser())!;
-
-      final bool isExists  = await _onboardSurveyRepository.isExistsProfilerData(
-        uid: user.uid,
-      );
+      final res = await _getCompletionStatusUseCase.call();
+      final bool isExists = res?.completeSpecialization ?? false;
       emit(
         state.copyWith(
           status: OnboardSurveyPageStatus.initial,

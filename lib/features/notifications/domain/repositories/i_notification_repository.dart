@@ -5,6 +5,10 @@ abstract class INotificationRepository {
     required String uid,
   });
 
+  Stream<Notification> listen({
+    required String uid,
+  });
+
   Future<Notification> create({
     required String uid,
     required Notification notification,

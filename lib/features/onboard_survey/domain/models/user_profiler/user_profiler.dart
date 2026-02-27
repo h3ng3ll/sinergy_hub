@@ -19,6 +19,14 @@ sealed class UserProfiler with _$UserProfiler {
     @Default([]) List<Skill> skills,
   }) = _UserProfiler;
 
+  factory UserProfiler.none() => UserProfiler(
+    specialization: ESpecialization.fullStackDeveloper,
+    role: ERole.productManager,
+    experience: EExperience.senior,
+    searchingSpecializations: [],
+    skills: [],
+  );
+
   factory UserProfiler.fromJson(Map<String, dynamic> json) =>
       _$UserProfilerFromJson(json);
 }

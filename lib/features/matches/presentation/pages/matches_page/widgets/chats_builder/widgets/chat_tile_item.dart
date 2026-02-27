@@ -30,7 +30,7 @@ class ChatTileItem extends StatelessWidget {
           BuildUserAvatar(
             width: 80.0,
             height: 80.0,
-            url: chat.user.avatarUrl,
+            url: chat.info.cover,
           ),
           Gap(10.0),
           Column(
@@ -38,13 +38,13 @@ class ChatTileItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${chat.user.firstName} ${chat.user.lastName ?? ''}',
+                chat.info.title,
                 style: textTheme.bold16.copyWith(
                   color: colorScheme.onPrimary,
                 ),
               ),
               Text(
-                '${chat.lastMessage} ${chat.user.firstName} ',
+                chat.info.lastMessage,
                 maxLines: 1,
                 style: textTheme.regular12.copyWith(
                   color: colorScheme.onPrimary,
@@ -52,7 +52,7 @@ class ChatTileItem extends StatelessWidget {
               ),
               SpecializationInfoBar(
                 specialization: Specializations.get(
-                  chat.user.profiler.specialization,
+                  chat.info.specialization,
                 ),
               ),
             ],

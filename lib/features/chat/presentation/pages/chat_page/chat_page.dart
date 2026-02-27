@@ -86,15 +86,22 @@ class _ChatPageState extends State<ChatPage> {
                 if (state.status == ChatPageStatus.loading) {
                   return LoadingDataWidget();
                 }
-                final uidOfChat = state.chat!.participants.firstWhere(
-                  (member) => member != context.read<AuthBloc>().state.uid,
+                final cUserId = context.read<AuthBloc>().state.uid;
+                final chatterUid = state.chat!.participants.firstWhere(
+                  (member) => member != cUserId,
                 );
+
+                final user = state.users.firstWhere(
+                  (e) => e.uid == chatterUid,
+                );
+
                 return Scaffold(
                   appBar: ChatAppBar(
                     onTapVideoCall: () => onTapVideoCall(
-                      uidOfChat,
+                      chatterUid,
                     ),
                     onTapUser: onTapUser,
+                    user: user,
                   ),
                   body: Column(
                     children: [

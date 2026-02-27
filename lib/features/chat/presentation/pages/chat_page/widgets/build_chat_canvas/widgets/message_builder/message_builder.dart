@@ -1,13 +1,12 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grouped_list/grouped_list.dart';
-
 
 import '../../../../../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../../../../../core/utils/extensions/scroll_controller_ext.dart';
 
 import '../../../../../../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import '../../../../../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../../../../../domain/models/chat_message/chat_message.dart';
 import '../../../../bloc/chat_page_bloc/chat_page_bloc.dart';
 import 'widgets/build_chat_separator.dart';
@@ -53,22 +52,12 @@ class _MessageBuilderState extends State<MessageBuilder> {
         if (state.status == ChatPageStatus.initial && state.messages.isEmpty) {
           return BuildEmptyChatMessages();
         }
+        final uid = context.read<AuthBloc>().state.uid;
+        final curUser = context.read<UserBloc>().state.userData!;
 
-        final typingUid = state.chat!.typingUsers.firstWhereOrNull(
-          (e) => state.chat!.user.uid == e,
-        );
         final elements = List<ChatMessage>.from(
           state.messages,
         );
-        final uid = context.read<AuthBloc>().state.uid;
-
-        if (typingUid != null) {
-          elements.add(
-            ChatMessage(
-              createdAt: DateTime.now(),
-            ),
-          );
-        }
 
         return GroupedListView<ChatMessage, DateTime>(
           elements: elements,
@@ -86,18 +75,15 @@ class _MessageBuilderState extends State<MessageBuilder> {
             );
           },
           indexedItemBuilder: (context, message, index) {
-            if (typingUid != null && index == 0) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
-                child: BuildMessage.loading(
-                  user: state.chat!.user,
-                ),
-              );
-            }
+            final isSentByCurUser = message.sentUid == uid;
             return BuildMessage(
               message: message,
-              user: state.chat!.user,
-              isSentByCurUser: message.sentUid == uid,
+              user: isSentByCurUser
+                  ? curUser
+                  : state.users.firstWhere(
+                      (e) => e.uid == message.sentUid,
+                    ),
+              isSentByCurUser: isSentByCurUser,
             );
           },
         );

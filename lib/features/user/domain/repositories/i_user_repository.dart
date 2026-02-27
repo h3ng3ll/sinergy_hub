@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../onboard_survey/domain/models/user_profiler/user_profiler.dart';
 import '../models/user_data/user_data.dart';
 import '../models/users_data_pg_state/users_data_pg_state.dart';
 
@@ -25,6 +26,11 @@ abstract class IUserRepository {
 
   Future<List<UserData>> get({
     required UserDataPgState userDataState,
+  });
+
+  Future<void> setUserProfiler({
+    required String uid,
+    required UserProfiler userProfiler,
   });
 
   Future<void> update({

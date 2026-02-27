@@ -36,76 +36,65 @@ class ExperienceStage extends StatelessWidget {
           ),
           Gap(20.0),
           Expanded(
-            child: Column(
-              spacing: 15.0,
-              // runSpacing: 15.0,
+            child: GridView(
+              padding: .symmetric(
+                vertical: 15.0,
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisExtent: 245.0,
+                crossAxisSpacing: 15.0,
+                mainAxisSpacing: 15.0,
+              ),
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: ExperienceCard(
-                        height: 245.0,
-                        // height: 300,
-                        // width: 300,
-                        icon: Assets.icons.seedling,
-                        isSelected: selectedExperience == EExperience.junior,
-                        onTapCard: onSelectExperience,
-                        experience: EExperience.junior,
-                        name: 'Junior',
-                        yearExperience: '0-2 years',
-                        description:
-                            'Learning and growing in your field. Ready to collaborate and gain experience.',
-                      ),
-                    ),
-                    Gap(15.0),
-                    Expanded(
-                      child: ExperienceCard(
-                        height: 245.0,
-                        // height: 100,
-                        // width: 100,
-                        icon: Assets.icons.herb,
-                        isSelected: selectedExperience == EExperience.middle,
-                        onTapCard: onSelectExperience,
-                        experience: EExperience.middle,
-                        name: 'Middle',
-                        yearExperience: '2-5 years',
-                        description:
-                            'Confident and independent professional with solid skills.',
-                      ),
-                    ),
-                  ],
+                ExperienceCard(
+                  height: 245.0,
+                  // height: 300,
+                  // width: 300,
+                  icon: Assets.icons.seedling,
+                  isSelected: selectedExperience == EExperience.junior,
+                  onTapCard: onSelectExperience,
+                  experience: EExperience.junior,
+                  name: 'Junior',
+                  yearExperience: '0-2 years',
+                  description:
+                      'Learning and growing in your field. Ready to collaborate and gain experience.',
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ExperienceCard(
-                        height: 245.0,
-                        icon: Assets.icons.tree,
-                        isSelected: selectedExperience == EExperience.senior,
-                        onTapCard: onSelectExperience,
-                        experience: EExperience.senior,
-                        name: 'Senior',
-                        yearExperience: '5+ years',
-                        description:
-                            'Expert with deep knowledge and proven track record',
-                      ),
-                    ),
-                    Gap(15.0),
-                    Expanded(
-                      child: ExperienceCard(
-                        height: 245.0,
-                        icon: Assets.icons.rocket,
-                        isSelected:
-                            selectedExperience == EExperience.leadExpert,
-                        onTapCard: onSelectExperience,
-                        experience: EExperience.leadExpert,
-                        name: 'Lead/Expert',
-                        yearExperience: 'Leadership experience',
-                        description:
-                            'Team management and mentoring with strategic vision',
-                      ),
-                    ),
-                  ],
+
+                ExperienceCard(
+                  height: 245.0,
+                  // height: 100,
+                  // width: 100,
+                  icon: Assets.icons.herb,
+                  isSelected: selectedExperience == EExperience.middle,
+                  onTapCard: onSelectExperience,
+                  experience: EExperience.middle,
+                  name: 'Middle',
+                  yearExperience: '2-5 years',
+                  description:
+                      'Confident and independent professional with solid skills.',
+                ),
+                ExperienceCard(
+                  height: 245.0,
+                  icon: Assets.icons.tree,
+                  isSelected: selectedExperience == EExperience.senior,
+                  onTapCard: onSelectExperience,
+                  experience: EExperience.senior,
+                  name: 'Senior',
+                  yearExperience: '5+ years',
+                  description:
+                      'Expert with deep knowledge and proven track record',
+                ),
+                ExperienceCard(
+                  height: 245.0,
+                  icon: Assets.icons.rocket,
+                  isSelected: selectedExperience == EExperience.leadExpert,
+                  onTapCard: onSelectExperience,
+                  experience: EExperience.leadExpert,
+                  name: 'Lead/Expert',
+                  yearExperience: 'Leadership experience',
+                  description:
+                      'Team management and mentoring with strategic vision',
                 ),
               ],
             ),

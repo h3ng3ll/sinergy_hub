@@ -5,39 +5,39 @@ import 'package:gap/gap.dart';
 import '../../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../../core/widgets/build_user_avatar.dart';
+import '../../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../bloc/chat_page_bloc/chat_page_bloc.dart';
 
 class BuildChatUserInfo extends StatelessWidget {
   final VoidCallback onTapUser;
+  final UserData user;
 
   const BuildChatUserInfo({
     super.key,
     required this.onTapUser,
+    required this.user,
   });
 
   @override
   Widget build(BuildContext context) {
     final chatPageBloc = context.watch<ChatPageBloc>().state;
-    final chat = chatPageBloc.chat;
 
     final textTheme = AppTextTheme.of(context);
-    if (chat?.user == null) {
-      return Container();
-    }
+
 
     return Row(
       children: [
         BuildUserAvatar(
           width: 45.0,
           height: 45.0,
-          url: chat!.user.avatarUrl,
+          url: user.avatarUrl,
         ),
         Gap(10.0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${chat.user.firstName}',
+              '${user.firstName}',
               style: textTheme.medium16.copyWith(
                 color: AppColors.black.value,
               ),

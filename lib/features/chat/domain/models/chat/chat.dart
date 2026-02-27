@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
+import '../chat_info/chat_info.dart';
 
 part 'chat.g.dart';
 
@@ -10,7 +12,7 @@ part 'chat.freezed.dart';
 abstract class Chat with _$Chat {
   const factory Chat({
     @Default('') String chatId,
-    required UserData user,
+    required ChatInfo info,
     @Default('') String lastMessage,
     required DateTime lastMessageSent,
     @Default([]) List<String> typingUsers,
@@ -27,7 +29,9 @@ abstract class Chat with _$Chat {
   @visibleForTesting
   factory Chat.empty() => Chat(
     chatId: '',
-    user: UserData.none(),
+    info: ChatInfo(
+      specialization: ESpecialization.backendDeveloper,
+    ),
     lastMessage: '',
     lastMessageSent: DateTime.now(),
     typingUsers: [],

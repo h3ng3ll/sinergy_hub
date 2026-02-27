@@ -10,11 +10,13 @@ import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../auth/domain/repostories/i_auth_repository.dart';
 
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
+import '../../../../user/domain/usecases/update_user_profiler_use_case.dart';
 import '../../../domain/models/experience/experience.dart';
 import '../../../domain/models/role/role.dart';
 import '../../../domain/models/specialization/specialization.dart';
 import '../../../domain/models/user_profiler/user_profiler.dart';
 import '../../../domain/repositories/i_onboard_survey_repository.dart';
+import '../../../domain/use_cases/get_completion_status_use_case.dart';
 import '../../bloc/onboard_bloc/onboard_bloc.dart';
 import 'bloc/onboard_survey_page_cubit/onboard_survey_page_cubit.dart';
 import 'overlays/active_community_overlay/active_community_overlay.dart';
@@ -35,8 +37,6 @@ class OnboardSurveyPage extends StatefulWidget {
 
 class _OnboardSurveyPageState extends State<OnboardSurveyPage>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animation;
-
   late final OnboardSurveyPageCubit _onboardSurveyPageCubit;
   final PageController pageController = PageController();
   OverlayEntry? overlayEntry;
@@ -49,8 +49,8 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
   @override
   void initState() {
     _onboardSurveyPageCubit = OnboardSurveyPageCubit(
-      onboardSurveyRepository: getIt<IOnboardSurveyRepository>(),
-      authRepository: getIt<IAuthRepository>(),
+      updateUserProfilerUseCase: getIt<UpdateUserProfilerUseCase>(),
+      getCompletionStatusUseCase: getIt<GetCompletionStatusUseCase>(),
     );
 
     WidgetsBinding.instance.addPostFrameCallback(
@@ -63,20 +63,6 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
         }
       },
     );
-
-    _animation =
-        AnimationController(
-            vsync: this,
-            duration: Duration(
-              seconds: 2,
-            ),
-          )
-          ..repeat(
-            reverse: true,
-          )
-          ..addListener(
-            () => setState(() {}),
-          );
     super.initState();
   }
 
@@ -84,7 +70,6 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
   void dispose() {
     overlayEntry?.remove();
     overlayEntry?.dispose();
-    _animation.dispose();
     super.dispose();
   }
 

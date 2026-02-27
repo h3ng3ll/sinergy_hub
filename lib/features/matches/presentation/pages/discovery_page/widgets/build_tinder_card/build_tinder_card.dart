@@ -38,9 +38,9 @@ class BuildTinderCard extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             ...state.users
-                .take(
-                  2,
-                )
+                // .take(
+                //   2,
+                // )
                 .map(
                   (e) => Align(
                     alignment: Alignment.bottomCenter,

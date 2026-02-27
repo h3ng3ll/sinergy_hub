@@ -1,14 +1,13 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../../core/services/firebase/firebase_storage_service.dart';
+import '../../../onboard_survey/domain/models/user_profiler/user_profiler.dart';
 import '../../domain/models/user_data/user_data.dart';
 import '../../domain/models/users_data_pg_state/users_data_pg_state.dart';
 import '../../domain/repositories/i_user_repository.dart';
@@ -190,5 +189,19 @@ class UserFirebaseRepository extends IUserRepository {
     await _firebaseStorageService.delete(
       path,
     );
+  }
+
+  @override
+  Future<void> setUserProfiler({
+    required String uid,
+    required UserProfiler userProfiler,
+  }) async {
+    await _firebaseFirestoreService
+        .userDocument(
+          uid,
+        )
+        .update(
+          userProfiler.toJson(),
+        );
   }
 }

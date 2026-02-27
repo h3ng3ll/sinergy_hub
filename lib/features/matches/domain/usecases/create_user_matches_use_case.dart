@@ -48,7 +48,6 @@ class CreateUserMatchesUseCase {
     /// Initialize chat for matched users
     await _initChatUseCase.call(
       participants: [
-        uid,
         match.user.uid,
       ],
     );

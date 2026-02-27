@@ -41,6 +41,7 @@ void initChatFeature(GetIt getIt) {
     () => InitChatUseCase(
       chatRepository: getIt<IChatRepository>(),
       authRepository: getIt<IAuthRepository>(),
+      userRepository: getIt<IUserRepository>(),
     ),
   );
   getIt.registerLazySingleton<SendMessageUseCase>(

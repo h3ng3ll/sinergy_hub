@@ -4,16 +4,19 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../core/resources/colors/app_colors.dart';
+import '../../../../../../user/domain/models/user_data/user_data.dart';
 import 'widgets/build_chat_user_info.dart';
 
 class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onTapUser;
   final VoidCallback onTapVideoCall;
+  final UserData user;
 
   const ChatAppBar({
     super.key,
     required this.onTapUser,
     required this.onTapVideoCall,
+    required this.user,
   });
 
   @override
@@ -52,6 +55,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
           Spacer(),
           BuildChatUserInfo(
             onTapUser: onTapUser,
+            user: user,
           ),
           Spacer(),
           InkWell(
@@ -60,7 +64,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
               Icons.video_call,
             ),
           ),
-         InkWell(
+          InkWell(
             child: Icon(
               Icons.more_vert,
             ),

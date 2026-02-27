@@ -431,7 +431,7 @@ as List<ChatMessage>,
 /// @nodoc
 mixin _$ChatPageState {
 
- Chat? get chat; List<ChatMessage> get messages; ChatPageStatus get status; bool get isOnlineUser; dynamic get errorMessage;
+ Chat? get chat; List<ChatMessage> get messages; List<UserData> get users; ChatPageStatus get status; bool get isOnlineUser; dynamic get errorMessage;
 /// Create a copy of ChatPageState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -442,16 +442,16 @@ $ChatPageStateCopyWith<ChatPageState> get copyWith => _$ChatPageStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatPageState&&(identical(other.chat, chat) || other.chat == chat)&&const DeepCollectionEquality().equals(other.messages, messages)&&(identical(other.status, status) || other.status == status)&&(identical(other.isOnlineUser, isOnlineUser) || other.isOnlineUser == isOnlineUser)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatPageState&&(identical(other.chat, chat) || other.chat == chat)&&const DeepCollectionEquality().equals(other.messages, messages)&&const DeepCollectionEquality().equals(other.users, users)&&(identical(other.status, status) || other.status == status)&&(identical(other.isOnlineUser, isOnlineUser) || other.isOnlineUser == isOnlineUser)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,chat,const DeepCollectionEquality().hash(messages),status,isOnlineUser,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,chat,const DeepCollectionEquality().hash(messages),const DeepCollectionEquality().hash(users),status,isOnlineUser,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatPageState(chat: $chat, messages: $messages, status: $status, isOnlineUser: $isOnlineUser, errorMessage: $errorMessage)';
+  return 'ChatPageState(chat: $chat, messages: $messages, users: $users, status: $status, isOnlineUser: $isOnlineUser, errorMessage: $errorMessage)';
 }
 
 
@@ -462,7 +462,7 @@ abstract mixin class $ChatPageStateCopyWith<$Res>  {
   factory $ChatPageStateCopyWith(ChatPageState value, $Res Function(ChatPageState) _then) = _$ChatPageStateCopyWithImpl;
 @useResult
 $Res call({
- Chat? chat, List<ChatMessage> messages, ChatPageStatus status, bool isOnlineUser, dynamic errorMessage
+ Chat? chat, List<ChatMessage> messages, List<UserData> users, ChatPageStatus status, bool isOnlineUser, dynamic errorMessage
 });
 
 
@@ -479,11 +479,12 @@ class _$ChatPageStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatPageState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? chat = freezed,Object? messages = null,Object? status = null,Object? isOnlineUser = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? chat = freezed,Object? messages = null,Object? users = null,Object? status = null,Object? isOnlineUser = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 chat: freezed == chat ? _self.chat : chat // ignore: cast_nullable_to_non_nullable
 as Chat?,messages: null == messages ? _self.messages : messages // ignore: cast_nullable_to_non_nullable
-as List<ChatMessage>,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as List<ChatMessage>,users: null == users ? _self.users : users // ignore: cast_nullable_to_non_nullable
+as List<UserData>,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ChatPageStatus,isOnlineUser: null == isOnlineUser ? _self.isOnlineUser : isOnlineUser // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as dynamic,
@@ -580,10 +581,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Chat? chat,  List<ChatMessage> messages,  ChatPageStatus status,  bool isOnlineUser,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Chat? chat,  List<ChatMessage> messages,  List<UserData> users,  ChatPageStatus status,  bool isOnlineUser,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatPageState() when $default != null:
-return $default(_that.chat,_that.messages,_that.status,_that.isOnlineUser,_that.errorMessage);case _:
+return $default(_that.chat,_that.messages,_that.users,_that.status,_that.isOnlineUser,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -601,10 +602,10 @@ return $default(_that.chat,_that.messages,_that.status,_that.isOnlineUser,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Chat? chat,  List<ChatMessage> messages,  ChatPageStatus status,  bool isOnlineUser,  dynamic errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Chat? chat,  List<ChatMessage> messages,  List<UserData> users,  ChatPageStatus status,  bool isOnlineUser,  dynamic errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _ChatPageState():
-return $default(_that.chat,_that.messages,_that.status,_that.isOnlineUser,_that.errorMessage);}
+return $default(_that.chat,_that.messages,_that.users,_that.status,_that.isOnlineUser,_that.errorMessage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -618,10 +619,10 @@ return $default(_that.chat,_that.messages,_that.status,_that.isOnlineUser,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Chat? chat,  List<ChatMessage> messages,  ChatPageStatus status,  bool isOnlineUser,  dynamic errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Chat? chat,  List<ChatMessage> messages,  List<UserData> users,  ChatPageStatus status,  bool isOnlineUser,  dynamic errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatPageState() when $default != null:
-return $default(_that.chat,_that.messages,_that.status,_that.isOnlineUser,_that.errorMessage);case _:
+return $default(_that.chat,_that.messages,_that.users,_that.status,_that.isOnlineUser,_that.errorMessage);case _:
   return null;
 
 }
@@ -633,7 +634,7 @@ return $default(_that.chat,_that.messages,_that.status,_that.isOnlineUser,_that.
 
 
 class _ChatPageState implements ChatPageState {
-   _ChatPageState({this.chat, final  List<ChatMessage> messages = const [], this.status = ChatPageStatus.loading, this.isOnlineUser = true, this.errorMessage = ''}): _messages = messages;
+   _ChatPageState({this.chat, final  List<ChatMessage> messages = const [], final  List<UserData> users = const [], this.status = ChatPageStatus.loading, this.isOnlineUser = true, this.errorMessage = ''}): _messages = messages,_users = users;
   
 
 @override final  Chat? chat;
@@ -642,6 +643,13 @@ class _ChatPageState implements ChatPageState {
   if (_messages is EqualUnmodifiableListView) return _messages;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_messages);
+}
+
+ final  List<UserData> _users;
+@override@JsonKey() List<UserData> get users {
+  if (_users is EqualUnmodifiableListView) return _users;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_users);
 }
 
 @override@JsonKey() final  ChatPageStatus status;
@@ -658,16 +666,16 @@ _$ChatPageStateCopyWith<_ChatPageState> get copyWith => __$ChatPageStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatPageState&&(identical(other.chat, chat) || other.chat == chat)&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.status, status) || other.status == status)&&(identical(other.isOnlineUser, isOnlineUser) || other.isOnlineUser == isOnlineUser)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatPageState&&(identical(other.chat, chat) || other.chat == chat)&&const DeepCollectionEquality().equals(other._messages, _messages)&&const DeepCollectionEquality().equals(other._users, _users)&&(identical(other.status, status) || other.status == status)&&(identical(other.isOnlineUser, isOnlineUser) || other.isOnlineUser == isOnlineUser)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,chat,const DeepCollectionEquality().hash(_messages),status,isOnlineUser,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,chat,const DeepCollectionEquality().hash(_messages),const DeepCollectionEquality().hash(_users),status,isOnlineUser,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatPageState(chat: $chat, messages: $messages, status: $status, isOnlineUser: $isOnlineUser, errorMessage: $errorMessage)';
+  return 'ChatPageState(chat: $chat, messages: $messages, users: $users, status: $status, isOnlineUser: $isOnlineUser, errorMessage: $errorMessage)';
 }
 
 
@@ -678,7 +686,7 @@ abstract mixin class _$ChatPageStateCopyWith<$Res> implements $ChatPageStateCopy
   factory _$ChatPageStateCopyWith(_ChatPageState value, $Res Function(_ChatPageState) _then) = __$ChatPageStateCopyWithImpl;
 @override @useResult
 $Res call({
- Chat? chat, List<ChatMessage> messages, ChatPageStatus status, bool isOnlineUser, dynamic errorMessage
+ Chat? chat, List<ChatMessage> messages, List<UserData> users, ChatPageStatus status, bool isOnlineUser, dynamic errorMessage
 });
 
 
@@ -695,11 +703,12 @@ class __$ChatPageStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatPageState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? chat = freezed,Object? messages = null,Object? status = null,Object? isOnlineUser = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? chat = freezed,Object? messages = null,Object? users = null,Object? status = null,Object? isOnlineUser = null,Object? errorMessage = freezed,}) {
   return _then(_ChatPageState(
 chat: freezed == chat ? _self.chat : chat // ignore: cast_nullable_to_non_nullable
 as Chat?,messages: null == messages ? _self._messages : messages // ignore: cast_nullable_to_non_nullable
-as List<ChatMessage>,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as List<ChatMessage>,users: null == users ? _self._users : users // ignore: cast_nullable_to_non_nullable
+as List<UserData>,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ChatPageStatus,isOnlineUser: null == isOnlineUser ? _self.isOnlineUser : isOnlineUser // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as dynamic,

@@ -10,7 +10,6 @@ enum UserStatus {
 @freezed
 sealed class UserState with _$UserState {
   const factory UserState({
-    User? user,
     UserData? userData,
     @Default('') String errorMessage,
     @Default(UserStatus.loading) UserStatus status,
