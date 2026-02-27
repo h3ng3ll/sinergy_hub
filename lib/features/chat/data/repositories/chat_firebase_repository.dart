@@ -89,4 +89,10 @@ class ChatFirebaseRepository implements IChatRepository {
           chat.toJson(),
         );
   }
+
+  @override
+  Future<List<Chat>> search({required String uid, required String query}) {
+    // TODO: implement search
+    throw UnimplementedError();
+  }
 }
