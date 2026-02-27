@@ -56,7 +56,7 @@ class ChatFirebaseRepository implements IChatRepository {
   }
 
   @override
-  Stream<ChatDto> getByIdStream({
+  Stream<ChatDto> listenByIdStream({
     required String uid,
     required String chatId,
   }) {
@@ -94,5 +94,23 @@ class ChatFirebaseRepository implements IChatRepository {
   Future<List<Chat>> search({required String uid, required String query}) {
     // TODO: implement search
     throw UnimplementedError();
+  }
+
+  @override
+  Future<ChatDto> getById({
+    required String chatId,
+  }) async {
+
+    final chatRow = await _firebaseFirestoreService
+        .chats()
+        .doc(
+          chatId,
+        )
+        .get();
+
+    final chat = ChatDto.fromJson(
+      chatRow.data()!,
+    );
+    return chat;
   }
 }

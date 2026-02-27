@@ -4,50 +4,50 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/models/chat/chat.dart';
-import '../../../domain/usecases/get_chats_use_case.dart';
+import '../../../domain/usecases/listen_chats_use_case.dart';
 import '../../../domain/usecases/init_chat_use_case.dart';
+
+part 'chat_event.dart';
 
 part 'chat_state.dart';
 
-part 'chat_cubit.freezed.dart';
+part 'chat_bloc.freezed.dart';
 
-class ChatCubit extends Cubit<ChatState> {
+class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final InitChatUseCase _initChatUseCase;
-  final GetChatsUseCase _getChatsUseCase;
+  final ListenChatsUseCase _getChatsUseCase;
 
-  StreamSubscription? _subscription;
-
-  ChatCubit({
-    required GetChatsUseCase getChatsUseCase,
+  ChatBloc({
+    required ListenChatsUseCase getChatsUseCase,
     required InitChatUseCase initChatUseCase,
   }) : _initChatUseCase = initChatUseCase,
        _getChatsUseCase = getChatsUseCase,
-       super(const ChatState());
-
-  void init() {
-    _subscription = _getChatsUseCase.call().listen(
-      (
-        chats,
-      ) => _update(
-        chats: chats,
-      ),
-    );
+       super(const ChatState()) {
+    on<_Init>(_init);
+    on<_CreateChat>(_createChat);
   }
 
-  void _update({
-    required List<Chat> chats,
-  }) {
-    emit(
-      state.copyWith(
+  void _init(
+    _Init event,
+    Emitter<ChatState> emit,
+  ) {
+    emit.forEach(
+      _getChatsUseCase.call(),
+      onData: (chats) => state.copyWith(
         chats: chats,
         status: ChatStatus.initial,
       ),
+      onError: (e, _) => state.copyWith(
+        errorMessage: e.toString(),
+        status: ChatStatus.failed,
+      ),
     );
   }
 
-  Future<String> create({
-    required String uid,
-  }) async {
+  void _createChat(
+    _CreateChat event,
+    Emitter<ChatState> emit,
+  ) async {
     try {
       emit(
         state.copyWith(
@@ -57,15 +57,15 @@ class ChatCubit extends Cubit<ChatState> {
 
       final chat = await _initChatUseCase.call(
         participants: [
-          uid,
+          event.uid,
         ],
       );
       emit(
         state.copyWith(
           status: ChatStatus.initial,
+          createdChatId: chat.chatId,
         ),
       );
-      return chat.chatId;
     } catch (e) {
       emit(
         state.copyWith(
@@ -73,13 +73,6 @@ class ChatCubit extends Cubit<ChatState> {
           status: ChatStatus.failed,
         ),
       );
-      return '';
     }
-  }
-
-  @override
-  Future<void> close() {
-    _subscription?.cancel();
-    return super.close();
   }
 }

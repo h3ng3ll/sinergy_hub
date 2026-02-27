@@ -30,7 +30,7 @@ abstract class ChatDto with _$ChatDto {
     json,
   );
 
-  Chat toDomain(UserData user) => Chat(
+  Chat toDomain() => Chat(
     chatId: chatId,
     lastMessage: lastMessage,
     lastMessageSent: lastMessageSent,

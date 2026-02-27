@@ -5,7 +5,7 @@ import '../../../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../../../core/utils/extensions/scroll_controller_ext.dart';
 import '../../../../../../chat/domain/models/chat/chat.dart';
 
-import '../../../../../../chat/presentation/bloc/chat_cubit/chat_cubit.dart';
+import '../../../../../../chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import 'widgets/build_chats_empty.dart';
 import 'widgets/chat_tile_item.dart';
 
@@ -44,10 +44,15 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatCubit, ChatState>(
+    return BlocBuilder<ChatBloc, ChatState>(
       builder: (context, state) {
         if (state.status == ChatStatus.loading) {
           return LoadingDataWidget();
+        }
+        if (state.status == ChatStatus.failed) {
+          return Text(
+            'Failed load data: ${state.errorMessage}',
+          );
         }
         if (state.status == ChatStatus.initial && state.chats.isEmpty) {
           return BuildChatsEmpty();

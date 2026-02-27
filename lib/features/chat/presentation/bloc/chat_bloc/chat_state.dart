@@ -1,4 +1,4 @@
-part of 'chat_cubit.dart';
+part of 'chat_bloc.dart';
 
 enum ChatStatus {
   initial,
@@ -11,6 +11,7 @@ sealed class ChatState with _$ChatState {
   const factory ChatState({
     @Default([]) List<Chat> chats,
     @Default('') String errorMessage,
+    @Default('') String createdChatId,
     @Default(ChatStatus.loading) ChatStatus status,
   }) = _ChatState;
 }

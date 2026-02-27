@@ -8,10 +8,13 @@ import '../data/repositories/chat_message_firebase_repository.dart';
 import '../domain/repositories/i_chat_message_repository.dart';
 import '../domain/repositories/i_chat_repository.dart';
 import '../domain/usecases/get_chat_by_id_use_case.dart';
-import '../domain/usecases/get_chats_use_case.dart';
+import '../domain/usecases/listen_chats_use_case.dart';
 import '../domain/usecases/get_last_messages_use_case.dart';
 import '../domain/usecases/init_chat_use_case.dart';
+import '../domain/usecases/listen_chat_by_id_use_case.dart';
+import '../domain/usecases/listen_chat_messages_use_case.dart';
 import '../domain/usecases/send_message_use_case.dart';
+import '../domain/usecases/update_chat_info_use_case.dart';
 
 void initChatFeature(GetIt getIt) {
   getIt.registerLazySingleton<IChatRepository>(
@@ -25,8 +28,8 @@ void initChatFeature(GetIt getIt) {
     ),
   );
 
-  getIt.registerLazySingleton<GetChatsUseCase>(
-    () => GetChatsUseCase(
+  getIt.registerLazySingleton<ListenChatsUseCase>(
+    () => ListenChatsUseCase(
       chatRepository: getIt<IChatRepository>(),
       userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),
@@ -47,12 +50,28 @@ void initChatFeature(GetIt getIt) {
   getIt.registerLazySingleton<SendMessageUseCase>(
     () => SendMessageUseCase(
       chatMessageRepository: getIt<IChatMessageRepository>(),
-      chatRepository: getIt<IChatRepository>(),
       authRepository: getIt<IAuthRepository>(),
+      updateChatInfoUseCase: getIt<UpdateChatInfoUseCase>(),
+      getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
     ),
   );
   getIt.registerLazySingleton<GetChatByIdUseCase>(
     () => GetChatByIdUseCase(
+      chatRepository: getIt<IChatRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<ListenChatMessagesUseCase>(
+    () => ListenChatMessagesUseCase(
+      chatMessageRepository: getIt<IChatMessageRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<UpdateChatInfoUseCase>(
+    () => UpdateChatInfoUseCase(
+      chatRepository: getIt<IChatRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<ListenChatByIdUseCase>(
+    () => ListenChatByIdUseCase(
       chatRepository: getIt<IChatRepository>(),
       userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),

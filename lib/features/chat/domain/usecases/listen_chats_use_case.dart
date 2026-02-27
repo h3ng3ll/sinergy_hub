@@ -5,18 +5,16 @@ import '../../data/models/chat_dto/chat_dto.dart';
 import '../models/chat/chat.dart';
 import '../repositories/i_chat_repository.dart';
 
-class GetChatsUseCase {
+class ListenChatsUseCase {
   final IChatRepository _chatRepository;
-  final IUserRepository _userRepository;
   final IAuthRepository _authRepository;
 
-  GetChatsUseCase({
+  ListenChatsUseCase({
     required IChatRepository chatRepository,
     required IUserRepository userRepository,
     required IAuthRepository authRepository,
   }) : _chatRepository = chatRepository,
-       _authRepository = authRepository,
-       _userRepository = userRepository;
+       _authRepository = authRepository;
 
   Stream<List<Chat>> call() async* {
     final uid = await _authRepository.requireUserId();
@@ -26,25 +24,8 @@ class GetChatsUseCase {
         )
         .asyncMap(
           (List<ChatDto> chatsDto) async {
-            final uids = chatsDto
-                .map(
-                  (ChatDto chat) => chat.participants.firstWhere(
-                    (e) => e != uid,
-                  ),
-                )
-                .toList();
-            final List<UserData> users = await _userRepository.getUsersById(
-              ids: uids,
-            );
-
-            final userById = {for (var u in users) u.uid: u};
-
             final chats = chatsDto.map((ChatDto chat) {
-              final UserData user = userById[uids.first]!;
-
-              return chat.toDomain(
-                user,
-              );
+              return chat.toDomain();
             }).toList();
             return chats;
           },

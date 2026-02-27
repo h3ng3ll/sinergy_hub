@@ -44,7 +44,7 @@ extension ChatsFilterStateExt on ChatsFilterState {
   }
 
   List<Chat> applyfilter(List<Chat> chats) {
-    return [];
+    return chats;
     // return _filterByType(
     //   // _filterByQuery(
     //   //   chats,

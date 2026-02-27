@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
-import '../../../../chat/presentation/bloc/chat_cubit/chat_cubit.dart';
+import '../../../../chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import '../../../domain/usecases/look_for_matches_use_case.dart';
 import '../../bloc/people_data_bloc/people_data_bloc.dart';
 import '../../bloc/tinder_card_cubit/tinder_card_cubit.dart';
@@ -55,9 +55,26 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
   void onKeepSwiping() {}
 
   Future<void> onSendMessage(UserData matchedUser) async {
-    final chatId = await context.read<ChatCubit>().create(
-      uid: matchedUser.uid,
+    context.read<ChatBloc>().add(
+      ChatEvent.createChat(
+        uid: matchedUser.uid,
+      ),
     );
+    
+    // Wait for chat to be created and get the chatId from state
+    final chatBloc = context.read<ChatBloc>();
+    await Future.doWhile(() async {
+      await Future.delayed(const Duration(milliseconds: 100));
+      if (chatBloc.state.createdChatId.isNotEmpty) {
+        return false;
+      }
+      if (chatBloc.state.status == ChatStatus.failed) {
+        return false;
+      }
+      return true;
+    });
+    
+    final chatId = chatBloc.state.createdChatId;
     if (!mounted) return;
 
     ChatPageRoute(

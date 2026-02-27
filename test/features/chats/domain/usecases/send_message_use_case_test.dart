@@ -1,12 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:sinergy_hub/core/di/injection.dart';
 import 'package:sinergy_hub/features/chat/data/models/chat_dto/chat_dto.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_info/chat_info.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_message/chat_message.dart';
 import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_message_repository.dart';
 import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_repository.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/get_chat_by_id_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/send_message_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/update_chat_info_use_case.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/models/specialization/specialization.dart';
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
 
@@ -66,8 +69,9 @@ void main() {
 
       final useCase = SendMessageUseCase(
         chatMessageRepository: chatMessageRepo,
-        chatRepository: chatRepo,
         authRepository: authRepo,
+        updateChatInfoUseCase: getIt<UpdateChatInfoUseCase>(),
+        getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
       );
 
       when(
@@ -99,7 +103,7 @@ void main() {
 
       await useCase.call(
         message: 'message',
-        chat: chat,
+        chatId: '',
       );
 
       /// assert

@@ -6,6 +6,8 @@ import '../../../core/services/firebase/firebase_storage_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../data/repositories/user_firebase_repository.dart';
 import '../domain/repositories/i_user_repository.dart';
+import '../domain/usecases/get_user_use_case.dart';
+import '../domain/usecases/get_users_use_case.dart';
 import '../domain/usecases/update_user_usecase.dart';
 
 void initUserFeature(GetIt getIt) {
@@ -18,6 +20,17 @@ void initUserFeature(GetIt getIt) {
   );
   getIt.registerLazySingleton<UpdateUserUseCase>(
     () => UpdateUserUseCase(
+      userRepository: getIt<IUserRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<GetUserUseCase>(
+    () => GetUserUseCase(
+      userRepository: getIt<IUserRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<GetUsersUseCase>(
+    () => GetUsersUseCase(
       userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),
     ),

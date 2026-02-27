@@ -8,7 +8,7 @@ import '../../../../../../../../../core/utils/extensions/scroll_controller_ext.d
 import '../../../../../../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../../../../../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../../../../../domain/models/chat_message/chat_message.dart';
-import '../../../../bloc/chat_page_bloc/chat_page_bloc.dart';
+import '../../../../../../bloc/chat_page_bloc/chat_page_bloc.dart';
 import 'widgets/build_chat_separator.dart';
 import 'widgets/build_empty_chat_messages.dart';
 import 'widgets/build_message.dart';

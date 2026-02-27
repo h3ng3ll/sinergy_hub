@@ -8,8 +8,12 @@ abstract class IChatRepository {
   /// to specify [uid]
   Stream<List<ChatDto>> getStream(String uid);
 
-  Stream<ChatDto> getByIdStream({
+  Stream<ChatDto> listenByIdStream({
     required String uid,
+    required String chatId,
+  });
+
+  Future<ChatDto> getById({
     required String chatId,
   });
 

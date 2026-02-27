@@ -1,26 +1,28 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
-import '../../data/models/chat_dto/chat_dto.dart';
-import '../models/chat/chat.dart';
 import '../models/chat_message/chat_message.dart';
 import '../repositories/i_chat_message_repository.dart';
-import '../repositories/i_chat_repository.dart';
+import 'get_chat_by_id_use_case.dart';
+import 'update_chat_info_use_case.dart';
 
 class SendMessageUseCase {
   final IChatMessageRepository _chatMessageRepository;
-  final IChatRepository _chatRepository;
   final IAuthRepository _authRepository;
+  final UpdateChatInfoUseCase _updateChatInfoUseCase;
+  final GetChatByIdUseCase _getChatByIdUseCase;
 
   SendMessageUseCase({
     required IChatMessageRepository chatMessageRepository,
-    required IChatRepository chatRepository,
     required IAuthRepository authRepository,
+    required UpdateChatInfoUseCase updateChatInfoUseCase,
+    required GetChatByIdUseCase getChatByIdUseCase,
   }) : _chatMessageRepository = chatMessageRepository,
        _authRepository = authRepository,
-       _chatRepository = chatRepository;
+       _getChatByIdUseCase = getChatByIdUseCase,
+       _updateChatInfoUseCase = updateChatInfoUseCase;
 
   Future<void> call({
     required String message,
-    required Chat chat,
+    required String chatId,
   }) async {
     final uid = await _authRepository.requireUserId();
     final chatMessage = ChatMessage(
@@ -30,14 +32,16 @@ class SendMessageUseCase {
     );
     await _chatMessageRepository.create(
       message: chatMessage,
+      chatId: chatId,
+    );
+    final chat = await _getChatByIdUseCase.call(
+      chatId: chatId,
+    );
+    final updatedChat = chat.copyWith(
+      lastMessage: message,
+    );
+    await _updateChatInfoUseCase(
       chatId: chat.chatId,
-    );
-    final updatedChat = ChatDto.fromDomain(
-      chat.copyWith(
-        lastMessage: message,
-      ),
-    );
-    await _chatRepository.update(
       chat: updatedChat,
     );
   }
