@@ -97,11 +97,14 @@ class WebrtcService implements IWebRtcService {
   }
 
   @override
-  Future<void> setRemoteSdp(String sdp) async {
+  Future<void> setRemoteSdp(
+    String sdp, {
+    String type = 'offer',
+  }) async {
     await _pc!.setRemoteDescription(
       RTCSessionDescription(
         sdp,
-        'offer',
+        type,
       ),
     );
   }

@@ -6,12 +6,11 @@ import '../../../../core/routes/init_router/init_router.dart';
 import '../../../../core/services/audio_service.dart';
 import '../../../../core/services/firebase/firebase_messaging_service.dart';
 import '../../../auth/domain/services/i_webrtc_service.dart';
-import '../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
-import '../../../calls/domain/models/call/call.dart';
 import '../../../calls/domain/use_cases/accept_call_use_case.dart';
 import '../../../calls/domain/use_cases/decline_call_use_case.dart';
 import '../../../calls/domain/use_cases/hang_up_call_use_case.dart';
 import '../../../calls/domain/use_cases/listen_call_use_case.dart';
+import '../../../calls/domain/use_cases/listen_candidate_use_case.dart';
 import '../../../calls/domain/use_cases/start_call_use_case.dart';
 import '../../../calls/presentation/bloc/call_bloc/call_bloc.dart';
 import '../../../calls/presentation/overlay/incoming_call_overlay/incoming_call_overlay.dart';
@@ -24,7 +23,6 @@ import '../../../notifications/domain/usecases/save_notification_config_use_case
 import '../../../notifications/domain/usecases/save_notification_use_case.dart';
 import '../../../notifications/presentation/bloc/notification_bloc/notification_bloc.dart';
 import '../../../notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
-import '../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 
 class HomeRoot extends StatefulWidget {
   final Widget navigator;
@@ -69,6 +67,7 @@ class _HomeRootState extends State<HomeRoot> {
           listenCallUseCase: getIt<ListenCallUseCase>(),
           webRtcService: getIt<IWebRtcService>(),
           audioService: getIt<AudioService>(),
+          listenCandidateUseCase: getIt<ListenCandidateUseCase>(),
         )..add(
           CallEvent.listenCalls(),
         );

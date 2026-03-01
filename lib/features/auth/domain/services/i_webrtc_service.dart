@@ -15,8 +15,9 @@ abstract class IWebRtcService {
   Future<String> createAnswer();
 
   Future<void> setRemoteSdp(
-    String sdp,
-  );
+    String sdp, {
+    String type = 'offer',
+  });
 
   Stream<IceCandidate> onIceCandidate();
 

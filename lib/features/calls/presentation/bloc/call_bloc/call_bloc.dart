@@ -13,6 +13,7 @@ import '../../../domain/use_cases/accept_call_use_case.dart';
 import '../../../domain/use_cases/decline_call_use_case.dart';
 import '../../../domain/use_cases/hang_up_call_use_case.dart';
 import '../../../domain/use_cases/listen_call_use_case.dart';
+import '../../../domain/use_cases/listen_candidate_use_case.dart';
 import '../../../domain/use_cases/start_call_use_case.dart';
 
 part 'call_event.dart';
@@ -29,6 +30,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   final ListenCallUseCase _listenCallUseCase;
   final IWebRtcService _webRtcService;
   final AudioService _audioService;
+  final ListenCandidateUseCase _listenCandidateUseCase;
 
   CallBloc({
     required StartCallUseCase startCallUseCase,
@@ -38,6 +40,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     required DeclineCallUseCase declineCallUseCase,
     required IWebRtcService webRtcService,
     required AudioService audioService,
+    required ListenCandidateUseCase listenCandidateUseCase,
   }) : _startCallUseCase = startCallUseCase,
        _acceptCallUseCase = acceptCallUseCase,
        _webRtcService = webRtcService,
@@ -45,6 +48,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
        _declineCallUseCase = declineCallUseCase,
        _audioService = audioService,
        _hangUpCallUseCase = hangUpCallUseCase,
+       _listenCandidateUseCase = listenCandidateUseCase,
        super(const CallState()) {
     on<_Ring>(_ring);
     on<_Accept>(_accept);
@@ -52,12 +56,13 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     on<_RemoteStream>(_remoteStream);
     on<_ListenCalls>(_listenCalls);
     on<_Decline>(_decline);
+    on<_ListenIceCandidates>(_listenIceCandidates);
   }
 
   Future<void> _listenCalls(
-      _ListenCalls event,
-      Emitter<CallState> emit,
-      ) async => await emit.forEach(
+    _ListenCalls event,
+    Emitter<CallState> emit,
+  ) async => await emit.forEach(
     _listenCallUseCase.call(),
     onData: (Call? call) {
       final prevCall = state.aCall;
@@ -74,6 +79,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
             releaseMode: ReleaseMode.loop,
         );
       }
+
       /// stop playing  if call status changed
       if (!call.isCalling && (prevCall?.isCalling ?? false)) {
         _audioService.stop();
@@ -84,6 +90,21 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       );
     },
     onError: (e, __) => state,
+  );
+
+  void _listenIceCandidates(
+    _ListenIceCandidates event,
+    Emitter<CallState> emit,
+  ) async => emit.forEach(
+    _listenCandidateUseCase.execute(
+      event.callId,
+    ),
+    onData: (candidate) {
+      _webRtcService.addIceCandidate(
+        candidate,
+      );
+      return state;
+    },
   );
 
   void _decline(_Decline event, emit) async {
@@ -104,11 +125,21 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
   void _ring(_Ring event, emit) async {
     try {
-      await _startCallUseCase.execute(
+      final callId = await _startCallUseCase.execute(
         event.calleeId,
       );
+      emit(
+        state.copyWith(
+          localStream: _webRtcService.localStream,
+          aCall: state.aCall?.copyWith(
+            id: callId,
+          ),
+        ),
+      );
+
+      // Listen for remote stream
       _webRtcService.remoteStream.listen(
-            (stream) {
+        (stream) {
           add(
             CallEvent.remoteStream(
               stream: stream,
@@ -116,6 +147,20 @@ class CallBloc extends Bloc<CallEvent, CallState> {
           );
         },
       );
+
+      // Send ICE candidates to Firestore
+      _webRtcService.onIceCandidate().listen(
+        (candidate) {
+          // _callsRepository.sendCandidate(callId, candidate);
+        },
+      );
+      // Listen for ICE candidates from callee
+      add(
+        CallEvent.listenIceCandidates(
+          callId: callId,
+        ),
+      );
+
     } catch (e) {
       rethrow;
     }
@@ -159,8 +204,9 @@ class CallBloc extends Bloc<CallEvent, CallState> {
         ),
       );
 
+      // Listen for remote stream
       _webRtcService.remoteStream.listen(
-            (stream) {
+        (stream) {
           add(
             CallEvent.remoteStream(
               stream: stream,
@@ -168,6 +214,20 @@ class CallBloc extends Bloc<CallEvent, CallState> {
           );
         },
       );
+
+      // // Send ICE candidates to Firestore
+      // _webRtcService.onIceCandidate().listen(
+      //   (candidate) {
+      //     _callsRepository.sendCandidate(call.id, candidate);
+      //   },
+      // );
+      //
+      // // Listen for ICE candidates from caller
+      // _callsRepository.listenCandidate(call.id).listen(
+      //   (candidate) {
+      //     _webRtcService.addIceCandidate(candidate);
+      //   },
+      // );
     } catch (e) {
       rethrow;
     }

@@ -4,6 +4,10 @@ part of 'call_bloc.dart';
 class CallEvent with _$CallEvent {
   const factory CallEvent.listenCalls() = _ListenCalls;
 
+  const factory CallEvent.listenIceCandidates({
+    required String callId,
+  }) = _ListenIceCandidates;
+
   const factory CallEvent.ring({
     required String calleeId,
   }) = _Ring;

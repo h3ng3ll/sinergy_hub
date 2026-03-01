@@ -55,11 +55,12 @@ extension CallEventPatterns on CallEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ListenCalls value)?  listenCalls,TResult Function( _Ring value)?  ring,TResult Function( _Accept value)?  accept,TResult Function( _Decline value)?  decline,TResult Function( _HangUp value)?  hangUp,TResult Function( _RemoteStream value)?  remoteStream,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ListenCalls value)?  listenCalls,TResult Function( _ListenIceCandidates value)?  listenIceCandidates,TResult Function( _Ring value)?  ring,TResult Function( _Accept value)?  accept,TResult Function( _Decline value)?  decline,TResult Function( _HangUp value)?  hangUp,TResult Function( _RemoteStream value)?  remoteStream,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _ListenCalls() when listenCalls != null:
-return listenCalls(_that);case _Ring() when ring != null:
+return listenCalls(_that);case _ListenIceCandidates() when listenIceCandidates != null:
+return listenIceCandidates(_that);case _Ring() when ring != null:
 return ring(_that);case _Accept() when accept != null:
 return accept(_that);case _Decline() when decline != null:
 return decline(_that);case _HangUp() when hangUp != null:
@@ -82,11 +83,12 @@ return remoteStream(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ListenCalls value)  listenCalls,required TResult Function( _Ring value)  ring,required TResult Function( _Accept value)  accept,required TResult Function( _Decline value)  decline,required TResult Function( _HangUp value)  hangUp,required TResult Function( _RemoteStream value)  remoteStream,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ListenCalls value)  listenCalls,required TResult Function( _ListenIceCandidates value)  listenIceCandidates,required TResult Function( _Ring value)  ring,required TResult Function( _Accept value)  accept,required TResult Function( _Decline value)  decline,required TResult Function( _HangUp value)  hangUp,required TResult Function( _RemoteStream value)  remoteStream,}){
 final _that = this;
 switch (_that) {
 case _ListenCalls():
-return listenCalls(_that);case _Ring():
+return listenCalls(_that);case _ListenIceCandidates():
+return listenIceCandidates(_that);case _Ring():
 return ring(_that);case _Accept():
 return accept(_that);case _Decline():
 return decline(_that);case _HangUp():
@@ -108,11 +110,12 @@ return remoteStream(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ListenCalls value)?  listenCalls,TResult? Function( _Ring value)?  ring,TResult? Function( _Accept value)?  accept,TResult? Function( _Decline value)?  decline,TResult? Function( _HangUp value)?  hangUp,TResult? Function( _RemoteStream value)?  remoteStream,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ListenCalls value)?  listenCalls,TResult? Function( _ListenIceCandidates value)?  listenIceCandidates,TResult? Function( _Ring value)?  ring,TResult? Function( _Accept value)?  accept,TResult? Function( _Decline value)?  decline,TResult? Function( _HangUp value)?  hangUp,TResult? Function( _RemoteStream value)?  remoteStream,}){
 final _that = this;
 switch (_that) {
 case _ListenCalls() when listenCalls != null:
-return listenCalls(_that);case _Ring() when ring != null:
+return listenCalls(_that);case _ListenIceCandidates() when listenIceCandidates != null:
+return listenIceCandidates(_that);case _Ring() when ring != null:
 return ring(_that);case _Accept() when accept != null:
 return accept(_that);case _Decline() when decline != null:
 return decline(_that);case _HangUp() when hangUp != null:
@@ -134,10 +137,11 @@ return remoteStream(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  listenCalls,TResult Function( String calleeId)?  ring,TResult Function()?  accept,TResult Function()?  decline,TResult Function()?  hangUp,TResult Function( MediaStream stream)?  remoteStream,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  listenCalls,TResult Function( String callId)?  listenIceCandidates,TResult Function( String calleeId)?  ring,TResult Function()?  accept,TResult Function()?  decline,TResult Function()?  hangUp,TResult Function( MediaStream stream)?  remoteStream,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ListenCalls() when listenCalls != null:
-return listenCalls();case _Ring() when ring != null:
+return listenCalls();case _ListenIceCandidates() when listenIceCandidates != null:
+return listenIceCandidates(_that.callId);case _Ring() when ring != null:
 return ring(_that.calleeId);case _Accept() when accept != null:
 return accept();case _Decline() when decline != null:
 return decline();case _HangUp() when hangUp != null:
@@ -160,10 +164,11 @@ return remoteStream(_that.stream);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  listenCalls,required TResult Function( String calleeId)  ring,required TResult Function()  accept,required TResult Function()  decline,required TResult Function()  hangUp,required TResult Function( MediaStream stream)  remoteStream,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  listenCalls,required TResult Function( String callId)  listenIceCandidates,required TResult Function( String calleeId)  ring,required TResult Function()  accept,required TResult Function()  decline,required TResult Function()  hangUp,required TResult Function( MediaStream stream)  remoteStream,}) {final _that = this;
 switch (_that) {
 case _ListenCalls():
-return listenCalls();case _Ring():
+return listenCalls();case _ListenIceCandidates():
+return listenIceCandidates(_that.callId);case _Ring():
 return ring(_that.calleeId);case _Accept():
 return accept();case _Decline():
 return decline();case _HangUp():
@@ -185,10 +190,11 @@ return remoteStream(_that.stream);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  listenCalls,TResult? Function( String calleeId)?  ring,TResult? Function()?  accept,TResult? Function()?  decline,TResult? Function()?  hangUp,TResult? Function( MediaStream stream)?  remoteStream,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  listenCalls,TResult? Function( String callId)?  listenIceCandidates,TResult? Function( String calleeId)?  ring,TResult? Function()?  accept,TResult? Function()?  decline,TResult? Function()?  hangUp,TResult? Function( MediaStream stream)?  remoteStream,}) {final _that = this;
 switch (_that) {
 case _ListenCalls() when listenCalls != null:
-return listenCalls();case _Ring() when ring != null:
+return listenCalls();case _ListenIceCandidates() when listenIceCandidates != null:
+return listenIceCandidates(_that.callId);case _Ring() when ring != null:
 return ring(_that.calleeId);case _Accept() when accept != null:
 return accept();case _Decline() when decline != null:
 return decline();case _HangUp() when hangUp != null:
@@ -232,6 +238,72 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class _ListenIceCandidates implements CallEvent {
+  const _ListenIceCandidates({required this.callId});
+  
+
+ final  String callId;
+
+/// Create a copy of CallEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ListenIceCandidatesCopyWith<_ListenIceCandidates> get copyWith => __$ListenIceCandidatesCopyWithImpl<_ListenIceCandidates>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListenIceCandidates&&(identical(other.callId, callId) || other.callId == callId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,callId);
+
+@override
+String toString() {
+  return 'CallEvent.listenIceCandidates(callId: $callId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ListenIceCandidatesCopyWith<$Res> implements $CallEventCopyWith<$Res> {
+  factory _$ListenIceCandidatesCopyWith(_ListenIceCandidates value, $Res Function(_ListenIceCandidates) _then) = __$ListenIceCandidatesCopyWithImpl;
+@useResult
+$Res call({
+ String callId
+});
+
+
+
+
+}
+/// @nodoc
+class __$ListenIceCandidatesCopyWithImpl<$Res>
+    implements _$ListenIceCandidatesCopyWith<$Res> {
+  __$ListenIceCandidatesCopyWithImpl(this._self, this._then);
+
+  final _ListenIceCandidates _self;
+  final $Res Function(_ListenIceCandidates) _then;
+
+/// Create a copy of CallEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? callId = null,}) {
+  return _then(_ListenIceCandidates(
+callId: null == callId ? _self.callId : callId // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

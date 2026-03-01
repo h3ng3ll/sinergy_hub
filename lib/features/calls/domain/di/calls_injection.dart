@@ -9,6 +9,7 @@ import '../use_cases/accept_call_use_case.dart';
 import '../use_cases/decline_call_use_case.dart';
 import '../use_cases/hang_up_call_use_case.dart';
 import '../use_cases/listen_call_use_case.dart';
+import '../use_cases/listen_candidate_use_case.dart';
 import '../use_cases/start_call_use_case.dart';
 
 void initCallsFeature(GetIt getIt) {
@@ -46,6 +47,11 @@ void initCallsFeature(GetIt getIt) {
     () => DeclineCallUseCase(
       callsRepository: getIt<ICallsRepository>(),
       webrtc: getIt<IWebRtcService>(),
+    ),
+  );
+  getIt.registerLazySingleton<ListenCandidateUseCase>(
+    () => ListenCandidateUseCase(
+      callsRepository: getIt<ICallsRepository>(),
     ),
   );
 }

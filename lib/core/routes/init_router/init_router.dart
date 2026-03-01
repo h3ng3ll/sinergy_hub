@@ -177,7 +177,6 @@ class OnboardAboutYouPageRoute extends GoRouteData
 }
 
 class HomeBottomBarRoute extends StatefulShellRouteData {
-  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
 
   @override
   Widget builder(

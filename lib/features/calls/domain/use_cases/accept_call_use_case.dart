@@ -11,11 +11,12 @@ class AcceptCallUseCase {
     required this.webrtc,
   });
 
-  Future<void> execute(Call call) async {
+  Future<String> execute(Call call) async {
     await webrtc.init();
 
     await webrtc.setRemoteSdp(
       call.offerSdp!,
+      type: 'offer',
     );
 
     final answer = await webrtc.createAnswer();
@@ -29,5 +30,7 @@ class AcceptCallUseCase {
       call.id,
       ECallStatus.accepted,
     );
+
+    return answer;
   }
 }
