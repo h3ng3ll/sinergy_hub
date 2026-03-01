@@ -84,7 +84,7 @@ class CallsFirebaseRepository implements ICallsRepository {
   }
 
   @override
-  Stream<IceCandidate> listenCandidate(
+  Stream<IceCandidate?> listenCandidate(
     String callId,
   ) =>
       _candidates(
@@ -99,7 +99,7 @@ class CallsFirebaseRepository implements ICallsRepository {
                 e.doc.data()!,
               ),
             )
-            .first,
+            .firstOrNull,
       );
 
   @override

@@ -44,3 +44,32 @@
         lo.calendar,
         style: textTheme.b32.copyWith(color: AppColors.newCream.value),
     ),
+
+# Когда добавляешь функционал или редактируешь обязательно добавляй комму и dart format 
+## Плохой пример - нужно избегать
+      Stream<IceCandidate> listenCandidate(String callId) {
+        return _candidates(callId).snapshots().expand((snapshot) {
+            return snapshot.docChanges
+            .where((e) => e.type == DocumentChangeType.added)
+            .map((e) => IceCandidate.fromJson(e.doc.data()!));
+        });
+      }
+## Хороший пример - как нужно делать
+    Stream<IceCandidate> listenCandidate(
+        String callId,
+    ) {
+       return _candidates(
+        callId,
+            ).snapshots().expand(
+                (snapshot) {
+                    return snapshot.docChanges
+                    .where(
+                    (e) => e.type == DocumentChangeType.added,
+                ).map(
+                    (e) => IceCandidate.fromJson(
+                             e.doc.data()!,
+                        ),
+                    );
+                },
+        );
+    }        

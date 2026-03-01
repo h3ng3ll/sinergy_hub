@@ -8,6 +8,8 @@ class CallEvent with _$CallEvent {
     required String callId,
   }) = _ListenIceCandidates;
 
+  const factory CallEvent.listenRemoteMediaStream() = _ListenRemoteMediaStream;
+
   const factory CallEvent.ring({
     required String calleeId,
   }) = _Ring;

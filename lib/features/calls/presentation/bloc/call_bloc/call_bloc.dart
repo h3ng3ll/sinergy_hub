@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -10,6 +11,7 @@ import '../../../../../gen/assets.gen.dart';
 import '../../../../auth/domain/services/i_webrtc_service.dart';
 import '../../../domain/models/call/call.dart';
 import '../../../domain/use_cases/accept_call_use_case.dart';
+import '../../../domain/use_cases/add_ice_candidate_call_use_case.dart';
 import '../../../domain/use_cases/decline_call_use_case.dart';
 import '../../../domain/use_cases/hang_up_call_use_case.dart';
 import '../../../domain/use_cases/listen_call_use_case.dart';
@@ -31,6 +33,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   final IWebRtcService _webRtcService;
   final AudioService _audioService;
   final ListenCandidateUseCase _listenCandidateUseCase;
+  final AddIceCandidateCallUseCase _addIceCandidateCallUseCase;
 
   CallBloc({
     required StartCallUseCase startCallUseCase,
@@ -41,6 +44,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     required IWebRtcService webRtcService,
     required AudioService audioService,
     required ListenCandidateUseCase listenCandidateUseCase,
+    required AddIceCandidateCallUseCase addIceCandidateCallUseCase,
   }) : _startCallUseCase = startCallUseCase,
        _acceptCallUseCase = acceptCallUseCase,
        _webRtcService = webRtcService,
@@ -49,6 +53,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
        _audioService = audioService,
        _hangUpCallUseCase = hangUpCallUseCase,
        _listenCandidateUseCase = listenCandidateUseCase,
+       _addIceCandidateCallUseCase = addIceCandidateCallUseCase,
        super(const CallState()) {
     on<_Ring>(_ring);
     on<_Accept>(_accept);
@@ -57,6 +62,10 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     on<_ListenCalls>(_listenCalls);
     on<_Decline>(_decline);
     on<_ListenIceCandidates>(_listenIceCandidates);
+    on<_ListenRemoteMediaStream>(
+      _listenRemoteMediaStream,
+      transformer: restartable(),
+    );
   }
 
   Future<void> _listenCalls(
@@ -75,8 +84,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       }
       if (call.isCalling && !(prevCall?.isCalling ?? false)) {
         _audioService.playAsset(
-            Assets.sounds.incomeCall,
-            releaseMode: ReleaseMode.loop,
+          Assets.sounds.incomeCall,
+          releaseMode: ReleaseMode.loop,
         );
       }
 
@@ -89,25 +98,49 @@ class CallBloc extends Bloc<CallEvent, CallState> {
         status: call.status,
       );
     },
-    onError: (e, __) => state,
+    onError: (e, __) => state.copyWith(),
   );
 
   void _listenIceCandidates(
     _ListenIceCandidates event,
     Emitter<CallState> emit,
   ) async => emit.forEach(
-    _listenCandidateUseCase.execute(
-      event.callId,
-    ),
+    _listenCandidateUseCase.execute(),
     onData: (candidate) {
-      _webRtcService.addIceCandidate(
-        candidate,
-      );
+      if (candidate != null) {
+        /// add Ice candidate available for communication
+        _addIceCandidateCallUseCase.call(
+          callId: event.callId,
+          iceCandidate: candidate,
+        );
+      }
       return state;
     },
   );
 
-  void _decline(_Decline event, emit) async {
+  void _listenRemoteMediaStream(
+    _ListenRemoteMediaStream event,
+    Emitter<CallState> emit,
+  ) async => emit.forEach<MediaStream>(
+    _webRtcService.remoteStream,
+    onData: (stream) {
+      return state.copyWith(
+        remoteStream: stream,
+        isConnected: true,
+      );
+    },
+    onError: (e, _) {
+      return state.copyWith(
+        status: ECallStatus.ended,
+        errorMessage: e.toString(),
+      );
+    },
+  );
+
+  void _decline(
+    _Decline event,
+    Emitter<CallState> emit,
+  ) async {
     try {
       await _declineCallUseCase.execute(
         state.aCall!,
@@ -123,11 +156,15 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     }
   }
 
-  void _ring(_Ring event, emit) async {
+  void _ring(
+    _Ring event,
+    Emitter<CallState> emit,
+  ) async {
     try {
       final callId = await _startCallUseCase.execute(
         event.calleeId,
       );
+
       emit(
         state.copyWith(
           localStream: _webRtcService.localStream,
@@ -137,22 +174,9 @@ class CallBloc extends Bloc<CallEvent, CallState> {
         ),
       );
 
-      // Listen for remote stream
-      _webRtcService.remoteStream.listen(
-        (stream) {
-          add(
-            CallEvent.remoteStream(
-              stream: stream,
-            ),
-          );
-        },
-      );
-
-      // Send ICE candidates to Firestore
-      _webRtcService.onIceCandidate().listen(
-        (candidate) {
-          // _callsRepository.sendCandidate(callId, candidate);
-        },
+      // Listen for remote stream using emit.forEach (proper pattern)
+      add(
+        CallEvent.listenRemoteMediaStream(),
       );
       // Listen for ICE candidates from callee
       add(
@@ -160,8 +184,29 @@ class CallBloc extends Bloc<CallEvent, CallState> {
           callId: callId,
         ),
       );
-
+      // emit.forEach(
+      //   _webRtcService.onIceCandidate(),
+      //   onData: (e) {
+      //     _addIceCandidateCallUseCase.call(
+      //       callId: callId,
+      //       iceCandidate: e,
+      //     );
+      //     return state;
+      //   },
+      //   onError: (e, _) {
+      //     return state.copyWith(
+      //       status: ECallStatus.ended,
+      //       errorMessage: e.toString(),
+      //     );
+      //   },
+      // );
     } catch (e) {
+      emit(
+        state.copyWith(
+          status: ECallStatus.ended,
+          errorMessage: e.toString(),
+        ),
+      );
       rethrow;
     }
   }
@@ -193,42 +238,58 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
   Future<void> _accept(_Accept event, Emitter<CallState> emit) async {
     try {
-      await _acceptCallUseCase.execute(
-        state.aCall!,
-      );
-
       emit(
         state.copyWith(
-          localStream: _webRtcService.localStream,
-          // status: ECallStatus.accepted,
+          status: ECallStatus.loading,
         ),
       );
 
-      // Listen for remote stream
-      _webRtcService.remoteStream.listen(
-        (stream) {
-          add(
-            CallEvent.remoteStream(
-              stream: stream,
-            ),
+      // Listen for remote stream BEFORE accepting (to not miss the stream)
+      emit.forEach<MediaStream>(
+        _webRtcService.remoteStream,
+        onData: (stream) {
+          return state.copyWith(
+            remoteStream: stream,
+            isConnected: true,
+            status: ECallStatus.accepted,
+          );
+        },
+        onError: (e, _) {
+          return state.copyWith(
+            status: ECallStatus.ended,
+            errorMessage: e.toString(),
           );
         },
       );
 
-      // // Send ICE candidates to Firestore
-      // _webRtcService.onIceCandidate().listen(
-      //   (candidate) {
-      //     _callsRepository.sendCandidate(call.id, candidate);
-      //   },
-      // );
-      //
-      // // Listen for ICE candidates from caller
-      // _callsRepository.listenCandidate(call.id).listen(
-      //   (candidate) {
-      //     _webRtcService.addIceCandidate(candidate);
-      //   },
-      // );
+      await _acceptCallUseCase.execute(
+        state.aCall!,
+      );
+      add(
+        CallEvent.listenIceCandidates(
+          callId: state.aCall!.id,
+        ),
+      );
+      emit(
+        state.copyWith(
+          localStream: _webRtcService.localStream,
+          status: ECallStatus.accepted,
+        ),
+      );
+
+      // Listen for ICE candidates from caller
+      add(
+        CallEvent.listenIceCandidates(
+          callId: state.aCall!.id,
+        ),
+      );
     } catch (e) {
+      emit(
+        state.copyWith(
+          status: ECallStatus.ended,
+          errorMessage: e.toString(),
+        ),
+      );
       rethrow;
     }
   }

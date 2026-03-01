@@ -5,16 +5,15 @@ import '../models/call/call.dart';
 
 class ListenCandidateUseCase {
   final ICallsRepository _callsRepository;
+  final IWebRtcService _webrtc;
 
   ListenCandidateUseCase({
     required ICallsRepository callsRepository,
-  }) : _callsRepository = callsRepository;
+    required IWebRtcService webrtc,
+  }) : _callsRepository = callsRepository,
+       _webrtc = webrtc;
 
-  Stream<IceCandidate> execute(
-    String callId,
-  ) {
-    return _callsRepository.listenCandidate(
-      callId,
-    );
+  Stream<IceCandidate?> execute() {
+    return _webrtc.onIceCandidate();
   }
 }

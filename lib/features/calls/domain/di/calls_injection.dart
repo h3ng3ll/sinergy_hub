@@ -6,6 +6,7 @@ import '../../../auth/domain/services/i_webrtc_service.dart';
 import '../../data/repositories/calls_firebase_repository.dart';
 import '../repositories/i_calls_repository.dart';
 import '../use_cases/accept_call_use_case.dart';
+import '../use_cases/add_ice_candidate_call_use_case.dart';
 import '../use_cases/decline_call_use_case.dart';
 import '../use_cases/hang_up_call_use_case.dart';
 import '../use_cases/listen_call_use_case.dart';
@@ -52,6 +53,13 @@ void initCallsFeature(GetIt getIt) {
   getIt.registerLazySingleton<ListenCandidateUseCase>(
     () => ListenCandidateUseCase(
       callsRepository: getIt<ICallsRepository>(),
+      webrtc: getIt<IWebRtcService>(),
+    ),
+  );
+  getIt.registerLazySingleton<AddIceCandidateCallUseCase>(
+    () => AddIceCandidateCallUseCase(
+      callsRepository: getIt<ICallsRepository>(),
+      webrtc: getIt<IWebRtcService>(),
     ),
   );
 }

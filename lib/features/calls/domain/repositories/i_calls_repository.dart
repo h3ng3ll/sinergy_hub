@@ -26,7 +26,7 @@ abstract class ICallsRepository {
     IceCandidate candidate,
   );
 
-  Stream<IceCandidate> listenCandidate(
+  Stream<IceCandidate?> listenCandidate(
     String callId,
   );
 

@@ -7,6 +7,7 @@ import '../../../../core/services/audio_service.dart';
 import '../../../../core/services/firebase/firebase_messaging_service.dart';
 import '../../../auth/domain/services/i_webrtc_service.dart';
 import '../../../calls/domain/use_cases/accept_call_use_case.dart';
+import '../../../calls/domain/use_cases/add_ice_candidate_call_use_case.dart';
 import '../../../calls/domain/use_cases/decline_call_use_case.dart';
 import '../../../calls/domain/use_cases/hang_up_call_use_case.dart';
 import '../../../calls/domain/use_cases/listen_call_use_case.dart';
@@ -68,6 +69,7 @@ class _HomeRootState extends State<HomeRoot> {
           webRtcService: getIt<IWebRtcService>(),
           audioService: getIt<AudioService>(),
           listenCandidateUseCase: getIt<ListenCandidateUseCase>(),
+          addIceCandidateCallUseCase: getIt<AddIceCandidateCallUseCase>(),
         )..add(
           CallEvent.listenCalls(),
         );

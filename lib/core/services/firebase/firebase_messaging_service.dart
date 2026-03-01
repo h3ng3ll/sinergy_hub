@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../di/injection.dart';
 import '../local_notification_service.dart';
@@ -17,14 +19,17 @@ class FirebaseMessagingService {
     // Запрос разрешений на iOS
     await _firebaseMessaging.requestPermission();
 
-    // Получаем токен устройства
-    String? token = await _firebaseMessaging.getToken();
-    print(
-      'FCM device token: $token',
-    );
-    if(token != null) {
-      fcmToken = token;
+    if(Platform.isAndroid) {
+      // Получаем токен устройства
+      String? token = await _firebaseMessaging.getToken();
+      print(
+        'FCM device token: $token',
+      );
+      if(token != null) {
+        fcmToken = token;
+      }
     }
+
 
     // Сохрани его в backend (для отправки пушей)
 
