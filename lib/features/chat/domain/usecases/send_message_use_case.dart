@@ -29,6 +29,7 @@ class SendMessageUseCase {
       createdAt: DateTime.now(),
       sentUid: uid,
       message: message,
+      // hasRead: false,
     );
     await _chatMessageRepository.create(
       message: chatMessage,

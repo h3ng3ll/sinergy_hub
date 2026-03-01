@@ -271,10 +271,12 @@ class EditProfilePageRoute extends GoRouteData with _$EditProfilePageRoute {
 }
 
 class CallPageRoute extends GoRouteData with _$CallPageRoute {
-  final String calleeId;
+  final String? calleeId;
+  final String? callId;
 
   CallPageRoute({
-    required this.calleeId,
+    this.calleeId,
+    this.callId,
   });
 
   @override
@@ -282,6 +284,7 @@ class CallPageRoute extends GoRouteData with _$CallPageRoute {
     return GoRouterPageBuilder.pageBuilder(
       CallPage(
         calleeId: calleeId,
+        callId: callId,
       ),
     );
   }

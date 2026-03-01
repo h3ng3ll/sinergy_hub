@@ -27,7 +27,7 @@ class AcceptCallUseCase {
 
     await callsRepository.updateStatus(
       call.id,
-      ECallStatus.declined,
+      ECallStatus.accepted,
     );
   }
 }

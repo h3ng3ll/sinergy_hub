@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/injection.dart';
 import '../../../../core/routes/init_router/init_router.dart';
+import '../../../../core/services/audio_service.dart';
 import '../../../../core/services/firebase/firebase_messaging_service.dart';
 import '../../../auth/domain/services/i_webrtc_service.dart';
+import '../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import '../../../calls/domain/models/call/call.dart';
 import '../../../calls/domain/use_cases/accept_call_use_case.dart';
 import '../../../calls/domain/use_cases/decline_call_use_case.dart';
 import '../../../calls/domain/use_cases/hang_up_call_use_case.dart';
@@ -21,6 +24,7 @@ import '../../../notifications/domain/usecases/save_notification_config_use_case
 import '../../../notifications/domain/usecases/save_notification_use_case.dart';
 import '../../../notifications/presentation/bloc/notification_bloc/notification_bloc.dart';
 import '../../../notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
+import '../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 
 class HomeRoot extends StatefulWidget {
   final Widget navigator;
@@ -38,17 +42,19 @@ class _HomeRootState extends State<HomeRoot> {
   late final ChatBloc _chatBloc;
   late final UserMatchesOutcomeCubit _userMatchingOutcomeCubit;
   late final CallBloc _callBloc;
+  OverlayEntry? _entry;
 
   @override
   void initState() {
     super.initState();
 
-    _chatBloc = ChatBloc(
-      getChatsUseCase: getIt(),
-      initChatUseCase: getIt(),
-    )..add(
-      const ChatEvent.init(),
-    );
+    _chatBloc =
+        ChatBloc(
+          getChatsUseCase: getIt(),
+          initChatUseCase: getIt(),
+        )..add(
+          const ChatEvent.init(),
+        );
 
     _userMatchingOutcomeCubit = UserMatchesOutcomeCubit(
       createUserMatchesUseCase: getIt(),
@@ -62,13 +68,14 @@ class _HomeRootState extends State<HomeRoot> {
           hangUpCallUseCase: getIt<HangUpCallUseCase>(),
           listenCallUseCase: getIt<ListenCallUseCase>(),
           webRtcService: getIt<IWebRtcService>(),
+          audioService: getIt<AudioService>(),
         )..add(
           CallEvent.listenCalls(),
         );
   }
 
   void onDecline() => _callBloc.add(
-    CallEvent.accept(),
+    CallEvent.decline(),
   );
 
   void onAccept() {
@@ -76,7 +83,7 @@ class _HomeRootState extends State<HomeRoot> {
       CallEvent.accept(),
     );
     CallPageRoute(
-      calleeId: _callBloc.state.aCall!.calleeId,
+      callId: _callBloc.state.aCall!.id,
     ).push(
       context,
     );
@@ -124,18 +131,41 @@ class _HomeRootState extends State<HomeRoot> {
       ],
       child: Builder(
         builder: (context) {
-          final callsBloc = context.watch<CallBloc>().state;
-          return Stack(
-            children: [
-              widget.navigator,
+          return BlocListener<CallBloc, CallState>(
+            listenWhen: (p, n) => p.isCalling && !n.isCalling,
+            listener: (context, state) {
+              /// After calling accepted or declined anyway
+              /// close overlay entry
+              _entry?.remove();
+              _entry = null;
+            },
+            child: BlocListener<CallBloc, CallState>(
+              listener: (context, state) {
+                final hasIncomingCall = state.aCall != null && state.isCalling;
+                // Show overlay when there's an incoming call (user is callee) and status is calling
 
-              if (callsBloc.isCalling)
-                IncomingCallOverlay(
-                  onAccept: onAccept,
-                  onDecline: onDecline,
-                  onOpen: onOpen,
-                ),
-            ],
+                if (hasIncomingCall && _entry == null) {
+                  _entry = OverlayEntry(
+                    builder: (_) => BlocProvider.value(
+                      value: _callBloc,
+                      child: IncomingCallOverlay(
+                        onAccept: onAccept,
+                        onDecline: onDecline,
+                        onOpen: onOpen,
+                      ),
+                    ),
+                  );
+
+                  Overlay.of(
+                    context,
+                    rootOverlay: true,
+                  ).insert(
+                    _entry!,
+                  );
+                }
+              },
+              child: widget.navigator,
+            ),
           );
         },
       ),
@@ -144,6 +174,9 @@ class _HomeRootState extends State<HomeRoot> {
 
   @override
   void dispose() {
+    _entry?.remove();
+    _entry = null;
+
     _callBloc.close();
     _chatBloc.close();
     _userMatchingOutcomeCubit.close();

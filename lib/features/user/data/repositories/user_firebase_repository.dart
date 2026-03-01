@@ -128,7 +128,7 @@ class UserFirebaseRepository extends IUserRepository {
         .snapshots()
         .map(
           (snapshot) {
-            if (!snapshot.exists) return null;
+            if (!snapshot.exists || snapshot.data() == null) return null;
             return UserData.fromJson(
               snapshot.data()!,
             );

@@ -9,6 +9,8 @@ enum AuthStatus {
 
 extension AuthStateX on AuthState {
   String? get uid => user?.uid;
+
+  bool get isAuthorized => status == AuthStatus.authorized;
 }
 
 @freezed

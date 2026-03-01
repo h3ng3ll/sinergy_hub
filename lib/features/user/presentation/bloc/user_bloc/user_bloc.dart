@@ -21,33 +21,36 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc({
     required IUserRepository userRepository,
   }) : _userRepository = userRepository,
-       super(const UserState()) {
+        super(const UserState()) {
     on<_Init>(
       _init,
-     transformer:  restartable(),
+      transformer: restartable(),
     );
     on<_Reset>(_reset);
   }
 
   void _init(
-    _Init event,
-    Emitter<UserState> emit,
-  ) async {
-    await emit.forEach<UserData?>(
-      _userRepository.userDataStream(event.uid),
-      onData: (user) {
-        return state.copyWith(
-          userData: user,
-          status: UserStatus.loaded,
-        );
-      },
-    );
-  }
+      _Init event,
+      Emitter<UserState> emit,
+      ) async => await emit.forEach<UserData?>(
+    _userRepository.userDataStream(
+      event.uid,
+    ),
+    onData: (user) {
+      return state.copyWith(
+        userData: user,
+        status: user != null ? UserStatus.loaded : UserStatus.noData,
+      );
+    },
+    onError: (e, _) => state.copyWith(
+      status: UserStatus.failed,
+    ),
+  );
 
   void _reset(
-    _Reset event,
-    Emitter<UserState> emit,
-  ) async {
+      _Reset event,
+      Emitter<UserState> emit,
+      ) async {
     await _userSub?.cancel();
     _userSub = null;
     emit(

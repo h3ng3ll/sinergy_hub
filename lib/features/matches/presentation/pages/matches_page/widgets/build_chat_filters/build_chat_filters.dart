@@ -42,10 +42,10 @@ class BuildChatFilters extends StatelessWidget {
       height: 70.0,
       child: ListView(
         // spacing: 10.0,
-        scrollDirection: .horizontal,
+        scrollDirection: Axis.horizontal,
         children: [
           Padding(
-            padding: .only(
+            padding: EdgeInsets.only(
               left: 20.0,
             ),
             child: BuildChatFilterItem(

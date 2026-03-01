@@ -37,7 +37,7 @@ class ExperienceStage extends StatelessWidget {
           Gap(20.0),
           Expanded(
             child: GridView(
-              padding: .symmetric(
+              padding: EdgeInsets.symmetric(
                 vertical: 15.0,
               ),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

@@ -13,17 +13,17 @@ class NoFoundNotifications extends StatelessWidget {
     final textTheme = AppTextTheme.of(context);
     return Center(
       child: Column(
-        mainAxisAlignment: .center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ClipRRect(
-            borderRadius: .circular(
+            borderRadius: BorderRadius.circular(
               200.0,
             ),
             child: Container(
               width: 120.0,
               height: 120.0,
               decoration: BoxDecoration(
-                shape: .circle,
+                shape: BoxShape.circle,
               ),
               child: BuildAnimatedBackground(
                 child: Icon(

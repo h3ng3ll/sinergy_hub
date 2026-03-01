@@ -19,12 +19,12 @@ class BuildNotificationItem extends StatelessWidget {
     final textTheme = AppTextTheme.of(context);
 
     return Container(
-      padding: .all(
+      padding: EdgeInsets.all(
         16.0,
       ),
       decoration: BoxDecoration(
         color: AppColors.whiteLilac.value,
-        borderRadius: .circular(
+        borderRadius: BorderRadius.circular(
           25.0,
         ),
 
@@ -32,7 +32,7 @@ class BuildNotificationItem extends StatelessWidget {
       child: Row(
         children: [
           Column(
-            crossAxisAlignment: .start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 notification.title,

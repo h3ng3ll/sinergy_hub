@@ -11,6 +11,7 @@ import 'core/resources/app_theme.dart';
 import 'core/routes/init_router/init_router.dart';
 import 'core/services/firebase/firebase_messaging_service.dart';
 import 'core/services/local_notification_service.dart';
+import 'core/services/ui_message_service.dart';
 import 'features/auth/domain/repostories/i_auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'features/user/domain/repositories/i_user_repository.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool initialized = false;
   late final UserBloc userBloc;
+  late final AuthBloc authBloc;
 
   // late final
   @override
@@ -70,6 +72,16 @@ class _MyAppState extends State<MyApp> {
     userBloc = UserBloc(
       userRepository: getIt<IUserRepository>(),
     );
+    authBloc =
+    AuthBloc(
+      authRepository: getIt<IAuthRepository>(),
+    )
+      ..add(
+        AuthEvent.init(),
+      )
+      ..add(
+        AuthEvent.listen(),
+      );
     initialized = true;
     setState(() {});
   }
@@ -84,22 +96,13 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<UserBloc>.value(
           value: userBloc,
         ),
-        BlocProvider<AuthBloc>(
-          create: (_) =>
-              AuthBloc(
-                  authRepository: getIt<IAuthRepository>(),
-                )
-                ..add(
-                  AuthEvent.init(),
-                )
-                ..add(
-                  AuthEvent.listen(),
-                ),
+        BlocProvider<AuthBloc>.value(
+          value: authBloc,
         ),
       ],
       child: BlocListener<AuthBloc, AuthState>(
         listenWhen: (p, n) =>
-            (p.status == AuthStatus.authorized) ||
+        (p.status == AuthStatus.authorized) ||
             (p.status == AuthStatus.logout),
 
         listener: (context, state) {
@@ -116,11 +119,23 @@ class _MyAppState extends State<MyApp> {
             );
           }
         },
-        child: MaterialApp.router(
-          theme: AppThemeData.light,
-          supportedLocales: AppLocale.supportedLocales,
-          locale: AppLocale.startLocale,
-          routerConfig: initRouter,
+        child: BlocListener<UserBloc, UserState>(
+          listener: (context, state) {
+            if (state.isNoData && authBloc.state.isAuthorized) {
+              UiMessageService.showError(
+                'No data . Logout',
+              );
+              context.read<AuthBloc>().add(
+                AuthEvent.signOut(),
+              );
+            }
+          },
+          child: MaterialApp.router(
+            theme: AppThemeData.light,
+            supportedLocales: AppLocale.supportedLocales,
+            locale: AppLocale.startLocale,
+            routerConfig: initRouter,
+          ),
         ),
       ),
     );

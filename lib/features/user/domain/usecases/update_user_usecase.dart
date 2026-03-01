@@ -12,12 +12,18 @@ class UpdateUserUseCase {
     required IUserRepository userRepository,
     required IAuthRepository authRepository,
   }) : _userRepository = userRepository,
-       _authRepository = authRepository;
+        _authRepository = authRepository;
 
   Future<void> call(
-    UserData userData,
-    Uint8List? img,
-  ) async {
+      UserData userData,
+      Uint8List? img,
+      ) async {
+    final uid = await _authRepository.requireUserId();
+
+    userData = userData.copyWith(
+      uid: uid,
+    );
+
     if (img != null) {
       final avatarUrl = await _userRepository.updateAvatar(
         uid: userData.uid,
@@ -29,10 +35,7 @@ class UpdateUserUseCase {
           name: userData.avatarUrl!,
         );
       }
-      final uid = await _authRepository.requireUserId();
-
       userData = userData.copyWith(
-        uid: uid,
         avatarUrl: avatarUrl,
       );
     }

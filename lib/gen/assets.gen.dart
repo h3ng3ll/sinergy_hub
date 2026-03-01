@@ -304,6 +304,16 @@ class $AssetsLottieGen {
   List<String> get values => [loadingDots];
 }
 
+class $AssetsSoundsGen {
+  const $AssetsSoundsGen();
+
+  /// File path: assets/sounds/income_call.mp3
+  String get incomeCall => 'assets/sounds/income_call.mp3';
+
+  /// List of all assets
+  List<String> get values => [incomeCall];
+}
+
 class Assets {
   const Assets._();
 
@@ -311,6 +321,7 @@ class Assets {
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
+  static const $AssetsSoundsGen sounds = $AssetsSoundsGen();
 
   /// List of all assets
   static List<String> get values => [aEnv];

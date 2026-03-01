@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../../core/services/audio_service.dart';
+import '../../../../../gen/assets.gen.dart';
 import '../../../../auth/domain/services/i_webrtc_service.dart';
 import '../../../domain/models/call/call.dart';
 import '../../../domain/use_cases/accept_call_use_case.dart';
@@ -25,6 +28,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   final HangUpCallUseCase _hangUpCallUseCase;
   final ListenCallUseCase _listenCallUseCase;
   final IWebRtcService _webRtcService;
+  final AudioService _audioService;
 
   CallBloc({
     required StartCallUseCase startCallUseCase,
@@ -33,11 +37,13 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     required ListenCallUseCase listenCallUseCase,
     required DeclineCallUseCase declineCallUseCase,
     required IWebRtcService webRtcService,
+    required AudioService audioService,
   }) : _startCallUseCase = startCallUseCase,
        _acceptCallUseCase = acceptCallUseCase,
        _webRtcService = webRtcService,
        _listenCallUseCase = listenCallUseCase,
        _declineCallUseCase = declineCallUseCase,
+       _audioService = audioService,
        _hangUpCallUseCase = hangUpCallUseCase,
        super(const CallState()) {
     on<_Ring>(_ring);
@@ -49,23 +55,47 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Future<void> _listenCalls(
-    _ListenCalls event,
-    Emitter<CallState> emit,
-  ) async => await emit.forEach(
-    _listenCallUseCase.execute(),
-    onData: (call) => state.copyWith(
-      aCall: call,
-    ),
+      _ListenCalls event,
+      Emitter<CallState> emit,
+      ) async => await emit.forEach(
+    _listenCallUseCase.call(),
+    onData: (Call? call) {
+      final prevCall = state.aCall;
+
+      if (call == null) {
+        return state.copyWith(
+          aCall: null,
+          status: ECallStatus.idle,
+        );
+      }
+      if (call.isCalling && !(prevCall?.isCalling ?? false)) {
+        _audioService.playAsset(
+            Assets.sounds.incomeCall,
+            releaseMode: ReleaseMode.loop,
+        );
+      }
+      /// stop playing  if call status changed
+      if (!call.isCalling && (prevCall?.isCalling ?? false)) {
+        _audioService.stop();
+      }
+      return state.copyWith(
+        aCall: call,
+        status: call.status,
+      );
+    },
     onError: (e, __) => state,
   );
 
-  void _decline(
-    _Decline event,
-    Emitter<CallState> emit,
-  ) async {
+  void _decline(_Decline event, emit) async {
     try {
-      _declineCallUseCase.execute(
+      await _declineCallUseCase.execute(
         state.aCall!,
+      );
+      emit(
+        state.copyWith(
+          status: ECallStatus.declined,
+          aCall: null,
+        ),
       );
     } catch (e) {
       rethrow;
@@ -78,7 +108,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
         event.calleeId,
       );
       _webRtcService.remoteStream.listen(
-        (stream) {
+            (stream) {
           add(
             CallEvent.remoteStream(
               stream: stream,
@@ -95,6 +125,12 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     try {
       await _hangUpCallUseCase.execute(
         state.aCall?.id ?? '',
+      );
+      emit(
+        state.copyWith(
+          status: ECallStatus.ended,
+          aCall: null,
+        ),
       );
     } catch (e) {
       rethrow;
@@ -119,11 +155,12 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       emit(
         state.copyWith(
           localStream: _webRtcService.localStream,
+          // status: ECallStatus.accepted,
         ),
       );
 
       _webRtcService.remoteStream.listen(
-        (stream) {
+            (stream) {
           add(
             CallEvent.remoteStream(
               stream: stream,

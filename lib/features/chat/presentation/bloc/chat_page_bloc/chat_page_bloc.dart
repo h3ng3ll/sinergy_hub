@@ -5,6 +5,7 @@ import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../user/domain/usecases/get_users_use_case.dart';
 import '../../../domain/models/chat_message/chat_message.dart';
 import '../../../domain/usecases/get_chat_by_id_use_case.dart';
+import '../../../domain/usecases/get_last_messages_use_case.dart';
 import '../../../domain/usecases/listen_chat_messages_use_case.dart';
 import '../../../domain/usecases/send_message_use_case.dart';
 
@@ -18,24 +19,27 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   final SendMessageUseCase _sendMessageUseCase;
   final ListenChatMessagesUseCase _listenChatMessagesUseCase;
   final GetChatByIdUseCase _getChatByIdUseCase;
+  final GetLastMessagesUseCase _getLastMessagesUseCase;
   final GetUsersUseCase _getUsersUseCase;
 
   ChatPageBloc({
     required String chatId,
     required SendMessageUseCase sendMessageUseCase,
+    required GetLastMessagesUseCase getLastMessageUseCase,
     required ListenChatMessagesUseCase listenChatMessagesUseCase,
     required GetChatByIdUseCase getChatByIdUseCase,
     required GetUsersUseCase getUsersUseCase,
   }) : _sendMessageUseCase = sendMessageUseCase,
-       _listenChatMessagesUseCase = listenChatMessagesUseCase,
-       _getUsersUseCase = getUsersUseCase,
-       _getChatByIdUseCase = getChatByIdUseCase,
+        _listenChatMessagesUseCase = listenChatMessagesUseCase,
+        _getUsersUseCase = getUsersUseCase,
+        _getLastMessagesUseCase = getLastMessageUseCase,
+        _getChatByIdUseCase = getChatByIdUseCase,
 
-       super(
-         ChatPageState(
-           chatId: chatId,
-         ),
-       ) {
+        super(
+        ChatPageState(
+          chatId: chatId,
+        ),
+      ) {
     on<_Subscribe>(_subscribe);
     on<_Init>(_init);
     on<_UpdateMessages>(_updateMessages);
@@ -51,22 +55,25 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   }
 
   void _subscribe(
-    ChatPageEvent event,
-    Emitter<ChatPageState> emit,
-  ) async => await emit.forEach(
-    _listenChatMessagesUseCase.call(
+      ChatPageEvent event,
+      Emitter<ChatPageState> emit,
+      ) async => await emit.forEach(
+    _getLastMessagesUseCase.call(
       chatId: state.chatId,
     ),
-    onData: (messages) => state.copyWith(
-      messages: messages,
+    onData: (message) => state.copyWith(
+      messages: [
+        ...state.messages,
+        ...message,
+      ],
       status: ChatPageStatus.initial,
     ),
   );
 
   void _init(
-    _Init event,
-    Emitter<ChatPageState> emit,
-  ) async {
+      _Init event,
+      Emitter<ChatPageState> emit,
+      ) async {
     try {
       emit(
         state.copyWith(

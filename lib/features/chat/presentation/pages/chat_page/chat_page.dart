@@ -9,6 +9,7 @@ import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../user/domain/usecases/get_users_use_case.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/usecases/get_chat_by_id_use_case.dart';
+import '../../../domain/usecases/get_last_messages_use_case.dart';
 import '../../../domain/usecases/listen_chat_messages_use_case.dart';
 import '../../../domain/usecases/send_message_use_case.dart';
 import '../../bloc/chat_bloc/chat_bloc.dart';
@@ -36,15 +37,16 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     _chatPageBloc =
-        ChatPageBloc(
-          chatId: widget.chatId,
-          sendMessageUseCase: getIt<SendMessageUseCase>(),
-          getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
-          listenChatMessagesUseCase: getIt<ListenChatMessagesUseCase>(),
-          getUsersUseCase: getIt<GetUsersUseCase>(),
-        )..add(
-          ChatPageEvent.init(),
-        );
+    ChatPageBloc(
+      chatId: widget.chatId,
+      sendMessageUseCase: getIt<SendMessageUseCase>(),
+      getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
+      listenChatMessagesUseCase: getIt<ListenChatMessagesUseCase>(),
+      getUsersUseCase: getIt<GetUsersUseCase>(),
+      getLastMessageUseCase: getIt<GetLastMessagesUseCase>(),
+    )..add(
+      ChatPageEvent.init(),
+    );
 
     super.initState();
   }
@@ -98,8 +100,9 @@ class _ChatPageState extends State<ChatPage> {
                   return LoadingDataWidget();
                 }
                 final Chat chat = chatBloc.state.chats.firstWhere(
-                  (e) => e.chatId == widget.chatId,
+                      (e) => e.chatId == widget.chatId,
                 );
+
                 /// Todo: refactor for grouped chats
                 final UserData chatterUser = chatPageState.users.first;
 

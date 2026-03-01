@@ -11,6 +11,7 @@ import '../../features/matches/di/matches_injection.dart';
 import '../../features/notifications/di/notifications_injection.dart';
 import '../../features/onboard_survey/di/onboard_survery_injection.dart';
 import '../../features/user/di/user_injection.dart';
+import '../services/audio_service.dart';
 import '../services/firebase/firebase_auth_service.dart';
 import '../services/firebase/firebase_firestore_service.dart';
 import '../services/firebase/firebase_messaging_service.dart';
@@ -31,14 +32,16 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => PermissionRequester());
   getIt.registerLazySingleton(() => FirebaseStorageService());
   getIt.registerLazySingleton(() => LocalNotificationService());
+  getIt.registerLazySingleton(() => AudioService());
+
   getIt.registerLazySingleton(
-    () => FirebaseMessagingService(
+        () => FirebaseMessagingService(
       localNotificationService: getIt<LocalNotificationService>(),
       firebaseMessaging: getIt<FirebaseMessaging>(),
     ),
   );
   getIt.registerLazySingleton<IWebRtcService>(
-    () => WebrtcService(),
+        () => WebrtcService(),
   );
 
   // Auth feature
