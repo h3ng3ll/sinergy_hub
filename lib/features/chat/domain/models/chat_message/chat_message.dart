@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-
 part 'chat_message.g.dart';
 
 part 'chat_message.freezed.dart';
@@ -11,6 +10,7 @@ abstract class ChatMessage with _$ChatMessage {
     @Default('') String id,
     @Default('') String message,
     @Default('') String sentUid,
+    // @Default(false) bool hasRead,
     required DateTime createdAt,
   }) = _ChatMessage;
 

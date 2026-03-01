@@ -18,6 +18,12 @@ class UpdateUserUseCase {
     UserData userData,
     Uint8List? img,
   ) async {
+    final uid = await _authRepository.requireUserId();
+
+    userData = userData.copyWith(
+      uid: uid,
+    );
+
     if (img != null) {
       final avatarUrl = await _userRepository.updateAvatar(
         uid: userData.uid,
@@ -29,10 +35,7 @@ class UpdateUserUseCase {
           name: userData.avatarUrl!,
         );
       }
-      final uid = await _authRepository.requireUserId();
-
       userData = userData.copyWith(
-        uid: uid,
         avatarUrl: avatarUrl,
       );
     }

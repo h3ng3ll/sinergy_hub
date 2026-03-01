@@ -322,15 +322,20 @@ mixin _$NotificationPageRoute on GoRouteData {
 }
 
 mixin _$CallPageRoute on GoRouteData {
-  static CallPageRoute _fromState(GoRouterState state) =>
-      CallPageRoute(calleeId: state.uri.queryParameters['callee-id']!);
+  static CallPageRoute _fromState(GoRouterState state) => CallPageRoute(
+    calleeId: state.uri.queryParameters['callee-id'],
+    callId: state.uri.queryParameters['call-id'],
+  );
 
   CallPageRoute get _self => this as CallPageRoute;
 
   @override
   String get location => GoRouteData.$location(
     '/call',
-    queryParams: {'callee-id': _self.calleeId},
+    queryParams: {
+      if (_self.calleeId != null) 'callee-id': _self.calleeId,
+      if (_self.callId != null) 'call-id': _self.callId,
+    },
   );
 
   @override

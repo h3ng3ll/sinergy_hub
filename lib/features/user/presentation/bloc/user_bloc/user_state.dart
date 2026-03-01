@@ -5,8 +5,12 @@ enum UserStatus {
   loading,
   failed,
   updated,
+  noData,
 }
 
+extension UserStateX on UserState {
+  bool get isNoData => status == UserStatus.noData;
+}
 @freezed
 sealed class UserState with _$UserState {
   const factory UserState({

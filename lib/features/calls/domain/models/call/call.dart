@@ -16,6 +16,16 @@ enum ECallStatus {
   declined,
 }
 
+extension CallX on Call {
+  bool get isCalling => status == ECallStatus.calling;
+
+  bool get isAccepted => status == ECallStatus.accepted;
+
+  bool get isDeclined => status == ECallStatus.declined;
+
+  bool get isEnded => status == ECallStatus.ended;
+}
+
 @freezed
 sealed class Call with _$Call {
   const factory Call({

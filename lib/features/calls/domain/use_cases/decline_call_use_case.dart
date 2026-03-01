@@ -12,22 +12,22 @@ class DeclineCallUseCase {
   });
 
   Future<void> execute(Call call) async {
-    // await webrtc.init();
+    await webrtc.init();
     //
     // await webrtc.setRemoteSdp(
     //   call.offerSdp!,
     // );
-    //
+
     // final answer = await webrtc.createAnswer();
-    //
+
     // await callsRepository.sendAnswer(
     //   call.id,
     //   answer,
     // );
-    //
-    // await callsRepository.updateStatus(
-    //   call.id,
-    //   ECallStatus.accepted,
-    // );
+
+    await callsRepository.updateStatus(
+      call.id,
+      ECallStatus.declined,
+    );
   }
 }

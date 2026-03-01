@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatMessage {
 
- String get id; String get message; String get sentUid; DateTime get createdAt;
+ String get id; String get message; String get sentUid;// @Default(false) bool hasRead,
+ DateTime get createdAt;
 /// Create a copy of ChatMessage
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -218,6 +219,7 @@ class _ChatMessage implements ChatMessage {
 @override@JsonKey() final  String id;
 @override@JsonKey() final  String message;
 @override@JsonKey() final  String sentUid;
+// @Default(false) bool hasRead,
 @override final  DateTime createdAt;
 
 /// Create a copy of ChatMessage

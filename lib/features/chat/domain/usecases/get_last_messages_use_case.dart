@@ -11,9 +11,9 @@ class GetLastMessagesUseCase {
   /// At the beginning Load last 30 messages
   /// and added 1 by 1 data after
   /// creation
-  Stream<List<ChatMessage>> call(
-    String chatId,
-  ) {
+  Stream<List<ChatMessage>> call({
+    required String chatId,
+  }) {
     return _chatMessageRepository.getLastMessagesStream(
       chatId: chatId,
     );

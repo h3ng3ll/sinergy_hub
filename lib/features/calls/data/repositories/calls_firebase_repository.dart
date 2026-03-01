@@ -65,10 +65,10 @@ class CallsFirebaseRepository implements ICallsRepository {
           'calleeId',
           isEqualTo: uid,
         )
-        .where(
-          'status',
-          isEqualTo: ECallStatus.calling.name,
-        )
+        // .where(
+        //   'status',
+        //   isEqualTo: ECallStatus.calling.name,
+        // )
         .limit(
           2,
         )
@@ -77,7 +77,7 @@ class CallsFirebaseRepository implements ICallsRepository {
           (snapshot) {
             if (snapshot.docs.isEmpty) return null;
             return Call.fromJson(
-              snapshot.docs.first.data(),
+              snapshot.docs.last.data(),
             );
           },
         );

@@ -5,11 +5,13 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import '../../bloc/call_bloc/call_bloc.dart';
 
 class CallPage extends StatefulWidget {
-  final String calleeId;
+  final String? calleeId;
+  final String? callId;
 
   const CallPage({
     super.key,
-    required this.calleeId,
+    this.calleeId,
+    this.callId,
   });
 
   @override
@@ -32,11 +34,16 @@ class _CallPageState extends State<CallPage> {
   Future<void> _initRenderers() async {
     await _localRenderer.initialize();
     await _remoteRenderer.initialize();
-    _callBloc.add(
-      CallEvent.ring(
-        calleeId: widget.calleeId,
-      ),
-    );
+
+    // If calleeId is provided, this is an outgoing call
+    if (widget.calleeId != null) {
+      _callBloc.add(
+        CallEvent.ring(
+          calleeId: widget.calleeId!,
+        ),
+      );
+    }
+    // If callId is provided, this is an incoming call (already accepted via bloc)
   }
 
   @override
