@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
+import '../../../../../core/services/ui_message_service.dart';
 import '../../../../chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import '../../../domain/usecases/look_for_matches_use_case.dart';
 import '../../bloc/people_data_bloc/people_data_bloc.dart';
@@ -60,7 +61,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
         uid: matchedUser.uid,
       ),
     );
-    
+
     // Wait for chat to be created and get the chatId from state
     final chatBloc = context.read<ChatBloc>();
     await Future.doWhile(() async {
@@ -73,7 +74,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
       }
       return true;
     });
-    
+
     final chatId = chatBloc.state.createdChatId;
     if (!mounted) return;
 
@@ -96,6 +97,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
     );
     if (status != TinderCardStatus.none && mounted) {
       final lastUser = _peopleDataBloc.state.users.last;
+
       /// remove from visible
       _peopleDataBloc.add(
         PeopleDataEvent.removeVisible(),
@@ -133,15 +135,20 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
         ],
         child: BlocListener<UserMatchesOutcomeCubit, UserMatchesOutcomeState>(
           listener: (context, state) {
-            _peopleDataBloc.add(
-              PeopleDataEvent.updateViewedPeoples(
-                uids: state.userMatches
-                    .map(
-                      (e) => e.user.uid,
-                    )
-                    .toList(),
-              ),
-            );
+            if (state.status == UserMatchesOutcomeStatus.failed) {
+              UiMessageService.showError(
+                state.errorMessage,
+              );
+            }
+            // _peopleDataBloc.add(
+            //   PeopleDataEvent.updateViewedPeoples(
+            //     uids: state.userMatches
+            //         .map(
+            //           (e) => e.user.uid,
+            //         )
+            //         .toList(),
+            //   ),
+            // );
             if (state.status == UserMatchesOutcomeStatus.foundMatch) {
               showDialog(
                 context: context,

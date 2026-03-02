@@ -13,7 +13,6 @@ import 'core/services/firebase/firebase_auth_service.dart';
 import 'core/services/firebase/firebase_firestore_service.dart';
 import 'core/services/firebase/firebase_messaging_service.dart';
 import 'core/services/local_notification_service.dart';
-import 'core/services/ui_message_service.dart';
 import 'features/auth/domain/repostories/i_auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'features/notifications/domain/usecases/get_notification_config_use_case.dart';
@@ -135,7 +134,6 @@ class _MyAppState extends State<MyApp> {
                 context.read<NotificationConfigBloc>().add(
                   NotificationConfigEvent.init(),
                 );
-                // OnboardAboutYouPageRoute().go(context);
               } else if (state.status == AuthStatus.logout) {
                 userBloc.add(
                   UserEvent.reset(),

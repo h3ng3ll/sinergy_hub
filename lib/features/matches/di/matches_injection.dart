@@ -10,6 +10,7 @@ import '../data/repositories/user_matching_out_firebase_repository.dart';
 import '../domain/repositories/i_user_matching_in_repository.dart';
 import '../domain/repositories/i_user_matching_out_repository.dart';
 import '../domain/usecases/create_user_matches_use_case.dart';
+import '../domain/usecases/get_a_user_match_income_use_case.dart';
 import '../domain/usecases/get_user_matches_income_use_case.dart';
 import '../domain/usecases/get_user_matches_outcome_use_case.dart';
 import '../domain/usecases/look_for_matches_use_case.dart';
@@ -32,6 +33,7 @@ void initMatchingFeature(GetIt getIt) {
       notificationRepository: getIt<INotificationRepository>(),
       initChatUseCase: getIt<InitChatUseCase>(),
       authRepository: getIt<IAuthRepository>(),
+      getAUserMatchIncomeUseCase: getIt<GetAUserMatchIncomeUseCase>(),
     ),
   );
   getIt.registerLazySingleton<GetUserMatchesIncomeUseCase>(
@@ -52,6 +54,12 @@ void initMatchingFeature(GetIt getIt) {
       userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),
       matchingOutRepository: getIt<IUserMatchingOutRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<GetAUserMatchIncomeUseCase>(
+    () => GetAUserMatchIncomeUseCase(
+      userRepository: getIt<IUserRepository>(),
+      userMatchingInRepository: getIt<IUserMatchingInRepository>(),
     ),
   );
 }

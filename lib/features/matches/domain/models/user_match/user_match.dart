@@ -1,8 +1,3 @@
-
-
-
-
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../user/domain/models/user_data/user_data.dart';
@@ -12,12 +7,28 @@ part 'user_match.g.dart';
 
 part 'user_match.freezed.dart';
 
-
 enum EUserMatchCompleteness {
+  /// first time user liked another user
   oneWayMatch,
+
+  // /// if one user disliked another and from opposite it liked first one
+  // incomeOneWayMatch,
+
+  /// if first liked second and second both liked first
   twoWayMatch,
+
+  /// if first disliked second and second not answered to it
   none,
 }
+
+extension UserMatchX on UserMatch {
+  bool get isOneWayMatch => completeness == EUserMatchCompleteness.oneWayMatch;
+
+  bool get isTwoWayMatch => completeness == EUserMatchCompleteness.twoWayMatch;
+
+  bool get isNone => completeness == EUserMatchCompleteness.none;
+}
+
 @freezed
 sealed class UserMatch with _$UserMatch {
   const factory UserMatch({

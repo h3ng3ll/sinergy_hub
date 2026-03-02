@@ -6,6 +6,7 @@ import '../../../notifications/domain/repositories/i_notification_repository.dar
 import '../models/user_match/user_match.dart';
 import '../repositories/i_user_matching_in_repository.dart';
 import '../repositories/i_user_matching_out_repository.dart';
+import 'get_a_user_match_income_use_case.dart';
 
 class CreateUserMatchesUseCase {
   final IUserMatchingOutRepository _userMatchingOutRepository;
@@ -14,24 +15,26 @@ class CreateUserMatchesUseCase {
   final IAuthRepository _authRepository;
 
   final InitChatUseCase _initChatUseCase;
+  final GetAUserMatchIncomeUseCase _getAUserMatchIncomeUseCase;
 
   CreateUserMatchesUseCase({
     required IUserMatchingOutRepository userMatchingOutRepository,
     required IUserMatchingInRepository userMatchingInRepository,
     required INotificationRepository notificationRepository,
-    required InitChatUseCase initChatUseCase,
     required IAuthRepository authRepository,
+    required InitChatUseCase initChatUseCase,
+    required GetAUserMatchIncomeUseCase getAUserMatchIncomeUseCase,
   }) : _userMatchingOutRepository = userMatchingOutRepository,
        _userMatchingInRepository = userMatchingInRepository,
-       _initChatUseCase = initChatUseCase,
        _notificationRepository = notificationRepository,
-       _authRepository = authRepository;
+       _authRepository = authRepository,
+       _initChatUseCase = initChatUseCase,
+       _getAUserMatchIncomeUseCase = getAUserMatchIncomeUseCase;
 
   /// return Status of Matching
   Future<EUserMatchCompleteness> call({
     required UserMatch match,
   }) async {
-
     final uid = await _authRepository.requireUserId();
 
     if (match.matchStatus != TinderCardStatus.liked) {
@@ -55,7 +58,7 @@ class CreateUserMatchesUseCase {
     /// who   matched create record
     /// process cases
 
-    final possibleMatch = await _userMatchingInRepository.getById(
+    final UserMatch? possibleMatch = await _getAUserMatchIncomeUseCase.call(
       uid: uid,
     );
 
@@ -88,7 +91,7 @@ class CreateUserMatchesUseCase {
     }
 
     ///  has matching from both size
-    if (possibleMatch.completeness == EUserMatchCompleteness.oneWayMatch) {
+    if (possibleMatch.isOneWayMatch) {
       await _userMatchingOutRepository.create(
         uid: uid,
         match: match.copyWith(
@@ -127,6 +130,17 @@ class CreateUserMatchesUseCase {
       return EUserMatchCompleteness.twoWayMatch;
     }
 
+    /// User reacted to dislike to user
+    /// Mark only for current user it.
+    if (possibleMatch.isNone) {
+      await _userMatchingOutRepository.create(
+        uid: uid,
+        match: match.copyWith(
+          completeness: EUserMatchCompleteness.none,
+        ),
+      );
+      return EUserMatchCompleteness.none;
+    }
     throw Exception(
       'Unhandled matching result',
     );

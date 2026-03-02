@@ -13,6 +13,7 @@ import '../../../chats/data/usecases/init_chat_use_case_mock.dart';
 import '../../../notifications/data/repositories/notification_repository_mock.dart';
 import '../../data/repositories/user_matching_in_repository_mock.dart';
 import '../../data/repositories/user_matching_out_repository_mock.dart';
+import 'get_a_user_match_income_use_case_mock.dart';
 
 void main() {
   late CreateUserMatchesUseCase useCase;
@@ -21,6 +22,7 @@ void main() {
   late NotificationRepositoryMock notificationRepository;
   late InitChatUseCaseMock initChatUseCaseMock;
   late AuthRepositoryMock authRepositoryMock;
+  late GetAUserMatchIncomeUseCaseMock getAUserMatchIncomeUseCaseMock;
 
   setUp(() {
     mockInRepo = UserMatchingInRepositoryMock();
@@ -28,6 +30,7 @@ void main() {
     notificationRepository = NotificationRepositoryMock();
     initChatUseCaseMock = InitChatUseCaseMock();
     authRepositoryMock = AuthRepositoryMock();
+    getAUserMatchIncomeUseCaseMock = GetAUserMatchIncomeUseCaseMock();
 
     useCase = CreateUserMatchesUseCase(
       userMatchingOutRepository: mockOutRepo,
@@ -35,6 +38,7 @@ void main() {
       notificationRepository: notificationRepository,
       initChatUseCase: initChatUseCaseMock,
       authRepository: authRepositoryMock,
+      getAUserMatchIncomeUseCase: getAUserMatchIncomeUseCaseMock,
     );
   });
 
