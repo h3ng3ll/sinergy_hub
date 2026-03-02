@@ -159,9 +159,6 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
             UiMessageService.showSuccess(
               'Profile updated successfully',
             );
-            OnboardSurveyPageRoute().go(
-              context,
-            );
           }
         },
         child: BuildAnimatedBackground(

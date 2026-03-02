@@ -23,15 +23,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<_SignOut>(_signOut);
   }
 
-  void _listen(
+  Future<void> _listen(
     _Listen event,
     Emitter<AuthState> emit,
   ) async {
     await emit.forEach(
       _authRepository.watchUser(),
-      onData: (e) {
+      onData: (User? user) {
         return state.copyWith(
-          user: e,
+          user: user,
         );
       },
     );

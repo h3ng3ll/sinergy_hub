@@ -9,6 +9,8 @@ class FirebaseMessagingService {
   final LocalNotificationService _localNotificationService;
 
   late String fcmToken ;
+  static bool _isBackgroundHandlerInitialized = false;
+  
   FirebaseMessagingService({
     required LocalNotificationService localNotificationService,
     required FirebaseMessaging firebaseMessaging,
@@ -36,8 +38,11 @@ class FirebaseMessagingService {
     // Слушаем foreground сообщения
     FirebaseMessaging.onMessage.listen(_handleMessage);
 
-    // Слушаем background сообщения
-    FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+    // Слушаем background сообщения - регистрируем только один раз
+    if (!_isBackgroundHandlerInitialized) {
+      FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+      _isBackgroundHandlerInitialized = true;
+    }
   }
 
   void _handleMessage(RemoteMessage message) {

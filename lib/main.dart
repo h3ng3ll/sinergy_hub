@@ -143,13 +143,16 @@ class _MyAppState extends State<MyApp> {
               }
             },
             child: BlocListener<UserBloc, UserState>(
+              listenWhen: (previous, current) {
+                return previous.status != current.status &&
+                    current.status == UserStatus.noData;
+              },
               listener: (context, state) {
+                // Don't auto-logout - user might be new and hasn't completed onboarding
+                // Navigate to onboarding instead
                 if (state.isNoData && authBloc.state.isAuthorized) {
-                  UiMessageService.showError(
-                    'No data . Logout',
-                  );
-                  context.read<AuthBloc>().add(
-                    AuthEvent.signOut(),
+                  OnboardAboutYouPageRoute().go(
+                    context,
                   );
                 }
               },
