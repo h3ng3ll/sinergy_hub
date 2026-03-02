@@ -14,7 +14,7 @@ part 'user_matches_outcome_cubit.freezed.dart';
 class UserMatchesOutcomeCubit extends Cubit<UserMatchesOutcomeState> {
   final CreateUserMatchesUseCase _createUserMatchesUseCase;
   final GetUserMatchesOutcomeUseCase _getUserMatchesUseCase;
-  late final StreamSubscription _matchesSubscription;
+  late final StreamSubscription? _matchesSubscription;
 
   UserMatchesOutcomeCubit({
     required GetUserMatchesOutcomeUseCase getUserMatchesOutcomeUseCase,
@@ -80,7 +80,7 @@ class UserMatchesOutcomeCubit extends Cubit<UserMatchesOutcomeState> {
 
   @override
   Future<void> close() {
-    _matchesSubscription.cancel();
+    _matchesSubscription?.cancel();
     return super.close();
   }
 }

@@ -51,6 +51,7 @@ dependencies:
   firebase_messaging: ^16.0.2
 #  flutter_local_notifications: ^19.4.2
   cloud_firestore: ^6.1.1
+  cloud_functions: ^6.0.0
   go_router_builder: ^3.0.0
   flutter_dotenv: ^6.0.0
   google_sign_in: ^7.2.0

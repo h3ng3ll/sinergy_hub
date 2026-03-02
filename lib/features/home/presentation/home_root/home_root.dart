@@ -102,19 +102,7 @@ class _HomeRootState extends State<HomeRoot> {
         BlocProvider.value(
           value: _userMatchingOutcomeCubit,
         ),
-        BlocProvider(
-          lazy: false,
-          create: (_) =>
-              NotificationConfigBloc(
-                getNotificationsConfigUseCase:
-                    getIt<GetNotificationsConfigUseCase>(),
-                saveNotificationsConfigUseCase:
-                    getIt<SaveNotificationsConfigUseCase>(),
-                firebaseMessagingService: getIt<FirebaseMessagingService>(),
-              )..add(
-                NotificationConfigEvent.init(),
-              ),
-        ),
+
         BlocProvider<NotificationBloc>(
           create: (_) =>
               NotificationBloc(

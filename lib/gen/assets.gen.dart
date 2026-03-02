@@ -250,6 +250,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/group.png
   AssetGenImage get group => const AssetGenImage('assets/images/group.png');
 
+  /// File path: assets/images/ic_notification.png
+  AssetGenImage get icNotification =>
+      const AssetGenImage('assets/images/ic_notification.png');
+
   /// File path: assets/images/layer.png
   AssetGenImage get layer => const AssetGenImage('assets/images/layer.png');
 
@@ -284,6 +288,7 @@ class $AssetsImagesGen {
     crown,
     engine,
     group,
+    icNotification,
     layer,
     magicPattern,
     mobilePhone,

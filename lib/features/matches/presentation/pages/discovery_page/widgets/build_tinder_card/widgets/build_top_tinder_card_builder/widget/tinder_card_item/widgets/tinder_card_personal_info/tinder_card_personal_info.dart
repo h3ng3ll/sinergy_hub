@@ -29,18 +29,20 @@ class TinderCardPersonalInfo extends StatelessWidget {
     return Column(
       spacing: 10.0,
       children: [
-        Row(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               user.firstName ?? '',
               style: textTheme.bold20,
+              overflow: TextOverflow.ellipsis,
             ),
             Gap(5.0),
             Text(
               user.lastName ?? '',
               style: textTheme.bold20,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

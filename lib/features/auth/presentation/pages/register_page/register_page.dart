@@ -53,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void register() {
     /// if validation not meet requirements return
     if (!(_formKey.currentState?.validate() ?? false)) return;
-
+    FocusManager.instance.primaryFocus?.unfocus();
     _registerBloc.add(
       RegisterEvent.register(
         email: _emailController.text,
@@ -86,50 +86,52 @@ class _RegisterPageState extends State<RegisterPage> {
               );
             }
           },
-          child: HorizontalPadding(
-            child: Center(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Text(
-                        'Register',
-                        style: textTheme.medium32.copyWith(
-                          color: AppColors.white.value,
+          child: SingleChildScrollView(
+            child: HorizontalPadding(
+              child: Center(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Text(
+                          'Register',
+                          style: textTheme.medium32.copyWith(
+                            color: AppColors.white.value,
+                          ),
                         ),
                       ),
-                    ),
-                    Gap(32.0),
-                    EmailInput(
-                      controller: _emailController,
-                    ),
-                    Gap(24.0),
-                    PasswordInput(
-                      controller: _passwordController,
-                      hintText: 'Password',
-                    ),
-                    Gap(24.0),
-                    PasswordInput(
-                      controller: _repeatPasswordController,
-                      hintText: 'Repeat password',
-                    ),
-                    Gap(24.0),
-                    ActionBtn(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 15.0,
-                        horizontal: 20.0,
+                      Gap(32.0),
+                      EmailInput(
+                        controller: _emailController,
                       ),
-                      onPressed: register,
-                      child: Text(
-                        'Register',
-                        style: textTheme.medium16.copyWith(
-                          color: colorScheme.onSecondary,
+                      Gap(24.0),
+                      PasswordInput(
+                        controller: _passwordController,
+                        hintText: 'Password',
+                      ),
+                      Gap(24.0),
+                      PasswordInput(
+                        controller: _repeatPasswordController,
+                        hintText: 'Repeat password',
+                      ),
+                      Gap(24.0),
+                      ActionBtn(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 15.0,
+                          horizontal: 20.0,
+                        ),
+                        onPressed: register,
+                        child: Text(
+                          'Register',
+                          style: textTheme.medium16.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

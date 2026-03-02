@@ -46,6 +46,7 @@ class FirebaseMessagingService {
       _localNotificationService.sendNotification(
         title: notification.title ?? 'New Notification',
         body: notification.body ?? '',
+        payload: message.data,
       );
     }
   }
@@ -58,6 +59,7 @@ class FirebaseMessagingService {
       await localService.sendNotification(
         title: notification.title ?? 'New Notification',
         body: notification.body ?? '',
+        payload: message.data,
       );
     }
   }

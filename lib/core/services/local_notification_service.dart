@@ -3,9 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../di/injection.dart';
+import '../models/chat_payload/chat_payload.dart';
+import '../routes/init_router/init_router.dart';
 
 @pragma('vm:entry-point')
 void notificationTopBackground(NotificationResponse notificationResponse) {
@@ -86,19 +89,43 @@ class LocalNotificationService {
 
   Future<void> receiveNotificationResponse(
     NotificationResponse notificationResponse,
-  ) async {}
+  ) async {
+    final payload = notificationResponse.payload;
+    if (payload == null) return;
+
+    final context = RootPageRoute.rootKey.currentContext;
+    if (context == null || !context.mounted) {
+      return;
+    }
+    final payloadData = jsonDecode(
+      payload,
+    );
+
+    if (payloadData['type'] == 'chat') {
+      final chat = ChatPayload.fromJson(
+        payloadData,
+      );
+      ChatPageRoute(
+        chatId: chat.chatId,
+      ).push(
+        context,
+      );
+    }
+  }
 
   Future<void> sendNotification({
     required String title,
     required String body,
     String? icon,
     dynamic payload,
+
+    /// Map<String , dynamic> by default
   }) async {
     String? largeIconPath =
         icon ??
         await copyAssetToTemp(
-          'assets/images/ic_launcher.png',
-          'notif_icon.png',
+          'assets/images/ic_notification.png',
+          'ic_notification.png',
         );
 
     final androidNotificationDetails = AndroidNotificationDetails(
@@ -126,9 +153,25 @@ class LocalNotificationService {
 
     final payloadData = payload != null
         ? jsonEncode(
-            payload?.toJson(),
+            payload,
           )
         : null;
+
+    final context = RootPageRoute.rootKey.currentContext;
+
+    if (context != null && context.mounted) {
+      if (payload['type'] == 'chat') {
+        final chat = ChatPayload.fromJson(
+          payload,
+        );
+        final isOnCurrentChat =
+            GoRouter.of(context).state.uri.toString() ==
+            ChatPageRoute(
+              chatId: chat.chatId,
+            ).location;
+        if (isOnCurrentChat) return;
+      }
+    }
 
     await _flutterLocalNotificationsPlugin.show(
       id: 0,

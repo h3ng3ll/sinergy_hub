@@ -9,7 +9,6 @@ part of 'init_router.dart';
 List<RouteBase> get $appRoutes => [$rootPageRoute];
 
 RouteBase get $rootPageRoute => ShellRouteData.$route(
-  navigatorKey: RootPageRoute.$navigatorKey,
   factory: $RootPageRouteExtension._fromState,
   routes: [
     GoRouteData.$route(

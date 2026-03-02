@@ -21,6 +21,7 @@ class FirstNameInput extends StatelessWidget {
         }
         return null;
       },
+      textInputAction: TextInputAction.next,
       controller: controller,
     );
   }

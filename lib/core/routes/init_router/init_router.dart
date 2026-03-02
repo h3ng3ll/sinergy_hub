@@ -95,8 +95,8 @@ final GoRouter initRouter = GoRouter(
   ],
 )
 class RootPageRoute extends ShellRouteData {
-  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
-
+  // static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+  static final GlobalKey rootKey = GlobalKey();
   @override
   Widget builder(
     BuildContext context,
@@ -104,6 +104,7 @@ class RootPageRoute extends ShellRouteData {
     Widget navigator,
   ) {
     return RootPage(
+      key: rootKey,
       navigator: navigator,
     );
   }
@@ -218,7 +219,7 @@ class ProfilePageRoute extends GoRouteData with _$ProfilePageRoute {
 }
 
 class HomeRootRoute extends StatefulShellRouteData {
-  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+  // static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
 
   @override
   Widget builder(
