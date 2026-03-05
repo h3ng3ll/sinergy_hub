@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../domain/models/user_match/user_match.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
 import '../../../domain/usecases/get_user_matches_outcome_use_case.dart';
+import '../tinder_card_cubit/tinder_card_cubit.dart';
 
 part 'user_matches_outcome_state.dart';
 
@@ -36,7 +37,8 @@ class UserMatchesOutcomeCubit extends Cubit<UserMatchesOutcomeState> {
   }
 
   Future<void> create({
-    required UserMatch match,
+    required TinderCardStatus status,
+    required String matchedID,
   }) async {
     try {
       emit(
@@ -44,22 +46,23 @@ class UserMatchesOutcomeCubit extends Cubit<UserMatchesOutcomeState> {
           status: UserMatchesOutcomeStatus.loading,
         ),
       );
-      final status = await _createUserMatchesUseCase.call(
-        match: match,
+     await _createUserMatchesUseCase.call(
+        status: status,
+        matchedID:matchedID,
       );
-      if (status == EUserMatchCompleteness.twoWayMatch) {
-        emit(
-          state.copyWith(
-            status: UserMatchesOutcomeStatus.foundMatch,
-          ),
-        );
-      } else {
-        emit(
-          state.copyWith(
-            status: UserMatchesOutcomeStatus.initial,
-          ),
-        );
-      }
+      // if (status == EUserMatchCompleteness.twoWayMatch) {
+      //   emit(
+      //     state.copyWith(
+      //       status: UserMatchesOutcomeStatus.foundMatch,
+      //     ),
+      //   );
+      // } else {
+      //   emit(
+      //     state.copyWith(
+      //       status: UserMatchesOutcomeStatus.initial,
+      //     ),
+      //   );
+      // }
     } catch (e) {
       emit(
         state.copyWith(

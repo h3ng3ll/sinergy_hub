@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../domain/models/user_match/user_match.dart';
 import '../../domain/repositories/i_user_matching_in_repository.dart';
-import '../../domain/repositories/i_user_matching_out_repository.dart';
+import '../../presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../models/user_match_dto/user_match_dto.dart';
 
 class UserMatchingInFirebaseRepository extends IUserMatchingInRepository {
@@ -24,27 +23,31 @@ class UserMatchingInFirebaseRepository extends IUserMatchingInRepository {
       );
 
   @override
-  Future<UserMatch> create({
+  Future<void> create({
+    required String matchedID,
     required String uid,
-    required UserMatch match,
+    required TinderCardStatus status,
   }) async {
+    final dto = UserMatchDto(
+      userId: uid,
+      matchStatus: status,
+      time: DateTime.now(),
+      completeness: EUserMatchCompleteness.none,
+    );
+
     await _matches(
-          uid,
+          matchedID,
         )
         .doc(
-          match.user.uid,
+          uid,
         )
         .set(
-          UserMatchDto.fromDomain(
-            match,
-          ).toJson(),
+          dto.toJson(),
         );
-
-    return match;
   }
 
   @override
-  Stream<List<UserMatchDto>> get({
+  Stream<List<UserMatchDto>> listen({
     required String uid,
   }) {
     return _matches(

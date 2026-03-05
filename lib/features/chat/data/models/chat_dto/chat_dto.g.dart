@@ -14,20 +14,24 @@ _ChatDto _$ChatDtoFromJson(Map<String, dynamic> json) => _ChatDto(
           ?.map((e) => e as String)
           .toList() ??
       const [],
-  lastMessageSent: DateTime.parse(json['lastMessageSent'] as String),
-  info: ChatInfo.fromJson(json['info'] as Map<String, dynamic>),
+  lastMessageSent: const TimestampConverter().fromJson(
+    json['lastMessageSent'] as Timestamp,
+  ),
   participants: (json['participants'] as List<dynamic>)
       .map((e) => e as String)
       .toList(),
-  createdAt: DateTime.parse(json['createdAt'] as String),
+  createdAt: const TimestampConverter().fromJson(
+    json['createdAt'] as Timestamp,
+  ),
 );
 
 Map<String, dynamic> _$ChatDtoToJson(_ChatDto instance) => <String, dynamic>{
   'chatId': instance.chatId,
   'lastMessage': instance.lastMessage,
   'typingUsers': instance.typingUsers,
-  'lastMessageSent': instance.lastMessageSent.toIso8601String(),
-  'info': instance.info.toJson(),
+  'lastMessageSent': const TimestampConverter().toJson(
+    instance.lastMessageSent,
+  ),
   'participants': instance.participants,
-  'createdAt': instance.createdAt.toIso8601String(),
+  'createdAt': const TimestampConverter().toJson(instance.createdAt),
 };

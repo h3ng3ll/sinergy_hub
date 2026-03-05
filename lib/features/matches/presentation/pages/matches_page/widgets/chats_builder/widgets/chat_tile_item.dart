@@ -44,7 +44,7 @@ class ChatTileItem extends StatelessWidget {
                 ),
               ),
               Text(
-                chat.info.lastMessage,
+                chat.lastMessage,
                 maxLines: 1,
                 style: textTheme.regular12.copyWith(
                   color: colorScheme.onPrimary,

@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../user/domain/models/user_data/user_data.dart';
+import '../../../../../core/utils/converters/timestamp_convertor.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/chat_info/chat_info.dart';
 
@@ -16,12 +17,11 @@ abstract class ChatDto with _$ChatDto {
     @Default('') String chatId,
     @Default('') String lastMessage,
     @Default([]) List<String> typingUsers,
-    required DateTime lastMessageSent,
-    required ChatInfo info,
+    @TimestampConverter() required DateTime lastMessageSent,
 
     /// who access this chat
     required List<String> participants,
-    required DateTime createdAt,
+    @TimestampConverter()  required DateTime createdAt,
   }) = _ChatDto;
 
   factory ChatDto.fromJson(
@@ -30,14 +30,16 @@ abstract class ChatDto with _$ChatDto {
     json,
   );
 
-  Chat toDomain() => Chat(
+  Chat toDomain({
+    required ChatInfo info,
+  }) => Chat(
     chatId: chatId,
     lastMessage: lastMessage,
     lastMessageSent: lastMessageSent,
     participants: participants,
     createdAt: createdAt,
     typingUsers: typingUsers,
-    info: info,
+    info: info ,
   );
 
   factory ChatDto.fromDomain(
@@ -49,6 +51,5 @@ abstract class ChatDto with _$ChatDto {
     lastMessageSent: chat.lastMessageSent,
     participants: chat.participants,
     createdAt: chat.createdAt,
-    info: chat.info,
   );
 }

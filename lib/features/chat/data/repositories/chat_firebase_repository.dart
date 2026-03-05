@@ -10,11 +10,12 @@ class ChatFirebaseRepository implements IChatRepository {
     required FirebaseFirestoreService firebaseFirestoreService,
   }) : _firebaseFirestoreService = firebaseFirestoreService;
 
+  ColRef get _chats => _firebaseFirestoreService.chats();
+
   @override
   Future<Chat> create(Chat chat) async {
     final String id = _firebaseFirestoreService.chats().doc().id;
-    await _firebaseFirestoreService
-        .chats()
+    await _chats
         .doc(
           id,
         )
@@ -34,7 +35,7 @@ class ChatFirebaseRepository implements IChatRepository {
 
   @override
   Stream<List<ChatDto>> getStream(String uid) {
-    return _firebaseFirestoreService.chats().snapshots().map(
+    return _chats.snapshots().map(
       (e) => e.docs
           .where(
             (e) {
@@ -60,8 +61,7 @@ class ChatFirebaseRepository implements IChatRepository {
     required String uid,
     required String chatId,
   }) {
-    return _firebaseFirestoreService
-        .chats()
+    return _chats
         .doc(
           chatId,
         )
@@ -80,8 +80,7 @@ class ChatFirebaseRepository implements IChatRepository {
   Future<void> update({
     required ChatDto chat,
   }) async {
-    return await _firebaseFirestoreService
-        .chats()
+    return await _chats
         .doc(
           chat.chatId,
         )
@@ -91,18 +90,37 @@ class ChatFirebaseRepository implements IChatRepository {
   }
 
   @override
-  Future<List<Chat>> search({required String uid, required String query}) {
-    // TODO: implement search
-    throw UnimplementedError();
+  Future<List<ChatDto>> search({
+    required String uid,
+    required String query,
+  }) async {
+    final res = await _chats
+        .where(
+          'participants',
+          arrayContains: uid,
+        )
+        .where(
+          'keywords',
+          arrayContains: query,
+        )
+        .get();
+
+    final chats = res.docs
+        .map(
+          (e) => ChatDto.fromJson(
+            e.data(),
+          ),
+        )
+        .toList();
+
+    return chats;
   }
 
   @override
   Future<ChatDto> getById({
     required String chatId,
   }) async {
-
-    final chatRow = await _firebaseFirestoreService
-        .chats()
+    final chatRow = await _chats
         .doc(
           chatId,
         )
@@ -110,6 +128,28 @@ class ChatFirebaseRepository implements IChatRepository {
 
     final chat = ChatDto.fromJson(
       chatRow.data()!,
+    );
+    return chat;
+  }
+
+  @override
+  Future<ChatDto?> chatByParticipates({
+    required List<String> participates,
+  }) async {
+    final chatRow = await _chats
+        .where(
+          'participants',
+          isEqualTo: participates,
+        )
+        .limit(
+          1,
+        )
+        .get();
+    if (chatRow.docs.isEmpty) {
+      return null;
+    }
+    final chat = ChatDto.fromJson(
+      chatRow.docs.first.data(),
     );
     return chat;
   }

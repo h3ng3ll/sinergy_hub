@@ -78,13 +78,16 @@ class UserFirebaseRepository extends IUserRepository {
     required UserDataPgState userDataState,
   }) async {
     final res = await _firebaseFirestoreService.usersDocument.get();
-
+    
     final userData = List<UserData>.from(
       res.docs
           .map(
-            (e) => UserData.fromJson(
-              e.data(),
-            ),
+            (e) {
+              final userData = e.data();
+              return UserData.fromJson(
+                userData,
+              );
+            },
           )
           .where(
             (e) => !userDataState.excludedUids.contains(
@@ -110,9 +113,12 @@ class UserFirebaseRepository extends IUserRepository {
           id,
         )
         .get();
-    if (userRow.data() == null) return null;
+    final userData = userRow.data();
+    if (userData== null) {
+      return null;
+    }
     final user = UserData.fromJson(
-      userRow.data()!,
+      userData,
     );
     return user;
   }

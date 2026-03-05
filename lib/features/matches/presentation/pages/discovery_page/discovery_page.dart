@@ -8,7 +8,6 @@ import '../../../../chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import '../../../domain/usecases/look_for_matches_use_case.dart';
 import '../../bloc/people_data_bloc/people_data_bloc.dart';
 import '../../bloc/tinder_card_cubit/tinder_card_cubit.dart';
-import '../../../../matches/domain/models/user_match/user_match.dart';
 import '../../../../matches/presentation/bloc/user_matches_outcome_cubit/user_matches_outcome_cubit.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
 import 'widgets/build_has_match/build_has_match.dart';
@@ -105,11 +104,8 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
 
       /// save matching
       await context.read<UserMatchesOutcomeCubit>().create(
-        match: UserMatch(
-          matchStatus: status,
-          user: lastUser,
-          time: DateTime.now(),
-        ),
+        status: status,
+        matchedID: lastUser.uid,
       );
     }
   }

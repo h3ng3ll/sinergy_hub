@@ -7,11 +7,11 @@ import '../models/user_match/user_match.dart';
 import '../repositories/i_user_matching_in_repository.dart';
 import '../repositories/i_user_matching_out_repository.dart';
 
-class GetUserMatchesIncomeUseCase {
+class ListenUserMatchesIncomeUseCase {
   final IUserMatchingInRepository _userMatchingInRepository;
   final IUserRepository _userRepository;
 
-  GetUserMatchesIncomeUseCase({
+  ListenUserMatchesIncomeUseCase({
     required IUserMatchingInRepository userMatchingInRepository,
     required IUserRepository userRepository,
   }) : _userMatchingInRepository = userMatchingInRepository,
@@ -19,7 +19,7 @@ class GetUserMatchesIncomeUseCase {
 
   Stream<List<UserMatch>> call(String uid) {
     return _userMatchingInRepository
-        .get(
+        .listen(
           uid: uid,
         )
         .asyncMap(

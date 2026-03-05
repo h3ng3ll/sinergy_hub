@@ -12,6 +12,7 @@ import '../../features/matches/di/matches_injection.dart';
 import '../../features/notifications/di/notifications_injection.dart';
 import '../../features/onboard_survey/di/onboard_survery_injection.dart';
 import '../../features/user/di/user_injection.dart';
+import '../../features/user_chat/di/user_chat_injection.dart';
 import '../services/audio_service.dart';
 import '../services/firebase/firebase_auth_service.dart';
 import '../services/firebase/firebase_firestore_service.dart';
@@ -78,6 +79,9 @@ Future<void> initDependencies() async {
     getIt,
   );
   initCallsFeature(
+    getIt,
+  );
+  initUserChatFeature(
     getIt,
   );
   // TODO: Add onboarding, profile, etc.

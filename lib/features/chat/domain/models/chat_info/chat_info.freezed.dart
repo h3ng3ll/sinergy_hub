@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatInfo {
 
- String get title; String get lastMessage; String? get cover; ESpecialization get specialization;
+ String get title; String? get cover; ESpecialization get specialization;
 /// Create a copy of ChatInfo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ChatInfoCopyWith<ChatInfo> get copyWith => _$ChatInfoCopyWithImpl<ChatInfo>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatInfo&&(identical(other.title, title) || other.title == title)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.cover, cover) || other.cover == cover)&&(identical(other.specialization, specialization) || other.specialization == specialization));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatInfo&&(identical(other.title, title) || other.title == title)&&(identical(other.cover, cover) || other.cover == cover)&&(identical(other.specialization, specialization) || other.specialization == specialization));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,title,lastMessage,cover,specialization);
+int get hashCode => Object.hash(runtimeType,title,cover,specialization);
 
 @override
 String toString() {
-  return 'ChatInfo(title: $title, lastMessage: $lastMessage, cover: $cover, specialization: $specialization)';
+  return 'ChatInfo(title: $title, cover: $cover, specialization: $specialization)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ChatInfoCopyWith<$Res>  {
   factory $ChatInfoCopyWith(ChatInfo value, $Res Function(ChatInfo) _then) = _$ChatInfoCopyWithImpl;
 @useResult
 $Res call({
- String title, String lastMessage, String? cover, ESpecialization specialization
+ String title, String? cover, ESpecialization specialization
 });
 
 
@@ -65,10 +65,9 @@ class _$ChatInfoCopyWithImpl<$Res>
 
 /// Create a copy of ChatInfo
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? lastMessage = null,Object? cover = freezed,Object? specialization = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? cover = freezed,Object? specialization = null,}) {
   return _then(_self.copyWith(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
 as String,cover: freezed == cover ? _self.cover : cover // ignore: cast_nullable_to_non_nullable
 as String?,specialization: null == specialization ? _self.specialization : specialization // ignore: cast_nullable_to_non_nullable
 as ESpecialization,
@@ -156,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  String lastMessage,  String? cover,  ESpecialization specialization)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  String? cover,  ESpecialization specialization)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatInfo() when $default != null:
-return $default(_that.title,_that.lastMessage,_that.cover,_that.specialization);case _:
+return $default(_that.title,_that.cover,_that.specialization);case _:
   return orElse();
 
 }
@@ -177,10 +176,10 @@ return $default(_that.title,_that.lastMessage,_that.cover,_that.specialization);
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  String lastMessage,  String? cover,  ESpecialization specialization)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  String? cover,  ESpecialization specialization)  $default,) {final _that = this;
 switch (_that) {
 case _ChatInfo():
-return $default(_that.title,_that.lastMessage,_that.cover,_that.specialization);case _:
+return $default(_that.title,_that.cover,_that.specialization);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +196,10 @@ return $default(_that.title,_that.lastMessage,_that.cover,_that.specialization);
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  String lastMessage,  String? cover,  ESpecialization specialization)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  String? cover,  ESpecialization specialization)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatInfo() when $default != null:
-return $default(_that.title,_that.lastMessage,_that.cover,_that.specialization);case _:
+return $default(_that.title,_that.cover,_that.specialization);case _:
   return null;
 
 }
@@ -212,11 +211,10 @@ return $default(_that.title,_that.lastMessage,_that.cover,_that.specialization);
 @JsonSerializable()
 
 class _ChatInfo implements ChatInfo {
-  const _ChatInfo({this.title = '', this.lastMessage = '', this.cover, required this.specialization});
+  const _ChatInfo({this.title = '', this.cover, required this.specialization});
   factory _ChatInfo.fromJson(Map<String, dynamic> json) => _$ChatInfoFromJson(json);
 
 @override@JsonKey() final  String title;
-@override@JsonKey() final  String lastMessage;
 @override final  String? cover;
 @override final  ESpecialization specialization;
 
@@ -233,16 +231,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatInfo&&(identical(other.title, title) || other.title == title)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.cover, cover) || other.cover == cover)&&(identical(other.specialization, specialization) || other.specialization == specialization));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatInfo&&(identical(other.title, title) || other.title == title)&&(identical(other.cover, cover) || other.cover == cover)&&(identical(other.specialization, specialization) || other.specialization == specialization));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,title,lastMessage,cover,specialization);
+int get hashCode => Object.hash(runtimeType,title,cover,specialization);
 
 @override
 String toString() {
-  return 'ChatInfo(title: $title, lastMessage: $lastMessage, cover: $cover, specialization: $specialization)';
+  return 'ChatInfo(title: $title, cover: $cover, specialization: $specialization)';
 }
 
 
@@ -253,7 +251,7 @@ abstract mixin class _$ChatInfoCopyWith<$Res> implements $ChatInfoCopyWith<$Res>
   factory _$ChatInfoCopyWith(_ChatInfo value, $Res Function(_ChatInfo) _then) = __$ChatInfoCopyWithImpl;
 @override @useResult
 $Res call({
- String title, String lastMessage, String? cover, ESpecialization specialization
+ String title, String? cover, ESpecialization specialization
 });
 
 
@@ -270,10 +268,9 @@ class __$ChatInfoCopyWithImpl<$Res>
 
 /// Create a copy of ChatInfo
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? lastMessage = null,Object? cover = freezed,Object? specialization = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? cover = freezed,Object? specialization = null,}) {
   return _then(_ChatInfo(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
 as String,cover: freezed == cover ? _self.cover : cover // ignore: cast_nullable_to_non_nullable
 as String?,specialization: null == specialization ? _self.specialization : specialization // ignore: cast_nullable_to_non_nullable
 as ESpecialization,

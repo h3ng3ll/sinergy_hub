@@ -7,10 +7,11 @@ import '../data/repositories/chat_firebase_repository.dart';
 import '../data/repositories/chat_message_firebase_repository.dart';
 import '../domain/repositories/i_chat_message_repository.dart';
 import '../domain/repositories/i_chat_repository.dart';
+import '../domain/usecases/bundle_chat_use_case.dart';
 import '../domain/usecases/get_chat_by_id_use_case.dart';
+import '../domain/usecases/get_chat_by_participants_case.dart';
 import '../domain/usecases/listen_chats_use_case.dart';
 import '../domain/usecases/get_last_messages_use_case.dart';
-import '../domain/usecases/init_chat_use_case.dart';
 import '../domain/usecases/listen_chat_by_id_use_case.dart';
 import '../domain/usecases/listen_chat_messages_use_case.dart';
 import '../domain/usecases/send_message_use_case.dart';
@@ -28,23 +29,23 @@ void initChatFeature(GetIt getIt) {
     ),
   );
 
+  getIt.registerLazySingleton<BundleChatUseCase>(
+    () => BundleChatUseCase(
+      userRepository: getIt<IUserRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
   getIt.registerLazySingleton<ListenChatsUseCase>(
     () => ListenChatsUseCase(
       chatRepository: getIt<IChatRepository>(),
       userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),
+      bundleChatUseCase: getIt<BundleChatUseCase>(),
     ),
   );
   getIt.registerLazySingleton<GetLastMessagesUseCase>(
     () => GetLastMessagesUseCase(
       chatMessageRepository: getIt<IChatMessageRepository>(),
-    ),
-  );
-  getIt.registerLazySingleton<InitChatUseCase>(
-    () => InitChatUseCase(
-      chatRepository: getIt<IChatRepository>(),
-      authRepository: getIt<IAuthRepository>(),
-      userRepository: getIt<IUserRepository>(),
     ),
   );
   getIt.registerLazySingleton<SendMessageUseCase>(
@@ -58,6 +59,7 @@ void initChatFeature(GetIt getIt) {
   getIt.registerLazySingleton<GetChatByIdUseCase>(
     () => GetChatByIdUseCase(
       chatRepository: getIt<IChatRepository>(),
+      bundleChatUseCase: getIt<BundleChatUseCase>(),
     ),
   );
   getIt.registerLazySingleton<ListenChatMessagesUseCase>(
@@ -75,6 +77,13 @@ void initChatFeature(GetIt getIt) {
       chatRepository: getIt<IChatRepository>(),
       userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),
+      bundleChatUseCase: getIt<BundleChatUseCase>(),
+    ),
+  );
+  getIt.registerLazySingleton<GetChatByParticipantsCase>(
+    () => GetChatByParticipantsCase(
+      chatRepository: getIt<IChatRepository>(),
+      bundleChatUseCase: getIt<BundleChatUseCase>(),
     ),
   );
 }

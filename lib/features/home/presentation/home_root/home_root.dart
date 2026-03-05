@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/routes/init_router/init_router.dart';
 import '../../../../core/services/audio_service.dart';
-import '../../../../core/services/firebase/firebase_messaging_service.dart';
 import '../../../auth/domain/services/i_webrtc_service.dart';
 import '../../../calls/domain/use_cases/accept_call_use_case.dart';
 import '../../../calls/domain/use_cases/add_ice_candidate_call_use_case.dart';
@@ -18,12 +17,9 @@ import '../../../calls/presentation/overlay/incoming_call_overlay/incoming_call_
 import '../../../chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import '../../../matches/domain/usecases/get_user_matches_outcome_use_case.dart';
 import '../../../matches/presentation/bloc/user_matches_outcome_cubit/user_matches_outcome_cubit.dart';
-import '../../../notifications/domain/usecases/get_notification_config_use_case.dart';
 import '../../../notifications/domain/usecases/get_notifications_use_case.dart';
-import '../../../notifications/domain/usecases/save_notification_config_use_case.dart';
 import '../../../notifications/domain/usecases/save_notification_use_case.dart';
 import '../../../notifications/presentation/bloc/notification_bloc/notification_bloc.dart';
-import '../../../notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
 
 class HomeRoot extends StatefulWidget {
   final Widget navigator;
@@ -50,7 +46,6 @@ class _HomeRootState extends State<HomeRoot> {
     _chatBloc =
         ChatBloc(
           getChatsUseCase: getIt(),
-          initChatUseCase: getIt(),
         )..add(
           const ChatEvent.init(),
         );

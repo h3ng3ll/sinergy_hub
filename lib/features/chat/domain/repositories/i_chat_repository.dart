@@ -21,8 +21,14 @@ abstract class IChatRepository {
     required ChatDto chat,
   });
 
-  Future<List<Chat>> search({
+  Future<List<ChatDto>> search({
     required String uid,
     required String query,
+  });
+
+  /// must return if specified uid contain
+  /// in the chat to determine if it already exists  @override
+  Future<ChatDto?> chatByParticipates({
+    required List<String> participates,
   });
 }

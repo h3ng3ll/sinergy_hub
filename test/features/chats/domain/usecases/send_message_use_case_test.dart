@@ -33,9 +33,9 @@ void main() {
           lastMessageSent: DateTime.now(),
           participants: [],
           createdAt: DateTime.now(),
-          info: ChatInfo(
-            specialization: ESpecialization.backendDeveloper,
-          ),
+          // info: ChatInfo(
+          //   specialization: ESpecialization.backendDeveloper,
+          // ),
         ),
       );
     },

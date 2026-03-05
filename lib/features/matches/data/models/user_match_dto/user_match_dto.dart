@@ -10,7 +10,6 @@ part 'user_match_dto.freezed.dart';
 
 @freezed
 sealed class UserMatchDto with _$UserMatchDto {
-
   const UserMatchDto._();
 
   const factory UserMatchDto({
