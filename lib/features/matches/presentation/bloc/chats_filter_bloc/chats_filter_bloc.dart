@@ -3,7 +3,9 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../core/utils/extensions/bloc_ext.dart';
+import '../../../../chat/domain/models/chat/chat.dart';
 import '../../../../chat/domain/models/e_chat_filter.dart';
+import '../../../../chat/domain/usecases/search_chats_use_case.dart';
 
 part 'chats_filter_event.dart';
 
@@ -12,7 +14,12 @@ part 'chats_filter_state.dart';
 part 'chats_filter_bloc.freezed.dart';
 
 class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
-  ChatsFilterBloc() : super(const ChatsFilterState()) {
+  final SearchChatsUseCase _searchChatsUseCase;
+
+  ChatsFilterBloc({
+    required SearchChatsUseCase searchChatsUseCase,
+  }) : _searchChatsUseCase = searchChatsUseCase,
+       super(const ChatsFilterState()) {
     on<_ApplyFilter>(_applyFilter);
     on<_Search>(
       _search,
@@ -41,11 +48,22 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     }
   }
 
-  void _search(_Search event, emit) {
+  void _search(_Search event, emit) async {
     try {
       emit(
         state.copyWith(
           query: event.query,
+          status: ChatsFilterStatus.searching,
+        ),
+      );
+      final List<Chat> chats = await _searchChatsUseCase.call(
+        query: event.query,
+      );
+      emit(
+        state.copyWith(
+          query: event.query,
+          chats: chats,
+          status: ChatsFilterStatus.initial,
         ),
       );
     } catch (e) {

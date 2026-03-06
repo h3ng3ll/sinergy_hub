@@ -306,7 +306,7 @@ as String,
 /// @nodoc
 mixin _$ChatsFilterState {
 
- ChatsFilterStatus get status; EChatFilter get filter; String get query; dynamic get errorMessage;
+ ChatsFilterStatus get status; List<Chat> get chats; EChatFilter get filter; String get query; dynamic get errorMessage;
 /// Create a copy of ChatsFilterState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -317,16 +317,16 @@ $ChatsFilterStateCopyWith<ChatsFilterState> get copyWith => _$ChatsFilterStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatsFilterState&&(identical(other.status, status) || other.status == status)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatsFilterState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.chats, chats)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,filter,query,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(chats),filter,query,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatsFilterState(status: $status, filter: $filter, query: $query, errorMessage: $errorMessage)';
+  return 'ChatsFilterState(status: $status, chats: $chats, filter: $filter, query: $query, errorMessage: $errorMessage)';
 }
 
 
@@ -337,7 +337,7 @@ abstract mixin class $ChatsFilterStateCopyWith<$Res>  {
   factory $ChatsFilterStateCopyWith(ChatsFilterState value, $Res Function(ChatsFilterState) _then) = _$ChatsFilterStateCopyWithImpl;
 @useResult
 $Res call({
- ChatsFilterStatus status, EChatFilter filter, String query, dynamic errorMessage
+ ChatsFilterStatus status, List<Chat> chats, EChatFilter filter, String query, dynamic errorMessage
 });
 
 
@@ -354,10 +354,11 @@ class _$ChatsFilterStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatsFilterState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? filter = null,Object? query = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? chats = null,Object? filter = null,Object? query = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as ChatsFilterStatus,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
+as ChatsFilterStatus,chats: null == chats ? _self.chats : chats // ignore: cast_nullable_to_non_nullable
+as List<Chat>,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
 as EChatFilter,query: null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as dynamic,
@@ -442,10 +443,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  EChatFilter filter,  String query,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  List<Chat> chats,  EChatFilter filter,  String query,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatsFilterState() when $default != null:
-return $default(_that.status,_that.filter,_that.query,_that.errorMessage);case _:
+return $default(_that.status,_that.chats,_that.filter,_that.query,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -463,10 +464,10 @@ return $default(_that.status,_that.filter,_that.query,_that.errorMessage);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  EChatFilter filter,  String query,  dynamic errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  List<Chat> chats,  EChatFilter filter,  String query,  dynamic errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _ChatsFilterState():
-return $default(_that.status,_that.filter,_that.query,_that.errorMessage);}
+return $default(_that.status,_that.chats,_that.filter,_that.query,_that.errorMessage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -480,10 +481,10 @@ return $default(_that.status,_that.filter,_that.query,_that.errorMessage);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ChatsFilterStatus status,  EChatFilter filter,  String query,  dynamic errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ChatsFilterStatus status,  List<Chat> chats,  EChatFilter filter,  String query,  dynamic errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatsFilterState() when $default != null:
-return $default(_that.status,_that.filter,_that.query,_that.errorMessage);case _:
+return $default(_that.status,_that.chats,_that.filter,_that.query,_that.errorMessage);case _:
   return null;
 
 }
@@ -495,10 +496,17 @@ return $default(_that.status,_that.filter,_that.query,_that.errorMessage);case _
 
 
 class _ChatsFilterState implements ChatsFilterState {
-  const _ChatsFilterState({this.status = ChatsFilterStatus.initial, this.filter = EChatFilter.recent, this.query = '', this.errorMessage = ''});
+  const _ChatsFilterState({this.status = ChatsFilterStatus.initial, final  List<Chat> chats = const [], this.filter = EChatFilter.all, this.query = '', this.errorMessage = ''}): _chats = chats;
   
 
 @override@JsonKey() final  ChatsFilterStatus status;
+ final  List<Chat> _chats;
+@override@JsonKey() List<Chat> get chats {
+  if (_chats is EqualUnmodifiableListView) return _chats;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_chats);
+}
+
 @override@JsonKey() final  EChatFilter filter;
 @override@JsonKey() final  String query;
 @override@JsonKey() final  dynamic errorMessage;
@@ -513,16 +521,16 @@ _$ChatsFilterStateCopyWith<_ChatsFilterState> get copyWith => __$ChatsFilterStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatsFilterState&&(identical(other.status, status) || other.status == status)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatsFilterState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._chats, _chats)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,filter,query,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_chats),filter,query,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatsFilterState(status: $status, filter: $filter, query: $query, errorMessage: $errorMessage)';
+  return 'ChatsFilterState(status: $status, chats: $chats, filter: $filter, query: $query, errorMessage: $errorMessage)';
 }
 
 
@@ -533,7 +541,7 @@ abstract mixin class _$ChatsFilterStateCopyWith<$Res> implements $ChatsFilterSta
   factory _$ChatsFilterStateCopyWith(_ChatsFilterState value, $Res Function(_ChatsFilterState) _then) = __$ChatsFilterStateCopyWithImpl;
 @override @useResult
 $Res call({
- ChatsFilterStatus status, EChatFilter filter, String query, dynamic errorMessage
+ ChatsFilterStatus status, List<Chat> chats, EChatFilter filter, String query, dynamic errorMessage
 });
 
 
@@ -550,10 +558,11 @@ class __$ChatsFilterStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatsFilterState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? filter = null,Object? query = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? chats = null,Object? filter = null,Object? query = null,Object? errorMessage = freezed,}) {
   return _then(_ChatsFilterState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as ChatsFilterStatus,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
+as ChatsFilterStatus,chats: null == chats ? _self._chats : chats // ignore: cast_nullable_to_non_nullable
+as List<Chat>,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
 as EChatFilter,query: null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as dynamic,

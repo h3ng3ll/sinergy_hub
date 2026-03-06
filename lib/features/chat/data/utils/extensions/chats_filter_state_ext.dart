@@ -17,8 +17,9 @@ extension ChatsFilterStateExt on ChatsFilterState {
   //     return fullName.contains(q);
   //   });
   // }
+  bool get isApplied => query.isNotEmpty;
 
-  Iterable<Chat> _filterByType(Iterable<Chat> chats) {
+  Iterable<Chat> filterByType(Iterable<Chat> chats) {
     switch (filter) {
       ///Todo Came up with some logic
       case EChatFilter.recent:
@@ -41,14 +42,5 @@ extension ChatsFilterStateExt on ChatsFilterState {
           (e) => e.isArchived,
         );
     }
-  }
-
-  List<Chat> applyfilter(List<Chat> chats) {
-    return chats;
-    // return _filterByType(
-    //   // _filterByQuery(
-    //   //   chats,
-    //   // ),
-    // ).toList();
   }
 }

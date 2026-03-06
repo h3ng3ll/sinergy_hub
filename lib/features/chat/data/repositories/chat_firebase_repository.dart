@@ -1,6 +1,7 @@
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../domain/models/chat/chat.dart';
 import '../../domain/repositories/i_chat_repository.dart';
+import '../exception/no_found_keywords_for_searching_exception.dart';
 import '../models/chat_dto/chat_dto.dart';
 
 class ChatFirebaseRepository implements IChatRepository {
@@ -99,13 +100,22 @@ class ChatFirebaseRepository implements IChatRepository {
           'participants',
           arrayContains: uid,
         )
-        .where(
-          'keywords',
-          arrayContains: query,
-        )
         .get();
 
-    final chats = res.docs
+    final filtered = res.docs.where((doc) {
+      if( doc['searchKeywords'] == null) {
+        throw NoFoundKeywordsForSearchingException();
+      }
+      final keywords = List<String>.from(
+        doc['searchKeywords'],
+      );
+
+      return keywords.contains(
+        query.toLowerCase(),
+      );
+    });
+
+    final chats = filtered
         .map(
           (e) => ChatDto.fromJson(
             e.data(),
