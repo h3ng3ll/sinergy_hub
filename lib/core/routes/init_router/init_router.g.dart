@@ -71,6 +71,12 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
             GoRouteData.$route(
               path: '/edit-profile-page',
               factory: _$EditProfilePageRoute._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: 'looking-for-edit',
+                  factory: _$EditLookingForRoute._fromState,
+                ),
+              ],
             ),
             GoRouteData.$route(
               path: '/profile',
@@ -264,6 +270,28 @@ mixin _$EditProfilePageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/edit-profile-page');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$EditLookingForRoute on GoRouteData {
+  static EditLookingForRoute _fromState(GoRouterState state) =>
+      EditLookingForRoute();
+
+  @override
+  String get location =>
+      GoRouteData.$location('/edit-profile-page/looking-for-edit');
 
   @override
   void go(BuildContext context) => context.go(location);

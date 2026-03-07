@@ -1,10 +1,10 @@
 import '../models/user_data/user_data.dart';
 import '../repositories/i_user_repository.dart';
 
-class GetUserUseCase {
+class GetUserDataUseCase {
   final IUserRepository _userRepository;
 
-  GetUserUseCase({
+  GetUserDataUseCase({
     required IUserRepository userRepository,
   }) : _userRepository = userRepository;
 

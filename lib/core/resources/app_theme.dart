@@ -15,6 +15,7 @@ abstract class AppThemeData {
       elevation: 0,
       iconTheme: IconThemeData(color: Color(0xff1C1C1C)),
     ),
+
     textSelectionTheme: const TextSelectionThemeData(
         // cursorColor: Constants.cursorColor,
         // selectionHandleColor: Constants.bubbleUnderCursorColor,

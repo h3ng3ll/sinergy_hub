@@ -17,6 +17,7 @@ import '../../../features/notifications/presentation/pages/notification_page/not
 import '../../../features/onboard_survey/presentation/pages/onboard_about_you_page/onboard_about_you_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_shell_page/onboard_shell_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
+import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
 import '../root_page/root_page.dart';
 
 part 'init_router.g.dart';
@@ -78,6 +79,11 @@ final GoRouter initRouter = GoRouter(
             ),
             TypedGoRoute<EditProfilePageRoute>(
               path: '/edit-profile-page',
+              routes: [
+                TypedGoRoute<EditLookingForRoute>(
+                  path: 'looking-for-edit',
+                ),
+              ],
             ),
             TypedGoRoute<ProfilePageRoute>(
               path: '/profile',
@@ -97,6 +103,7 @@ final GoRouter initRouter = GoRouter(
 class RootPageRoute extends ShellRouteData {
   // static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
   static final GlobalKey rootKey = GlobalKey();
+
   @override
   Widget builder(
     BuildContext context,
@@ -178,7 +185,6 @@ class OnboardAboutYouPageRoute extends GoRouteData
 }
 
 class HomeBottomBarRoute extends StatefulShellRouteData {
-
   @override
   Widget builder(
     BuildContext context,
@@ -214,6 +220,15 @@ class ProfilePageRoute extends GoRouteData with _$ProfilePageRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       ProfileTab(),
+    );
+  }
+}
+
+class EditLookingForRoute extends GoRouteData with _$EditLookingForRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      EditLookingForPage(),
     );
   }
 }

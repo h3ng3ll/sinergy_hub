@@ -78,7 +78,7 @@ class UserFirebaseRepository extends IUserRepository {
     required UserDataPgState userDataState,
   }) async {
     final res = await _firebaseFirestoreService.usersDocument.get();
-    
+
     final userData = List<UserData>.from(
       res.docs
           .map(
@@ -114,7 +114,7 @@ class UserFirebaseRepository extends IUserRepository {
         )
         .get();
     final userData = userRow.data();
-    if (userData== null) {
+    if (userData == null) {
       return null;
     }
     final user = UserData.fromJson(
@@ -206,8 +206,17 @@ class UserFirebaseRepository extends IUserRepository {
         .userDocument(
           uid,
         )
-        .update(
-          userProfiler.toJson(),
-        );
+        .update({
+          'profiler': userProfiler.toJson(),
+        } , );
+  }
+
+  @override
+  Future<UserData?> currentUserDataFuture() async {
+    final uid = _firebaseAuthService.currentUser?.uid;
+    if (uid == null) return null;
+    return await getUserById(
+      id: uid,
+    );
   }
 }

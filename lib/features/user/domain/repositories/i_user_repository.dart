@@ -16,6 +16,8 @@ abstract class IUserRepository {
 
   Future<User?> currentUserFuture();
 
+  Future<UserData?> currentUserDataFuture();
+
   Future<List<UserData>> getUsersById({
     required List<String> ids,
   });
