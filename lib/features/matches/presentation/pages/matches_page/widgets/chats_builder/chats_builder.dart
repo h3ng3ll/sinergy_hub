@@ -15,12 +15,14 @@ class ChatsBuilder extends StatefulWidget {
   final VoidCallback onReachToEnd;
   final List<Chat> chats;
   final Function(Chat chat) onTapChat;
+  final Function(Chat chat) showChatActions;
 
   const ChatsBuilder({
     super.key,
     required this.onReachToEnd,
     required this.onTapChat,
     required this.chats,
+    required this.showChatActions,
   });
 
   @override
@@ -44,68 +46,21 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
     }
   }
 
-  void _showChatActions(BuildContext context, Chat chat) {
-    ChatActionsDialog.show(
-      context,
-      chat: chat,
-      onArchive: () {
-        // TODO: Implement archive logic
-        UiMessageService.showInfo(
-          chat.isArchived
-              ? 'Chat unarchived successfully'
-              : 'Chat archived successfully',
-        );
-      },
-      onFavorite: () {
-        // TODO: Implement favorite logic
-        UiMessageService.showInfo(
-          chat.isFavorite ? 'Removed from favorites' : 'Added to favorites',
-        );
-      },
-      onMute: () {
-        // TODO: Implement mute logic
-        UiMessageService.showInfo(
-          'Chat muted',
-        );
-      },
-      onDelete: () {
-        // TODO: Implement delete logic
-        UiMessageService.showInfo(
-          'Chat deleted',
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatBloc, ChatState>(
-      builder: (context, state) {
-        if (state.status == ChatStatus.loading) {
-          return LoadingDataWidget();
-        }
-        if (state.status == ChatStatus.failed) {
-          return Text(
-            'Failed load data: ${state.errorMessage}',
-          );
-        }
-        if (state.status == ChatStatus.initial && state.chats.isEmpty) {
-          return BuildChatsEmpty();
-        }
-
-        return ListView.builder(
-          controller: _scrollController,
-          itemCount: widget.chats.length,
-          itemBuilder: (context, index) {
-            final chat = widget.chats[index];
-            return ChatTileItem(
-              chat: chat,
-              onTap: () => widget.onTapChat(
-                chat,
-              ),
-              onLongPress: () => _showChatActions(context, chat),
-            );
-          },
+    return ListView.builder(
+      controller: _scrollController,
+      itemCount: widget.chats.length,
+      itemBuilder: (context, index) {
+        final chat = widget.chats[index];
+        return ChatTileItem(
+          chat: chat,
+          onTap: () => widget.onTapChat(
+            chat,
+          ),
+          onLongPress: () => widget.showChatActions(
+            chat,
+          ),
         );
       },
     );

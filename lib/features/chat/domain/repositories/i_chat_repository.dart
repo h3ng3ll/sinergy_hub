@@ -24,6 +24,7 @@ abstract class IChatRepository {
   Future<List<ChatDto>> get({
     required String uid,
     required String query,
+    List<String>? chatIds,
   });
 
   /// must return if specified uid contain

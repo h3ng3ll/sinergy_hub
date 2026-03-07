@@ -82,7 +82,7 @@ class ChatConfigFirebaseRepository implements IChatConfigRepository {
   }) async {
     final snapshot = await _chatConfigs(
       uid,
-    ).snapshots().last;
+    ).get();
 
     final configs = snapshot.docs
         .map(

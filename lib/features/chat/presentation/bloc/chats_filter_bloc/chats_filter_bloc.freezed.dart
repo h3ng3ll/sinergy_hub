@@ -55,12 +55,14 @@ extension ChatsFilterEventPatterns on ChatsFilterEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ApplyFilter value)?  applyFilter,TResult Function( _Search value)?  search,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ApplyFilter value)?  applyFilter,TResult Function( _Search value)?  search,TResult Function( _ToggleArchived value)?  toggleArchived,TResult Function( _ToggleFavorite value)?  toggleFavorite,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that);case _Search() when search != null:
-return search(_that);case _:
+return search(_that);case _ToggleArchived() when toggleArchived != null:
+return toggleArchived(_that);case _ToggleFavorite() when toggleFavorite != null:
+return toggleFavorite(_that);case _:
   return orElse();
 
 }
@@ -78,12 +80,14 @@ return search(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ApplyFilter value)  applyFilter,required TResult Function( _Search value)  search,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ApplyFilter value)  applyFilter,required TResult Function( _Search value)  search,required TResult Function( _ToggleArchived value)  toggleArchived,required TResult Function( _ToggleFavorite value)  toggleFavorite,}){
 final _that = this;
 switch (_that) {
 case _ApplyFilter():
 return applyFilter(_that);case _Search():
-return search(_that);}
+return search(_that);case _ToggleArchived():
+return toggleArchived(_that);case _ToggleFavorite():
+return toggleFavorite(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -97,12 +101,14 @@ return search(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ApplyFilter value)?  applyFilter,TResult? Function( _Search value)?  search,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ApplyFilter value)?  applyFilter,TResult? Function( _Search value)?  search,TResult? Function( _ToggleArchived value)?  toggleArchived,TResult? Function( _ToggleFavorite value)?  toggleFavorite,}){
 final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that);case _Search() when search != null:
-return search(_that);case _:
+return search(_that);case _ToggleArchived() when toggleArchived != null:
+return toggleArchived(_that);case _ToggleFavorite() when toggleFavorite != null:
+return toggleFavorite(_that);case _:
   return null;
 
 }
@@ -119,11 +125,13 @@ return search(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( EChatFilter filter)?  applyFilter,TResult Function( String query)?  search,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( EChatFilter filter)?  applyFilter,TResult Function( String query)?  search,TResult Function( Chat chat)?  toggleArchived,TResult Function( Chat chat)?  toggleFavorite,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that.filter);case _Search() when search != null:
-return search(_that.query);case _:
+return search(_that.query);case _ToggleArchived() when toggleArchived != null:
+return toggleArchived(_that.chat);case _ToggleFavorite() when toggleFavorite != null:
+return toggleFavorite(_that.chat);case _:
   return orElse();
 
 }
@@ -141,11 +149,13 @@ return search(_that.query);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( EChatFilter filter)  applyFilter,required TResult Function( String query)  search,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( EChatFilter filter)  applyFilter,required TResult Function( String query)  search,required TResult Function( Chat chat)  toggleArchived,required TResult Function( Chat chat)  toggleFavorite,}) {final _that = this;
 switch (_that) {
 case _ApplyFilter():
 return applyFilter(_that.filter);case _Search():
-return search(_that.query);}
+return search(_that.query);case _ToggleArchived():
+return toggleArchived(_that.chat);case _ToggleFavorite():
+return toggleFavorite(_that.chat);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -159,11 +169,13 @@ return search(_that.query);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( EChatFilter filter)?  applyFilter,TResult? Function( String query)?  search,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( EChatFilter filter)?  applyFilter,TResult? Function( String query)?  search,TResult? Function( Chat chat)?  toggleArchived,TResult? Function( Chat chat)?  toggleFavorite,}) {final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that.filter);case _Search() when search != null:
-return search(_that.query);case _:
+return search(_that.query);case _ToggleArchived() when toggleArchived != null:
+return toggleArchived(_that.chat);case _ToggleFavorite() when toggleFavorite != null:
+return toggleFavorite(_that.chat);case _:
   return null;
 
 }
@@ -301,6 +313,156 @@ as String,
 }
 
 
+}
+
+/// @nodoc
+
+
+class _ToggleArchived implements ChatsFilterEvent {
+  const _ToggleArchived({required this.chat});
+  
+
+ final  Chat chat;
+
+/// Create a copy of ChatsFilterEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ToggleArchivedCopyWith<_ToggleArchived> get copyWith => __$ToggleArchivedCopyWithImpl<_ToggleArchived>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ToggleArchived&&(identical(other.chat, chat) || other.chat == chat));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,chat);
+
+@override
+String toString() {
+  return 'ChatsFilterEvent.toggleArchived(chat: $chat)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ToggleArchivedCopyWith<$Res> implements $ChatsFilterEventCopyWith<$Res> {
+  factory _$ToggleArchivedCopyWith(_ToggleArchived value, $Res Function(_ToggleArchived) _then) = __$ToggleArchivedCopyWithImpl;
+@useResult
+$Res call({
+ Chat chat
+});
+
+
+$ChatCopyWith<$Res> get chat;
+
+}
+/// @nodoc
+class __$ToggleArchivedCopyWithImpl<$Res>
+    implements _$ToggleArchivedCopyWith<$Res> {
+  __$ToggleArchivedCopyWithImpl(this._self, this._then);
+
+  final _ToggleArchived _self;
+  final $Res Function(_ToggleArchived) _then;
+
+/// Create a copy of ChatsFilterEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? chat = null,}) {
+  return _then(_ToggleArchived(
+chat: null == chat ? _self.chat : chat // ignore: cast_nullable_to_non_nullable
+as Chat,
+  ));
+}
+
+/// Create a copy of ChatsFilterEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ChatCopyWith<$Res> get chat {
+  
+  return $ChatCopyWith<$Res>(_self.chat, (value) {
+    return _then(_self.copyWith(chat: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class _ToggleFavorite implements ChatsFilterEvent {
+  const _ToggleFavorite({required this.chat});
+  
+
+ final  Chat chat;
+
+/// Create a copy of ChatsFilterEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ToggleFavoriteCopyWith<_ToggleFavorite> get copyWith => __$ToggleFavoriteCopyWithImpl<_ToggleFavorite>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ToggleFavorite&&(identical(other.chat, chat) || other.chat == chat));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,chat);
+
+@override
+String toString() {
+  return 'ChatsFilterEvent.toggleFavorite(chat: $chat)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ToggleFavoriteCopyWith<$Res> implements $ChatsFilterEventCopyWith<$Res> {
+  factory _$ToggleFavoriteCopyWith(_ToggleFavorite value, $Res Function(_ToggleFavorite) _then) = __$ToggleFavoriteCopyWithImpl;
+@useResult
+$Res call({
+ Chat chat
+});
+
+
+$ChatCopyWith<$Res> get chat;
+
+}
+/// @nodoc
+class __$ToggleFavoriteCopyWithImpl<$Res>
+    implements _$ToggleFavoriteCopyWith<$Res> {
+  __$ToggleFavoriteCopyWithImpl(this._self, this._then);
+
+  final _ToggleFavorite _self;
+  final $Res Function(_ToggleFavorite) _then;
+
+/// Create a copy of ChatsFilterEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? chat = null,}) {
+  return _then(_ToggleFavorite(
+chat: null == chat ? _self.chat : chat // ignore: cast_nullable_to_non_nullable
+as Chat,
+  ));
+}
+
+/// Create a copy of ChatsFilterEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ChatCopyWith<$Res> get chat {
+  
+  return $ChatCopyWith<$Res>(_self.chat, (value) {
+    return _then(_self.copyWith(chat: value));
+  });
+}
 }
 
 /// @nodoc

@@ -6,7 +6,7 @@ extension ChatListFilterExt on List<ChatDto> {
   List<ChatDto> filterBy(EChatFilter filter) {
     switch (filter) {
       case EChatFilter.all:
-        return where((c) => !c.isArchived).toList();
+        return this;
 
       case EChatFilter.archived:
         return where((c) => c.isArchived).toList();
@@ -18,11 +18,10 @@ extension ChatListFilterExt on List<ChatDto> {
         return where((c) => !c.hasRead && !c.isArchived).toList();
 
       case EChatFilter.recent:
-        final sorted = List<ChatDto>.from(
-          where((c) => !c.isArchived),
+        sort(
+          (a, b) => b.lastMessageSent.compareTo(a.lastMessageSent),
         );
-        sorted.sort((a, b) => b.lastMessageSent.compareTo(a.lastMessageSent));
-        return sorted;
+        return this;
     }
   }
 }

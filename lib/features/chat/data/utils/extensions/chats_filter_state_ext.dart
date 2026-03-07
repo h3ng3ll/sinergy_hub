@@ -17,7 +17,7 @@ extension ChatsFilterStateExt on ChatsFilterState {
   //     return fullName.contains(q);
   //   });
   // }
-  bool get isApplied => query.isNotEmpty;
+  bool get isApplied => query.isNotEmpty || filter != EChatFilter.all;
 
   Iterable<Chat> filterByType(Iterable<Chat> chats) {
     switch (filter) {

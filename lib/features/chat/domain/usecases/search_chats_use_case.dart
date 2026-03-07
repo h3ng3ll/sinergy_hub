@@ -51,6 +51,7 @@ class SearchChatsUseCase {
 
     final List<ChatDto> chatsDto = await _chatRepository.get(
       uid: uid,
+      chatIds: chatIds,
       query: query,
     );
 
