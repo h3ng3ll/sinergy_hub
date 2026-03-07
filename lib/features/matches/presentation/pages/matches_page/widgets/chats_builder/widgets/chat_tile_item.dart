@@ -12,11 +12,13 @@ import '../../../../discovery_page/widgets/build_tinder_card/widgets/build_top_t
 class ChatTileItem extends StatelessWidget {
   final Chat chat;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
   const ChatTileItem({
     super.key,
     required this.chat,
     required this.onTap,
+    this.onLongPress,
   });
 
   @override
@@ -25,6 +27,7 @@ class ChatTileItem extends StatelessWidget {
     final textTheme = AppTextTheme.of(context);
     return TranslucentCardContainer(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Row(
         children: [
           BuildUserAvatar(
@@ -57,7 +60,6 @@ class ChatTileItem extends StatelessWidget {
               ),
             ],
           ),
-
         ],
       ),
     );

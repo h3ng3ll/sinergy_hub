@@ -17,6 +17,14 @@ _ChatDto _$ChatDtoFromJson(Map<String, dynamic> json) => _ChatDto(
   lastMessageSent: const TimestampConverter().fromJson(
     json['lastMessageSent'] as Timestamp,
   ),
+  searchKeywords:
+      (json['searchKeywords'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
+  isArchived: json['isArchived'] ?? false,
+  isFavorite: json['isFavorite'] ?? false,
+  hasRead: json['hasRead'] ?? false,
   participants: (json['participants'] as List<dynamic>)
       .map((e) => e as String)
       .toList(),
@@ -32,6 +40,10 @@ Map<String, dynamic> _$ChatDtoToJson(_ChatDto instance) => <String, dynamic>{
   'lastMessageSent': const TimestampConverter().toJson(
     instance.lastMessageSent,
   ),
+  'searchKeywords': instance.searchKeywords,
+  'isArchived': instance.isArchived,
+  'isFavorite': instance.isFavorite,
+  'hasRead': instance.hasRead,
   'participants': instance.participants,
   'createdAt': const TimestampConverter().toJson(instance.createdAt),
 };

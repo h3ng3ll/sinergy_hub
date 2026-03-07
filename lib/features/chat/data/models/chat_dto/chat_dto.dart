@@ -18,10 +18,14 @@ abstract class ChatDto with _$ChatDto {
     @Default('') String lastMessage,
     @Default([]) List<String> typingUsers,
     @TimestampConverter() required DateTime lastMessageSent,
+    @Default([]) List<String> searchKeywords,
+    @Default(false) isArchived,
+    @Default(false) isFavorite,
+    @Default(false) hasRead,
 
     /// who access this chat
     required List<String> participants,
-    @TimestampConverter()  required DateTime createdAt,
+    @TimestampConverter() required DateTime createdAt,
   }) = _ChatDto;
 
   factory ChatDto.fromJson(
@@ -39,7 +43,9 @@ abstract class ChatDto with _$ChatDto {
     participants: participants,
     createdAt: createdAt,
     typingUsers: typingUsers,
-    info: info ,
+    info: info,
+    isArchived: isArchived,
+    isFavorite: isFavorite,
   );
 
   factory ChatDto.fromDomain(
@@ -51,5 +57,7 @@ abstract class ChatDto with _$ChatDto {
     lastMessageSent: chat.lastMessageSent,
     participants: chat.participants,
     createdAt: chat.createdAt,
+    isArchived: chat.isArchived,
+    isFavorite: chat.isFavorite,
   );
 }

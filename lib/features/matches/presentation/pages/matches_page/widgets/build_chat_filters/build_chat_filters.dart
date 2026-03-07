@@ -8,7 +8,7 @@ import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../gen/assets.gen.dart';
 import '../../../../../../chat/domain/models/e_chat_filter.dart';
-import '../../../../bloc/chats_filter_bloc/chats_filter_bloc.dart';
+import '../../../../../../chat/presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 import 'build_chat_filter_item/build_chat_filter_item.dart';
 
 class ChatFilterUIData {

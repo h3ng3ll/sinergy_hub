@@ -1,4 +1,4 @@
-import '../../../../matches/presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
+import '../../../presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/e_chat_filter.dart';
 

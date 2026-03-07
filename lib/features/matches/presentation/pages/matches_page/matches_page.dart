@@ -13,7 +13,7 @@ import '../../../../chat/domain/models/e_chat_filter.dart';
 import '../../../../chat/domain/usecases/search_chats_use_case.dart';
 import '../../../../chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import '../../../../onboard_survey/presentation/pages/onboard_survey_page/stages/specialization_stage/widgets/search_input.dart';
-import '../../bloc/chats_filter_bloc/chats_filter_bloc.dart';
+import '../../../../chat/presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 import 'widgets/build_chat_filters/build_chat_filters.dart';
 import 'widgets/chats_builder/chats_builder.dart';
 

@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../domain/models/chat/chat.dart';
 import '../../domain/repositories/i_chat_repository.dart';
-import '../exception/no_found_keywords_for_searching_exception.dart';
+import '../exception/chat_no_data_exception.dart';
 import '../models/chat_dto/chat_dto.dart';
 
 class ChatFirebaseRepository implements IChatRepository {
@@ -91,39 +93,91 @@ class ChatFirebaseRepository implements IChatRepository {
   }
 
   @override
-  Future<List<ChatDto>> search({
+  Future<List<ChatDto>> get({
     required String uid,
-    required String query,
+    String? query,
+    List<String>? chatIds,
+    int limit = 20,
+    DocumentSnapshot? startAfterDoc,
   }) async {
-    final res = await _chats
-        .where(
-          'participants',
-          arrayContains: uid,
-        )
-        .get();
+    // 1. Если chatIds пустые, возвращаем сразу пустой список
+    if (chatIds == null || chatIds.isEmpty) {
+      return [];
+    }
 
-    final filtered = res.docs.where((doc) {
-      if( doc['searchKeywords'] == null) {
-        throw NoFoundKeywordsForSearchingException();
+    final List<ChatDto> result = [];
+
+    // 2. Firestore ограничивает whereIn до 10-30 элементов, делаем батчи
+    const batchSize = 10;
+    for (var i = 0; i < chatIds.length; i += batchSize) {
+      final batchIds = chatIds.sublist(
+        i,
+        (i + batchSize).clamp(
+          0,
+          chatIds.length,
+        ),
+      );
+
+      Query queryRef = _chats
+          .where(
+            'chatId',
+            whereIn: batchIds,
+          )
+          .where(
+            'participants',
+            arrayContains: uid,
+          )
+          .orderBy(
+            'lastMessageSent',
+            descending: true,
+          )
+          .limit(
+            limit,
+          );
+
+      // 3. Пагинация: если есть стартовый документ, продолжаем с него
+      if (startAfterDoc != null) {
+        queryRef = queryRef.startAfterDocument(
+          startAfterDoc,
+        );
       }
-      final keywords = List<String>.from(
-        doc['searchKeywords'],
-      );
 
-      return keywords.contains(
-        query.toLowerCase(),
-      );
-    });
+      final batchSnap = await queryRef.get();
 
-    final chats = filtered
-        .map(
-          (e) => ChatDto.fromJson(
-            e.data(),
-          ),
-        )
-        .toList();
+      final List<ChatDto> batchChats = batchSnap.docs.map(
+        (doc) {
+          if (doc.data() == null) {
+            throw ChatNoDataException();
+          }
+          return ChatDto.fromJson(
+            doc.data() as Map<String, dynamic>,
+          );
+        },
+      ).toList();
 
-    return chats;
+      result.addAll(batchChats);
+    }
+
+    // 4. Если query есть, фильтруем на клиенте по searchKeywords
+    if (query != null && query.isNotEmpty) {
+      return result.where(
+        (chat) {
+          final keywords = chat.searchKeywords
+              .map(
+                (k) => k.toLowerCase(),
+              )
+              .toList();
+
+          if (keywords.isEmpty) return false;
+
+          return keywords.contains(
+            query.toLowerCase(),
+          );
+        },
+      ).toList();
+    }
+
+    return result;
   }
 
   @override

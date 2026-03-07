@@ -1,11 +1,12 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../core/utils/extensions/bloc_ext.dart';
-import '../../../../chat/domain/models/chat/chat.dart';
-import '../../../../chat/domain/models/e_chat_filter.dart';
-import '../../../../chat/domain/usecases/search_chats_use_case.dart';
+import '../../../domain/models/chat/chat.dart';
+import '../../../domain/models/e_chat_filter.dart';
+import '../../../domain/usecases/search_chats_use_case.dart';
 
 part 'chats_filter_event.dart';
 
@@ -58,6 +59,7 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
       );
       final List<Chat> chats = await _searchChatsUseCase.call(
         query: event.query,
+        filter: state.filter,
       );
       emit(
         state.copyWith(

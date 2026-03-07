@@ -21,7 +21,7 @@ abstract class IChatRepository {
     required ChatDto chat,
   });
 
-  Future<List<ChatDto>> search({
+  Future<List<ChatDto>> get({
     required String uid,
     required String query,
   });
