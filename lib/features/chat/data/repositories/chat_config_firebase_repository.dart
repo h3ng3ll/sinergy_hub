@@ -1,4 +1,3 @@
-
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../domain/models/chat_config/chat_config.dart';
 import '../../domain/repositories/i_chat_config_repository.dart';
@@ -18,7 +17,7 @@ class ChatConfigFirebaseRepository implements IChatConfigRepository {
         uid,
       )
       .collection(
-        'chatConfigs',
+        'chats',
       );
 
   @override
