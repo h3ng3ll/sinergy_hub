@@ -35,7 +35,7 @@ const _$TinderCardStatusEnumMap = {
 };
 
 const _$EUserMatchCompletenessEnumMap = {
-  EUserMatchCompleteness.oneWayMatch: 'oneWayMatch',
-  EUserMatchCompleteness.twoWayMatch: 'twoWayMatch',
   EUserMatchCompleteness.none: 'none',
+  EUserMatchCompleteness.twoWayMatch: 'twoWayMatch',
+  EUserMatchCompleteness.oneWayMatch: 'oneWayMatch',
 };

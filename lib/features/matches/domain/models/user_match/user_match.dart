@@ -8,17 +8,21 @@ part 'user_match.g.dart';
 part 'user_match.freezed.dart';
 
 enum EUserMatchCompleteness {
+
+  /// if first disliked second and second not answered to it
+  none,
+
+  /// if first liked second and second both liked first
+  twoWayMatch,
+
   /// first time user liked another user
   oneWayMatch,
 
   // /// if one user disliked another and from opposite it liked first one
   // incomeOneWayMatch,
 
-  /// if first liked second and second both liked first
-  twoWayMatch,
 
-  /// if first disliked second and second not answered to it
-  none,
+
 }
 
 extension UserMatchX on UserMatch {

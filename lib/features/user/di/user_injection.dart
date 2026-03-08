@@ -9,6 +9,7 @@ import '../domain/repositories/i_user_repository.dart';
 import '../domain/usecases/get_current_user_data_use_case.dart';
 import '../domain/usecases/get_user_data_use_case.dart';
 import '../domain/usecases/get_users_use_case.dart';
+import '../domain/usecases/listen_current_user_data_use_case.dart';
 import '../domain/usecases/update_user_profiler_use_case.dart';
 import '../domain/usecases/update_user_usecase.dart';
 import '../presentation/pages/edit_looking_for_page/bloc/edit_looking_for_bloc.dart';
@@ -48,6 +49,12 @@ void initUserFeature(GetIt getIt) {
       getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
       updateUserProfilerUseCase: getIt<UpdateUserProfilerUseCase>(),
       authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerFactory<ListenCurrentUserDataUseCase>(
+    () => ListenCurrentUserDataUseCase(
+      authRepository: getIt<IAuthRepository>(),
+      userRepository: getIt<IUserRepository>(),
     ),
   );
 }

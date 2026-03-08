@@ -109,6 +109,7 @@ flutter:
     - assets/icons/
     - assets/lottie/
     - assets/sounds/
+    - assets/data/
 #    - assets/shaders/
 
   # must be only at root shaders folder
@@ -118,6 +119,7 @@ flutter:
     - shaders/ve.frag
     - shaders/check_pulse.frag
     - shaders/gradient_smooth.frag
+    - shaders/animated_gradient.frag
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -65,6 +65,10 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
+              path: '/match-result',
+              factory: _$MatchResultPageRoute._fromState,
+            ),
+            GoRouteData.$route(
               path: '/chat',
               factory: _$ChatPageRoute._fromState,
             ),
@@ -225,6 +229,27 @@ mixin _$MatchesPageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/matches');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$MatchResultPageRoute on GoRouteData {
+  static MatchResultPageRoute _fromState(GoRouterState state) =>
+      MatchResultPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/match-result');
 
   @override
   void go(BuildContext context) => context.go(location);

@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../onboard_survey/domain/models/skill/skill.dart';
-import '../../../../../user/domain/repositories/i_user_repository.dart';
+import '../../../../../onboard_survey/domain/use_cases/get_skills_use_case.dart';
+import '../../../../../user/domain/models/user_data/user_data.dart';
+import '../../../../../user/domain/usecases/listen_current_user_data_use_case.dart';
+import '../../../../../user/domain/usecases/update_user_usecase.dart';
 
 part 'edit_profile_page_event.dart';
 
@@ -14,11 +18,17 @@ part 'edit_profile_page_bloc.freezed.dart';
 
 class EditProfilePageBloc
     extends Bloc<EditProfilePageEvent, EditProfilePageState> {
-  final IUserRepository _userRepository;
+  final ListenCurrentUserDataUseCase _listenCurrentUserDataUseCase;
+  final GetSkillsUseCase _getSkillsUseCase;
+  final UpdateUserUseCase _updateUserUseCase;
 
   EditProfilePageBloc({
-    required IUserRepository userRepository,
-  }) : _userRepository = userRepository,
+    required ListenCurrentUserDataUseCase listenCurrentUserDataUseCase,
+    required GetSkillsUseCase getSkillsUseCase,
+    required UpdateUserUseCase updateUserUseCase,
+  }) : _listenCurrentUserDataUseCase = listenCurrentUserDataUseCase,
+       _getSkillsUseCase = getSkillsUseCase,
+       _updateUserUseCase = updateUserUseCase,
        super(const EditProfilePageState()) {
     on<_AddSkill>(_addSkill);
     on<_Initialize>(_initialize);
@@ -26,18 +36,30 @@ class EditProfilePageBloc
     on<_ApplyChanges>(_applyChanges);
   }
 
-  void _addSkill(event, emit) {
+  void _addSkill(_AddSkill event, emit) {
     try {
       final String skillName = event.name;
       final Skill skill = Skill(
         name: skillName,
       );
+
+      final List<Skill> skills = {
+        ...state.skills,
+        skill,
+      }.toList();
+
+      if (skills.length > 30) {
+        emit(
+          state.copyWith(
+            errorMessage: 'Exceeded skills limits',
+            status: EditProfilePageStatus.failed,
+          ),
+        );
+        return;
+      }
       emit(
         state.copyWith(
-          skills: [
-            ...state.skills,
-            skill,
-          ],
+          skills: skills,
         ),
       );
     } catch (e) {
@@ -58,6 +80,7 @@ class EditProfilePageBloc
         ),
       );
       final Skill skill = event.skill;
+
       emit(
         state.copyWith(
           skills:
@@ -80,18 +103,25 @@ class EditProfilePageBloc
   }
 
   Future<void> _initialize(
-    event,
+    _Initialize event,
     Emitter<EditProfilePageState> emit,
   ) async {
     try {
+      final availableSkills = await _getSkillsUseCase.call();
+      emit(
+        state.copyWith(
+          availableSkills: availableSkills,
+        ),
+      );
       await emit.forEach(
-        _userRepository.userDataStream(
-          event.uid,
-        ),
-        onData: (userData) => state.copyWith(
-          skills: userData?.profiler.skills ?? state.skills,
-          status: EditProfilePageStatus.updated,
-        ),
+        _listenCurrentUserDataUseCase.call(),
+        onData:
+            (
+              userData,
+            ) => state.copyWith(
+              userData: userData,
+              skills: userData?.profiler.skills ?? state.skills,
+            ),
       );
     } catch (e) {
       emit(
@@ -103,18 +133,32 @@ class EditProfilePageBloc
     }
   }
 
-  void _applyChanges(event, emit) {
+  Future<void> _applyChanges(
+    _ApplyChanges event,
+    emit,
+  ) async {
     try {
       emit(
         state.copyWith(
           status: EditProfilePageStatus.loading,
         ),
       );
-      final List<Skill> skills = event.skills;
+
+      await _updateUserUseCase.call(
+        state.userData!.copyWith(
+          firstName: event.firstName,
+          lastName: event.lastName,
+          aboutMe: event.aboutMe,
+          profiler: state.userData!.profiler.copyWith(
+            skills: state.skills,
+          ),
+        ),
+        event.img,
+      );
+
       emit(
         state.copyWith(
-          skills: skills,
-          status: EditProfilePageStatus.initial,
+          status: EditProfilePageStatus.updated,
         ),
       );
     } catch (e) {

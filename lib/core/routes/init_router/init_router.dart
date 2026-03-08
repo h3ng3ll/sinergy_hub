@@ -10,6 +10,7 @@ import '../../../features/chat/presentation/pages/chat_page/chat_page.dart';
 import '../../../features/home/presentation/home_bottom_bar/home_bottom_bar.dart';
 import '../../../features/home/presentation/home_root/home_root.dart';
 import '../../../features/matches/presentation/pages/discovery_page/discovery_page.dart';
+import '../../../features/matches/presentation/pages/match_result_page/match_result_page.dart';
 import '../../../features/matches/presentation/pages/matches_page/matches_page.dart';
 import '../../../features/home/presentation/edit_profile_page/edit_profile_page.dart';
 import '../../../features/home/presentation/tabs/profile_tab/profile_tab.dart';
@@ -74,6 +75,9 @@ final GoRouter initRouter = GoRouter(
         ),
         TypedStatefulShellBranch(
           routes: [
+            TypedGoRoute<MatchResultPageRoute>(
+              path: '/match-result',
+            ),
             TypedGoRoute<ChatPageRoute>(
               path: '/chat',
             ),
@@ -229,6 +233,26 @@ class EditLookingForRoute extends GoRouteData with _$EditLookingForRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       EditLookingForPage(),
+    );
+  }
+}
+
+class MatchResultPageRoute extends GoRouteData with _$MatchResultPageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      MatchResultPage(
+        currentUserName: '',
+        currentUserAvatar: '',
+        currentUserRole: '',
+        matchedUserName: '',
+        matchedUserAvatar: '',
+        matchedUserRole: '',
+        compatibilityScore: 3,
+        skillsMatch: 5,
+        visionAlign: 3,
+        experienceScore: 7,
+      ),
     );
   }
 }

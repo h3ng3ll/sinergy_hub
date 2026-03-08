@@ -25,11 +25,13 @@ import '../../../../home/presentation/edit_profile_page/widgets/build_grouped_in
 import '../../../../home/presentation/edit_profile_page/widgets/build_skills_section/build_skills_section.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../user/domain/repositories/i_user_repository.dart';
+import '../../../../user/domain/usecases/listen_current_user_data_use_case.dart';
 import '../../../../user/domain/usecases/update_user_usecase.dart';
 import '../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../../user/presentation/bloc/user_update_cubit/user_update_cubit.dart';
 import '../../../domain/models/skill/skill.dart';
 import '../../../domain/models/user_profiler/user_profiler.dart';
+import '../../../domain/use_cases/get_skills_use_case.dart';
 import '../../bloc/onboard_bloc/onboard_bloc.dart';
 
 class OnboardAboutYouPage extends StatefulWidget {
@@ -53,7 +55,9 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
   void initState() {
     final userCubit = context.read<UserBloc>();
     _editProfilePageBloc = EditProfilePageBloc(
-      userRepository: getIt<IUserRepository>(),
+      getSkillsUseCase: getIt<GetSkillsUseCase>(),
+      listenCurrentUserDataUseCase: getIt<ListenCurrentUserDataUseCase>(),
+      updateUserUseCase: getIt<UpdateUserUseCase>(),
     );
     _userUpdateCubit = UserUpdateCubit(
       updateUserUseCase: getIt<UpdateUserUseCase>(),
@@ -161,85 +165,93 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
             );
           }
         },
-        child: BuildAnimatedBackground(
-          child: SafeArea(
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: CustomAppBar(
-                actions: [
-                  Spacer(),
-                  Center(
-                    child: Text(
-                      'Tell About yourself',
-                      style: textTheme.bold20.copyWith(
-                        color: colorScheme.onPrimary,
+        child: BlocBuilder<EditProfilePageBloc, EditProfilePageState>(
+          builder: (context, state) {
+            final availableSkills = state.availableSkills;
+
+            return BuildAnimatedBackground(
+              child: SafeArea(
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: CustomAppBar(
+                    actions: [
+                      Spacer(),
+                      Center(
+                        child: Text(
+                          'Tell About yourself',
+                          style: textTheme.bold20.copyWith(
+                            color: colorScheme.onPrimary,
+                          ),
+                        ),
                       ),
-                    ),
+                      Spacer(),
+                    ],
                   ),
-                  Spacer(),
-                ],
-              ),
-              body: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: HorizontalPadding(
-                    child: Column(
-                      spacing: 20,
-                      children: [
-                        BuildUserAvatar(
-                          width: 100.0,
-                          height: 100.0,
-                          onTap: onTapAvatar,
-                          url: userData?.avatarUrl,
-                          cacheImg: image,
-                        ),
-                        BuildGroupedInput(
-                          title: 'FirstName',
-                          child: FirstNameInput(
-                            controller: _firstNameController,
-                          ),
-                        ),
-                        BuildGroupedInput(
-                          title: 'LastName',
-                          child: LastNameInput(
-                            controller: _lastNameController,
-                          ),
-                        ),
-                        BuildGroupedInput(
-                          title: 'Bio',
-                          child: BioInput(
-                            controller: _bioController,
-                          ),
-                        ),
-                        BuildSkillsSection(
-                          onRemoveExistingSkill: onRemoveExistingSkill,
-                          skillController: _skillController,
-                          onSubmitSkill: onSubmitSkill,
-                        ),
-                        // Spacer(),
-                        Row(
-                          spacing: 20.0,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                  body: SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: HorizontalPadding(
+                        child: Column(
+                          spacing: 20,
                           children: [
-                            CustomTextBtn(
-                              onPressed: onCancel,
-                              text: 'Cancel',
+                            BuildUserAvatar(
+                              width: 100.0,
+                              height: 100.0,
+                              onTap: onTapAvatar,
+                              url: userData?.avatarUrl,
+                              cacheImg: image,
                             ),
-                            TranslucentBtn(
-                              onPressed: onNext,
-                              child: Text(
-                                'Next',
+                            BuildGroupedInput(
+                              title: 'FirstName',
+                              child: FirstNameInput(
+                                controller: _firstNameController,
                               ),
+                            ),
+                            BuildGroupedInput(
+                              title: 'LastName',
+                              child: LastNameInput(
+                                controller: _lastNameController,
+                              ),
+                            ),
+                            BuildGroupedInput(
+                              title: 'Bio',
+                              child: BioInput(
+                                controller: _bioController,
+                              ),
+                            ),
+                            BuildSkillsSection(
+                              onRemoveExistingSkill: onRemoveExistingSkill,
+                              onSubmitSkill: onSubmitSkill,
+                              skills: availableSkills,
+                              activeSkills: state.skills,
+
+                            ),
+                            // Spacer(),
+                            Row(
+                              spacing: 20.0,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CustomTextBtn(
+                                  onPressed: onCancel,
+                                  text: 'Cancel',
+                                ),
+                                TranslucentBtn(
+                                  onPressed: onNext,
+                                  child: Text(
+                                    'Next',
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

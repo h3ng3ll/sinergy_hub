@@ -9,6 +9,7 @@ abstract class AppShaders {
   static const myShader = '${_base}my_shader$_ext';
   static const checkPulse = '${_base}check_pulse$_ext';
   static const gradientSmooth = '${_base}gradient_smooth$_ext';
+  static const animatedGradient = '${_base}animated_gradient$_ext';
 }
 
 
