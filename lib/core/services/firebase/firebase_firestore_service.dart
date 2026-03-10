@@ -12,7 +12,7 @@ class FirebaseFirestoreService {
   final int _batchLimit = 500;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
-  Future<void> init () async {
+  Future<void> init() async {
     if (AppConfig.isQA) {
       _firebaseFirestore.useFirestoreEmulator(
         AppConfig.emulatorAddress(),
@@ -20,6 +20,7 @@ class FirebaseFirestoreService {
       );
     }
   }
+
   /// References
   ColRef get usersDocument => _firebaseFirestore.collection(
     'users',
@@ -46,6 +47,10 @@ class FirebaseFirestoreService {
 
   ColRef chats() => _firebaseFirestore.collection(
     'chats',
+  );
+
+  ColRef matches() => _firebaseFirestore.collection(
+    'matches',
   );
 
   ColRef notifications({

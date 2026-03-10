@@ -246,10 +246,15 @@ mixin _$MatchesPageRoute on GoRouteData {
 
 mixin _$MatchResultPageRoute on GoRouteData {
   static MatchResultPageRoute _fromState(GoRouterState state) =>
-      MatchResultPageRoute();
+      MatchResultPageRoute(matchId: state.uri.queryParameters['match-id']!);
+
+  MatchResultPageRoute get _self => this as MatchResultPageRoute;
 
   @override
-  String get location => GoRouteData.$location('/match-result');
+  String get location => GoRouteData.$location(
+    '/match-result',
+    queryParams: {'match-id': _self.matchId},
+  );
 
   @override
   void go(BuildContext context) => context.go(location);

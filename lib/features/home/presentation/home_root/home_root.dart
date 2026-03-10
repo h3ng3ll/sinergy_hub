@@ -15,8 +15,6 @@ import '../../../calls/domain/use_cases/start_call_use_case.dart';
 import '../../../calls/presentation/bloc/call_bloc/call_bloc.dart';
 import '../../../calls/presentation/overlay/incoming_call_overlay/incoming_call_overlay.dart';
 import '../../../chat/presentation/bloc/chat_bloc/chat_bloc.dart';
-import '../../../matches/domain/usecases/get_user_matches_outcome_use_case.dart';
-import '../../../matches/presentation/bloc/user_matches_outcome_cubit/user_matches_outcome_cubit.dart';
 import '../../../notifications/domain/usecases/get_notifications_use_case.dart';
 import '../../../notifications/domain/usecases/save_notification_use_case.dart';
 import '../../../notifications/presentation/bloc/notification_bloc/notification_bloc.dart';
@@ -35,7 +33,6 @@ class HomeRoot extends StatefulWidget {
 
 class _HomeRootState extends State<HomeRoot> {
   late final ChatBloc _chatBloc;
-  late final UserMatchesOutcomeCubit _userMatchingOutcomeCubit;
   late final CallBloc _callBloc;
   OverlayEntry? _entry;
 
@@ -50,10 +47,6 @@ class _HomeRootState extends State<HomeRoot> {
           const ChatEvent.init(),
         );
 
-    _userMatchingOutcomeCubit = UserMatchesOutcomeCubit(
-      createUserMatchesUseCase: getIt(),
-      getUserMatchesOutcomeUseCase: getIt<GetUserMatchesOutcomeUseCase>(),
-    );
     _callBloc =
         CallBloc(
           startCallUseCase: getIt<StartCallUseCase>(),
@@ -94,10 +87,6 @@ class _HomeRootState extends State<HomeRoot> {
         BlocProvider.value(
           value: _chatBloc,
         ),
-        BlocProvider.value(
-          value: _userMatchingOutcomeCubit,
-        ),
-
         BlocProvider<NotificationBloc>(
           create: (_) =>
               NotificationBloc(
@@ -163,7 +152,6 @@ class _HomeRootState extends State<HomeRoot> {
 
     _callBloc.close();
     _chatBloc.close();
-    _userMatchingOutcomeCubit.close();
     super.dispose();
   }
 }

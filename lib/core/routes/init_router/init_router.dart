@@ -238,20 +238,17 @@ class EditLookingForRoute extends GoRouteData with _$EditLookingForRoute {
 }
 
 class MatchResultPageRoute extends GoRouteData with _$MatchResultPageRoute {
+  final String matchId;
+
+  const MatchResultPageRoute({
+    required this.matchId,
+  });
+
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       MatchResultPage(
-        currentUserName: '',
-        currentUserAvatar: '',
-        currentUserRole: '',
-        matchedUserName: '',
-        matchedUserAvatar: '',
-        matchedUserRole: '',
-        compatibilityScore: 3,
-        skillsMatch: 5,
-        visionAlign: 3,
-        experienceScore: 7,
+        matchId: matchId,
       ),
     );
   }

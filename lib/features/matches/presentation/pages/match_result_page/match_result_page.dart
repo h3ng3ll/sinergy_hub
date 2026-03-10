@@ -1,104 +1,200 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
+import '../../../domain/usecases/get_match_by_id_use_case.dart';
+import '../../../domain/usecases/mark_as_notified_match_use_case.dart';
+import '../../bloc/match_result_bloc/match_result_bloc.dart';
 import 'widgets/animated_gradient_background.dart';
 
-class MatchResultPage extends StatelessWidget {
-  final String currentUserName;
-  final String currentUserAvatar;
-  final String currentUserRole;
-  final String matchedUserName;
-  final String matchedUserAvatar;
-  final String matchedUserRole;
-  final int compatibilityScore;
-  final int skillsMatch;
-  final int visionAlign;
-  final int experienceScore;
+class MatchResultPage extends StatefulWidget {
+  final String matchId;
 
   const MatchResultPage({
     super.key,
-    required this.currentUserName,
-    required this.currentUserAvatar,
-    required this.currentUserRole,
-    required this.matchedUserName,
-    required this.matchedUserAvatar,
-    required this.matchedUserRole,
-    required this.compatibilityScore,
-    required this.skillsMatch,
-    required this.visionAlign,
-    required this.experienceScore,
+    required this.matchId,
   });
+
+  @override
+  State<MatchResultPage> createState() => _MatchResultPageState();
+}
+
+class _MatchResultPageState extends State<MatchResultPage> {
+  late final MatchResultBloc _matchResultBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _matchResultBloc =
+        MatchResultBloc(
+          getMatchByIdUseCase: getIt<GetMatchByIdUseCase>(),
+          getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
+          markAsNotifiedMatchUseCase: getIt<MarkAsNotifiedMatchUseCase>(),
+        )..add(
+          MatchResultEvent.getResult(
+            matchId: widget.matchId,
+          ),
+        );
+  }
+
+  @override
+  void dispose() {
+    _matchResultBloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
 
-    return AnimatedGradientBackground(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Spacer(),
-                // User Avatars Row
-                _buildAvatarsRow(context),
-                const Gap(40),
-                // Match Title
-                Text(
-                  'You + $matchedUserName',
-                  style: textTheme.bold24.copyWith(
+    return BlocProvider.value(
+      value: _matchResultBloc,
+      child: BlocBuilder<MatchResultBloc, MatchResultState>(
+        builder: (context, state) {
+          if (state.status == MatchResultStatus.loading) {
+            return AnimatedGradientBackground(
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: const Center(
+                  child: CircularProgressIndicator(
                     color: Colors.white,
-                    fontSize: 32,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                const Gap(12),
-                Text(
-                  'Perfect Co-founder Match!',
-                  style: textTheme.medium16.copyWith(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    fontSize: 18,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const Gap(24),
-                // Role Badges
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildRoleBadge(currentUserRole, colorScheme, textTheme),
-                    const Gap(12),
-                    Icon(
-                      Icons.add,
-                      color: Colors.white.withValues(alpha: 0.8),
-                      size: 20,
+              ),
+            );
+          }
+
+          if (state.status == MatchResultStatus.failed) {
+            return AnimatedGradientBackground(
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Center(
+                  child: Text(
+                    'Error: ${state.errorMessage}',
+                    style: textTheme.medium16.copyWith(
+                      color: Colors.white,
                     ),
-                    const Gap(12),
-                    _buildRoleBadge(matchedUserRole, colorScheme, textTheme),
-                  ],
+                  ),
                 ),
-                const Gap(60),
-                // Compatibility Score Card
-                _buildCompatibilityCard(colorScheme, textTheme),
-                const Spacer(),
-                // Action Buttons
-                _buildActionButtons(context, colorScheme, textTheme),
-                const Gap(32),
-              ],
+              ),
+            );
+          }
+
+          if (state.match == null) {
+            return AnimatedGradientBackground(
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: const Center(
+                  child: Text(
+                    'No match data',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            );
+          }
+          final match = state.match!;
+          // Calculate compatibility score
+          final skillsMatch = match.skillsMatch ?? 0;
+          final visionAlign = match.align ?? 0;
+          final experienceScore = match.experienceScore ?? 0;
+          final total = skillsMatch + visionAlign + experienceScore;
+          final compatibilityScore = ((total / 30) * 100).round();
+
+          return AnimatedGradientBackground(
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Spacer(),
+                      // User Avatars Row
+                      _buildAvatarsRow(
+                        context,
+                        match.user.avatarUrl ?? '',
+                        match.user.avatarUrl ?? '',
+                      ),
+                      const Gap(40),
+                      // Match Title
+                      Text(
+                        'You + ${match.user.firstName}',
+                        style: textTheme.bold24.copyWith(
+                          color: Colors.white,
+                          fontSize: 32,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const Gap(12),
+                      Text(
+                        'Perfect Co-founder Match!',
+                        style: textTheme.medium16.copyWith(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          fontSize: 18,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const Gap(24),
+                      // Role Badges
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildRoleBadge(
+                            match.user.profiler.role.name,
+                            colorScheme,
+                            textTheme,
+                          ),
+                          const Gap(12),
+                          Icon(
+                            Icons.add,
+                            color: Colors.white.withValues(alpha: 0.8),
+                            size: 20,
+                          ),
+                          const Gap(12),
+                          _buildRoleBadge(
+                            match.user.profiler.role.name,
+                            colorScheme,
+                            textTheme,
+                          ),
+                        ],
+                      ),
+                      const Gap(60),
+                      // Compatibility Score Card
+                      _buildCompatibilityCard(
+                        compatibilityScore,
+                        skillsMatch,
+                        visionAlign,
+                        experienceScore,
+                        colorScheme,
+                        textTheme,
+                      ),
+                      const Spacer(),
+                      // Action Buttons
+                      _buildActionButtons(context, colorScheme, textTheme),
+                      const Gap(32),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildAvatarsRow(BuildContext context) {
+  Widget _buildAvatarsRow(
+    BuildContext context,
+    String currentUserAvatar,
+    String matchedUserAvatar,
+  ) {
     return Stack(
       alignment: Alignment.center,
       clipBehavior: Clip.none,
@@ -202,6 +298,10 @@ class MatchResultPage extends StatelessWidget {
   }
 
   Widget _buildCompatibilityCard(
+    int compatibilityScore,
+    int skillsMatch,
+    int visionAlign,
+    int experienceScore,
     AppColorScheme colorScheme,
     AppTextTheme textTheme,
   ) {
