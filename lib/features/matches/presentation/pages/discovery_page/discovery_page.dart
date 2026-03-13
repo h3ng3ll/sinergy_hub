@@ -5,6 +5,7 @@ import '../../../../../core/di/injection.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../chat/presentation/bloc/chat_bloc/chat_bloc.dart';
+import '../../../domain/models/matches_filter/matches_filter.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
 import '../../../domain/usecases/look_for_matches_use_case.dart';
 import '../../../domain/usecases/listen_two_way_match_use_case.dart';
@@ -13,6 +14,7 @@ import '../../bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../bloc/matches_bloc/matches_bloc.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
 import 'widgets/build_tinder_card/build_tinder_card.dart';
+import '../../dialogs/filter_modal/matches_filters_modal_sheet.dart';
 
 class DiscoveryPage extends StatefulWidget {
   const DiscoveryPage({
@@ -60,10 +62,18 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
     super.dispose();
   }
 
-  void onAdjustFilters() {
-    // MatchResultPageRoute().push(
-    //   context,
-    // );
+  Future<void> onAdjustFilters() async {
+    final MatchesFilter? result = await MatchesFiltersModalSheet.show(
+      HomeBottomBarRoute.homeBottomBarKey.currentState!.context,
+      initialOptions: _peopleDataBloc.state.filter,
+    );
+
+    if (result == null) return;
+    _peopleDataBloc.add(
+      PeopleDataEvent.applyFilter(
+        filter: result,
+      ),
+    );
   }
 
   void onKeepSwiping() {}
@@ -132,44 +142,102 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
     );
   }
 
+  void _onResetFilter() {
+    _peopleDataBloc.add(
+      PeopleDataEvent.removeFilter(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider.value(
-            value: _peopleDataBloc,
-          ),
-          BlocProvider<TinderCardCubit>.value(
-            value: _tinderCardCubit,
-          ),
-          BlocProvider.value(
-            value: _matchesBloc,
-          ),
-        ],
-        child: BlocListener<MatchesBloc, MatchesState>(
-          listener: (context, state) {
-            if (state.status == MatchesStatus.foundMatch &&
-                state.userMatch != null) {
-              MatchResultPageRoute(
-                matchId: state.userMatch!.matchId,
-              ).push(
-                context,
-              );
-            }
-            if (state.status == MatchesStatus.failed) {
-              UiMessageService.showError(
-                state.errorMessage,
-              );
-            }
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(
+          value: _peopleDataBloc,
+        ),
+        BlocProvider<TinderCardCubit>.value(
+          value: _tinderCardCubit,
+        ),
+        BlocProvider.value(
+          value: _matchesBloc,
+        ),
+      ],
+      child: BlocListener<MatchesBloc, MatchesState>(
+        listener: (context, state) {
+          if (state.status == MatchesStatus.foundMatch &&
+              state.userMatch != null) {
+            MatchResultPageRoute(
+              matchId: state.userMatch!.matchId,
+            ).push(
+              context,
+            );
+          }
+          if (state.status == MatchesStatus.failed) {
+            UiMessageService.showError(
+              state.errorMessage,
+            );
+          }
+        },
+        child: Builder(
+          builder: (context) {
+            final isApplied = context
+                .watch<PeopleDataBloc>()
+                .state
+                .filter
+                .isApplied;
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                actions: [
+                  if (isApplied)
+                    InkWell(
+                      onTap: _onResetFilter,
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.filter_list_off_outlined,
+                          color: Colors.white,
+                          size: 24.0,
+                        ),
+                      ),
+                    ),
+                  IconButton(
+                    icon: Stack(
+                      children: [
+                        const Icon(
+                          Icons.tune,
+                          color: Colors.white,
+                        ),
+                        if (isApplied)
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Container(
+                              width: 8.0,
+                              height: 8.0,
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    onPressed: onAdjustFilters,
+                    tooltip: 'Filters',
+                  ),
+                ],
+              ),
+              body: BuildTinderCard(
+                onAdjustFilters: onAdjustFilters,
+                onPanUpdate: onPanUpdate,
+                onPanStart: onPanStart,
+                onPanEnd: onPanEnd,
+              ),
+            );
           },
-          child: BuildTinderCard(
-            onAdjustFilters: onAdjustFilters,
-            onPanUpdate: onPanUpdate,
-            onPanStart: onPanStart,
-            onPanEnd: onPanEnd,
-          ),
         ),
       ),
     );

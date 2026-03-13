@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../matches/domain/models/matches_filter/matches_filter.dart';
 import '../../../onboard_survey/domain/models/user_profiler/user_profiler.dart';
 import '../models/user_data/user_data.dart';
 import '../models/users_data_pg_state/users_data_pg_state.dart';
@@ -26,8 +27,9 @@ abstract class IUserRepository {
     required String id,
   });
 
-  Future<List<UserData>> get({
+  Future<UserDataPgState> get({
     required UserDataPgState userDataState,
+    MatchesFilter? filter,
   });
 
   Future<void> setUserProfiler({

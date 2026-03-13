@@ -1,4 +1,5 @@
 import '../../data/models/matches_dto/matches_dto.dart';
+import '../models/matches_filter/matches_filter.dart';
 
 abstract class IMatchesRepository {
   /// Listen for new two-way matches

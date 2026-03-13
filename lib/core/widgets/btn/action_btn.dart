@@ -43,6 +43,7 @@ class ActionBtn extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
+
         backgroundColor: WidgetStateProperty.resolveWith<Color>(
           (states) {
             if (states.contains(WidgetState.disabled)) {
@@ -68,7 +69,7 @@ class ActionBtn extends StatelessWidget {
           colorScheme.onPrimary,
         ),
         shadowColor: WidgetStateProperty.all(
-          Colors.transparent,
+          Colors.black.withOpacity(0.1),
         ),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(

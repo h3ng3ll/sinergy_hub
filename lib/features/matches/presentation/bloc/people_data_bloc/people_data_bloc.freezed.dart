@@ -55,11 +55,14 @@ extension PeopleDataEventPatterns on PeopleDataEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _LoadPeoples value)?  loadPeoples,TResult Function( _RemoveVisible value)?  removeVisible,TResult Function( _UpdateViewedPeoples value)?  updateViewedPeoples,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _LoadPeoples value)?  loadPeoples,TResult Function( _LoadMorePeoples value)?  loadMorePeoples,TResult Function( _ApplyFilter value)?  applyFilter,TResult Function( _RemoveFilter value)?  removeFilter,TResult Function( _RemoveVisible value)?  removeVisible,TResult Function( _UpdateViewedPeoples value)?  updateViewedPeoples,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _LoadPeoples() when loadPeoples != null:
-return loadPeoples(_that);case _RemoveVisible() when removeVisible != null:
+return loadPeoples(_that);case _LoadMorePeoples() when loadMorePeoples != null:
+return loadMorePeoples(_that);case _ApplyFilter() when applyFilter != null:
+return applyFilter(_that);case _RemoveFilter() when removeFilter != null:
+return removeFilter(_that);case _RemoveVisible() when removeVisible != null:
 return removeVisible(_that);case _UpdateViewedPeoples() when updateViewedPeoples != null:
 return updateViewedPeoples(_that);case _:
   return orElse();
@@ -79,11 +82,14 @@ return updateViewedPeoples(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _LoadPeoples value)  loadPeoples,required TResult Function( _RemoveVisible value)  removeVisible,required TResult Function( _UpdateViewedPeoples value)  updateViewedPeoples,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _LoadPeoples value)  loadPeoples,required TResult Function( _LoadMorePeoples value)  loadMorePeoples,required TResult Function( _ApplyFilter value)  applyFilter,required TResult Function( _RemoveFilter value)  removeFilter,required TResult Function( _RemoveVisible value)  removeVisible,required TResult Function( _UpdateViewedPeoples value)  updateViewedPeoples,}){
 final _that = this;
 switch (_that) {
 case _LoadPeoples():
-return loadPeoples(_that);case _RemoveVisible():
+return loadPeoples(_that);case _LoadMorePeoples():
+return loadMorePeoples(_that);case _ApplyFilter():
+return applyFilter(_that);case _RemoveFilter():
+return removeFilter(_that);case _RemoveVisible():
 return removeVisible(_that);case _UpdateViewedPeoples():
 return updateViewedPeoples(_that);case _:
   throw StateError('Unexpected subclass');
@@ -102,11 +108,14 @@ return updateViewedPeoples(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _LoadPeoples value)?  loadPeoples,TResult? Function( _RemoveVisible value)?  removeVisible,TResult? Function( _UpdateViewedPeoples value)?  updateViewedPeoples,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _LoadPeoples value)?  loadPeoples,TResult? Function( _LoadMorePeoples value)?  loadMorePeoples,TResult? Function( _ApplyFilter value)?  applyFilter,TResult? Function( _RemoveFilter value)?  removeFilter,TResult? Function( _RemoveVisible value)?  removeVisible,TResult? Function( _UpdateViewedPeoples value)?  updateViewedPeoples,}){
 final _that = this;
 switch (_that) {
 case _LoadPeoples() when loadPeoples != null:
-return loadPeoples(_that);case _RemoveVisible() when removeVisible != null:
+return loadPeoples(_that);case _LoadMorePeoples() when loadMorePeoples != null:
+return loadMorePeoples(_that);case _ApplyFilter() when applyFilter != null:
+return applyFilter(_that);case _RemoveFilter() when removeFilter != null:
+return removeFilter(_that);case _RemoveVisible() when removeVisible != null:
 return removeVisible(_that);case _UpdateViewedPeoples() when updateViewedPeoples != null:
 return updateViewedPeoples(_that);case _:
   return null;
@@ -125,10 +134,13 @@ return updateViewedPeoples(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadPeoples,TResult Function()?  removeVisible,TResult Function( List<String> uids)?  updateViewedPeoples,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadPeoples,TResult Function()?  loadMorePeoples,TResult Function( MatchesFilter filter)?  applyFilter,TResult Function()?  removeFilter,TResult Function()?  removeVisible,TResult Function( List<String> uids)?  updateViewedPeoples,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoadPeoples() when loadPeoples != null:
-return loadPeoples();case _RemoveVisible() when removeVisible != null:
+return loadPeoples();case _LoadMorePeoples() when loadMorePeoples != null:
+return loadMorePeoples();case _ApplyFilter() when applyFilter != null:
+return applyFilter(_that.filter);case _RemoveFilter() when removeFilter != null:
+return removeFilter();case _RemoveVisible() when removeVisible != null:
 return removeVisible();case _UpdateViewedPeoples() when updateViewedPeoples != null:
 return updateViewedPeoples(_that.uids);case _:
   return orElse();
@@ -148,10 +160,13 @@ return updateViewedPeoples(_that.uids);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadPeoples,required TResult Function()  removeVisible,required TResult Function( List<String> uids)  updateViewedPeoples,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadPeoples,required TResult Function()  loadMorePeoples,required TResult Function( MatchesFilter filter)  applyFilter,required TResult Function()  removeFilter,required TResult Function()  removeVisible,required TResult Function( List<String> uids)  updateViewedPeoples,}) {final _that = this;
 switch (_that) {
 case _LoadPeoples():
-return loadPeoples();case _RemoveVisible():
+return loadPeoples();case _LoadMorePeoples():
+return loadMorePeoples();case _ApplyFilter():
+return applyFilter(_that.filter);case _RemoveFilter():
+return removeFilter();case _RemoveVisible():
 return removeVisible();case _UpdateViewedPeoples():
 return updateViewedPeoples(_that.uids);case _:
   throw StateError('Unexpected subclass');
@@ -170,10 +185,13 @@ return updateViewedPeoples(_that.uids);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadPeoples,TResult? Function()?  removeVisible,TResult? Function( List<String> uids)?  updateViewedPeoples,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadPeoples,TResult? Function()?  loadMorePeoples,TResult? Function( MatchesFilter filter)?  applyFilter,TResult? Function()?  removeFilter,TResult? Function()?  removeVisible,TResult? Function( List<String> uids)?  updateViewedPeoples,}) {final _that = this;
 switch (_that) {
 case _LoadPeoples() when loadPeoples != null:
-return loadPeoples();case _RemoveVisible() when removeVisible != null:
+return loadPeoples();case _LoadMorePeoples() when loadMorePeoples != null:
+return loadMorePeoples();case _ApplyFilter() when applyFilter != null:
+return applyFilter(_that.filter);case _RemoveFilter() when removeFilter != null:
+return removeFilter();case _RemoveVisible() when removeVisible != null:
 return removeVisible();case _UpdateViewedPeoples() when updateViewedPeoples != null:
 return updateViewedPeoples(_that.uids);case _:
   return null;
@@ -207,6 +225,145 @@ int get hashCode => runtimeType.hashCode;
 @override
 String toString() {
   return 'PeopleDataEvent.loadPeoples()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _LoadMorePeoples implements PeopleDataEvent {
+  const _LoadMorePeoples();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadMorePeoples);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'PeopleDataEvent.loadMorePeoples()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _ApplyFilter implements PeopleDataEvent {
+  const _ApplyFilter({required this.filter});
+  
+
+ final  MatchesFilter filter;
+
+/// Create a copy of PeopleDataEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ApplyFilterCopyWith<_ApplyFilter> get copyWith => __$ApplyFilterCopyWithImpl<_ApplyFilter>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ApplyFilter&&(identical(other.filter, filter) || other.filter == filter));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,filter);
+
+@override
+String toString() {
+  return 'PeopleDataEvent.applyFilter(filter: $filter)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ApplyFilterCopyWith<$Res> implements $PeopleDataEventCopyWith<$Res> {
+  factory _$ApplyFilterCopyWith(_ApplyFilter value, $Res Function(_ApplyFilter) _then) = __$ApplyFilterCopyWithImpl;
+@useResult
+$Res call({
+ MatchesFilter filter
+});
+
+
+$MatchesFilterCopyWith<$Res> get filter;
+
+}
+/// @nodoc
+class __$ApplyFilterCopyWithImpl<$Res>
+    implements _$ApplyFilterCopyWith<$Res> {
+  __$ApplyFilterCopyWithImpl(this._self, this._then);
+
+  final _ApplyFilter _self;
+  final $Res Function(_ApplyFilter) _then;
+
+/// Create a copy of PeopleDataEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? filter = null,}) {
+  return _then(_ApplyFilter(
+filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
+as MatchesFilter,
+  ));
+}
+
+/// Create a copy of PeopleDataEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MatchesFilterCopyWith<$Res> get filter {
+  
+  return $MatchesFilterCopyWith<$Res>(_self.filter, (value) {
+    return _then(_self.copyWith(filter: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class _RemoveFilter implements PeopleDataEvent {
+  const _RemoveFilter();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RemoveFilter);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'PeopleDataEvent.removeFilter()';
 }
 
 
@@ -322,7 +479,7 @@ as List<String>,
 /// @nodoc
 mixin _$PeopleDataState {
 
- List<UserData> get users; List<String> get viewedUids; bool get initialized; EPeopleDataStatus get status; String get errorMessage;
+ UserDataPgState get usersState; MatchesFilter get filter; List<String> get viewedUids; bool get initialized; EPeopleDataStatus get status; String get errorMessage;
 /// Create a copy of PeopleDataState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -333,16 +490,16 @@ $PeopleDataStateCopyWith<PeopleDataState> get copyWith => _$PeopleDataStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PeopleDataState&&const DeepCollectionEquality().equals(other.users, users)&&const DeepCollectionEquality().equals(other.viewedUids, viewedUids)&&(identical(other.initialized, initialized) || other.initialized == initialized)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PeopleDataState&&(identical(other.usersState, usersState) || other.usersState == usersState)&&(identical(other.filter, filter) || other.filter == filter)&&const DeepCollectionEquality().equals(other.viewedUids, viewedUids)&&(identical(other.initialized, initialized) || other.initialized == initialized)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(users),const DeepCollectionEquality().hash(viewedUids),initialized,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,usersState,filter,const DeepCollectionEquality().hash(viewedUids),initialized,status,errorMessage);
 
 @override
 String toString() {
-  return 'PeopleDataState(users: $users, viewedUids: $viewedUids, initialized: $initialized, status: $status, errorMessage: $errorMessage)';
+  return 'PeopleDataState(usersState: $usersState, filter: $filter, viewedUids: $viewedUids, initialized: $initialized, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -353,11 +510,11 @@ abstract mixin class $PeopleDataStateCopyWith<$Res>  {
   factory $PeopleDataStateCopyWith(PeopleDataState value, $Res Function(PeopleDataState) _then) = _$PeopleDataStateCopyWithImpl;
 @useResult
 $Res call({
- List<UserData> users, List<String> viewedUids, bool initialized, EPeopleDataStatus status, String errorMessage
+ UserDataPgState usersState, MatchesFilter filter, List<String> viewedUids, bool initialized, EPeopleDataStatus status, String errorMessage
 });
 
 
-
+$UserDataPgStateCopyWith<$Res> get usersState;$MatchesFilterCopyWith<$Res> get filter;
 
 }
 /// @nodoc
@@ -370,17 +527,36 @@ class _$PeopleDataStateCopyWithImpl<$Res>
 
 /// Create a copy of PeopleDataState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? users = null,Object? viewedUids = null,Object? initialized = null,Object? status = null,Object? errorMessage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? usersState = null,Object? filter = null,Object? viewedUids = null,Object? initialized = null,Object? status = null,Object? errorMessage = null,}) {
   return _then(_self.copyWith(
-users: null == users ? _self.users : users // ignore: cast_nullable_to_non_nullable
-as List<UserData>,viewedUids: null == viewedUids ? _self.viewedUids : viewedUids // ignore: cast_nullable_to_non_nullable
+usersState: null == usersState ? _self.usersState : usersState // ignore: cast_nullable_to_non_nullable
+as UserDataPgState,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
+as MatchesFilter,viewedUids: null == viewedUids ? _self.viewedUids : viewedUids // ignore: cast_nullable_to_non_nullable
 as List<String>,initialized: null == initialized ? _self.initialized : initialized // ignore: cast_nullable_to_non_nullable
 as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EPeopleDataStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
-
+/// Create a copy of PeopleDataState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserDataPgStateCopyWith<$Res> get usersState {
+  
+  return $UserDataPgStateCopyWith<$Res>(_self.usersState, (value) {
+    return _then(_self.copyWith(usersState: value));
+  });
+}/// Create a copy of PeopleDataState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MatchesFilterCopyWith<$Res> get filter {
+  
+  return $MatchesFilterCopyWith<$Res>(_self.filter, (value) {
+    return _then(_self.copyWith(filter: value));
+  });
+}
 }
 
 
@@ -459,10 +635,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<UserData> users,  List<String> viewedUids,  bool initialized,  EPeopleDataStatus status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserDataPgState usersState,  MatchesFilter filter,  List<String> viewedUids,  bool initialized,  EPeopleDataStatus status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PeopleDataState() when $default != null:
-return $default(_that.users,_that.viewedUids,_that.initialized,_that.status,_that.errorMessage);case _:
+return $default(_that.usersState,_that.filter,_that.viewedUids,_that.initialized,_that.status,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -480,10 +656,10 @@ return $default(_that.users,_that.viewedUids,_that.initialized,_that.status,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<UserData> users,  List<String> viewedUids,  bool initialized,  EPeopleDataStatus status,  String errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserDataPgState usersState,  MatchesFilter filter,  List<String> viewedUids,  bool initialized,  EPeopleDataStatus status,  String errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _PeopleDataState():
-return $default(_that.users,_that.viewedUids,_that.initialized,_that.status,_that.errorMessage);}
+return $default(_that.usersState,_that.filter,_that.viewedUids,_that.initialized,_that.status,_that.errorMessage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -497,10 +673,10 @@ return $default(_that.users,_that.viewedUids,_that.initialized,_that.status,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<UserData> users,  List<String> viewedUids,  bool initialized,  EPeopleDataStatus status,  String errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserDataPgState usersState,  MatchesFilter filter,  List<String> viewedUids,  bool initialized,  EPeopleDataStatus status,  String errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _PeopleDataState() when $default != null:
-return $default(_that.users,_that.viewedUids,_that.initialized,_that.status,_that.errorMessage);case _:
+return $default(_that.usersState,_that.filter,_that.viewedUids,_that.initialized,_that.status,_that.errorMessage);case _:
   return null;
 
 }
@@ -512,16 +688,11 @@ return $default(_that.users,_that.viewedUids,_that.initialized,_that.status,_tha
 
 
 class _PeopleDataState implements PeopleDataState {
-  const _PeopleDataState({final  List<UserData> users = const [], final  List<String> viewedUids = const [], this.initialized = false, this.status = EPeopleDataStatus.loading, this.errorMessage = ''}): _users = users,_viewedUids = viewedUids;
+  const _PeopleDataState({this.usersState = const UserDataPgState(), this.filter = const MatchesFilter(), final  List<String> viewedUids = const [], this.initialized = false, this.status = EPeopleDataStatus.loading, this.errorMessage = ''}): _viewedUids = viewedUids;
   
 
- final  List<UserData> _users;
-@override@JsonKey() List<UserData> get users {
-  if (_users is EqualUnmodifiableListView) return _users;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_users);
-}
-
+@override@JsonKey() final  UserDataPgState usersState;
+@override@JsonKey() final  MatchesFilter filter;
  final  List<String> _viewedUids;
 @override@JsonKey() List<String> get viewedUids {
   if (_viewedUids is EqualUnmodifiableListView) return _viewedUids;
@@ -543,16 +714,16 @@ _$PeopleDataStateCopyWith<_PeopleDataState> get copyWith => __$PeopleDataStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PeopleDataState&&const DeepCollectionEquality().equals(other._users, _users)&&const DeepCollectionEquality().equals(other._viewedUids, _viewedUids)&&(identical(other.initialized, initialized) || other.initialized == initialized)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PeopleDataState&&(identical(other.usersState, usersState) || other.usersState == usersState)&&(identical(other.filter, filter) || other.filter == filter)&&const DeepCollectionEquality().equals(other._viewedUids, _viewedUids)&&(identical(other.initialized, initialized) || other.initialized == initialized)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_users),const DeepCollectionEquality().hash(_viewedUids),initialized,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,usersState,filter,const DeepCollectionEquality().hash(_viewedUids),initialized,status,errorMessage);
 
 @override
 String toString() {
-  return 'PeopleDataState(users: $users, viewedUids: $viewedUids, initialized: $initialized, status: $status, errorMessage: $errorMessage)';
+  return 'PeopleDataState(usersState: $usersState, filter: $filter, viewedUids: $viewedUids, initialized: $initialized, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -563,11 +734,11 @@ abstract mixin class _$PeopleDataStateCopyWith<$Res> implements $PeopleDataState
   factory _$PeopleDataStateCopyWith(_PeopleDataState value, $Res Function(_PeopleDataState) _then) = __$PeopleDataStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<UserData> users, List<String> viewedUids, bool initialized, EPeopleDataStatus status, String errorMessage
+ UserDataPgState usersState, MatchesFilter filter, List<String> viewedUids, bool initialized, EPeopleDataStatus status, String errorMessage
 });
 
 
-
+@override $UserDataPgStateCopyWith<$Res> get usersState;@override $MatchesFilterCopyWith<$Res> get filter;
 
 }
 /// @nodoc
@@ -580,10 +751,11 @@ class __$PeopleDataStateCopyWithImpl<$Res>
 
 /// Create a copy of PeopleDataState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? users = null,Object? viewedUids = null,Object? initialized = null,Object? status = null,Object? errorMessage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? usersState = null,Object? filter = null,Object? viewedUids = null,Object? initialized = null,Object? status = null,Object? errorMessage = null,}) {
   return _then(_PeopleDataState(
-users: null == users ? _self._users : users // ignore: cast_nullable_to_non_nullable
-as List<UserData>,viewedUids: null == viewedUids ? _self._viewedUids : viewedUids // ignore: cast_nullable_to_non_nullable
+usersState: null == usersState ? _self.usersState : usersState // ignore: cast_nullable_to_non_nullable
+as UserDataPgState,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
+as MatchesFilter,viewedUids: null == viewedUids ? _self._viewedUids : viewedUids // ignore: cast_nullable_to_non_nullable
 as List<String>,initialized: null == initialized ? _self.initialized : initialized // ignore: cast_nullable_to_non_nullable
 as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EPeopleDataStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -591,7 +763,25 @@ as String,
   ));
 }
 
-
+/// Create a copy of PeopleDataState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserDataPgStateCopyWith<$Res> get usersState {
+  
+  return $UserDataPgStateCopyWith<$Res>(_self.usersState, (value) {
+    return _then(_self.copyWith(usersState: value));
+  });
+}/// Create a copy of PeopleDataState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MatchesFilterCopyWith<$Res> get filter {
+  
+  return $MatchesFilterCopyWith<$Res>(_self.filter, (value) {
+    return _then(_self.copyWith(filter: value));
+  });
+}
 }
 
 // dart format on

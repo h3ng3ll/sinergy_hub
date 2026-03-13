@@ -99,6 +99,17 @@ class FirebaseFirestoreService {
     );
   }
 
+  Query applyPagination(Query query, DocumentSnapshot doc) {
+    return query
+        .orderBy(
+          'createdAt',
+          descending: true,
+        )
+        .startAfterDocument(
+          doc,
+        );
+  }
+
   WriteBatch batch() => _firebaseFirestore.batch();
 
   // Query pagination({

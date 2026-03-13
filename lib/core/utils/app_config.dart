@@ -1,5 +1,5 @@
 abstract class AppConfig {
-  static bool get isQA => true;
+  static bool get isQA => false;
 
   static String emulatorAddress() {
     // return '10.0.2.2';

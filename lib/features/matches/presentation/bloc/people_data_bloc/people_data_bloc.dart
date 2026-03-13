@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../user/domain/models/users_data_pg_state/users_data_pg_state.dart';
 import '../../../domain/models/e_people_data_status.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
+import '../../../domain/models/matches_filter/matches_filter.dart';
 import '../../../domain/usecases/look_for_matches_use_case.dart';
 
 part 'people_data_event.dart';
@@ -21,11 +24,26 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
   }) : _lookForMatchesUseCase = lookForMatchesUseCase,
        super(const PeopleDataState()) {
     on<_LoadPeoples>(_loadPeoples);
-    on<_RemoveVisible>(_removeVisible);
+    on<_LoadMorePeoples>(
+      _loadMorePeoples,
+      transformer: droppable(),
+    );
+    on<_ApplyFilter>(_applyFilter);
+    on<_RemoveVisible>(
+      _removeVisible,
+      transformer: droppable(),
+    );
     on<_UpdateViewedPeoples>(_updateViewedPeoples);
+    on<_RemoveFilter>(
+      _removeFilter,
+      transformer: droppable(),
+    );
   }
 
-  Future<void> _updateViewedPeoples(event, emit) async {
+  Future<void> _updateViewedPeoples(
+    _UpdateViewedPeoples event,
+    Emitter<PeopleDataState> emit,
+  ) async {
     final uids = event.uids;
     emit(
       state.copyWith(
@@ -40,19 +58,124 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
     }
   }
 
-  Future<void> _loadPeoples(event, emit) async {
+  Future<void> _loadPeoples(
+    _LoadPeoples event,
+    Emitter<PeopleDataState> emit,
+  ) async {
     try {
       emit(
         state.copyWith(
           status: EPeopleDataStatus.loading,
         ),
       );
-      final List<UserData> users = await _lookForMatchesUseCase.call();
+      final UserDataPgState usersState = await _lookForMatchesUseCase.call();
       emit(
         state.copyWith(
           initialized: true,
           status: EPeopleDataStatus.initial,
-          users: users,
+          usersState: usersState,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          initialized: true,
+          status: EPeopleDataStatus.failed,
+          errorMessage: e.toString(),
+        ),
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> _loadMorePeoples(
+    _LoadMorePeoples event,
+    Emitter<PeopleDataState> emit,
+  ) async {
+    try {
+      if (!state.usersState.hasMore || state.isLoadingMore) return;
+      emit(
+        state.copyWith(
+          status: EPeopleDataStatus.loadingMore,
+        ),
+      );
+      final UserDataPgState usersState = await _lookForMatchesUseCase.call(
+        filter: state.filter,
+      );
+      emit(
+        state.copyWith(
+          initialized: true,
+          status: EPeopleDataStatus.initial,
+          usersState: usersState,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          initialized: true,
+          status: EPeopleDataStatus.failed,
+          errorMessage: e.toString(),
+        ),
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> _applyFilter(
+    _ApplyFilter event,
+    Emitter<PeopleDataState> emit,
+  ) async {
+    try {
+      final filter = event.filter;
+      if (filter == state.filter) return;
+      emit(
+        state.copyWith(
+          status: EPeopleDataStatus.loading,
+        ),
+      );
+      final UserDataPgState usersState = await _lookForMatchesUseCase.call(
+        filter: event.filter,
+      );
+      emit(
+        state.copyWith(
+          initialized: true,
+          status: EPeopleDataStatus.initial,
+          filter: filter,
+          usersState: usersState,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          initialized: true,
+          status: EPeopleDataStatus.failed,
+          errorMessage: e.toString(),
+        ),
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> _removeFilter(
+    _RemoveFilter event,
+    Emitter<PeopleDataState> emit,
+  ) async {
+    try {
+      emit(
+        state.copyWith(
+          status: EPeopleDataStatus.loading,
+        ),
+      );
+      final filter = MatchesFilter();
+      final UserDataPgState usersState = await _lookForMatchesUseCase.call(
+        filter: filter,
+      );
+      emit(
+        state.copyWith(
+          initialized: true,
+          status: EPeopleDataStatus.initial,
+          usersState: usersState,
+          filter: filter,
         ),
       );
     } catch (e) {
@@ -75,12 +198,24 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
         ),
       );
 
+      if (state.usersState.items.length <= 5 && state.usersState.hasMore) {
+        add(
+          PeopleDataEvent.loadMorePeoples(),
+        );
+      }
+      final items = [
+        ...state.usersState.items,
+      ];
+
+      if (items.isNotEmpty) {
+        items.removeLast();
+      }
       emit(
         state.copyWith(
           status: EPeopleDataStatus.initial,
-          users: List.from(
-            state.users,
-          )..removeLast(),
+          usersState: state.usersState.copyWith(
+            items: items,
+          ),
         ),
       );
     } catch (e) {

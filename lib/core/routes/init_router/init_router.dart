@@ -189,6 +189,7 @@ class OnboardAboutYouPageRoute extends GoRouteData
 }
 
 class HomeBottomBarRoute extends StatefulShellRouteData {
+  static final homeBottomBarKey = GlobalKey();
   @override
   Widget builder(
     BuildContext context,
@@ -196,6 +197,7 @@ class HomeBottomBarRoute extends StatefulShellRouteData {
     StatefulNavigationShell navigationShell,
   ) {
     return HomeBottomBar(
+      key: homeBottomBarKey,
       navigationShell: navigationShell,
     );
   }

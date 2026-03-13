@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../../core/services/firebase/firebase_storage_service.dart';
+import '../../../matches/domain/models/matches_filter/matches_filter.dart';
 import '../../../onboard_survey/domain/models/user_profiler/user_profiler.dart';
 import '../../domain/models/user_data/user_data.dart';
 import '../../domain/models/users_data_pg_state/users_data_pg_state.dart';
@@ -74,29 +75,68 @@ class UserFirebaseRepository extends IUserRepository {
   }
 
   @override
-  Future<List<UserData>> get({
+  Future<UserDataPgState> get({
     required UserDataPgState userDataState,
+    MatchesFilter? filter,
   }) async {
-    final res = await _firebaseFirestoreService.usersDocument.get();
+    Query query = _firebaseFirestoreService.usersDocument;
+
+    if (filter != null && filter.isApplied) {
+      if (filter.experience != null) {
+        query = query.where(
+          'profiler.experience',
+          isEqualTo: filter.experience!.name,
+        );
+      }
+      if (filter.specialization != null) {
+        query = query.where(
+          'profiler.specialization',
+        );
+      }
+      if (filter.skills.isNotEmpty) {
+        /// till 10 skills: cause firebase limitation
+        query = query.where(
+          'profiler.skills',
+          arrayContainsAny: filter.skills.map(
+            (e) => e.name,
+          ),
+        );
+      }
+    }
+
+    /// pagination
+
+    query.limit(
+      userDataState.pageSize,
+    );
+
+    if (userDataState.lastDocument != null) {
+      query = _firebaseFirestoreService.applyPagination(
+        query,
+        userDataState.lastDocument!,
+      );
+    }
+
+    final QuerySnapshot res = await query.get();
 
     final userData = List<UserData>.from(
-      res.docs
-          .map(
-            (e) {
-              final userData = e.data();
-              return UserData.fromJson(
-                userData,
-              );
-            },
-          )
-          .where(
-            (e) => !userDataState.excludedUids.contains(
-              e.uid,
-            ),
-          )
-          .toList(),
+      res.docs.map(
+        (e) {
+          final userData = e.data();
+          return UserData.fromJson(
+            userData as Map<String, dynamic>,
+          );
+        },
+      ).toList(),
     );
-    return userData;
+    return userDataState.copyWith(
+      items: [
+        ...userDataState.items,
+        ...userData,
+      ],
+      hasMore: res.docs.isNotEmpty,
+      lastDocument: res.docs.isNotEmpty ? res.docs.last : userDataState.lastDocument,
+    );
   }
 
   @override
@@ -206,9 +246,11 @@ class UserFirebaseRepository extends IUserRepository {
         .userDocument(
           uid,
         )
-        .update({
-          'profiler': userProfiler.toJson(),
-        } , );
+        .update(
+          {
+            'profiler': userProfiler.toJson(),
+          },
+        );
   }
 
   @override
