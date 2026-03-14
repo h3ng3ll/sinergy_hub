@@ -99,7 +99,11 @@ class FirebaseFirestoreService {
     );
   }
 
-  Query applyPagination(Query query, DocumentSnapshot doc) {
+  Query applyPagination(
+    Query query,
+    DocumentSnapshot doc, {
+    int pageSize = 10,
+  }) {
     return query
         .orderBy(
           'createdAt',
@@ -107,6 +111,9 @@ class FirebaseFirestoreService {
         )
         .startAfterDocument(
           doc,
+        )
+        .limit(
+      pageSize,
         );
   }
 

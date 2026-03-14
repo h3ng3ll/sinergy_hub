@@ -17,6 +17,7 @@ import '../../../../onboard_survey/presentation/pages/onboard_survey_page/bloc/s
 import '../../../../onboard_survey/presentation/pages/onboard_survey_page/stages/specialization_stage/widgets/search_input.dart';
 import '../../../../onboard_survey/presentation/pages/onboard_survey_page/widgets/onboard_survey_header.dart';
 import '../../../../onboard_survey/presentation/pages/onboard_survey_page/widgets/survey_card/survey_card.dart';
+import '../../bloc/skills_bloc/skills_bloc.dart';
 import 'bloc/edit_looking_for_bloc.dart';
 
 class EditLookingForPage extends StatelessWidget {
@@ -61,6 +62,12 @@ class EditLookingForPage extends StatelessWidget {
           create: (context) => getIt<EditLookingForBloc>()
             ..add(
               const EditLookingForEvent.init(),
+            ),
+        ),
+        BlocProvider(
+          create: (context) => getIt<SkillsBloc>()
+            ..add(
+              const SkillsEvent.fetch(),
             ),
         ),
         BlocProvider(

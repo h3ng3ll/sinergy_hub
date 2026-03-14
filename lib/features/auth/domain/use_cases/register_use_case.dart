@@ -26,6 +26,7 @@ class RegisterUseCase {
     await _userRepository.update(
       userData: UserData.none().copyWith(
         uid: uid,
+        createdAt: DateTime.now(),
       ),
     );
   }

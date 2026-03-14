@@ -1,6 +1,5 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../../../user/domain/repositories/i_user_repository.dart';
-import '../models/matches_filter/matches_filter.dart';
 import '../repositories/i_matches_repository.dart';
 
 class GetExcludedMatchesUseCase {
@@ -24,13 +23,18 @@ class GetExcludedMatchesUseCase {
 
     final uids = matchIds
         .map(
-          (e) => e
-              .split('_')
-              .firstWhere(
-                (ee) => ee != uid,
-              ),
-        )
+          (matchId) {
+        final parts = matchId.split('_');
+        // Возвращаем часть, которая не равна текущему пользователю
+        return parts.firstWhere(
+              (part) => part != uid,
+          orElse: () => '',
+        );
+      },
+    )
+        .where((otherUid) => otherUid.isNotEmpty)
         .toList();
+
     return uids;
   }
 }

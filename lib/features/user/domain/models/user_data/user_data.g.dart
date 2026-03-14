@@ -14,6 +14,9 @@ _UserData _$UserDataFromJson(Map<String, dynamic> json) => _UserData(
   age: (json['age'] as num?)?.toInt(),
   aboutMe: json['aboutMe'] as String?,
   profiler: UserProfiler.fromJson(json['profiler'] as Map<String, dynamic>),
+  createdAt: const TimestampConverter().fromJson(
+    json['createdAt'] as Timestamp,
+  ),
 );
 
 Map<String, dynamic> _$UserDataToJson(_UserData instance) => <String, dynamic>{
@@ -24,4 +27,5 @@ Map<String, dynamic> _$UserDataToJson(_UserData instance) => <String, dynamic>{
   'age': instance.age,
   'aboutMe': instance.aboutMe,
   'profiler': instance.profiler.toJson(),
+  'createdAt': const TimestampConverter().toJson(instance.createdAt),
 };

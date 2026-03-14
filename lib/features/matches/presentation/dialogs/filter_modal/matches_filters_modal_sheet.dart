@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../core/resources/text/app_text_theme.dart';
-import '../../../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/widgets/btn/app_btn.dart';
+import '../../../../home/presentation/edit_profile_page/widgets/build_skills_section/build_skills_section.dart';
 import '../../../../onboard_survey/domain/models/experience/experience.dart';
 import '../../../../onboard_survey/domain/models/skill/skill.dart';
 import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
+import '../../../../user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import '../../../domain/models/matches_filter/matches_filter.dart';
 import 'widgets/experience_level_section.dart';
 import 'widgets/filter_header.dart';
@@ -75,9 +77,19 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
     });
   }
 
-  void _onSkillToggled(Skill skill) {
+  void _onAddSkill(String skill) {
     setState(() {
-      _options = _options.toggleSkill(
+      _options = _options.add(
+        Skill(
+          name: skill,
+        ),
+      );
+    });
+  }
+
+  void _onDeleteSkill(Skill skill) {
+    setState(() {
+      _options = _options.remove(
         skill,
       );
     });
@@ -87,7 +99,6 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
     widget.onApply?.call(_options);
   }
 
-
   void _onClose() {
     Navigator.pop(context);
   }
@@ -95,6 +106,9 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
   @override
   Widget build(BuildContext context) {
     final maxHeight = MediaQuery.of(context).size.height * 0.9;
+    final skills = context.watch<SkillsBloc>().state.skills;
+    final textTheme = AppTextTheme.of(context);
+
     return Container(
       height: maxHeight,
       decoration: BoxDecoration(
@@ -108,7 +122,6 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
         children: [
           FilterHeader(
             onClose: _onClose,
-
           ),
           Flexible(
             child: SingleChildScrollView(
@@ -126,11 +139,24 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
                     onSpecializationSelected: _onSpecializationSelected,
                   ),
                   const SizedBox(height: 24.0),
-                  SkillsSection(
-                    skills: _options.skills,
-                    onSkillToggled: _onSkillToggled,
-                    selectedSkills: _options.skills,
+
+                  Text(
+                    'Skills',
+                    style: textTheme.medium18,
                   ),
+                  const SizedBox(height: 12.0),
+                  BuildSkillsSection(
+                    onRemoveExistingSkill: _onDeleteSkill,
+                    onSubmitSkill: _onAddSkill,
+                    skills: skills,
+                    activeSkills: _options.skills,
+                    isVisibleInput: !_options.isExceeded,
+                  ),
+                  // SkillsSection(
+                  //   skills: _options.skills,
+                  //   onSkillToggled: _onSkillToggled,
+                  //   selectedSkills: _options.skills,
+                  // ),
                   const SizedBox(height: 32.0),
                   _ApplyButton(
                     onPressed: _onApply,
@@ -169,19 +195,7 @@ class _ApplyButton extends StatelessWidget {
           vertical: 10,
           horizontal: 14.0,
         ),
-        // anyStateColor: AppColors.black.value,
         borderRadius: BorderRadius.circular(28.0),
-        // child: Container(
-        //   width: double.infinity,
-        //   height: 56.0,
-        //   alignment: Alignment.center,
-        //   child: Text(
-        //     'Apply Filters',
-        //     style: textTheme.semiBold17.copyWith(
-        //       color: Colors.white,
-        //     ),
-        //   ),
-        // ),
       ),
     );
   }

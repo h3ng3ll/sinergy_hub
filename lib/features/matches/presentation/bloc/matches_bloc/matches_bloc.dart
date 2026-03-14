@@ -29,8 +29,8 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
     _StartListening event,
     Emitter<MatchesState> emit,
   ) async {
-    emit.forEach(
-      _listenTwoWayMatchUseCase(),
+   await emit.forEach(
+      _listenTwoWayMatchUseCase.call(),
       onData: (Matches? userMatch) {
         if (userMatch != null) {
           return state.copyWith(

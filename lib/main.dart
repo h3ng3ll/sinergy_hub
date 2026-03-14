@@ -18,7 +18,9 @@ import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'features/notifications/domain/usecases/get_notification_config_use_case.dart';
 import 'features/notifications/domain/usecases/save_notification_config_use_case.dart';
 import 'features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
+import 'features/onboard_survey/presentation/bloc/onboard_bloc/onboard_bloc.dart';
 import 'features/user/domain/repositories/i_user_repository.dart';
+import 'features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import 'features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'firebase_options.dart';
 
@@ -101,6 +103,12 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider<UserBloc>.value(
           value: userBloc,
+        ),
+        BlocProvider<SkillsBloc>(
+          create: (_) => getIt<SkillsBloc>()
+            ..add(
+              SkillsEvent.fetch(),
+            ),
         ),
         BlocProvider<AuthBloc>.value(
           value: authBloc,

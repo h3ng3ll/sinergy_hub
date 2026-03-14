@@ -68,7 +68,9 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
           status: EPeopleDataStatus.loading,
         ),
       );
-      final UserDataPgState usersState = await _lookForMatchesUseCase.call();
+      final UserDataPgState usersState = await _lookForMatchesUseCase.call(
+        userDataState: UserDataPgState(),
+      );
       emit(
         state.copyWith(
           initialized: true,
@@ -100,6 +102,7 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
         ),
       );
       final UserDataPgState usersState = await _lookForMatchesUseCase.call(
+        userDataState: state.usersState,
         filter: state.filter,
       );
       emit(
@@ -134,6 +137,7 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
         ),
       );
       final UserDataPgState usersState = await _lookForMatchesUseCase.call(
+        userDataState: UserDataPgState(),
         filter: event.filter,
       );
       emit(
@@ -168,6 +172,7 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
       );
       final filter = MatchesFilter();
       final UserDataPgState usersState = await _lookForMatchesUseCase.call(
+        userDataState: UserDataPgState(),
         filter: filter,
       );
       emit(

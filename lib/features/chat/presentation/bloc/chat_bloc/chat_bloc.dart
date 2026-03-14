@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -16,17 +15,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   ChatBloc({
     required ListenChatsUseCase getChatsUseCase,
-  }) :
-       _getChatsUseCase = getChatsUseCase,
+  }) : _getChatsUseCase = getChatsUseCase,
        super(const ChatState()) {
     on<_Init>(_init);
   }
 
-  void _init(
+  Future<void> _init(
     _Init event,
     Emitter<ChatState> emit,
-  ) {
-    emit.forEach(
+  ) async {
+    await emit.forEach(
       _getChatsUseCase.call(),
       onData: (chats) => state.copyWith(
         chats: chats,

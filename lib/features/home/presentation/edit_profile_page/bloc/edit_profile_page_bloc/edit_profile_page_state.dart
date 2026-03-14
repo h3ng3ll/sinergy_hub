@@ -22,7 +22,6 @@ sealed class EditProfilePageState with _$EditProfilePageState {
     @Default(EditProfilePageStatus.initial) EditProfilePageStatus status,
     @Default([]) List<Skill> skills,
     UserData? userData,
-    @Default([]) List<String> availableSkills,
     @Default('') errorMessage,
   }) = _EditProfilePageState;
 }

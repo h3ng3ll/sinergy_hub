@@ -19,15 +19,12 @@ part 'edit_profile_page_bloc.freezed.dart';
 class EditProfilePageBloc
     extends Bloc<EditProfilePageEvent, EditProfilePageState> {
   final ListenCurrentUserDataUseCase _listenCurrentUserDataUseCase;
-  final GetSkillsUseCase _getSkillsUseCase;
   final UpdateUserUseCase _updateUserUseCase;
 
   EditProfilePageBloc({
     required ListenCurrentUserDataUseCase listenCurrentUserDataUseCase,
-    required GetSkillsUseCase getSkillsUseCase,
     required UpdateUserUseCase updateUserUseCase,
   }) : _listenCurrentUserDataUseCase = listenCurrentUserDataUseCase,
-       _getSkillsUseCase = getSkillsUseCase,
        _updateUserUseCase = updateUserUseCase,
        super(const EditProfilePageState()) {
     on<_AddSkill>(_addSkill);
@@ -107,11 +104,8 @@ class EditProfilePageBloc
     Emitter<EditProfilePageState> emit,
   ) async {
     try {
-      final availableSkills = await _getSkillsUseCase.call();
       emit(
-        state.copyWith(
-          availableSkills: availableSkills,
-        ),
+        state.copyWith(status: EditProfilePageStatus.loading),
       );
       await emit.forEach(
         _listenCurrentUserDataUseCase.call(),

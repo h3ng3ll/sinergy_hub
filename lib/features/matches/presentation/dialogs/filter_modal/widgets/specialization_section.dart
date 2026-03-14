@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../../core/resources/colors/app_gradients.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import '../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 
@@ -23,14 +24,9 @@ class SpecializationSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12.0),
-          child: Text(
-            'Specialization',
-            style: textTheme.medium18.copyWith(
-              color: const Color(0xff666666),
-            ),
-          ),
+        Text(
+          'Specialization',
+          style: textTheme.medium18,
         ),
         GridView.builder(
           shrinkWrap: true,

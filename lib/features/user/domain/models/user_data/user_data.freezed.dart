@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserData {
 
- String get uid; String? get avatarUrl; String? get firstName; String? get lastName; int? get age; String? get aboutMe; UserProfiler get profiler;
+ String get uid; String? get avatarUrl; String? get firstName; String? get lastName; int? get age; String? get aboutMe; UserProfiler get profiler;@TimestampConverter() DateTime get createdAt;
 /// Create a copy of UserData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,12 +28,12 @@ $UserDataCopyWith<UserData> get copyWith => _$UserDataCopyWithImpl<UserData>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserData&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.age, age) || other.age == age)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.profiler, profiler) || other.profiler == profiler));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserData&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.age, age) || other.age == age)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.profiler, profiler) || other.profiler == profiler)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uid,avatarUrl,firstName,lastName,age,aboutMe,profiler);
+int get hashCode => Object.hash(runtimeType,uid,avatarUrl,firstName,lastName,age,aboutMe,profiler,createdAt);
 
 
 
@@ -44,7 +44,7 @@ abstract mixin class $UserDataCopyWith<$Res>  {
   factory $UserDataCopyWith(UserData value, $Res Function(UserData) _then) = _$UserDataCopyWithImpl;
 @useResult
 $Res call({
- String uid, String? avatarUrl, String? firstName, String? lastName, int? age, String? aboutMe, UserProfiler profiler
+ String uid, String? avatarUrl, String? firstName, String? lastName, int? age, String? aboutMe, UserProfiler profiler,@TimestampConverter() DateTime createdAt
 });
 
 
@@ -61,7 +61,7 @@ class _$UserDataCopyWithImpl<$Res>
 
 /// Create a copy of UserData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? uid = null,Object? avatarUrl = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? age = freezed,Object? aboutMe = freezed,Object? profiler = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? uid = null,Object? avatarUrl = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? age = freezed,Object? aboutMe = freezed,Object? profiler = null,Object? createdAt = null,}) {
   return _then(_self.copyWith(
 uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
@@ -70,7 +70,8 @@ as String?,lastName: freezed == lastName ? _self.lastName : lastName // ignore: 
 as String?,age: freezed == age ? _self.age : age // ignore: cast_nullable_to_non_nullable
 as int?,aboutMe: freezed == aboutMe ? _self.aboutMe : aboutMe // ignore: cast_nullable_to_non_nullable
 as String?,profiler: null == profiler ? _self.profiler : profiler // ignore: cast_nullable_to_non_nullable
-as UserProfiler,
+as UserProfiler,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,
   ));
 }
 /// Create a copy of UserData
@@ -161,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String uid,  String? avatarUrl,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String uid,  String? avatarUrl,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler, @TimestampConverter()  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserData() when $default != null:
-return $default(_that.uid,_that.avatarUrl,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler);case _:
+return $default(_that.uid,_that.avatarUrl,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler,_that.createdAt);case _:
   return orElse();
 
 }
@@ -182,10 +183,10 @@ return $default(_that.uid,_that.avatarUrl,_that.firstName,_that.lastName,_that.a
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String uid,  String? avatarUrl,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String uid,  String? avatarUrl,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler, @TimestampConverter()  DateTime createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _UserData():
-return $default(_that.uid,_that.avatarUrl,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler);}
+return $default(_that.uid,_that.avatarUrl,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler,_that.createdAt);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -199,10 +200,10 @@ return $default(_that.uid,_that.avatarUrl,_that.firstName,_that.lastName,_that.a
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String uid,  String? avatarUrl,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String uid,  String? avatarUrl,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler, @TimestampConverter()  DateTime createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _UserData() when $default != null:
-return $default(_that.uid,_that.avatarUrl,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler);case _:
+return $default(_that.uid,_that.avatarUrl,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler,_that.createdAt);case _:
   return null;
 
 }
@@ -214,7 +215,7 @@ return $default(_that.uid,_that.avatarUrl,_that.firstName,_that.lastName,_that.a
 @JsonSerializable()
 
 class _UserData extends UserData {
-  const _UserData({required this.uid, this.avatarUrl, this.firstName, this.lastName, this.age, this.aboutMe, required this.profiler}): super._();
+  const _UserData({required this.uid, this.avatarUrl, this.firstName, this.lastName, this.age, this.aboutMe, required this.profiler, @TimestampConverter() required this.createdAt}): super._();
   factory _UserData.fromJson(Map<String, dynamic> json) => _$UserDataFromJson(json);
 
 @override final  String uid;
@@ -224,6 +225,7 @@ class _UserData extends UserData {
 @override final  int? age;
 @override final  String? aboutMe;
 @override final  UserProfiler profiler;
+@override@TimestampConverter() final  DateTime createdAt;
 
 /// Create a copy of UserData
 /// with the given fields replaced by the non-null parameter values.
@@ -238,12 +240,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserData&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.age, age) || other.age == age)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.profiler, profiler) || other.profiler == profiler));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserData&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.age, age) || other.age == age)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.profiler, profiler) || other.profiler == profiler)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uid,avatarUrl,firstName,lastName,age,aboutMe,profiler);
+int get hashCode => Object.hash(runtimeType,uid,avatarUrl,firstName,lastName,age,aboutMe,profiler,createdAt);
 
 
 
@@ -254,7 +256,7 @@ abstract mixin class _$UserDataCopyWith<$Res> implements $UserDataCopyWith<$Res>
   factory _$UserDataCopyWith(_UserData value, $Res Function(_UserData) _then) = __$UserDataCopyWithImpl;
 @override @useResult
 $Res call({
- String uid, String? avatarUrl, String? firstName, String? lastName, int? age, String? aboutMe, UserProfiler profiler
+ String uid, String? avatarUrl, String? firstName, String? lastName, int? age, String? aboutMe, UserProfiler profiler,@TimestampConverter() DateTime createdAt
 });
 
 
@@ -271,7 +273,7 @@ class __$UserDataCopyWithImpl<$Res>
 
 /// Create a copy of UserData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? uid = null,Object? avatarUrl = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? age = freezed,Object? aboutMe = freezed,Object? profiler = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? uid = null,Object? avatarUrl = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? age = freezed,Object? aboutMe = freezed,Object? profiler = null,Object? createdAt = null,}) {
   return _then(_UserData(
 uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
@@ -280,7 +282,8 @@ as String?,lastName: freezed == lastName ? _self.lastName : lastName // ignore: 
 as String?,age: freezed == age ? _self.age : age // ignore: cast_nullable_to_non_nullable
 as int?,aboutMe: freezed == aboutMe ? _self.aboutMe : aboutMe // ignore: cast_nullable_to_non_nullable
 as String?,profiler: null == profiler ? _self.profiler : profiler // ignore: cast_nullable_to_non_nullable
-as UserProfiler,
+as UserProfiler,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,
   ));
 }
 

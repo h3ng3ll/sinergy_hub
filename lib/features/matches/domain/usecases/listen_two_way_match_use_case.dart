@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../../../user/domain/repositories/i_user_repository.dart';
 import '../../data/models/matches_dto/matches_dto.dart';
@@ -28,9 +30,10 @@ class ListenTwoWayMatchUseCase {
         .asyncMap(
           (MatchesDto? matchDto) async {
             if (matchDto == null) return null;
-            final userId = matchDto.users.firstWhere(
+            final userId = matchDto.users.firstWhereOrNull(
               (e) => e != uid,
             );
+            if (userId == null) return null;
             final user = await _userRepository.getUserById(
               id: userId,
             );

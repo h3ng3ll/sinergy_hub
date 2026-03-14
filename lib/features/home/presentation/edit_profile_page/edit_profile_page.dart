@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/injection.dart';
@@ -19,6 +20,7 @@ import '../../../onboard_survey/domain/models/skill/skill.dart';
 import '../../../onboard_survey/domain/use_cases/get_skills_use_case.dart';
 import '../../../user/domain/usecases/listen_current_user_data_use_case.dart';
 import '../../../user/domain/usecases/update_user_usecase.dart';
+import '../../../user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import '../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import 'bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
@@ -50,7 +52,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _editProfilePageBloc =
         EditProfilePageBloc(
           listenCurrentUserDataUseCase: getIt<ListenCurrentUserDataUseCase>(),
-          getSkillsUseCase: getIt<GetSkillsUseCase>(),
           updateUserUseCase: getIt<UpdateUserUseCase>(),
         )..add(
           EditProfilePageEvent.initialize(),
@@ -140,7 +141,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         child: BlocBuilder<EditProfilePageBloc, EditProfilePageState>(
           builder: (context, state) {
             final userData = state.userData;
-            final availableSkills = state.availableSkills;
+            final availableSkills = context.watch<SkillsBloc>().state.skills;
+
             return BuildAnimatedBackground(
               child: SafeArea(
                 child: Scaffold(
@@ -193,13 +195,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             ),
                           ],
                         ),
-
+                        Gap(15.0),
+                        Text(
+                          'Skills',
+                          style: textTheme.regular14.copyWith(
+                            color: colorScheme.onPrimary,
+                          ),
+                        ),
+                        Gap(15.0),
                         BuildSkillsSection(
                           onRemoveExistingSkill: onRemoveExistingSkill,
                           onSubmitSkill: onSubmitSkill,
                           skills: availableSkills,
                           activeSkills: state.skills,
                         ),
+                        Gap(15.0),
                         Row(
                           spacing: 20.0,
                           mainAxisAlignment: MainAxisAlignment.center,

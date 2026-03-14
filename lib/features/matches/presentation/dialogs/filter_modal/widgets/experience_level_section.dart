@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../../core/resources/colors/app_gradients.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../../onboard_survey/domain/models/experience/experience.dart';
 
 /// Experience level section widget with vertical list of selectable options.
@@ -22,14 +23,9 @@ class ExperienceLevelSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12.0),
-          child: Text(
-            'Experience Level',
-            style: textTheme.medium18.copyWith(
-              color: const Color(0xff666666),
-            ),
-          ),
+        Text(
+          'Experience Level',
+          style: textTheme.medium18,
         ),
         ...EExperience.values.map((level) {
           final isSelected = selectedLevel == level;

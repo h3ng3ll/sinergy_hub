@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
-import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/services/permission_requester_service.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/btn/custom_text_btn.dart';
@@ -24,9 +23,9 @@ import '../../../../home/presentation/edit_profile_page/bloc/edit_profile_page_b
 import '../../../../home/presentation/edit_profile_page/widgets/build_grouped_input.dart';
 import '../../../../home/presentation/edit_profile_page/widgets/build_skills_section/build_skills_section.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
-import '../../../../user/domain/repositories/i_user_repository.dart';
 import '../../../../user/domain/usecases/listen_current_user_data_use_case.dart';
 import '../../../../user/domain/usecases/update_user_usecase.dart';
+import '../../../../user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import '../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../../user/presentation/bloc/user_update_cubit/user_update_cubit.dart';
 import '../../../domain/models/skill/skill.dart';
@@ -55,7 +54,6 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
   void initState() {
     final userCubit = context.read<UserBloc>();
     _editProfilePageBloc = EditProfilePageBloc(
-      getSkillsUseCase: getIt<GetSkillsUseCase>(),
       listenCurrentUserDataUseCase: getIt<ListenCurrentUserDataUseCase>(),
       updateUserUseCase: getIt<UpdateUserUseCase>(),
     );
@@ -167,7 +165,7 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
         },
         child: BlocBuilder<EditProfilePageBloc, EditProfilePageState>(
           builder: (context, state) {
-            final availableSkills = state.availableSkills;
+            final availableSkills = context.watch<SkillsBloc>().state.skills;
 
             return BuildAnimatedBackground(
               child: SafeArea(
@@ -217,6 +215,12 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
                               title: 'Bio',
                               child: BioInput(
                                 controller: _bioController,
+                              ),
+                            ),
+                            Text(
+                              'Skills',
+                              style: textTheme.regular14.copyWith(
+                                color: colorScheme.onPrimary,
                               ),
                             ),
                             BuildSkillsSection(

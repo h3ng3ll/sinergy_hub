@@ -20,16 +20,15 @@ class LookForMatchesUseCase {
   /// fetch users and exclude already matched people if it
   /// found include current user
   Future<UserDataPgState> call({
+    required UserDataPgState userDataState,
     MatchesFilter? filter,
   }) async {
     final uid = await _authRepository.requireUserId();
-    final excludedUids = await _getExcludedMatchesUseCase.call();
-    final userDataState = UserDataPgState(
-      excludedUids: {
+
+    List<String> excludedUids = await _getExcludedMatchesUseCase.call()
+      ..add(
         uid,
-        ...excludedUids,
-      },
-    );
+      );
 
     UserDataPgState userState = await _userRepository.get(
       userDataState: userDataState,

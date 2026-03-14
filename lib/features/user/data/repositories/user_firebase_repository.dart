@@ -106,9 +106,7 @@ class UserFirebaseRepository extends IUserRepository {
 
     /// pagination
 
-    query.limit(
-      userDataState.pageSize,
-    );
+
 
     if (userDataState.lastDocument != null) {
       query = _firebaseFirestoreService.applyPagination(
@@ -116,6 +114,7 @@ class UserFirebaseRepository extends IUserRepository {
         userDataState.lastDocument!,
       );
     }
+
 
     final QuerySnapshot res = await query.get();
 
