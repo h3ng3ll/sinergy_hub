@@ -20,6 +20,11 @@ abstract class IChatRepository {
     required String chatId,
   });
 
+  /// return lastly updated Chat
+  Stream<ChatDto> chatUpdates({
+    required String uid,
+  });
+
   Future<ChatDto> getById({
     required String chatId,
   });

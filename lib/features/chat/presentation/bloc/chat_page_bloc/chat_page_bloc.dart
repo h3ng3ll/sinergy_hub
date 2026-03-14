@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../user/domain/usecases/get_users_use_case.dart';
+import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/chat_message/chat_message.dart';
 import '../../../domain/usecases/get_chat_by_id_use_case.dart';
 import '../../../domain/usecases/get_last_messages_use_case.dart';
@@ -94,6 +95,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       emit(
         state.copyWith(
           users: users,
+          chat: chat,
           status: ChatPageStatus.initial,
         ),
       );

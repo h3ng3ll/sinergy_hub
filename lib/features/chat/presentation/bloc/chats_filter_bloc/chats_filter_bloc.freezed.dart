@@ -55,14 +55,15 @@ extension ChatsFilterEventPatterns on ChatsFilterEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ApplyFilter value)?  applyFilter,TResult Function( _Search value)?  search,TResult Function( _ToggleArchived value)?  toggleArchived,TResult Function( _ToggleFavorite value)?  toggleFavorite,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ApplyFilter value)?  applyFilter,TResult Function( _Search value)?  search,TResult Function( _ToggleArchived value)?  toggleArchived,TResult Function( _ToggleFavorite value)?  toggleFavorite,TResult Function( _ListenChatsChanges value)?  listenChatsChanges,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that);case _Search() when search != null:
 return search(_that);case _ToggleArchived() when toggleArchived != null:
 return toggleArchived(_that);case _ToggleFavorite() when toggleFavorite != null:
-return toggleFavorite(_that);case _:
+return toggleFavorite(_that);case _ListenChatsChanges() when listenChatsChanges != null:
+return listenChatsChanges(_that);case _:
   return orElse();
 
 }
@@ -80,14 +81,15 @@ return toggleFavorite(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ApplyFilter value)  applyFilter,required TResult Function( _Search value)  search,required TResult Function( _ToggleArchived value)  toggleArchived,required TResult Function( _ToggleFavorite value)  toggleFavorite,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ApplyFilter value)  applyFilter,required TResult Function( _Search value)  search,required TResult Function( _ToggleArchived value)  toggleArchived,required TResult Function( _ToggleFavorite value)  toggleFavorite,required TResult Function( _ListenChatsChanges value)  listenChatsChanges,}){
 final _that = this;
 switch (_that) {
 case _ApplyFilter():
 return applyFilter(_that);case _Search():
 return search(_that);case _ToggleArchived():
 return toggleArchived(_that);case _ToggleFavorite():
-return toggleFavorite(_that);}
+return toggleFavorite(_that);case _ListenChatsChanges():
+return listenChatsChanges(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -101,14 +103,15 @@ return toggleFavorite(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ApplyFilter value)?  applyFilter,TResult? Function( _Search value)?  search,TResult? Function( _ToggleArchived value)?  toggleArchived,TResult? Function( _ToggleFavorite value)?  toggleFavorite,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ApplyFilter value)?  applyFilter,TResult? Function( _Search value)?  search,TResult? Function( _ToggleArchived value)?  toggleArchived,TResult? Function( _ToggleFavorite value)?  toggleFavorite,TResult? Function( _ListenChatsChanges value)?  listenChatsChanges,}){
 final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that);case _Search() when search != null:
 return search(_that);case _ToggleArchived() when toggleArchived != null:
 return toggleArchived(_that);case _ToggleFavorite() when toggleFavorite != null:
-return toggleFavorite(_that);case _:
+return toggleFavorite(_that);case _ListenChatsChanges() when listenChatsChanges != null:
+return listenChatsChanges(_that);case _:
   return null;
 
 }
@@ -125,13 +128,14 @@ return toggleFavorite(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( EChatFilter filter)?  applyFilter,TResult Function( String query)?  search,TResult Function( Chat chat)?  toggleArchived,TResult Function( Chat chat)?  toggleFavorite,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( EChatFilter filter)?  applyFilter,TResult Function( String query)?  search,TResult Function( Chat chat)?  toggleArchived,TResult Function( Chat chat)?  toggleFavorite,TResult Function()?  listenChatsChanges,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that.filter);case _Search() when search != null:
 return search(_that.query);case _ToggleArchived() when toggleArchived != null:
 return toggleArchived(_that.chat);case _ToggleFavorite() when toggleFavorite != null:
-return toggleFavorite(_that.chat);case _:
+return toggleFavorite(_that.chat);case _ListenChatsChanges() when listenChatsChanges != null:
+return listenChatsChanges();case _:
   return orElse();
 
 }
@@ -149,13 +153,14 @@ return toggleFavorite(_that.chat);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( EChatFilter filter)  applyFilter,required TResult Function( String query)  search,required TResult Function( Chat chat)  toggleArchived,required TResult Function( Chat chat)  toggleFavorite,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( EChatFilter filter)  applyFilter,required TResult Function( String query)  search,required TResult Function( Chat chat)  toggleArchived,required TResult Function( Chat chat)  toggleFavorite,required TResult Function()  listenChatsChanges,}) {final _that = this;
 switch (_that) {
 case _ApplyFilter():
 return applyFilter(_that.filter);case _Search():
 return search(_that.query);case _ToggleArchived():
 return toggleArchived(_that.chat);case _ToggleFavorite():
-return toggleFavorite(_that.chat);}
+return toggleFavorite(_that.chat);case _ListenChatsChanges():
+return listenChatsChanges();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -169,13 +174,14 @@ return toggleFavorite(_that.chat);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( EChatFilter filter)?  applyFilter,TResult? Function( String query)?  search,TResult? Function( Chat chat)?  toggleArchived,TResult? Function( Chat chat)?  toggleFavorite,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( EChatFilter filter)?  applyFilter,TResult? Function( String query)?  search,TResult? Function( Chat chat)?  toggleArchived,TResult? Function( Chat chat)?  toggleFavorite,TResult? Function()?  listenChatsChanges,}) {final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that.filter);case _Search() when search != null:
 return search(_that.query);case _ToggleArchived() when toggleArchived != null:
 return toggleArchived(_that.chat);case _ToggleFavorite() when toggleFavorite != null:
-return toggleFavorite(_that.chat);case _:
+return toggleFavorite(_that.chat);case _ListenChatsChanges() when listenChatsChanges != null:
+return listenChatsChanges();case _:
   return null;
 
 }
@@ -464,6 +470,38 @@ $ChatCopyWith<$Res> get chat {
   });
 }
 }
+
+/// @nodoc
+
+
+class _ListenChatsChanges implements ChatsFilterEvent {
+  const _ListenChatsChanges();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListenChatsChanges);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ChatsFilterEvent.listenChatsChanges()';
+}
+
+
+}
+
+
+
 
 /// @nodoc
 mixin _$ChatsFilterState {

@@ -115,7 +115,6 @@ class ChatFirebaseRepository implements IChatRepository {
       arrayContains: uid,
     );
 
-
     queryRef = queryRef
         .limit(
           chatState.pageSize,
@@ -231,7 +230,6 @@ class ChatFirebaseRepository implements IChatRepository {
   }) async {
     final updates = <String, dynamic>{};
 
-
     updates['config.favorite'] = config.favorite
         ? FieldValue.arrayUnion([uid])
         : FieldValue.arrayRemove([uid]);
@@ -268,5 +266,27 @@ class ChatFirebaseRepository implements IChatRepository {
     return config.toDomain(
       uid,
     );
+  }
+
+  @override
+  Stream<ChatDto> chatUpdates({
+    required String uid,
+  }) async* {
+    await for (final snapshot
+        in _chats
+            .where(
+              'participants',
+              arrayContains: uid,
+            )
+            .snapshots()) {
+      for (final change in snapshot.docChanges) {
+        if (change.type == DocumentChangeType.modified ||
+            change.type == DocumentChangeType.added) {
+          yield ChatDto.fromJson(
+            change.doc.data()!,
+          );
+        }
+      }
+    }
   }
 }

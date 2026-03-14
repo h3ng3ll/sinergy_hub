@@ -11,6 +11,7 @@ import '../domain/usecases/bundle_chat_use_case.dart';
 import '../domain/usecases/get_chat_by_id_use_case.dart';
 import '../domain/usecases/get_chat_by_participants_case.dart';
 import '../domain/usecases/get_chat_config_use_case.dart';
+import '../domain/usecases/listen_chat_updates_use_case.dart';
 import '../domain/usecases/listen_chats_use_case.dart';
 import '../domain/usecases/get_last_messages_use_case.dart';
 import '../domain/usecases/listen_chat_by_id_use_case.dart';
@@ -115,6 +116,14 @@ void initChatFeature(GetIt getIt) {
     () => ToggleFavoriteChatUseCase(
       authRepository: getIt<IAuthRepository>(),
       chatRepository: getIt<IChatRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<ListenChatUpdatesUseCase>(
+    () => ListenChatUpdatesUseCase(
+      authRepository: getIt<IAuthRepository>(),
+      chatRepository: getIt<IChatRepository>(),
+      bundleChatUseCase: getIt<BundleChatUseCase>(),
+      userRepository: getIt<IUserRepository>(),
     ),
   );
 }

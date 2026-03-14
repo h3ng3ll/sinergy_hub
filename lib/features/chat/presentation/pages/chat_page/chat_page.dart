@@ -89,51 +89,42 @@ class _ChatPageState extends State<ChatPage> {
       value: _chatPageBloc,
       child: SafeArea(
         top: false,
-        child: Builder(
-          builder: (context) {
-            final chatBloc = context.watch<ChatBloc>();
-            // final authBloc = context.read<AuthBloc>();
+        child: BlocBuilder<ChatPageBloc, ChatPageState>(
+          builder: (context, chatPageState) {
+            if (chatPageState.isLoading) {
+              return LoadingDataWidget();
+            }
+            final Chat chat = chatPageState.chat!;
 
-            return BlocBuilder<ChatPageBloc, ChatPageState>(
-              builder: (context, chatPageState) {
-                if (chatPageState.isLoading) {
-                  return LoadingDataWidget();
-                }
-                final Chat chat = chatBloc.state.chats.firstWhere(
-                  (e) => e.chatId == widget.chatId,
-                );
+            /// Todo: refactor for grouped chats
+            final UserData chatterUser = chatPageState.users.first;
 
-                /// Todo: refactor for grouped chats
-                final UserData chatterUser = chatPageState.users.first;
-
-                return Scaffold(
-                  appBar: ChatAppBar(
-                    onTapVideoCall: () => onTapVideoCall(
-                      chatterUser.uid,
+            return Scaffold(
+              appBar: ChatAppBar(
+                onTapVideoCall: () => onTapVideoCall(
+                  chatterUser.uid,
+                ),
+                onTapUser: onTapUser,
+                user: chatterUser,
+              ),
+              body: Column(
+                children: [
+                  Expanded(
+                    child: BuildChatCanvas(
+                      onReachToEnd: onReachToEndMessages,
+                      chat: chat,
+                      users: [chatterUser],
                     ),
-                    onTapUser: onTapUser,
-                    user: chatterUser,
                   ),
-                  body: Column(
-                    children: [
-                      Expanded(
-                        child: BuildChatCanvas(
-                          onReachToEnd: onReachToEndMessages,
-                          chat: chat,
-                          users: [chatterUser],
-                        ),
-                      ),
-                      BuildChatBottom(
-                        onSendMessage: () => onSendMessage(
-                          context,
-                        ),
-                        onAttachMedia: onAttachMedia,
-                        chatController: _textEditingController,
-                      ),
-                    ],
+                  BuildChatBottom(
+                    onSendMessage: () => onSendMessage(
+                      context,
+                    ),
+                    onAttachMedia: onAttachMedia,
+                    chatController: _textEditingController,
                   ),
-                );
-              },
+                ],
+              ),
             );
           },
         ),

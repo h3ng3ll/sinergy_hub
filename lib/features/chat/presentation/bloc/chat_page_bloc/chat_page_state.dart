@@ -13,7 +13,9 @@ extension ChatPageStateX on ChatPageState {
   get isLoading => status == ChatPageStatus.loading;
 
   get isFailed => status == ChatPageStatus.failed;
+
   get isSending => status == ChatPageStatus.sending;
+
   get isSent => status == ChatPageStatus.sent;
 }
 
@@ -23,6 +25,7 @@ sealed class ChatPageState with _$ChatPageState {
     required String chatId,
     @Default([]) List<ChatMessage> messages,
     @Default([]) List<UserData> users,
+    Chat? chat,
     @Default(ChatPageStatus.loading) ChatPageStatus status,
     // @Default(true) bool isOnlineUser,
     @Default('') errorMessage,

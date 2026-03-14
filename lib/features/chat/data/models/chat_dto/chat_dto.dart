@@ -20,8 +20,6 @@ abstract class ChatDto with _$ChatDto {
     @Default([]) List<String> typingUsers,
     @TimestampConverter() required DateTime lastMessageSent,
     @Default([]) List<String> searchKeywords,
-    @Default(false) isArchived,
-    @Default(false) isFavorite,
     @Default(false) hasRead,
     @Default(ChatConfigDto()) ChatConfigDto config,
 
@@ -46,8 +44,8 @@ abstract class ChatDto with _$ChatDto {
     createdAt: createdAt,
     typingUsers: typingUsers,
     info: info,
-    isArchived: isArchived,
-    isFavorite: isFavorite,
+    isArchived: config.archived.isNotEmpty,
+    isFavorite: config.favorite.isNotEmpty,
   );
 
   factory ChatDto.fromDomain(
@@ -60,8 +58,6 @@ abstract class ChatDto with _$ChatDto {
     lastMessageSent: chat.lastMessageSent,
     participants: chat.participants,
     createdAt: chat.createdAt,
-    isArchived: chat.isArchived,
-    isFavorite: chat.isFavorite,
     config: ChatConfigDto(
       archived: chat.isArchived ? [uid] : [],
       favorite: chat.isFavorite ? [uid] : [],

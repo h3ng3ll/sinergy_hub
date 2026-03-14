@@ -17,4 +17,6 @@ sealed class ChatsFilterEvent with _$ChatsFilterEvent {
   const factory ChatsFilterEvent.toggleFavorite({
     required Chat chat,
   }) = _ToggleFavorite;
+
+  const factory ChatsFilterEvent.listenChatsChanges() = _ListenChatsChanges;
 }

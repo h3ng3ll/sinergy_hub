@@ -22,8 +22,6 @@ _ChatDto _$ChatDtoFromJson(Map<String, dynamic> json) => _ChatDto(
           ?.map((e) => e as String)
           .toList() ??
       const [],
-  isArchived: json['isArchived'] ?? false,
-  isFavorite: json['isFavorite'] ?? false,
   hasRead: json['hasRead'] ?? false,
   config: json['config'] == null
       ? const ChatConfigDto()
@@ -44,8 +42,6 @@ Map<String, dynamic> _$ChatDtoToJson(_ChatDto instance) => <String, dynamic>{
     instance.lastMessageSent,
   ),
   'searchKeywords': instance.searchKeywords,
-  'isArchived': instance.isArchived,
-  'isFavorite': instance.isFavorite,
   'hasRead': instance.hasRead,
   'config': instance.config.toJson(),
   'participants': instance.participants,

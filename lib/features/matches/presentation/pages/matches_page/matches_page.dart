@@ -10,6 +10,7 @@ import '../../../../chat/data/services/chat_filter_service.dart';
 import '../../../../chat/data/utils/extensions/chats_filter_state_ext.dart';
 import '../../../../chat/domain/models/chat/chat.dart';
 import '../../../../chat/domain/models/e_chat_filter.dart';
+import '../../../../chat/domain/usecases/listen_chat_updates_use_case.dart';
 import '../../../../chat/domain/usecases/search_chats_use_case.dart';
 import '../../../../chat/domain/usecases/toggle_archive_chat_use_case.dart';
 import '../../../../chat/domain/usecases/toggle_favorite_chat_use_case.dart';
@@ -31,14 +32,19 @@ class MatchesPage extends StatefulWidget {
 class _MatchesPageState extends State<MatchesPage> {
   final ChatsFilterBloc _chatsFilterBloc =
       ChatsFilterBloc(
-        searchChatsUseCase: getIt<SearchChatsUseCase>(),
-        toggleArchiveChatUseCase: getIt<ToggleArchiveChatUseCase>(),
-        toggleFavoriteChatUseCase: getIt<ToggleFavoriteChatUseCase>(),
-      )..add(
-        ChatsFilterEvent.search(
-          query: '',
-        ),
-      );
+          searchChatsUseCase: getIt<SearchChatsUseCase>(),
+          toggleArchiveChatUseCase: getIt<ToggleArchiveChatUseCase>(),
+          toggleFavoriteChatUseCase: getIt<ToggleFavoriteChatUseCase>(),
+          listenChatUpdatesUseCase: getIt<ListenChatUpdatesUseCase>(),
+        )
+        ..add(
+          ChatsFilterEvent.search(
+            query: '',
+          ),
+        )
+        ..add(
+          ChatsFilterEvent.listenChatsChanges(),
+        );
 
   @override
   void dispose() {
