@@ -32,20 +32,12 @@ class HomeRoot extends StatefulWidget {
 }
 
 class _HomeRootState extends State<HomeRoot> {
-  late final ChatBloc _chatBloc;
   late final CallBloc _callBloc;
   OverlayEntry? _entry;
 
   @override
   void initState() {
     super.initState();
-
-    _chatBloc =
-        ChatBloc(
-          getChatsUseCase: getIt(),
-        )..add(
-          const ChatEvent.init(),
-        );
 
     _callBloc =
         CallBloc(
@@ -84,9 +76,6 @@ class _HomeRootState extends State<HomeRoot> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(
-          value: _chatBloc,
-        ),
         BlocProvider<NotificationBloc>(
           create: (_) =>
               NotificationBloc(
@@ -151,7 +140,6 @@ class _HomeRootState extends State<HomeRoot> {
     _entry = null;
 
     _callBloc.close();
-    _chatBloc.close();
     super.dispose();
   }
 }

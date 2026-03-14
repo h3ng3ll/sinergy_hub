@@ -11,9 +11,9 @@ abstract class ChatConfigDto with _$ChatConfigDto {
   const ChatConfigDto._();
 
   const factory ChatConfigDto({
-    required String chatId,
-    @Default(false) bool archived,
-    @Default(false) bool favorite,
+
+    @Default([]) List<String> archived,
+    @Default([]) List<String> favorite,
   }) = _ChatConfigDto;
 
   factory ChatConfigDto.fromJson(
@@ -22,17 +22,15 @@ abstract class ChatConfigDto with _$ChatConfigDto {
     json,
   );
 
-  ChatConfig toDomain() => ChatConfig(
-    chatId: chatId,
-    archived: archived,
-    favorite: favorite,
+  ChatConfig toDomain(
+    String uid,
+  ) => ChatConfig(
+    archived: archived.contains(
+      uid,
+    ),
+    favorite: favorite.contains(
+      uid,
+    ),
   );
 
-  factory ChatConfigDto.fromDomain(
-    ChatConfig chatConfig,
-  ) => ChatConfigDto(
-    chatId: chatConfig.chatId,
-    archived: chatConfig.archived,
-    favorite: chatConfig.favorite,
-  );
 }

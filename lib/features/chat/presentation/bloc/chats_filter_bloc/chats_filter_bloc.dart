@@ -3,10 +3,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../core/utils/extensions/bloc_ext.dart';
 import '../../../domain/models/chat/chat.dart';
+import '../../../domain/models/chat_pg_state.dart/chat_pg_state.dart';
 import '../../../domain/models/e_chat_filter.dart';
 import '../../../domain/usecases/search_chats_use_case.dart';
 import '../../../domain/usecases/toggle_archive_chat_use_case.dart';
 import '../../../domain/usecases/toggle_favorite_chat_use_case.dart';
+import '../chat_bloc/chat_bloc.dart';
 
 part 'chats_filter_event.dart';
 
@@ -48,14 +50,15 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
           status: ChatsFilterStatus.searching,
         ),
       );
-      final List<Chat> chats = await _searchChatsUseCase.call(
+      final ChatPgState chatsState = await _searchChatsUseCase.call(
+        chatState: ChatPgState(),
         query: state.query,
-        filter: state.filter,
+        filter: event.filter,
       );
       emit(
         state.copyWith(
           filter: event.filter,
-          chats: chats,
+          chatsState: chatsState,
           status: ChatsFilterStatus.initial,
         ),
       );
@@ -77,14 +80,15 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
           status: ChatsFilterStatus.searching,
         ),
       );
-      final List<Chat> chats = await _searchChatsUseCase.call(
+      final ChatPgState chatState = await _searchChatsUseCase.call(
+        chatState: state.chatsState,
         query: event.query,
         filter: state.filter,
       );
       emit(
         state.copyWith(
           query: event.query,
-          chats: chats,
+          chatsState: chatState,
           status: ChatsFilterStatus.initial,
         ),
       );
@@ -104,7 +108,8 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
         chatId: event.chat.chatId,
       );
 
-      final List<Chat> chats = await _searchChatsUseCase.call(
+      final ChatPgState chatState = await _searchChatsUseCase.call(
+        chatState: state.chatsState,
         query: state.query,
         filter: state.filter,
       );
@@ -115,7 +120,7 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
           status: isArchived
               ? ChatsFilterStatus.archived
               : ChatsFilterStatus.unArchived,
-          chats: chats,
+          chatsState: chatState,
         ),
       );
     } catch (e) {
@@ -134,7 +139,8 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
         chatId: event.chat.chatId,
       );
 
-      final List<Chat> chats = await _searchChatsUseCase.call(
+      final ChatPgState chatsState = await _searchChatsUseCase.call(
+        chatState: ChatPgState(),
         query: state.query,
         filter: state.filter,
       );
@@ -146,7 +152,7 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
           status: isFavorite
               ? ChatsFilterStatus.favorite
               : ChatsFilterStatus.unFavorite,
-          chats: chats,
+          chatsState: chatsState,
         ),
       );
     } catch (e) {

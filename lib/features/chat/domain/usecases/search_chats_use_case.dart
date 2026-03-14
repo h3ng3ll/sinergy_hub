@@ -1,79 +1,48 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
-import '../../data/extensions/chat_list_config_ext.dart';
-import '../../data/extensions/chat_list_filter_ext.dart';
-import '../../data/models/chat_dto/chat_dto.dart';
+import '../../data/models/chat_dto_pg_state.dart/chat_dto_pg_state.dart';
 import '../models/chat/chat.dart';
-import '../models/chat_config/chat_config.dart';
+import '../models/chat_pg_state.dart/chat_pg_state.dart';
 import '../models/e_chat_filter.dart';
-import '../repositories/i_chat_config_repository.dart';
 import '../repositories/i_chat_repository.dart';
 import 'bundle_chat_use_case.dart';
 import 'get_chat_config_use_case.dart';
-import 'get_chat_configs_use_case.dart';
 
 class SearchChatsUseCase {
   final IChatRepository _chatRepository;
   final IAuthRepository _authRepository;
   final BundleChatUseCase _bundleChatUseCase;
-  final IChatConfigRepository _chatConfigRepository;
-  final GetChatConfigsUseCase _getChatConfigsUseCase;
+  final GetChatConfigUseCase _getChatConfigsUseCase;
 
   SearchChatsUseCase({
     required IChatRepository chatRepository,
     required IAuthRepository authRepository,
     required BundleChatUseCase bundleChatUseCase,
-    required IChatConfigRepository chatConfigRepository,
-    required GetChatConfigsUseCase getChatConfigsUseCase,
+    required GetChatConfigUseCase getChatConfigsUseCase,
   }) : _chatRepository = chatRepository,
        _authRepository = authRepository,
        _bundleChatUseCase = bundleChatUseCase,
-       _getChatConfigsUseCase = getChatConfigsUseCase,
-       _chatConfigRepository = chatConfigRepository;
+       _getChatConfigsUseCase = getChatConfigsUseCase;
 
   /// Accept UID of participants which not include current user
-  Future<List<Chat>> call({
+  Future<ChatPgState> call({
+    required ChatPgState chatState,
     required String query,
     EChatFilter filter = EChatFilter.all,
   }) async {
     final uid = await _authRepository.requireUserId();
 
-    // 1. Получаем все персональные чаты пользователя
-    final userChatConfigs = await _getChatConfigsUseCase.call();
-
-    // Map chatId → ChatConfig
-    final configMap = {
-      for (final config in userChatConfigs) config.chatId: config,
-    };
-    // 2. Берём chatId, где пользователь участвует
-    final List<String> chatIds = configMap.keys.toList();
-
-    if (chatIds.isEmpty) return [];
-
-    final List<ChatDto> chatsDto = await _chatRepository.get(
+    final ChatDtoPgState chatsDto = await _chatRepository.get(
+      chatState: chatState,
       uid: uid,
-      chatIds: chatIds,
+      filter: filter,
       query: query,
     );
 
-    // 4. Объединяем с настройками пользователя
-    final List<ChatDto> chatsWithConfig = chatsDto.map(
-      (chat) {
-        final config = configMap[chat.chatId];
-        return chat.copyWith(
-          isArchived: config?.archived ?? false,
-          isFavorite: config?.favorite ?? false,
-        );
-      },
-    ).toList();
 
-    // 5. Применяем фильтр и поиск
-    final List<ChatDto> filtered = chatsWithConfig.toList().filterBy(
-      filter,
-    ); // extension из data layer
-
-    final bundledChats =
+    final chats = chatsDto.chats;
+    final List<Chat> bundledChats =
         await Stream.fromIterable(
-          filtered,
+          chats,
         ).asyncMap(
           (e) async {
             return await _bundleChatUseCase.call(
@@ -82,6 +51,15 @@ class SearchChatsUseCase {
           },
         ).toList();
 
-    return bundledChats;
+    return chatState.copyWith(
+      chats: [
+        ...chatState.chats,
+        ...bundledChats,
+
+      ],
+      hasMore: chatsDto.hasMore,
+      pageSize: chatsDto.pageSize,
+      lastDocument: chatsDto.lastDocument,
+    );
   }
 }

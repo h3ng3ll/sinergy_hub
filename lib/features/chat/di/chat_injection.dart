@@ -3,18 +3,14 @@ import 'package:get_it/get_it.dart';
 import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../user/domain/repositories/i_user_repository.dart';
-import '../data/repositories/chat_config_firebase_repository.dart';
 import '../data/repositories/chat_firebase_repository.dart';
 import '../data/repositories/chat_message_firebase_repository.dart';
-import '../domain/repositories/i_chat_config_repository.dart';
 import '../domain/repositories/i_chat_message_repository.dart';
 import '../domain/repositories/i_chat_repository.dart';
 import '../domain/usecases/bundle_chat_use_case.dart';
 import '../domain/usecases/get_chat_by_id_use_case.dart';
 import '../domain/usecases/get_chat_by_participants_case.dart';
 import '../domain/usecases/get_chat_config_use_case.dart';
-import '../domain/usecases/get_chat_configs_stream_use_case.dart';
-import '../domain/usecases/get_chat_configs_use_case.dart';
 import '../domain/usecases/listen_chats_use_case.dart';
 import '../domain/usecases/get_last_messages_use_case.dart';
 import '../domain/usecases/listen_chat_by_id_use_case.dart';
@@ -23,7 +19,6 @@ import '../domain/usecases/search_chats_use_case.dart';
 import '../domain/usecases/send_message_use_case.dart';
 import '../domain/usecases/toggle_archive_chat_use_case.dart';
 import '../domain/usecases/toggle_favorite_chat_use_case.dart';
-import '../domain/usecases/update_chat_config_use_case.dart';
 import '../domain/usecases/update_chat_info_use_case.dart';
 
 void initChatFeature(GetIt getIt) {
@@ -34,11 +29,6 @@ void initChatFeature(GetIt getIt) {
   );
   getIt.registerLazySingleton<IChatMessageRepository>(
     () => ChatMessageFirebaseRepository(
-      firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
-    ),
-  );
-  getIt.registerLazySingleton<IChatConfigRepository>(
-    () => ChatConfigFirebaseRepository(
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
     ),
   );
@@ -84,6 +74,7 @@ void initChatFeature(GetIt getIt) {
   getIt.registerLazySingleton<UpdateChatInfoUseCase>(
     () => UpdateChatInfoUseCase(
       chatRepository: getIt<IChatRepository>(),
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
   getIt.registerLazySingleton<ListenChatByIdUseCase>(
@@ -100,49 +91,30 @@ void initChatFeature(GetIt getIt) {
       bundleChatUseCase: getIt<BundleChatUseCase>(),
     ),
   );
-  getIt.registerLazySingleton<GetChatConfigsUseCase>(
-    () => GetChatConfigsUseCase(
-      chatConfigRepository: getIt<IChatConfigRepository>(),
-      authRepository: getIt<IAuthRepository>(),
-    ),
-  );
   getIt.registerLazySingleton<SearchChatsUseCase>(
     () => SearchChatsUseCase(
       chatRepository: getIt<IChatRepository>(),
       bundleChatUseCase: getIt<BundleChatUseCase>(),
       authRepository: getIt<IAuthRepository>(),
-      chatConfigRepository: getIt<IChatConfigRepository>(),
-      getChatConfigsUseCase: getIt<GetChatConfigsUseCase>(),
-    ),
-  );
-  getIt.registerLazySingleton<GetChatConfigsStreamUseCase>(
-    () => GetChatConfigsStreamUseCase(
-      chatConfigRepository: getIt<IChatConfigRepository>(),
-      authRepository: getIt<IAuthRepository>(),
-    ),
-  );
-  getIt.registerLazySingleton<UpdateChatConfigUseCase>(
-    () => UpdateChatConfigUseCase(
-      chatConfigRepository: getIt<IChatConfigRepository>(),
-      authRepository: getIt<IAuthRepository>(),
+      getChatConfigsUseCase: getIt<GetChatConfigUseCase>(),
     ),
   );
   getIt.registerLazySingleton<GetChatConfigUseCase>(
     () => GetChatConfigUseCase(
-      chatConfigRepository: getIt<IChatConfigRepository>(),
       authRepository: getIt<IAuthRepository>(),
+      chatRepository: getIt<IChatRepository>(),
     ),
   );
   getIt.registerLazySingleton<ToggleArchiveChatUseCase>(
     () => ToggleArchiveChatUseCase(
-      chatConfigRepository: getIt<IChatConfigRepository>(),
       authRepository: getIt<IAuthRepository>(),
+      chatRepository: getIt<IChatRepository>(),
     ),
   );
   getIt.registerLazySingleton<ToggleFavoriteChatUseCase>(
     () => ToggleFavoriteChatUseCase(
-      chatConfigRepository: getIt<IChatConfigRepository>(),
       authRepository: getIt<IAuthRepository>(),
+      chatRepository: getIt<IChatRepository>(),
     ),
   );
 }

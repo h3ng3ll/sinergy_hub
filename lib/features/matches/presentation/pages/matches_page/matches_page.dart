@@ -142,15 +142,14 @@ class _MatchesPageState extends State<MatchesPage> {
                 Expanded(
                   child: BlocBuilder<ChatsFilterBloc, ChatsFilterState>(
                     builder: (context, state) {
-                      final chats = state.chats;
+                      final chats = state.chatsState.chats;
 
                       if (state.status == ChatsFilterStatus.failed) {
                         return Text(
                           'Failed load data: ${state.errorMessage}',
                         );
                       }
-                      if (state.status == ChatsFilterStatus.initial &&
-                          state.chats.isEmpty) {
+                      if (state.isInitial && state.isEmpty) {
                         return BuildChatsEmpty();
                       }
 

@@ -1,15 +1,14 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
-import '../models/chat_config/chat_config.dart';
-import '../repositories/i_chat_config_repository.dart';
+import '../repositories/i_chat_repository.dart';
 
 class ToggleFavoriteChatUseCase {
-  final IChatConfigRepository _chatConfigRepository;
+  final IChatRepository _chatRepository;
   final IAuthRepository _authRepository;
 
   ToggleFavoriteChatUseCase({
-    required IChatConfigRepository chatConfigRepository,
+    required IChatRepository chatRepository,
     required IAuthRepository authRepository,
-  }) : _chatConfigRepository = chatConfigRepository,
+  }) : _chatRepository = chatRepository,
        _authRepository = authRepository;
 
   Future<void> call({
@@ -17,24 +16,20 @@ class ToggleFavoriteChatUseCase {
   }) async {
     final uid = await _authRepository.requireUserId();
 
-    final existingConfig = await _chatConfigRepository.getConfig(
+    final existingConfig = await _chatRepository.getConfig(
       uid: uid,
       chatId: chatId,
     );
 
-    final currentFavoriteStatus = existingConfig?.favorite ?? false;
+    final currentFavoriteStatus = existingConfig.favorite;
 
-    final updatedConfig =
-        (existingConfig ??
-                ChatConfig(
-                  chatId: chatId,
-                ))
-            .copyWith(
-              favorite: !currentFavoriteStatus,
-            );
+    final updatedConfig = existingConfig.copyWith(
+      favorite: !currentFavoriteStatus,
+    );
 
-    await _chatConfigRepository.updateConfig(
+    await _chatRepository.updateConfig(
       uid: uid,
+      chatId: chatId,
       config: updatedConfig,
     );
   }

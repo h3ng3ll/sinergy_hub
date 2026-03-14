@@ -17,6 +17,11 @@ extension ChatsFilterStateExt on ChatsFilterState {
   //     return fullName.contains(q);
   //   });
   // }
+  bool get isInitial => status == ChatsFilterStatus.initial;
+  bool get isEmpty => chatsState.chats.isEmpty;
+
+  bool get isLoading => status == ChatsFilterStatus.loading;
+
   bool get isApplied => query.isNotEmpty || filter != EChatFilter.all;
 
   Iterable<Chat> filterByType(Iterable<Chat> chats) {

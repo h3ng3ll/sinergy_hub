@@ -1,39 +1,35 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
-import '../models/chat_config/chat_config.dart';
-import '../repositories/i_chat_config_repository.dart';
+import '../repositories/i_chat_repository.dart';
 
 class ToggleArchiveChatUseCase {
-  final IChatConfigRepository _chatConfigRepository;
   final IAuthRepository _authRepository;
+  final IChatRepository _chatRepository;
 
   ToggleArchiveChatUseCase({
-    required IChatConfigRepository chatConfigRepository,
     required IAuthRepository authRepository,
-  }) : _chatConfigRepository = chatConfigRepository,
-       _authRepository = authRepository;
+    required IChatRepository chatRepository,
+  }) :
+       _authRepository = authRepository,
+       _chatRepository = chatRepository;
 
   Future<void> call({
     required String chatId,
   }) async {
     final uid = await _authRepository.requireUserId();
 
-    final existingConfig = await _chatConfigRepository.getConfig(
+    final existingConfig = await _chatRepository.getConfig(
       uid: uid,
       chatId: chatId,
     );
 
-    final currentArchivedStatus = existingConfig?.archived ?? false;
+    final currentArchivedStatus = existingConfig.archived ?? false;
 
-    final updatedConfig =
-        (existingConfig ??
-                ChatConfig(
-                  chatId: chatId,
-                ))
-            .copyWith(
-              archived: !currentArchivedStatus,
-            );
+    final updatedConfig = existingConfig .copyWith(
+      archived: !currentArchivedStatus,
+    );
 
-    await _chatConfigRepository.updateConfig(
+    await _chatRepository.updateConfig(
+      chatId: chatId,
       uid: uid,
       config: updatedConfig,
     );

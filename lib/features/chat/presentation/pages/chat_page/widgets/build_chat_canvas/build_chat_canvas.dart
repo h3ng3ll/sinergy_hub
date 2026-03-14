@@ -1,9 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
 
-import '../../../../../../../gen/assets.gen.dart';
 import '../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../domain/models/chat/chat.dart';
 import 'widgets/message_builder/message_builder.dart';
@@ -23,7 +19,6 @@ class BuildChatCanvas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Expanded(

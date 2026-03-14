@@ -1,24 +1,24 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../models/chat_config/chat_config.dart';
-import '../repositories/i_chat_config_repository.dart';
+import '../repositories/i_chat_repository.dart';
 
 class GetChatConfigUseCase {
-  final IChatConfigRepository _chatConfigRepository;
+  final IChatRepository _chatRepository;
   final IAuthRepository _authRepository;
 
   GetChatConfigUseCase({
-    required IChatConfigRepository chatConfigRepository,
+    required IChatRepository chatRepository,
     required IAuthRepository authRepository,
-  })  : _chatConfigRepository = chatConfigRepository,
-        _authRepository = authRepository;
+  }) : _chatRepository = chatRepository,
+       _authRepository = authRepository;
 
-  Future<ChatConfig?> call({
-    required String chatId,
-  }) async {
+  Future<ChatConfig> call(
+    String chatId,
+  ) async {
     final uid = await _authRepository.requireUserId();
-    return await _chatConfigRepository.getConfig(
-      uid: uid,
+    return await _chatRepository.getConfig(
       chatId: chatId,
+      uid: uid,
     );
   }
 }

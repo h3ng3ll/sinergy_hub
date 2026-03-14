@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../../core/utils/converters/timestamp_convertor.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/chat_info/chat_info.dart';
+import '../chat_config_dto/chat_config_dto.dart';
 
 part 'chat_dto.g.dart';
 
@@ -22,6 +23,7 @@ abstract class ChatDto with _$ChatDto {
     @Default(false) isArchived,
     @Default(false) isFavorite,
     @Default(false) hasRead,
+    @Default(ChatConfigDto()) ChatConfigDto config,
 
     /// who access this chat
     required List<String> participants,
@@ -50,6 +52,7 @@ abstract class ChatDto with _$ChatDto {
 
   factory ChatDto.fromDomain(
     Chat chat,
+    String uid,
   ) => ChatDto(
     chatId: chat.chatId,
     lastMessage: chat.lastMessage,
@@ -59,5 +62,9 @@ abstract class ChatDto with _$ChatDto {
     createdAt: chat.createdAt,
     isArchived: chat.isArchived,
     isFavorite: chat.isFavorite,
+    config: ChatConfigDto(
+      archived: chat.isArchived ? [uid] : [],
+      favorite: chat.isFavorite ? [uid] : [],
+    ),
   );
 }

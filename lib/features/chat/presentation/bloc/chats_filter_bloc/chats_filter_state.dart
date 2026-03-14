@@ -27,7 +27,7 @@ extension ChatsFilterStateX on ChatsFilterState {
 sealed class ChatsFilterState with _$ChatsFilterState {
   const factory ChatsFilterState({
     @Default(ChatsFilterStatus.initial) ChatsFilterStatus status,
-    @Default([]) List<Chat> chats,
+    @Default(ChatPgState()) ChatPgState chatsState,
     @Default(EChatFilter.all) EChatFilter filter,
     @Default('') String query,
     @Default('') errorMessage,

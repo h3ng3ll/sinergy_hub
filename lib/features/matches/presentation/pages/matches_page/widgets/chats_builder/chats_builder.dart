@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../../../core/services/ui_message_service.dart';
 import '../../../../../../../core/utils/extensions/scroll_controller_ext.dart';
-import '../../../../../../chat/domain/models/chat/chat.dart';
 
+import '../../../../../../chat/domain/models/chat/chat.dart';
 import '../../../../../../chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import 'widgets/build_chats_empty.dart';
 import 'widgets/chat_actions_dialog.dart';

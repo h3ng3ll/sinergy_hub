@@ -2,9 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../domain/models/chat/chat.dart';
+import '../../domain/models/chat_config/chat_config.dart';
+import '../../domain/models/chat_pg_state.dart/chat_pg_state.dart';
+import '../../domain/models/e_chat_filter.dart';
 import '../../domain/repositories/i_chat_repository.dart';
 import '../exception/chat_no_data_exception.dart';
+import '../models/chat_config_dto/chat_config_dto.dart';
 import '../models/chat_dto/chat_dto.dart';
+import '../models/chat_dto_pg_state.dart/chat_dto_pg_state.dart';
 
 class ChatFirebaseRepository implements IChatRepository {
   final FirebaseFirestoreService _firebaseFirestoreService;
@@ -16,7 +21,10 @@ class ChatFirebaseRepository implements IChatRepository {
   ColRef get _chats => _firebaseFirestoreService.chats();
 
   @override
-  Future<Chat> create(Chat chat) async {
+  Future<Chat> create(
+    Chat chat,
+    String uid,
+  ) async {
     final String id = _firebaseFirestoreService.chats().doc().id;
     await _chats
         .doc(
@@ -25,6 +33,7 @@ class ChatFirebaseRepository implements IChatRepository {
         .set(
           ChatDto.fromDomain(
                 chat,
+                uid,
               )
               .copyWith(
                 chatId: id,
@@ -93,74 +102,65 @@ class ChatFirebaseRepository implements IChatRepository {
   }
 
   @override
-  Future<List<ChatDto>> get({
+  Future<ChatDtoPgState> get({
     required String uid,
+    required ChatPgState chatState,
     String? query,
-    List<String>? chatIds,
-    int limit = 20,
-    DocumentSnapshot? startAfterDoc,
+    EChatFilter filter = EChatFilter.all,
   }) async {
-    // 1. Если chatIds пустые, возвращаем сразу пустой список
-    if (chatIds == null || chatIds.isEmpty) {
-      return [];
-    }
+    List<ChatDto> chats = [];
 
-    final List<ChatDto> result = [];
+    Query queryRef = _chats.where(
+      'participants',
+      arrayContains: uid,
+    );
 
-    // 2. Firestore ограничивает whereIn до 10-30 элементов, делаем батчи
-    const batchSize = 10;
-    for (var i = 0; i < chatIds.length; i += batchSize) {
-      final batchIds = chatIds.sublist(
-        i,
-        (i + batchSize).clamp(
-          0,
-          chatIds.length,
-        ),
-      );
 
-      Query queryRef = _chats
-          .where(
-            'chatId',
-            whereIn: batchIds,
-          )
-          .where(
-            'participants',
-            arrayContains: uid,
-          )
-          .orderBy(
-            'lastMessageSent',
-            descending: true,
-          )
-          .limit(
-            limit,
-          );
-
-      // 3. Пагинация: если есть стартовый документ, продолжаем с него
-      if (startAfterDoc != null) {
-        queryRef = queryRef.startAfterDocument(
-          startAfterDoc,
+    queryRef = queryRef
+        .limit(
+          chatState.pageSize,
+        )
+        .orderBy(
+          'lastMessageSent',
+          descending: true,
         );
-      }
-
-      final batchSnap = await queryRef.get();
-
-      final List<ChatDto> batchChats = batchSnap.docs.map(
-        (doc) {
-          if (doc.data() == null) {
-            throw ChatNoDataException();
-          }
-          return ChatDto.fromJson(
-            doc.data() as Map<String, dynamic>,
-          );
-        },
-      ).toList();
-
-      result.addAll(batchChats);
+    if (chatState.lastDocument != null) {
+      queryRef = queryRef.startAfterDocument(
+        chatState.lastDocument!,
+      );
     }
+    final data = await queryRef.get();
+
+    chats = data.docs
+        .map(
+          (doc) {
+            if (doc.data() == null) {
+              throw ChatNoDataException();
+            }
+            return ChatDto.fromJson(
+              doc.data() as Map<String, dynamic>,
+            );
+          },
+        )
+        .where(
+          (e) {
+            if (filter == EChatFilter.favorite) {
+              return e.config.favorite.contains(
+                uid,
+              );
+            } else if (filter == EChatFilter.archived) {
+              return e.config.archived.contains(
+                uid,
+              );
+            }
+            return true;
+          },
+        )
+        .toList();
 
     // 4. Если query есть, фильтруем на клиенте по searchKeywords
     if (query != null && query.isNotEmpty) {
-      return result.where(
+      chats = chats.where(
         (chat) {
           final keywords = chat.searchKeywords
               .map(
@@ -177,7 +177,12 @@ class ChatFirebaseRepository implements IChatRepository {
       ).toList();
     }
 
-    return result;
+    return ChatDtoPgState(
+      pageSize: chatState.pageSize,
+      chats: chats,
+      hasMore: data.docs.isNotEmpty,
+      lastDocument: data.docs.isEmpty ? chatState.lastDocument : data.docs.last,
+    );
   }
 
   @override
@@ -216,5 +221,52 @@ class ChatFirebaseRepository implements IChatRepository {
       chatRow.docs.first.data(),
     );
     return chat;
+  }
+
+  @override
+  Future<void> updateConfig({
+    required String uid,
+    required String chatId,
+    required ChatConfig config,
+  }) async {
+    final updates = <String, dynamic>{};
+
+
+    updates['config.favorite'] = config.favorite
+        ? FieldValue.arrayUnion([uid])
+        : FieldValue.arrayRemove([uid]);
+
+    updates['config.archived'] = config.archived
+        ? FieldValue.arrayUnion([uid])
+        : FieldValue.arrayRemove([uid]);
+
+    await _chats
+        .doc(
+          chatId,
+        )
+        .update(
+          updates,
+        );
+  }
+
+  @override
+  Future<ChatConfig> getConfig({
+    required String uid,
+    required String chatId,
+  }) async {
+    final data = await _chats
+        .doc(
+          chatId,
+        )
+        .get();
+    if (data.data() == null) {
+      return ChatConfig();
+    }
+    final config = ChatConfigDto.fromJson(
+      data.data()!['config'],
+    );
+    return config.toDomain(
+      uid,
+    );
   }
 }

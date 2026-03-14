@@ -37,16 +37,16 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     _chatPageBloc =
-    ChatPageBloc(
-      chatId: widget.chatId,
-      sendMessageUseCase: getIt<SendMessageUseCase>(),
-      getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
-      listenChatMessagesUseCase: getIt<ListenChatMessagesUseCase>(),
-      getUsersUseCase: getIt<GetUsersUseCase>(),
-      getLastMessageUseCase: getIt<GetLastMessagesUseCase>(),
-    )..add(
-      ChatPageEvent.init(),
-    );
+        ChatPageBloc(
+          chatId: widget.chatId,
+          sendMessageUseCase: getIt<SendMessageUseCase>(),
+          getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
+          listenChatMessagesUseCase: getIt<ListenChatMessagesUseCase>(),
+          getUsersUseCase: getIt<GetUsersUseCase>(),
+          getLastMessageUseCase: getIt<GetLastMessagesUseCase>(),
+        )..add(
+          ChatPageEvent.init(),
+        );
 
     super.initState();
   }
@@ -100,7 +100,7 @@ class _ChatPageState extends State<ChatPage> {
                   return LoadingDataWidget();
                 }
                 final Chat chat = chatBloc.state.chats.firstWhere(
-                      (e) => e.chatId == widget.chatId,
+                  (e) => e.chatId == widget.chatId,
                 );
 
                 /// Todo: refactor for grouped chats
