@@ -306,6 +306,9 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
                               ],
                             ),
                           ),
+                          Gap(
+                            MediaQuery.of(context).viewPadding.bottom,
+                          ),
                         ],
                       ),
                     ),

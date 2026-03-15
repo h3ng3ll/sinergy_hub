@@ -67,4 +67,11 @@ void initMatchingFeature(GetIt getIt) {
       authRepository: getIt<IAuthRepository>(),
     ),
   );
+  getIt.registerLazySingleton<LookForMatchesUseCase>(
+    () => LookForMatchesUseCase(
+      authRepository: getIt<IAuthRepository>(),
+      userRepository: getIt<IUserRepository>(),
+      getExcludedMatchesUseCase: getIt<GetExcludedMatchesUseCase>(),
+    ),
+  );
 }

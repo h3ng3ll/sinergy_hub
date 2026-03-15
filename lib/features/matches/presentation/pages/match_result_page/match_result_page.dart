@@ -5,7 +5,9 @@ import 'package:gap/gap.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
+import '../../../domain/usecases/find_match_chat_id_use_case.dart';
 import '../../../domain/usecases/get_match_by_id_use_case.dart';
 import '../../../domain/usecases/mark_as_notified_match_use_case.dart';
 import '../../bloc/match_result_bloc/match_result_bloc.dart';
@@ -34,6 +36,7 @@ class _MatchResultPageState extends State<MatchResultPage> {
           getMatchByIdUseCase: getIt<GetMatchByIdUseCase>(),
           getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
           markAsNotifiedMatchUseCase: getIt<MarkAsNotifiedMatchUseCase>(),
+          lookForMatchesUseCase: getIt<LookForMatchesUseCase>(),
         )..add(
           MatchResultEvent.getResult(
             matchId: widget.matchId,
@@ -45,6 +48,12 @@ class _MatchResultPageState extends State<MatchResultPage> {
   void dispose() {
     _matchResultBloc.close();
     super.dispose();
+  }
+
+  void onStartChat() {
+    ChatPageRoute(
+      chatId: _matchResultBloc.state.chatId,
+    );
   }
 
   @override
@@ -120,7 +129,7 @@ class _MatchResultPageState extends State<MatchResultPage> {
                       _buildAvatarsRow(
                         context,
                         match.user.avatarUrl ?? '',
-                        match.user.avatarUrl ?? '',
+                        state.user?.avatarUrl ?? '',
                       ),
                       const Gap(40),
                       // Match Title
@@ -232,8 +241,8 @@ class _MatchResultPageState extends State<MatchResultPage> {
       clipBehavior: Clip.none,
       children: [
         Container(
-          width: 120,
-          height: 120,
+          width: 110,
+          height: 110,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
@@ -420,9 +429,7 @@ class _MatchResultPageState extends State<MatchResultPage> {
         const Gap(16),
         Expanded(
           child: ElevatedButton(
-            onPressed: () {
-              // Navigate to chat or profile
-            },
+            onPressed: onStartChat,
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
               backgroundColor: Colors.white,

@@ -265,7 +265,7 @@ as String,
 /// @nodoc
 mixin _$MatchResultState {
 
- MatchResultStatus get status; String get errorMessage; Matches? get match; UserData? get user;
+ MatchResultStatus get status; String get errorMessage; Matches? get match; UserData? get user; String get chatId;
 /// Create a copy of MatchResultState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -276,16 +276,16 @@ $MatchResultStateCopyWith<MatchResultState> get copyWith => _$MatchResultStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MatchResultState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.match, match) || other.match == match)&&(identical(other.user, user) || other.user == user));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MatchResultState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.match, match) || other.match == match)&&(identical(other.user, user) || other.user == user)&&(identical(other.chatId, chatId) || other.chatId == chatId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,errorMessage,match,user);
+int get hashCode => Object.hash(runtimeType,status,errorMessage,match,user,chatId);
 
 @override
 String toString() {
-  return 'MatchResultState(status: $status, errorMessage: $errorMessage, match: $match, user: $user)';
+  return 'MatchResultState(status: $status, errorMessage: $errorMessage, match: $match, user: $user, chatId: $chatId)';
 }
 
 
@@ -296,7 +296,7 @@ abstract mixin class $MatchResultStateCopyWith<$Res>  {
   factory $MatchResultStateCopyWith(MatchResultState value, $Res Function(MatchResultState) _then) = _$MatchResultStateCopyWithImpl;
 @useResult
 $Res call({
- MatchResultStatus status, String errorMessage, Matches? match, UserData? user
+ MatchResultStatus status, String errorMessage, Matches? match, UserData? user, String chatId
 });
 
 
@@ -313,13 +313,14 @@ class _$MatchResultStateCopyWithImpl<$Res>
 
 /// Create a copy of MatchResultState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? errorMessage = null,Object? match = freezed,Object? user = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? errorMessage = null,Object? match = freezed,Object? user = freezed,Object? chatId = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as MatchResultStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,match: freezed == match ? _self.match : match // ignore: cast_nullable_to_non_nullable
 as Matches?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserData?,
+as UserData?,chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 /// Create a copy of MatchResultState
@@ -425,10 +426,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MatchResultStatus status,  String errorMessage,  Matches? match,  UserData? user)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MatchResultStatus status,  String errorMessage,  Matches? match,  UserData? user,  String chatId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MatchResultState() when $default != null:
-return $default(_that.status,_that.errorMessage,_that.match,_that.user);case _:
+return $default(_that.status,_that.errorMessage,_that.match,_that.user,_that.chatId);case _:
   return orElse();
 
 }
@@ -446,10 +447,10 @@ return $default(_that.status,_that.errorMessage,_that.match,_that.user);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MatchResultStatus status,  String errorMessage,  Matches? match,  UserData? user)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MatchResultStatus status,  String errorMessage,  Matches? match,  UserData? user,  String chatId)  $default,) {final _that = this;
 switch (_that) {
 case _MatchResultState():
-return $default(_that.status,_that.errorMessage,_that.match,_that.user);}
+return $default(_that.status,_that.errorMessage,_that.match,_that.user,_that.chatId);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -463,10 +464,10 @@ return $default(_that.status,_that.errorMessage,_that.match,_that.user);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MatchResultStatus status,  String errorMessage,  Matches? match,  UserData? user)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MatchResultStatus status,  String errorMessage,  Matches? match,  UserData? user,  String chatId)?  $default,) {final _that = this;
 switch (_that) {
 case _MatchResultState() when $default != null:
-return $default(_that.status,_that.errorMessage,_that.match,_that.user);case _:
+return $default(_that.status,_that.errorMessage,_that.match,_that.user,_that.chatId);case _:
   return null;
 
 }
@@ -478,13 +479,14 @@ return $default(_that.status,_that.errorMessage,_that.match,_that.user);case _:
 
 
 class _MatchResultState implements MatchResultState {
-  const _MatchResultState({this.status = MatchResultStatus.initial, this.errorMessage = '', this.match, this.user});
+  const _MatchResultState({this.status = MatchResultStatus.initial, this.errorMessage = '', this.match, this.user, this.chatId = ''});
   
 
 @override@JsonKey() final  MatchResultStatus status;
 @override@JsonKey() final  String errorMessage;
 @override final  Matches? match;
 @override final  UserData? user;
+@override@JsonKey() final  String chatId;
 
 /// Create a copy of MatchResultState
 /// with the given fields replaced by the non-null parameter values.
@@ -496,16 +498,16 @@ _$MatchResultStateCopyWith<_MatchResultState> get copyWith => __$MatchResultStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MatchResultState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.match, match) || other.match == match)&&(identical(other.user, user) || other.user == user));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MatchResultState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.match, match) || other.match == match)&&(identical(other.user, user) || other.user == user)&&(identical(other.chatId, chatId) || other.chatId == chatId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,errorMessage,match,user);
+int get hashCode => Object.hash(runtimeType,status,errorMessage,match,user,chatId);
 
 @override
 String toString() {
-  return 'MatchResultState(status: $status, errorMessage: $errorMessage, match: $match, user: $user)';
+  return 'MatchResultState(status: $status, errorMessage: $errorMessage, match: $match, user: $user, chatId: $chatId)';
 }
 
 
@@ -516,7 +518,7 @@ abstract mixin class _$MatchResultStateCopyWith<$Res> implements $MatchResultSta
   factory _$MatchResultStateCopyWith(_MatchResultState value, $Res Function(_MatchResultState) _then) = __$MatchResultStateCopyWithImpl;
 @override @useResult
 $Res call({
- MatchResultStatus status, String errorMessage, Matches? match, UserData? user
+ MatchResultStatus status, String errorMessage, Matches? match, UserData? user, String chatId
 });
 
 
@@ -533,13 +535,14 @@ class __$MatchResultStateCopyWithImpl<$Res>
 
 /// Create a copy of MatchResultState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? errorMessage = null,Object? match = freezed,Object? user = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? errorMessage = null,Object? match = freezed,Object? user = freezed,Object? chatId = null,}) {
   return _then(_MatchResultState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as MatchResultStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,match: freezed == match ? _self.match : match // ignore: cast_nullable_to_non_nullable
 as Matches?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserData?,
+as UserData?,chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

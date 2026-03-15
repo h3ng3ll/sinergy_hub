@@ -61,5 +61,12 @@
         </dict>
     </array>
 
+    <key>NSCameraUsageDescription</key>
+    <string>Update user avatar from camera</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>We need access to your microphone for use camera</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Update user avatar from library</string>
+
 </dict>
 </plist>

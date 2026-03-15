@@ -14,5 +14,6 @@ sealed class MatchResultState with _$MatchResultState {
     @Default('') String errorMessage,
     Matches? match,
     UserData? user,
+    @Default('') String chatId,
   }) = _MatchResultState;
 }
