@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../chat_info/chat_info.dart';
+import '../participants_info/participants_info.dart';
 
 part 'chat.g.dart';
 
@@ -19,7 +20,6 @@ abstract class Chat with _$Chat {
 
     /// who access this chat
     required List<String> participants,
-    @Default(false) bool hasRead,
     @Default(false) bool isArchived,
     @Default(false) bool isFavorite,
     required DateTime createdAt,
@@ -34,9 +34,8 @@ abstract class Chat with _$Chat {
     ),
     lastMessage: '',
     lastMessageSent: DateTime.now(),
-    typingUsers: [],
     participants: [],
-    hasRead: false,
+    typingUsers: [],
     isArchived: false,
     isFavorite: false,
     createdAt: DateTime.now(),

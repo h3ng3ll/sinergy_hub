@@ -13,19 +13,20 @@ abstract class IChatRepository {
 
   /// Receive chats which participate
   /// to specify [uid]
-  Stream<List<ChatDto>> getStream(String uid);
+  Stream<List<Chat>> getStream(String uid);
 
-  Stream<ChatDto> listenByIdStream({
+  Stream<Chat> listenByIdStream({
     required String uid,
     required String chatId,
   });
 
   /// return lastly updated Chat
-  Stream<ChatDto> chatUpdates({
+  Stream<Chat> chatUpdates({
     required String uid,
   });
 
-  Future<ChatDto> getById({
+  Future<Chat> getById({
+    required String uid,
     required String chatId,
   });
 
@@ -33,7 +34,13 @@ abstract class IChatRepository {
     required ChatDto chat,
   });
 
-  Future<ChatDtoPgState> get({
+  Future<void> updateTypeInfo({
+    required String uid,
+    required String chatId,
+    required bool isTyping,
+  });
+
+  Future<ChatPgState> get({
     required String uid,
     required ChatPgState chatState,
     String? query,
@@ -42,7 +49,8 @@ abstract class IChatRepository {
 
   /// must return if specified uid contain
   /// in the chat to determine if it already exists  @override
-  Future<ChatDto?> chatByParticipates({
+  Future<Chat?> chatByParticipates({
+    required String uid,
     required List<String> participates,
   });
 

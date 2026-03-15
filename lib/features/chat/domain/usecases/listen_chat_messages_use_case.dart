@@ -13,6 +13,7 @@ class ListenChatMessagesUseCase {
   }) {
     return _chatMessageRepository.getLastMessagesStream(
       chatId: chatId,
+      uid: '',
     );
   }
 }

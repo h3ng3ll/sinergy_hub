@@ -23,6 +23,11 @@ _ChatDto _$ChatDtoFromJson(Map<String, dynamic> json) => _ChatDto(
           .toList() ??
       const [],
   hasRead: json['hasRead'] ?? false,
+  participantsInfo:
+      (json['participantsInfo'] as List<dynamic>?)
+          ?.map((e) => ParticipantsInfo.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
   config: json['config'] == null
       ? const ChatConfigDto()
       : ChatConfigDto.fromJson(json['config'] as Map<String, dynamic>),
@@ -43,6 +48,7 @@ Map<String, dynamic> _$ChatDtoToJson(_ChatDto instance) => <String, dynamic>{
   ),
   'searchKeywords': instance.searchKeywords,
   'hasRead': instance.hasRead,
+  'participantsInfo': instance.participantsInfo.map((e) => e.toJson()).toList(),
   'config': instance.config.toJson(),
   'participants': instance.participants,
   'createdAt': const TimestampConverter().toJson(instance.createdAt),

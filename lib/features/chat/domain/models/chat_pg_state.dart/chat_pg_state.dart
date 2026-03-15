@@ -10,7 +10,6 @@ part 'chat_pg_state.freezed.dart';
 @freezed
 abstract class ChatPgState with _$ChatPgState {
   const factory ChatPgState({
-    @Default('') String ChatPgStateId,
 
     @Default(0) int startIndex,
     @Default(10) int pageSize,

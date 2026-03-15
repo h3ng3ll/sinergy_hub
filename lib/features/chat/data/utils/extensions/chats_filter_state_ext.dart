@@ -24,28 +24,28 @@ extension ChatsFilterStateExt on ChatsFilterState {
 
   bool get isApplied => query.isNotEmpty || filter != EChatFilter.all;
 
-  Iterable<Chat> filterByType(Iterable<Chat> chats) {
-    switch (filter) {
-      ///Todo Came up with some logic
-      case EChatFilter.recent:
-        return chats;
-
-      case EChatFilter.unread:
-        return chats.where(
-          (e) => !e.hasRead,
-        );
-
-      case EChatFilter.all:
-        return chats;
-
-      case EChatFilter.favorite:
-        return chats.where(
-          (e) => e.isFavorite,
-        );
-      case EChatFilter.archived:
-        return chats.where(
-          (e) => e.isArchived,
-        );
-    }
-  }
+  // Iterable<Chat> filterByType(Iterable<Chat> chats) {
+  //   switch (filter) {
+  //     ///Todo Came up with some logic
+  //     case EChatFilter.recent:
+  //       return chats;
+  //
+  //     // case EChatFilter.unread:
+  //     //   return chats.where(
+  //     //     (e) => !e.hasRead,
+  //     //   );
+  //
+  //     case EChatFilter.all:
+  //       return chats;
+  //
+  //     case EChatFilter.favorite:
+  //       return chats.where(
+  //         (e) => e.isFavorite,
+  //       );
+  //     case EChatFilter.archived:
+  //       return chats.where(
+  //         (e) => e.isArchived,
+  //       );
+  //   }
+  // }
 }

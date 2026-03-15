@@ -10,9 +10,10 @@ import '../../../../user/domain/usecases/get_users_use_case.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/usecases/get_chat_by_id_use_case.dart';
 import '../../../domain/usecases/get_last_messages_use_case.dart';
+import '../../../domain/usecases/listen_chat_by_id_use_case.dart';
 import '../../../domain/usecases/listen_chat_messages_use_case.dart';
 import '../../../domain/usecases/send_message_use_case.dart';
-import '../../bloc/chat_bloc/chat_bloc.dart';
+import '../../../domain/usecases/update_typing_info_use_case.dart';
 import '../../bloc/chat_page_bloc/chat_page_bloc.dart';
 import 'widgets/app_bar/chat_app_bar.dart';
 import 'widgets/build_chat_bottom/build_chat_bottom.dart';
@@ -43,18 +44,30 @@ class _ChatPageState extends State<ChatPage> {
           getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
           listenChatMessagesUseCase: getIt<ListenChatMessagesUseCase>(),
           getUsersUseCase: getIt<GetUsersUseCase>(),
-          getLastMessageUseCase: getIt<GetLastMessagesUseCase>(),
+          getLastMessageUseCase: getIt<ListenLastMessagesUseCase>(),
+          updateTypingInfoUseCase: getIt<UpdateTypingInfoUseCase>(),
+          listenChatByIdUseCase: getIt<ListenChatByIdUseCase>(),
         )..add(
           ChatPageEvent.init(),
         );
-
+    _textEditingController.addListener(
+      onTextUpdate,
+    );
     super.initState();
   }
 
   @override
   void dispose() {
+
+    _chatPageBloc.close();
     _textEditingController.dispose();
     super.dispose();
+  }
+
+  void onTextUpdate() {
+    _chatPageBloc.add(
+      ChatPageEvent.startTyping(),
+    );
   }
 
   void onSendMessage(BuildContext context) {

@@ -10,6 +10,7 @@ _ChatMessage _$ChatMessageFromJson(Map<String, dynamic> json) => _ChatMessage(
   id: json['id'] as String? ?? '',
   message: json['message'] as String? ?? '',
   sentUid: json['sentUid'] as String? ?? '',
+  hasRead: json['hasRead'] as bool? ?? false,
   createdAt: DateTime.parse(json['createdAt'] as String),
 );
 
@@ -18,5 +19,6 @@ Map<String, dynamic> _$ChatMessageToJson(_ChatMessage instance) =>
       'id': instance.id,
       'message': instance.message,
       'sentUid': instance.sentUid,
+      'hasRead': instance.hasRead,
       'createdAt': instance.createdAt.toIso8601String(),
     };

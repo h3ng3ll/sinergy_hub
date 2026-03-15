@@ -46,7 +46,7 @@ class ChatFirebaseRepository implements IChatRepository {
   }
 
   @override
-  Stream<List<ChatDto>> getStream(String uid) {
+  Stream<List<Chat>> getStream(String uid) {
     return _chats.snapshots().map(
       (e) => e.docs
           .where(
@@ -62,14 +62,14 @@ class ChatFirebaseRepository implements IChatRepository {
           .map(
             (doc) => ChatDto.fromJson(
               doc.data(),
-            ),
+            ).toDomain(uid: uid),
           )
           .toList(),
     );
   }
 
   @override
-  Stream<ChatDto> listenByIdStream({
+  Stream<Chat> listenByIdStream({
     required String uid,
     required String chatId,
   }) {
@@ -83,7 +83,9 @@ class ChatFirebaseRepository implements IChatRepository {
             final dto = ChatDto.fromJson(
               e.data()!,
             );
-            return dto;
+            return dto.toDomain(
+              uid: uid,
+            );
           },
         );
   }
@@ -102,7 +104,7 @@ class ChatFirebaseRepository implements IChatRepository {
   }
 
   @override
-  Future<ChatDtoPgState> get({
+  Future<ChatPgState> get({
     required String uid,
     required ChatPgState chatState,
     String? query,
@@ -175,18 +177,29 @@ class ChatFirebaseRepository implements IChatRepository {
         },
       ).toList();
     }
+    final modelChats = chats
+        .map(
+          (e) => e.toDomain(
+            uid: uid,
+          ),
+        )
+        .toList();
 
-    return ChatDtoPgState(
+    return ChatPgState(
       pageSize: chatState.pageSize,
-      chats: chats,
+      chats: [
+        ...chatState.chats,
+        ...modelChats,
+      ],
       hasMore: data.docs.isNotEmpty,
       lastDocument: data.docs.isEmpty ? chatState.lastDocument : data.docs.last,
     );
   }
 
   @override
-  Future<ChatDto> getById({
+  Future<Chat> getById({
     required String chatId,
+    required String uid,
   }) async {
     final chatRow = await _chats
         .doc(
@@ -194,14 +207,18 @@ class ChatFirebaseRepository implements IChatRepository {
         )
         .get();
 
-    final chat = ChatDto.fromJson(
-      chatRow.data()!,
-    );
+    final chat =
+        ChatDto.fromJson(
+          chatRow.data()!,
+        ).toDomain(
+          uid: uid,
+        );
     return chat;
   }
 
   @override
-  Future<ChatDto?> chatByParticipates({
+  Future<Chat?> chatByParticipates({
+    required String uid,
     required List<String> participates,
   }) async {
     final chatRow = await _chats
@@ -216,9 +233,12 @@ class ChatFirebaseRepository implements IChatRepository {
     if (chatRow.docs.isEmpty) {
       return null;
     }
-    final chat = ChatDto.fromJson(
-      chatRow.docs.first.data(),
-    );
+    final chat =
+        ChatDto.fromJson(
+          chatRow.docs.first.data(),
+        ).toDomain(
+          uid: uid,
+        );
     return chat;
   }
 
@@ -269,7 +289,7 @@ class ChatFirebaseRepository implements IChatRepository {
   }
 
   @override
-  Stream<ChatDto> chatUpdates({
+  Stream<Chat> chatUpdates({
     required String uid,
   }) async* {
     await for (final snapshot
@@ -284,9 +304,30 @@ class ChatFirebaseRepository implements IChatRepository {
             change.type == DocumentChangeType.added) {
           yield ChatDto.fromJson(
             change.doc.data()!,
+          ).toDomain(
+            uid: uid,
           );
         }
       }
     }
+  }
+
+  @override
+  Future<void> updateTypeInfo({
+    required String uid,
+    required String chatId,
+    required bool isTyping,
+  }) async {
+    _chats
+        .doc(
+          chatId,
+        )
+        .update(
+          {
+            'typingUsers': isTyping
+                ? FieldValue.arrayUnion([uid])
+                : FieldValue.arrayRemove([uid]),
+          },
+        );
   }
 }
