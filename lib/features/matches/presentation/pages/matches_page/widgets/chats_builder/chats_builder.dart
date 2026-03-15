@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../../../../core/utils/extensions/scroll_controller_ext.dart';
 
@@ -43,7 +44,7 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
       controller: _scrollController,
       itemCount: widget.chats.length,
       padding: EdgeInsets.symmetric(
@@ -61,6 +62,9 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
           ),
         );
       },
+      separatorBuilder: (_, _) => Gap(
+        15.0,
+      ),
     );
   }
 }

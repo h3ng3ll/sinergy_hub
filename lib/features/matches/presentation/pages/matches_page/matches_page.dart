@@ -129,47 +129,49 @@ class _MatchesPageState extends State<MatchesPage> {
             );
           }
         },
-        child: HorizontalPadding(
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
 
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SearchInput(
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HorizontalPadding(
+                child: SearchInput(
                   hintText: 'Search matches...',
                   onChanged: onChangedQuery,
                 ),
-                Gap(20.0),
-                BuildChatFilters(
-                  onTapChatFilter: onTapChatFilter,
-                ),
-                Gap(20.0),
-                Expanded(
-                  child: BlocBuilder<ChatsFilterBloc, ChatsFilterState>(
-                    builder: (context, state) {
-                      final chats = state.chatsState.chats;
+              ),
+              Gap(20.0),
+              BuildChatFilters(
+                onTapChatFilter: onTapChatFilter,
+              ),
+              Gap(20.0),
+              Expanded(
+                child: BlocBuilder<ChatsFilterBloc, ChatsFilterState>(
+                  builder: (context, state) {
+                    final chats = state.chatsState.chats;
 
-                      if (state.status == ChatsFilterStatus.failed) {
-                        return Text(
-                          'Failed load data: ${state.errorMessage}',
-                        );
-                      }
-                      if (state.isInitial && state.isEmpty) {
-                        return BuildChatsEmpty();
-                      }
+                    if (state.status == ChatsFilterStatus.failed) {
+                      return Text(
+                        'Failed load data: ${state.errorMessage}',
+                      );
+                    }
+                    if (state.isInitial && state.isEmpty) {
+                      return BuildChatsEmpty();
+                    }
 
-                      return ChatsBuilder(
+                    return HorizontalPadding(
+                      child: ChatsBuilder(
                         onReachToEnd: onReachChatsToEnd,
                         onTapChat: onTapChat,
                         chats: chats,
                         showChatActions: _showChatActions,
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

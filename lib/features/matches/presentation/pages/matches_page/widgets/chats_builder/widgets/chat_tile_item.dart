@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../../../../gen/assets.gen.dart';
 import '../../../../../../../chat/domain/models/chat/chat.dart';
 import '../../../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 import '../../../../../../../onboard_survey/presentation/pages/onboard_survey_page/widgets/translucent_card_container.dart';
@@ -30,10 +32,27 @@ class ChatTileItem extends StatelessWidget {
       onLongPress: onLongPress,
       child: Row(
         children: [
-          BuildUserAvatar(
+         chat.info.cover == null ? SizedBox(
+           width: 80.0,
+           height: 80.0,
+           child: Center(
+             child: SvgPicture.asset(
+               Assets.icons.user,
+               width: 40.0,
+               height: 40.0,
+               colorFilter: ColorFilter.mode(
+                 colorScheme.onPrimary.withValues(
+                   alpha: 0.6,
+                 ),
+                 BlendMode.srcIn,
+               ),
+             ),
+           ),
+         ) :  BuildUserAvatar(
             width: 80.0,
             height: 80.0,
             url: chat.info.cover,
+
           ),
           Gap(10.0),
           Column(
