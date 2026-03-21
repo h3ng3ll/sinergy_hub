@@ -1,48 +1,65 @@
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../di/injection.dart';
 import '../local_notification_service.dart';
 
 class FirebaseMessagingService {
-  final FirebaseMessaging _firebaseMessaging ;
+  final FirebaseMessaging _firebaseMessaging;
+
   final LocalNotificationService _localNotificationService;
 
-  late String fcmToken ;
+  late String fcmToken;
+
   static bool _isBackgroundHandlerInitialized = false;
-  
+
+
   FirebaseMessagingService({
     required LocalNotificationService localNotificationService,
     required FirebaseMessaging firebaseMessaging,
   }) : _localNotificationService = localNotificationService,
        _firebaseMessaging = firebaseMessaging;
 
+  void _saveToken () {
+
+  }
   Future<void> init() async {
     // Запрос разрешений на iOS
     await _firebaseMessaging.requestPermission();
 
-    if(Platform.isAndroid) {
-      // Получаем токен устройства
+    if (!kIsWeb) {
       String? token = await _firebaseMessaging.getToken();
-      print(
-        'FCM device token: $token',
+      print('FCM device token: $token');
+
+      if (token != null) {
+        fcmToken = token;
+      }
+      // Слушаем background сообщения - регистрируем только один раз
+      if (!_isBackgroundHandlerInitialized) {
+        FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+        _isBackgroundHandlerInitialized = true;
+      }
+    } else {
+      // Web тоже может получать токен!
+      String? token = await _firebaseMessaging.getToken(
+        vapidKey: dotenv.env['FIREBASE_WEB_PUSH_CERTIFICATE'],
       );
-      if(token != null) {
+
+      print('FCM WEB token: $token');
+
+      if (token != null) {
         fcmToken = token;
       }
     }
-
 
     // Сохрани его в backend (для отправки пушей)
 
     // Слушаем foreground сообщения
     FirebaseMessaging.onMessage.listen(_handleMessage);
 
-    // Слушаем background сообщения - регистрируем только один раз
-    if (!_isBackgroundHandlerInitialized) {
-      FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
-      _isBackgroundHandlerInitialized = true;
-    }
+
   }
 
   void _handleMessage(RemoteMessage message) {

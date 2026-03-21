@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
@@ -46,6 +47,7 @@ class LocalNotificationService {
   }
 
   Future<void> _checkPermissions() async {
+    if (kIsWeb) return;
     if (Platform.isAndroid) {
       final androidImpl = _flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
