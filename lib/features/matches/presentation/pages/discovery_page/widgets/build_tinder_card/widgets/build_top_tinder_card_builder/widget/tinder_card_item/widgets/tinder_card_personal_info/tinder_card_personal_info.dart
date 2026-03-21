@@ -1,8 +1,10 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../../../../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../../../../../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../../../../../../../../../onboard_survey/domain/models/experiences/experiences.dart';
 import '../../../../../../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import '../../../../../../../../../../../../user/domain/models/user_data/user_data.dart';
@@ -25,29 +27,19 @@ class TinderCardPersonalInfo extends StatelessWidget {
     final experience = Experiences.get(
       user.profiler.experience,
     );
-    print(experience.icon);
     return Column(
       spacing: 10.0,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              user.firstName ?? '',
-              style: textTheme.bold20,
-              overflow: TextOverflow.ellipsis,
-            ),
-            Gap(5.0),
-            Text(
-              user.lastName ?? '',
-              style: textTheme.bold20,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+        Gap(5.0),
+        AutoSizeText(
+          '${user.firstName ?? ''} ${user.lastName ?? ''} ',
+          style: textTheme.bold20,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
         ),
+
         Text(
-          user.age?.toString() ?? '',
+          user.age?.toString() ?? 'unknown age',
           style: textTheme.regular16,
         ),
         SpecializationInfoBar(
@@ -73,14 +65,37 @@ class TinderCardPersonalInfo extends StatelessWidget {
             ),
           ],
         ),
-        Gap(10.0),
-        Text(
-          'LOOKING FOR:'.toUpperCase(),
-          style: textTheme.regular16,
+
+        HorizontalPadding(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'LOOKING FOR:'.toUpperCase(),
+                style: textTheme.regular12,
+              ),
+              Padding(
+                padding: EdgeInsetsGeometry.all(
+                  5.0,
+                ),
+                child: BuildSpecializationNames(
+                  searchingSpecializations:
+                      user.profiler.searchingSpecializations,
+                ),
+              ),
+              Text(
+                'About Me:',
+                style: textTheme.regular12,
+              ),
+              Text(
+                user.aboutMe?.toString() ??
+                    'No info . Know about user more by matched it',
+                style: textTheme.regular16,
+              ),
+            ],
+          ),
         ),
-        BuildSpecializationNames(
-          searchingSpecializations: user.profiler.searchingSpecializations,
-        ),
+
       ],
     );
   }

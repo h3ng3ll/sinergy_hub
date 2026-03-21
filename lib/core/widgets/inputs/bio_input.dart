@@ -14,7 +14,7 @@ class BioInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomTextField(
       hintText: 'Tell about yourself what goals are you looking for and about your plans .',
-      maxLength: 500,
+      maxLength: 800,
       maxLines: 5,
       controller: controller,
     );

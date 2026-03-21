@@ -66,6 +66,9 @@ class _ProfileTabState extends State<ProfileTab> {
                     color: AppColors.white.value,
                     child: HorizontalPadding(
                       child: ListView(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 5.0,
+                        ),
                         children: [
                           Gap(20.0),
                           BuildAbout(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../../../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../../../../../../../../core/widgets/btn/custom_chip.dart';
 import '../../../../../../../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
+import '../../../../../../../../../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 
 class BuildSpecializationNames extends StatelessWidget {
   final List<ESpecialization> searchingSpecializations;
@@ -14,16 +16,24 @@ class BuildSpecializationNames extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
+      spacing: 10.0,
       children:
           (searchingSpecializations
               .take(2)
               .map<Widget>(
-                (e) => CustomChip(
-                  selected: false,
-                  label: Text(
-                    e.name,
+                (e) => Container(
+                  padding: EdgeInsets.all(
+                    5.0,
                   ),
-                  onTap: null,
+                  decoration: BoxDecoration(
+                    color: AppColors.whiteLilac.value,
+                    borderRadius: BorderRadius.circular(
+                      12.0,
+                    ),
+                  ),
+                  child: Text(
+                    Specializations.get(e).name,
+                  ),
                 ),
               )
               .toList()

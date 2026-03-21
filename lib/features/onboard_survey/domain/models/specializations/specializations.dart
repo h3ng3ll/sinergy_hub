@@ -51,7 +51,7 @@ abstract class Specializations {
       ],
       colors: [
         Color(0xffa675dd),
-        Color(0xfff3e8ff),
+        Color(0xfff271ae),
       ],
       icon: Assets.icons.server,
     ),

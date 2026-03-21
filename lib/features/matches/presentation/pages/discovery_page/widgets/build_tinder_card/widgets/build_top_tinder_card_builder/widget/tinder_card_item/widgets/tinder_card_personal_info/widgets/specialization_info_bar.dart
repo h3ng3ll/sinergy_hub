@@ -30,7 +30,11 @@ class SpecializationInfoBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(
           17.5,
         ),
-        color: specialization.colors[1],
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: specialization.colors,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

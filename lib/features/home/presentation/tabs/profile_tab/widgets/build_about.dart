@@ -26,6 +26,8 @@ class BuildAbout extends StatelessWidget {
     );
     return ShadowContainer(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 10.0,
         children: [
           BuildUserTitleWidget(
             onTapEdit: onTapEdit,
