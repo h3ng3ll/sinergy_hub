@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../chat/domain/models/chat/chat.dart';
+import '../../../../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 
 /// Dialog that shows available actions for a chat item.
 ///
@@ -27,6 +29,19 @@ class ChatActionsDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
+    final uid = context.watch<UserBloc>().state.userData!.uid;
+
+    final isArchived = chat.isArchived(
+      uid,
+    );
+    final isFavorite = chat.isFavorite(
+      uid,
+    );
+    final chatName =
+        chat.chatName(
+          uid,
+        ) ??
+        '';
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -47,7 +62,7 @@ class ChatActionsDialog extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             Text(
-              chat.info.title,
+              chatName,
               style: textTheme.regular12.copyWith(
                 color: colorScheme.onPrimary.withValues(alpha: 0.7),
               ),
@@ -59,10 +74,8 @@ class ChatActionsDialog extends StatelessWidget {
             // Actions
             if (onArchive != null)
               _ChatActionTile(
-                icon: chat.isArchived
-                    ? Icons.unarchive
-                    : Icons.archive_outlined,
-                title: chat.isArchived ? 'Unarchive' : 'Archive',
+                icon: isArchived ? Icons.unarchive : Icons.archive_outlined,
+                title: isArchived ? 'Unarchive' : 'Archive',
                 onTap: () {
                   Navigator.of(context).pop();
                   onArchive?.call();
@@ -71,11 +84,11 @@ class ChatActionsDialog extends StatelessWidget {
 
             if (onFavorite != null)
               _ChatActionTile(
-                icon: chat.isFavorite ? Icons.star : Icons.star_border,
-                title: chat.isFavorite
+                icon: isFavorite ? Icons.star : Icons.star_border,
+                title: isFavorite
                     ? 'Remove from Favorites'
                     : 'Add to Favorites',
-                iconColor: chat.isFavorite ? Colors.amber : null,
+                iconColor: isFavorite ? Colors.amber : null,
                 onTap: () {
                   Navigator.of(context).pop();
                   onFavorite?.call();

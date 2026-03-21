@@ -1,4 +1,5 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
+import '../models/chat_config/chat_config.dart';
 import '../repositories/i_chat_repository.dart';
 
 class ToggleFavoriteChatUseCase {
@@ -21,10 +22,13 @@ class ToggleFavoriteChatUseCase {
       chatId: chatId,
     );
 
-    final currentFavoriteStatus = existingConfig.favorite;
+    /// Toggle
+    final isFavorite = existingConfig.isFavorite(
+      uid,
+    );
 
     final updatedConfig = existingConfig.copyWith(
-      favorite: !currentFavoriteStatus,
+      favorite: isFavorite ? [] : [uid],
     );
 
     await _chatRepository.updateConfig(

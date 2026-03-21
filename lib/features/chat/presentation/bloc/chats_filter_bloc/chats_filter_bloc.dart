@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../core/utils/extensions/bloc_ext.dart';
+import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
+import '../../../../user/domain/usecases/get_user_data_use_case.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/chat_pg_state.dart/chat_pg_state.dart';
 import '../../../domain/models/e_chat_filter.dart';
@@ -21,16 +23,19 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
   final ToggleArchiveChatUseCase _toggleArchiveChatUseCase;
   final ToggleFavoriteChatUseCase _toggleFavoriteChatUseCase;
   final ListenChatUpdatesUseCase _listenChatUpdatesUseCase;
+  final GetCurrentUserDataUseCase _getCurrentUserDataUseCase;
 
   ChatsFilterBloc({
     required SearchChatsUseCase searchChatsUseCase,
     required ToggleArchiveChatUseCase toggleArchiveChatUseCase,
     required ToggleFavoriteChatUseCase toggleFavoriteChatUseCase,
     required ListenChatUpdatesUseCase listenChatUpdatesUseCase,
+    required GetCurrentUserDataUseCase getCurrentUserDataUseCase,
   }) : _searchChatsUseCase = searchChatsUseCase,
        _toggleArchiveChatUseCase = toggleArchiveChatUseCase,
        _listenChatUpdatesUseCase = listenChatUpdatesUseCase,
        _toggleFavoriteChatUseCase = toggleFavoriteChatUseCase,
+       _getCurrentUserDataUseCase = getCurrentUserDataUseCase,
        super(const ChatsFilterState()) {
     on<_ApplyFilter>(_applyFilter);
     on<_Search>(
@@ -44,6 +49,7 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     on<_ToggleArchived>(_toggleArchived);
     on<_ToggleFavorite>(_toggleFavorite);
     on<_ListenChatsChanges>(_listenChatsChanges);
+    on<_Init>(_init);
   }
 
   void _applyFilter(_ApplyFilter event, emit) async {
@@ -76,6 +82,40 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     }
   }
 
+  void _init(_Init event, emit) async {
+    try {
+      emit(
+        state.copyWith(
+          status: ChatsFilterStatus.loading,
+        ),
+      );
+      final user = await _getCurrentUserDataUseCase.call();
+
+      add(
+        ChatsFilterEvent.search(
+          query: '',
+        ),
+      );
+      add(
+        ChatsFilterEvent.listenChatsChanges(),
+      );
+
+      emit(
+        state.copyWith(
+          uid: user.uid,
+          status: ChatsFilterStatus.initial,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.toString(),
+          status: ChatsFilterStatus.failed,
+        ),
+      );
+    }
+  }
+
   void _listenChatsChanges(
     _ListenChatsChanges event,
     Emitter<ChatsFilterState> emit,
@@ -89,9 +129,23 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
         final index = chats.indexWhere(
           (e) => e.chatId == chat.chatId,
         );
-        chats[index] = chat;
 
+        /// No found
+        if (index == -1) {
+          return state;
+        }
+
+        final uid = state.uid;
+
+        final status = state.resolveStatus(
+          chats[index],
+          chat,
+          uid,
+        );
+
+        chats[index] = chat;
         return state.copyWith(
+          status: status ?? state.status,
           chatsState: state.chatsState.copyWith(
             chats: chats,
           ),
@@ -147,13 +201,9 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
         query: state.query,
         filter: state.filter,
       );
-      final isArchived = !event.chat.isArchived;
 
       emit(
         state.copyWith(
-          status: isArchived
-              ? ChatsFilterStatus.archived
-              : ChatsFilterStatus.unArchived,
           chatsState: chatState,
         ),
       );
@@ -179,13 +229,8 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
         filter: state.filter,
       );
 
-      final isFavorite = !event.chat.isFavorite;
-
       emit(
         state.copyWith(
-          status: isFavorite
-              ? ChatsFilterStatus.favorite
-              : ChatsFilterStatus.unFavorite,
           chatsState: chatsState,
         ),
       );

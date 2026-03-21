@@ -55,7 +55,7 @@ extension ChatsFilterEventPatterns on ChatsFilterEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ApplyFilter value)?  applyFilter,TResult Function( _Search value)?  search,TResult Function( _ToggleArchived value)?  toggleArchived,TResult Function( _ToggleFavorite value)?  toggleFavorite,TResult Function( _ListenChatsChanges value)?  listenChatsChanges,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ApplyFilter value)?  applyFilter,TResult Function( _Search value)?  search,TResult Function( _ToggleArchived value)?  toggleArchived,TResult Function( _ToggleFavorite value)?  toggleFavorite,TResult Function( _ListenChatsChanges value)?  listenChatsChanges,TResult Function( _Init value)?  init,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
@@ -63,7 +63,8 @@ return applyFilter(_that);case _Search() when search != null:
 return search(_that);case _ToggleArchived() when toggleArchived != null:
 return toggleArchived(_that);case _ToggleFavorite() when toggleFavorite != null:
 return toggleFavorite(_that);case _ListenChatsChanges() when listenChatsChanges != null:
-return listenChatsChanges(_that);case _:
+return listenChatsChanges(_that);case _Init() when init != null:
+return init(_that);case _:
   return orElse();
 
 }
@@ -81,7 +82,7 @@ return listenChatsChanges(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ApplyFilter value)  applyFilter,required TResult Function( _Search value)  search,required TResult Function( _ToggleArchived value)  toggleArchived,required TResult Function( _ToggleFavorite value)  toggleFavorite,required TResult Function( _ListenChatsChanges value)  listenChatsChanges,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ApplyFilter value)  applyFilter,required TResult Function( _Search value)  search,required TResult Function( _ToggleArchived value)  toggleArchived,required TResult Function( _ToggleFavorite value)  toggleFavorite,required TResult Function( _ListenChatsChanges value)  listenChatsChanges,required TResult Function( _Init value)  init,}){
 final _that = this;
 switch (_that) {
 case _ApplyFilter():
@@ -89,7 +90,8 @@ return applyFilter(_that);case _Search():
 return search(_that);case _ToggleArchived():
 return toggleArchived(_that);case _ToggleFavorite():
 return toggleFavorite(_that);case _ListenChatsChanges():
-return listenChatsChanges(_that);}
+return listenChatsChanges(_that);case _Init():
+return init(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -103,7 +105,7 @@ return listenChatsChanges(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ApplyFilter value)?  applyFilter,TResult? Function( _Search value)?  search,TResult? Function( _ToggleArchived value)?  toggleArchived,TResult? Function( _ToggleFavorite value)?  toggleFavorite,TResult? Function( _ListenChatsChanges value)?  listenChatsChanges,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ApplyFilter value)?  applyFilter,TResult? Function( _Search value)?  search,TResult? Function( _ToggleArchived value)?  toggleArchived,TResult? Function( _ToggleFavorite value)?  toggleFavorite,TResult? Function( _ListenChatsChanges value)?  listenChatsChanges,TResult? Function( _Init value)?  init,}){
 final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
@@ -111,7 +113,8 @@ return applyFilter(_that);case _Search() when search != null:
 return search(_that);case _ToggleArchived() when toggleArchived != null:
 return toggleArchived(_that);case _ToggleFavorite() when toggleFavorite != null:
 return toggleFavorite(_that);case _ListenChatsChanges() when listenChatsChanges != null:
-return listenChatsChanges(_that);case _:
+return listenChatsChanges(_that);case _Init() when init != null:
+return init(_that);case _:
   return null;
 
 }
@@ -128,14 +131,15 @@ return listenChatsChanges(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( EChatFilter filter)?  applyFilter,TResult Function( String query)?  search,TResult Function( Chat chat)?  toggleArchived,TResult Function( Chat chat)?  toggleFavorite,TResult Function()?  listenChatsChanges,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( EChatFilter filter)?  applyFilter,TResult Function( String query)?  search,TResult Function( Chat chat)?  toggleArchived,TResult Function( Chat chat)?  toggleFavorite,TResult Function()?  listenChatsChanges,TResult Function()?  init,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that.filter);case _Search() when search != null:
 return search(_that.query);case _ToggleArchived() when toggleArchived != null:
 return toggleArchived(_that.chat);case _ToggleFavorite() when toggleFavorite != null:
 return toggleFavorite(_that.chat);case _ListenChatsChanges() when listenChatsChanges != null:
-return listenChatsChanges();case _:
+return listenChatsChanges();case _Init() when init != null:
+return init();case _:
   return orElse();
 
 }
@@ -153,14 +157,15 @@ return listenChatsChanges();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( EChatFilter filter)  applyFilter,required TResult Function( String query)  search,required TResult Function( Chat chat)  toggleArchived,required TResult Function( Chat chat)  toggleFavorite,required TResult Function()  listenChatsChanges,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( EChatFilter filter)  applyFilter,required TResult Function( String query)  search,required TResult Function( Chat chat)  toggleArchived,required TResult Function( Chat chat)  toggleFavorite,required TResult Function()  listenChatsChanges,required TResult Function()  init,}) {final _that = this;
 switch (_that) {
 case _ApplyFilter():
 return applyFilter(_that.filter);case _Search():
 return search(_that.query);case _ToggleArchived():
 return toggleArchived(_that.chat);case _ToggleFavorite():
 return toggleFavorite(_that.chat);case _ListenChatsChanges():
-return listenChatsChanges();}
+return listenChatsChanges();case _Init():
+return init();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -174,14 +179,15 @@ return listenChatsChanges();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( EChatFilter filter)?  applyFilter,TResult? Function( String query)?  search,TResult? Function( Chat chat)?  toggleArchived,TResult? Function( Chat chat)?  toggleFavorite,TResult? Function()?  listenChatsChanges,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( EChatFilter filter)?  applyFilter,TResult? Function( String query)?  search,TResult? Function( Chat chat)?  toggleArchived,TResult? Function( Chat chat)?  toggleFavorite,TResult? Function()?  listenChatsChanges,TResult? Function()?  init,}) {final _that = this;
 switch (_that) {
 case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that.filter);case _Search() when search != null:
 return search(_that.query);case _ToggleArchived() when toggleArchived != null:
 return toggleArchived(_that.chat);case _ToggleFavorite() when toggleFavorite != null:
 return toggleFavorite(_that.chat);case _ListenChatsChanges() when listenChatsChanges != null:
-return listenChatsChanges();case _:
+return listenChatsChanges();case _Init() when init != null:
+return init();case _:
   return null;
 
 }
@@ -504,9 +510,41 @@ String toString() {
 
 
 /// @nodoc
+
+
+class _Init implements ChatsFilterEvent {
+  const _Init();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Init);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ChatsFilterEvent.init()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$ChatsFilterState {
 
- ChatsFilterStatus get status; ChatPgState get chatsState; EChatFilter get filter; String get query; dynamic get errorMessage;
+ ChatsFilterStatus get status; ChatPgState get chatsState; EChatFilter get filter; String get query; String get uid; dynamic get errorMessage;
 /// Create a copy of ChatsFilterState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -517,16 +555,16 @@ $ChatsFilterStateCopyWith<ChatsFilterState> get copyWith => _$ChatsFilterStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatsFilterState&&(identical(other.status, status) || other.status == status)&&(identical(other.chatsState, chatsState) || other.chatsState == chatsState)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatsFilterState&&(identical(other.status, status) || other.status == status)&&(identical(other.chatsState, chatsState) || other.chatsState == chatsState)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&(identical(other.uid, uid) || other.uid == uid)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,chatsState,filter,query,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,status,chatsState,filter,query,uid,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatsFilterState(status: $status, chatsState: $chatsState, filter: $filter, query: $query, errorMessage: $errorMessage)';
+  return 'ChatsFilterState(status: $status, chatsState: $chatsState, filter: $filter, query: $query, uid: $uid, errorMessage: $errorMessage)';
 }
 
 
@@ -537,7 +575,7 @@ abstract mixin class $ChatsFilterStateCopyWith<$Res>  {
   factory $ChatsFilterStateCopyWith(ChatsFilterState value, $Res Function(ChatsFilterState) _then) = _$ChatsFilterStateCopyWithImpl;
 @useResult
 $Res call({
- ChatsFilterStatus status, ChatPgState chatsState, EChatFilter filter, String query, dynamic errorMessage
+ ChatsFilterStatus status, ChatPgState chatsState, EChatFilter filter, String query, String uid, dynamic errorMessage
 });
 
 
@@ -554,12 +592,13 @@ class _$ChatsFilterStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatsFilterState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? chatsState = null,Object? filter = null,Object? query = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? chatsState = null,Object? filter = null,Object? query = null,Object? uid = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ChatsFilterStatus,chatsState: null == chatsState ? _self.chatsState : chatsState // ignore: cast_nullable_to_non_nullable
 as ChatPgState,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
 as EChatFilter,query: null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
+as String,uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as dynamic,
   ));
@@ -652,10 +691,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  ChatPgState chatsState,  EChatFilter filter,  String query,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  ChatPgState chatsState,  EChatFilter filter,  String query,  String uid,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatsFilterState() when $default != null:
-return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.errorMessage);case _:
+return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.uid,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -673,10 +712,10 @@ return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.err
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  ChatPgState chatsState,  EChatFilter filter,  String query,  dynamic errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  ChatPgState chatsState,  EChatFilter filter,  String query,  String uid,  dynamic errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _ChatsFilterState():
-return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.errorMessage);}
+return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.uid,_that.errorMessage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -690,10 +729,10 @@ return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.err
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ChatsFilterStatus status,  ChatPgState chatsState,  EChatFilter filter,  String query,  dynamic errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ChatsFilterStatus status,  ChatPgState chatsState,  EChatFilter filter,  String query,  String uid,  dynamic errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatsFilterState() when $default != null:
-return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.errorMessage);case _:
+return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.uid,_that.errorMessage);case _:
   return null;
 
 }
@@ -705,13 +744,14 @@ return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.err
 
 
 class _ChatsFilterState implements ChatsFilterState {
-  const _ChatsFilterState({this.status = ChatsFilterStatus.initial, this.chatsState = const ChatPgState(), this.filter = EChatFilter.all, this.query = '', this.errorMessage = ''});
+  const _ChatsFilterState({this.status = ChatsFilterStatus.initial, this.chatsState = const ChatPgState(), this.filter = EChatFilter.all, this.query = '', this.uid = '', this.errorMessage = ''});
   
 
 @override@JsonKey() final  ChatsFilterStatus status;
 @override@JsonKey() final  ChatPgState chatsState;
 @override@JsonKey() final  EChatFilter filter;
 @override@JsonKey() final  String query;
+@override@JsonKey() final  String uid;
 @override@JsonKey() final  dynamic errorMessage;
 
 /// Create a copy of ChatsFilterState
@@ -724,16 +764,16 @@ _$ChatsFilterStateCopyWith<_ChatsFilterState> get copyWith => __$ChatsFilterStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatsFilterState&&(identical(other.status, status) || other.status == status)&&(identical(other.chatsState, chatsState) || other.chatsState == chatsState)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatsFilterState&&(identical(other.status, status) || other.status == status)&&(identical(other.chatsState, chatsState) || other.chatsState == chatsState)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&(identical(other.uid, uid) || other.uid == uid)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,chatsState,filter,query,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,status,chatsState,filter,query,uid,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatsFilterState(status: $status, chatsState: $chatsState, filter: $filter, query: $query, errorMessage: $errorMessage)';
+  return 'ChatsFilterState(status: $status, chatsState: $chatsState, filter: $filter, query: $query, uid: $uid, errorMessage: $errorMessage)';
 }
 
 
@@ -744,7 +784,7 @@ abstract mixin class _$ChatsFilterStateCopyWith<$Res> implements $ChatsFilterSta
   factory _$ChatsFilterStateCopyWith(_ChatsFilterState value, $Res Function(_ChatsFilterState) _then) = __$ChatsFilterStateCopyWithImpl;
 @override @useResult
 $Res call({
- ChatsFilterStatus status, ChatPgState chatsState, EChatFilter filter, String query, dynamic errorMessage
+ ChatsFilterStatus status, ChatPgState chatsState, EChatFilter filter, String query, String uid, dynamic errorMessage
 });
 
 
@@ -761,12 +801,13 @@ class __$ChatsFilterStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatsFilterState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? chatsState = null,Object? filter = null,Object? query = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? chatsState = null,Object? filter = null,Object? query = null,Object? uid = null,Object? errorMessage = freezed,}) {
   return _then(_ChatsFilterState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ChatsFilterStatus,chatsState: null == chatsState ? _self.chatsState : chatsState // ignore: cast_nullable_to_non_nullable
 as ChatPgState,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
 as EChatFilter,query: null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
+as String,uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as dynamic,
   ));

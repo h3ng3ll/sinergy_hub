@@ -7,19 +7,34 @@ part 'chat_config.freezed.dart';
 @freezed
 abstract class ChatConfig with _$ChatConfig {
   const factory ChatConfig({
-    @Default(false) bool archived,
-    @Default(false) bool favorite,
+    @Default([]) List<String> archived,
+    @Default([]) List<String> favorite,
   }) = _ChatConfig;
 
   @visibleForTesting
   factory ChatConfig.empty() => const ChatConfig(
-    archived: false,
-    favorite: false,
+    archived: [],
+    favorite: [],
   );
 
   factory ChatConfig.fromJson(
     Map<String, Object?> json,
   ) => _$ChatConfigFromJson(
     json,
+  );
+}
+
+extension ChatConfigX on ChatConfig {
+
+  bool isArchived(
+      String uid,
+      ) => archived.contains(
+    uid,
+  );
+
+  bool isFavorite(
+      String uid,
+      ) => favorite.contains(
+    uid,
   );
 }

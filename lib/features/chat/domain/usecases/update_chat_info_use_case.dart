@@ -6,25 +6,19 @@ import '../repositories/i_chat_repository.dart';
 
 class UpdateChatInfoUseCase {
   final IChatRepository _chatRepository;
-  final IAuthRepository _authRepository;
+
 
   UpdateChatInfoUseCase({
     required IChatRepository chatRepository,
     required IAuthRepository authRepository,
-  }) : _chatRepository = chatRepository,
-       _authRepository = authRepository;
+  }) : _chatRepository = chatRepository;
 
   Future<void> call({
     required String chatId,
     required Chat chat,
   }) async {
-    final uid = await _authRepository.requireUserId();
-    final updatedChat = ChatDto.fromDomain(
-      chat,
-      uid,
-    );
     await _chatRepository.update(
-      chat: updatedChat,
+      chat: chat,
     );
   }
 }

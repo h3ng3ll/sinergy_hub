@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../../../../../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 
@@ -40,7 +41,7 @@ class SpecializationInfoBar extends StatelessWidget {
               width: 20.0,
               height: 20.0,
               colorFilter: ColorFilter.mode(
-                specialization.colors[0],
+                AppColors.white.value,
                 BlendMode.srcIn,
               ),
             ),
@@ -49,7 +50,7 @@ class SpecializationInfoBar extends StatelessWidget {
           Text(
             specialization.name,
             style: textTheme.medium16.copyWith(
-              color: specialization.colors[0],
+              color: AppColors.white.value,
             ),
           ),
         ],

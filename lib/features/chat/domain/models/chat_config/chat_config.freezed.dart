@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatConfig {
 
- bool get archived; bool get favorite;
+ List<String> get archived; List<String> get favorite;
 /// Create a copy of ChatConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,12 +28,12 @@ $ChatConfigCopyWith<ChatConfig> get copyWith => _$ChatConfigCopyWithImpl<ChatCon
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatConfig&&(identical(other.archived, archived) || other.archived == archived)&&(identical(other.favorite, favorite) || other.favorite == favorite));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatConfig&&const DeepCollectionEquality().equals(other.archived, archived)&&const DeepCollectionEquality().equals(other.favorite, favorite));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,archived,favorite);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(archived),const DeepCollectionEquality().hash(favorite));
 
 @override
 String toString() {
@@ -48,7 +48,7 @@ abstract mixin class $ChatConfigCopyWith<$Res>  {
   factory $ChatConfigCopyWith(ChatConfig value, $Res Function(ChatConfig) _then) = _$ChatConfigCopyWithImpl;
 @useResult
 $Res call({
- bool archived, bool favorite
+ List<String> archived, List<String> favorite
 });
 
 
@@ -68,8 +68,8 @@ class _$ChatConfigCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? archived = null,Object? favorite = null,}) {
   return _then(_self.copyWith(
 archived: null == archived ? _self.archived : archived // ignore: cast_nullable_to_non_nullable
-as bool,favorite: null == favorite ? _self.favorite : favorite // ignore: cast_nullable_to_non_nullable
-as bool,
+as List<String>,favorite: null == favorite ? _self.favorite : favorite // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 
@@ -154,7 +154,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool archived,  bool favorite)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> archived,  List<String> favorite)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatConfig() when $default != null:
 return $default(_that.archived,_that.favorite);case _:
@@ -175,7 +175,7 @@ return $default(_that.archived,_that.favorite);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool archived,  bool favorite)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> archived,  List<String> favorite)  $default,) {final _that = this;
 switch (_that) {
 case _ChatConfig():
 return $default(_that.archived,_that.favorite);case _:
@@ -195,7 +195,7 @@ return $default(_that.archived,_that.favorite);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool archived,  bool favorite)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> archived,  List<String> favorite)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatConfig() when $default != null:
 return $default(_that.archived,_that.favorite);case _:
@@ -210,11 +210,23 @@ return $default(_that.archived,_that.favorite);case _:
 @JsonSerializable()
 
 class _ChatConfig implements ChatConfig {
-  const _ChatConfig({this.archived = false, this.favorite = false});
+  const _ChatConfig({final  List<String> archived = const [], final  List<String> favorite = const []}): _archived = archived,_favorite = favorite;
   factory _ChatConfig.fromJson(Map<String, dynamic> json) => _$ChatConfigFromJson(json);
 
-@override@JsonKey() final  bool archived;
-@override@JsonKey() final  bool favorite;
+ final  List<String> _archived;
+@override@JsonKey() List<String> get archived {
+  if (_archived is EqualUnmodifiableListView) return _archived;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_archived);
+}
+
+ final  List<String> _favorite;
+@override@JsonKey() List<String> get favorite {
+  if (_favorite is EqualUnmodifiableListView) return _favorite;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_favorite);
+}
+
 
 /// Create a copy of ChatConfig
 /// with the given fields replaced by the non-null parameter values.
@@ -229,12 +241,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatConfig&&(identical(other.archived, archived) || other.archived == archived)&&(identical(other.favorite, favorite) || other.favorite == favorite));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatConfig&&const DeepCollectionEquality().equals(other._archived, _archived)&&const DeepCollectionEquality().equals(other._favorite, _favorite));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,archived,favorite);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_archived),const DeepCollectionEquality().hash(_favorite));
 
 @override
 String toString() {
@@ -249,7 +261,7 @@ abstract mixin class _$ChatConfigCopyWith<$Res> implements $ChatConfigCopyWith<$
   factory _$ChatConfigCopyWith(_ChatConfig value, $Res Function(_ChatConfig) _then) = __$ChatConfigCopyWithImpl;
 @override @useResult
 $Res call({
- bool archived, bool favorite
+ List<String> archived, List<String> favorite
 });
 
 
@@ -268,9 +280,9 @@ class __$ChatConfigCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? archived = null,Object? favorite = null,}) {
   return _then(_ChatConfig(
-archived: null == archived ? _self.archived : archived // ignore: cast_nullable_to_non_nullable
-as bool,favorite: null == favorite ? _self.favorite : favorite // ignore: cast_nullable_to_non_nullable
-as bool,
+archived: null == archived ? _self._archived : archived // ignore: cast_nullable_to_non_nullable
+as List<String>,favorite: null == favorite ? _self._favorite : favorite // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 

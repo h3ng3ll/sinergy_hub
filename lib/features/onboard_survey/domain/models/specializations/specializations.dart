@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
+
 import '../../../../../../../gen/assets.gen.dart';
 import '../specialization/specialization.dart';
 
@@ -276,4 +278,8 @@ abstract class Specializations {
   };
 
   static Specialization get(ESpecialization key) => all[key]!;
+
+  static Specialization? getByName(String name) => all.values.firstWhereOrNull(
+    (e) => e.specialization.name == name,
+  );
 }

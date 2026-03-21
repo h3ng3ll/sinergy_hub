@@ -1,4 +1,5 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
+import '../models/chat_config/chat_config.dart';
 import '../repositories/i_chat_repository.dart';
 
 class ToggleArchiveChatUseCase {
@@ -8,8 +9,7 @@ class ToggleArchiveChatUseCase {
   ToggleArchiveChatUseCase({
     required IAuthRepository authRepository,
     required IChatRepository chatRepository,
-  }) :
-       _authRepository = authRepository,
+  }) : _authRepository = authRepository,
        _chatRepository = chatRepository;
 
   Future<void> call({
@@ -17,15 +17,18 @@ class ToggleArchiveChatUseCase {
   }) async {
     final uid = await _authRepository.requireUserId();
 
-    final existingConfig = await _chatRepository.getConfig(
+    final ChatConfig existingConfig = await _chatRepository.getConfig(
       uid: uid,
       chatId: chatId,
     );
 
-    final currentArchivedStatus = existingConfig.archived ?? false;
+    final isArchived = existingConfig.isArchived(
+      uid,
+    );
 
-    final updatedConfig = existingConfig .copyWith(
-      archived: !currentArchivedStatus,
+    /// Toggle
+    final updatedConfig = existingConfig.copyWith(
+      archived: isArchived ? [] : [uid],
     );
 
     await _chatRepository.updateConfig(

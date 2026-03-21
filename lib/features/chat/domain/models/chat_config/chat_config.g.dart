@@ -7,8 +7,12 @@ part of 'chat_config.dart';
 // **************************************************************************
 
 _ChatConfig _$ChatConfigFromJson(Map<String, dynamic> json) => _ChatConfig(
-  archived: json['archived'] as bool? ?? false,
-  favorite: json['favorite'] as bool? ?? false,
+  archived:
+      (json['archived'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
+  favorite:
+      (json['favorite'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$ChatConfigToJson(_ChatConfig instance) =>

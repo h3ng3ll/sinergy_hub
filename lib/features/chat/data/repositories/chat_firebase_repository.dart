@@ -7,9 +7,6 @@ import '../../domain/models/chat_pg_state.dart/chat_pg_state.dart';
 import '../../domain/models/e_chat_filter.dart';
 import '../../domain/repositories/i_chat_repository.dart';
 import '../exception/chat_no_data_exception.dart';
-import '../models/chat_config_dto/chat_config_dto.dart';
-import '../models/chat_dto/chat_dto.dart';
-import '../models/chat_dto_pg_state.dart/chat_dto_pg_state.dart';
 
 class ChatFirebaseRepository implements IChatRepository {
   final FirebaseFirestoreService _firebaseFirestoreService;
@@ -31,10 +28,7 @@ class ChatFirebaseRepository implements IChatRepository {
           id,
         )
         .set(
-          ChatDto.fromDomain(
-                chat,
-                uid,
-              )
+          chat
               .copyWith(
                 chatId: id,
               )
@@ -60,9 +54,9 @@ class ChatFirebaseRepository implements IChatRepository {
             },
           )
           .map(
-            (doc) => ChatDto.fromJson(
+            (doc) => Chat.fromJson(
               doc.data(),
-            ).toDomain(uid: uid),
+            ),
           )
           .toList(),
     );
@@ -80,19 +74,17 @@ class ChatFirebaseRepository implements IChatRepository {
         .snapshots()
         .map(
           (e) {
-            final dto = ChatDto.fromJson(
+            final dto = Chat.fromJson(
               e.data()!,
             );
-            return dto.toDomain(
-              uid: uid,
-            );
+            return dto;
           },
         );
   }
 
   @override
   Future<void> update({
-    required ChatDto chat,
+    required Chat chat,
   }) async {
     return await _chats
         .doc(
@@ -110,7 +102,7 @@ class ChatFirebaseRepository implements IChatRepository {
     String? query,
     EChatFilter filter = EChatFilter.all,
   }) async {
-    List<ChatDto> chats = [];
+    List<Chat> chats = [];
 
     Query queryRef = _chats.where(
       'participants',
@@ -138,7 +130,7 @@ class ChatFirebaseRepository implements IChatRepository {
             if (doc.data() == null) {
               throw ChatNoDataException();
             }
-            return ChatDto.fromJson(
+            return Chat.fromJson(
               doc.data() as Map<String, dynamic>,
             );
           },
@@ -146,11 +138,11 @@ class ChatFirebaseRepository implements IChatRepository {
         .where(
           (e) {
             if (filter == EChatFilter.favorite) {
-              return e.config.favorite.contains(
+              return e.isFavorite(
                 uid,
               );
             } else if (filter == EChatFilter.archived) {
-              return e.config.archived.contains(
+              return e.isArchived(
                 uid,
               );
             }
@@ -162,7 +154,7 @@ class ChatFirebaseRepository implements IChatRepository {
     // 4. Если query есть, фильтруем на клиенте по searchKeywords
     if (query != null && query.isNotEmpty) {
       chats = chats.where(
-        (chat) {
+        (Chat chat) {
           final keywords = chat.searchKeywords
               .map(
                 (k) => k.toLowerCase(),
@@ -179,9 +171,7 @@ class ChatFirebaseRepository implements IChatRepository {
     }
     final modelChats = chats
         .map(
-          (e) => e.toDomain(
-            uid: uid,
-          ),
+          (e) => e,
         )
         .toList();
 
@@ -207,12 +197,9 @@ class ChatFirebaseRepository implements IChatRepository {
         )
         .get();
 
-    final chat =
-        ChatDto.fromJson(
-          chatRow.data()!,
-        ).toDomain(
-          uid: uid,
-        );
+    final chat = Chat.fromJson(
+      chatRow.data()!,
+    );
     return chat;
   }
 
@@ -233,12 +220,9 @@ class ChatFirebaseRepository implements IChatRepository {
     if (chatRow.docs.isEmpty) {
       return null;
     }
-    final chat =
-        ChatDto.fromJson(
-          chatRow.docs.first.data(),
-        ).toDomain(
-          uid: uid,
-        );
+    final chat = Chat.fromJson(
+      chatRow.docs.first.data(),
+    );
     return chat;
   }
 
@@ -250,11 +234,17 @@ class ChatFirebaseRepository implements IChatRepository {
   }) async {
     final updates = <String, dynamic>{};
 
-    updates['config.favorite'] = config.favorite
+    updates['config.favorite'] =
+        config.isFavorite(
+          uid,
+        )
         ? FieldValue.arrayUnion([uid])
         : FieldValue.arrayRemove([uid]);
 
-    updates['config.archived'] = config.archived
+    updates['config.archived'] =
+        config.isArchived(
+          uid,
+        )
         ? FieldValue.arrayUnion([uid])
         : FieldValue.arrayRemove([uid]);
 
@@ -280,12 +270,10 @@ class ChatFirebaseRepository implements IChatRepository {
     if (data.data() == null) {
       return ChatConfig();
     }
-    final config = ChatConfigDto.fromJson(
+    final config = ChatConfig.fromJson(
       data.data()!['config'],
     );
-    return config.toDomain(
-      uid,
-    );
+    return config;
   }
 
   @override
@@ -302,10 +290,8 @@ class ChatFirebaseRepository implements IChatRepository {
       for (final change in snapshot.docChanges) {
         if (change.type == DocumentChangeType.modified ||
             change.type == DocumentChangeType.added) {
-          yield ChatDto.fromJson(
+          yield Chat.fromJson(
             change.doc.data()!,
-          ).toDomain(
-            uid: uid,
           );
         }
       }

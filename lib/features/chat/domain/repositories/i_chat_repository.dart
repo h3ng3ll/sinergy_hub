@@ -1,5 +1,3 @@
-import '../../data/models/chat_dto/chat_dto.dart';
-import '../../data/models/chat_dto_pg_state.dart/chat_dto_pg_state.dart';
 import '../models/chat/chat.dart';
 import '../models/chat_config/chat_config.dart';
 import '../models/chat_pg_state.dart/chat_pg_state.dart';
@@ -31,7 +29,7 @@ abstract class IChatRepository {
   });
 
   Future<void> update({
-    required ChatDto chat,
+    required Chat chat,
   });
 
   Future<void> updateTypeInfo({

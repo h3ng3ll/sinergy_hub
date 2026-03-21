@@ -1,13 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 
-part 'participants_info.g.dart';
+part 'participant_info.g.dart';
 
-part 'participants_info.freezed.dart';
+part 'participant_info.freezed.dart';
 
 @freezed
-abstract class ParticipantsInfo with _$ParticipantsInfo {
-  const factory ParticipantsInfo({
+abstract class ParticipantInfo with _$ParticipantInfo {
+  const factory ParticipantInfo({
     @Default('') String id,
     @Default('') String name,
     String? avatarUrl,
@@ -15,7 +15,7 @@ abstract class ParticipantsInfo with _$ParticipantsInfo {
     // required ESpecialization specialization,
   }) = _ParticipantsInfo;
 
-  factory ParticipantsInfo.fromJson(
+  factory ParticipantInfo.fromJson(
     Map<String, Object?> json,
   ) => _$ParticipantsInfoFromJson(
     json,

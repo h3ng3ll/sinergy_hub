@@ -19,4 +19,5 @@ sealed class ChatsFilterEvent with _$ChatsFilterEvent {
   }) = _ToggleFavorite;
 
   const factory ChatsFilterEvent.listenChatsChanges() = _ListenChatsChanges;
+  const factory ChatsFilterEvent.init() = _Init;
 }

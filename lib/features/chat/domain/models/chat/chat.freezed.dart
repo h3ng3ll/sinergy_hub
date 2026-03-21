@@ -15,8 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Chat {
 
- String get chatId; ChatInfo get info; String get lastMessage; DateTime get lastMessageSent; List<String> get typingUsers;/// who access this chat
- List<String> get participants; bool get isArchived; bool get isFavorite; DateTime get createdAt; String get icon;
+ String get chatId; String get lastMessage;@TimestampConverter() DateTime get lastMessageSent; ChatConfig get config; List<String> get typingUsers; Map<String, ParticipantInfo> get participantInfo;/// who access this chat
+ List<String> get participants;@TimestampConverter() DateTime get createdAt; String get icon; List<String> get searchKeywords;
 /// Create a copy of Chat
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $ChatCopyWith<Chat> get copyWith => _$ChatCopyWithImpl<Chat>(this as Chat, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Chat&&(identical(other.chatId, chatId) || other.chatId == chatId)&&(identical(other.info, info) || other.info == info)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.lastMessageSent, lastMessageSent) || other.lastMessageSent == lastMessageSent)&&const DeepCollectionEquality().equals(other.typingUsers, typingUsers)&&const DeepCollectionEquality().equals(other.participants, participants)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Chat&&(identical(other.chatId, chatId) || other.chatId == chatId)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.lastMessageSent, lastMessageSent) || other.lastMessageSent == lastMessageSent)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other.typingUsers, typingUsers)&&const DeepCollectionEquality().equals(other.participantInfo, participantInfo)&&const DeepCollectionEquality().equals(other.participants, participants)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other.searchKeywords, searchKeywords));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,chatId,info,lastMessage,lastMessageSent,const DeepCollectionEquality().hash(typingUsers),const DeepCollectionEquality().hash(participants),isArchived,isFavorite,createdAt,icon);
+int get hashCode => Object.hash(runtimeType,chatId,lastMessage,lastMessageSent,config,const DeepCollectionEquality().hash(typingUsers),const DeepCollectionEquality().hash(participantInfo),const DeepCollectionEquality().hash(participants),createdAt,icon,const DeepCollectionEquality().hash(searchKeywords));
 
 @override
 String toString() {
-  return 'Chat(chatId: $chatId, info: $info, lastMessage: $lastMessage, lastMessageSent: $lastMessageSent, typingUsers: $typingUsers, participants: $participants, isArchived: $isArchived, isFavorite: $isFavorite, createdAt: $createdAt, icon: $icon)';
+  return 'Chat(chatId: $chatId, lastMessage: $lastMessage, lastMessageSent: $lastMessageSent, config: $config, typingUsers: $typingUsers, participantInfo: $participantInfo, participants: $participants, createdAt: $createdAt, icon: $icon, searchKeywords: $searchKeywords)';
 }
 
 
@@ -49,11 +49,11 @@ abstract mixin class $ChatCopyWith<$Res>  {
   factory $ChatCopyWith(Chat value, $Res Function(Chat) _then) = _$ChatCopyWithImpl;
 @useResult
 $Res call({
- String chatId, ChatInfo info, String lastMessage, DateTime lastMessageSent, List<String> typingUsers, List<String> participants, bool isArchived, bool isFavorite, DateTime createdAt, String icon
+ String chatId, String lastMessage,@TimestampConverter() DateTime lastMessageSent, ChatConfig config, List<String> typingUsers, Map<String, ParticipantInfo> participantInfo, List<String> participants,@TimestampConverter() DateTime createdAt, String icon, List<String> searchKeywords
 });
 
 
-$ChatInfoCopyWith<$Res> get info;
+$ChatConfigCopyWith<$Res> get config;
 
 }
 /// @nodoc
@@ -66,29 +66,29 @@ class _$ChatCopyWithImpl<$Res>
 
 /// Create a copy of Chat
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? chatId = null,Object? info = null,Object? lastMessage = null,Object? lastMessageSent = null,Object? typingUsers = null,Object? participants = null,Object? isArchived = null,Object? isFavorite = null,Object? createdAt = null,Object? icon = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? chatId = null,Object? lastMessage = null,Object? lastMessageSent = null,Object? config = null,Object? typingUsers = null,Object? participantInfo = null,Object? participants = null,Object? createdAt = null,Object? icon = null,Object? searchKeywords = null,}) {
   return _then(_self.copyWith(
 chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
-as String,info: null == info ? _self.info : info // ignore: cast_nullable_to_non_nullable
-as ChatInfo,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
+as String,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
 as String,lastMessageSent: null == lastMessageSent ? _self.lastMessageSent : lastMessageSent // ignore: cast_nullable_to_non_nullable
-as DateTime,typingUsers: null == typingUsers ? _self.typingUsers : typingUsers // ignore: cast_nullable_to_non_nullable
-as List<String>,participants: null == participants ? _self.participants : participants // ignore: cast_nullable_to_non_nullable
-as List<String>,isArchived: null == isArchived ? _self.isArchived : isArchived // ignore: cast_nullable_to_non_nullable
-as bool,isFavorite: null == isFavorite ? _self.isFavorite : isFavorite // ignore: cast_nullable_to_non_nullable
-as bool,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,config: null == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
+as ChatConfig,typingUsers: null == typingUsers ? _self.typingUsers : typingUsers // ignore: cast_nullable_to_non_nullable
+as List<String>,participantInfo: null == participantInfo ? _self.participantInfo : participantInfo // ignore: cast_nullable_to_non_nullable
+as Map<String, ParticipantInfo>,participants: null == participants ? _self.participants : participants // ignore: cast_nullable_to_non_nullable
+as List<String>,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String,
+as String,searchKeywords: null == searchKeywords ? _self.searchKeywords : searchKeywords // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 /// Create a copy of Chat
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ChatInfoCopyWith<$Res> get info {
+$ChatConfigCopyWith<$Res> get config {
   
-  return $ChatInfoCopyWith<$Res>(_self.info, (value) {
-    return _then(_self.copyWith(info: value));
+  return $ChatConfigCopyWith<$Res>(_self.config, (value) {
+    return _then(_self.copyWith(config: value));
   });
 }
 }
@@ -172,10 +172,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String chatId,  ChatInfo info,  String lastMessage,  DateTime lastMessageSent,  List<String> typingUsers,  List<String> participants,  bool isArchived,  bool isFavorite,  DateTime createdAt,  String icon)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String chatId,  String lastMessage, @TimestampConverter()  DateTime lastMessageSent,  ChatConfig config,  List<String> typingUsers,  Map<String, ParticipantInfo> participantInfo,  List<String> participants, @TimestampConverter()  DateTime createdAt,  String icon,  List<String> searchKeywords)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Chat() when $default != null:
-return $default(_that.chatId,_that.info,_that.lastMessage,_that.lastMessageSent,_that.typingUsers,_that.participants,_that.isArchived,_that.isFavorite,_that.createdAt,_that.icon);case _:
+return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.config,_that.typingUsers,_that.participantInfo,_that.participants,_that.createdAt,_that.icon,_that.searchKeywords);case _:
   return orElse();
 
 }
@@ -193,10 +193,10 @@ return $default(_that.chatId,_that.info,_that.lastMessage,_that.lastMessageSent,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String chatId,  ChatInfo info,  String lastMessage,  DateTime lastMessageSent,  List<String> typingUsers,  List<String> participants,  bool isArchived,  bool isFavorite,  DateTime createdAt,  String icon)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String chatId,  String lastMessage, @TimestampConverter()  DateTime lastMessageSent,  ChatConfig config,  List<String> typingUsers,  Map<String, ParticipantInfo> participantInfo,  List<String> participants, @TimestampConverter()  DateTime createdAt,  String icon,  List<String> searchKeywords)  $default,) {final _that = this;
 switch (_that) {
 case _Chat():
-return $default(_that.chatId,_that.info,_that.lastMessage,_that.lastMessageSent,_that.typingUsers,_that.participants,_that.isArchived,_that.isFavorite,_that.createdAt,_that.icon);case _:
+return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.config,_that.typingUsers,_that.participantInfo,_that.participants,_that.createdAt,_that.icon,_that.searchKeywords);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +213,10 @@ return $default(_that.chatId,_that.info,_that.lastMessage,_that.lastMessageSent,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String chatId,  ChatInfo info,  String lastMessage,  DateTime lastMessageSent,  List<String> typingUsers,  List<String> participants,  bool isArchived,  bool isFavorite,  DateTime createdAt,  String icon)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String chatId,  String lastMessage, @TimestampConverter()  DateTime lastMessageSent,  ChatConfig config,  List<String> typingUsers,  Map<String, ParticipantInfo> participantInfo,  List<String> participants, @TimestampConverter()  DateTime createdAt,  String icon,  List<String> searchKeywords)?  $default,) {final _that = this;
 switch (_that) {
 case _Chat() when $default != null:
-return $default(_that.chatId,_that.info,_that.lastMessage,_that.lastMessageSent,_that.typingUsers,_that.participants,_that.isArchived,_that.isFavorite,_that.createdAt,_that.icon);case _:
+return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.config,_that.typingUsers,_that.participantInfo,_that.participants,_that.createdAt,_that.icon,_that.searchKeywords);case _:
   return null;
 
 }
@@ -228,18 +228,25 @@ return $default(_that.chatId,_that.info,_that.lastMessage,_that.lastMessageSent,
 @JsonSerializable()
 
 class _Chat implements Chat {
-  const _Chat({this.chatId = '', required this.info, this.lastMessage = '', required this.lastMessageSent, final  List<String> typingUsers = const [], required final  List<String> participants, this.isArchived = false, this.isFavorite = false, required this.createdAt, this.icon = ''}): _typingUsers = typingUsers,_participants = participants;
+  const _Chat({this.chatId = '', this.lastMessage = '', @TimestampConverter() required this.lastMessageSent, required this.config, final  List<String> typingUsers = const [], final  Map<String, ParticipantInfo> participantInfo = const {}, required final  List<String> participants, @TimestampConverter() required this.createdAt, this.icon = '', final  List<String> searchKeywords = const []}): _typingUsers = typingUsers,_participantInfo = participantInfo,_participants = participants,_searchKeywords = searchKeywords;
   factory _Chat.fromJson(Map<String, dynamic> json) => _$ChatFromJson(json);
 
 @override@JsonKey() final  String chatId;
-@override final  ChatInfo info;
 @override@JsonKey() final  String lastMessage;
-@override final  DateTime lastMessageSent;
+@override@TimestampConverter() final  DateTime lastMessageSent;
+@override final  ChatConfig config;
  final  List<String> _typingUsers;
 @override@JsonKey() List<String> get typingUsers {
   if (_typingUsers is EqualUnmodifiableListView) return _typingUsers;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_typingUsers);
+}
+
+ final  Map<String, ParticipantInfo> _participantInfo;
+@override@JsonKey() Map<String, ParticipantInfo> get participantInfo {
+  if (_participantInfo is EqualUnmodifiableMapView) return _participantInfo;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_participantInfo);
 }
 
 /// who access this chat
@@ -251,10 +258,15 @@ class _Chat implements Chat {
   return EqualUnmodifiableListView(_participants);
 }
 
-@override@JsonKey() final  bool isArchived;
-@override@JsonKey() final  bool isFavorite;
-@override final  DateTime createdAt;
+@override@TimestampConverter() final  DateTime createdAt;
 @override@JsonKey() final  String icon;
+ final  List<String> _searchKeywords;
+@override@JsonKey() List<String> get searchKeywords {
+  if (_searchKeywords is EqualUnmodifiableListView) return _searchKeywords;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_searchKeywords);
+}
+
 
 /// Create a copy of Chat
 /// with the given fields replaced by the non-null parameter values.
@@ -269,16 +281,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Chat&&(identical(other.chatId, chatId) || other.chatId == chatId)&&(identical(other.info, info) || other.info == info)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.lastMessageSent, lastMessageSent) || other.lastMessageSent == lastMessageSent)&&const DeepCollectionEquality().equals(other._typingUsers, _typingUsers)&&const DeepCollectionEquality().equals(other._participants, _participants)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Chat&&(identical(other.chatId, chatId) || other.chatId == chatId)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.lastMessageSent, lastMessageSent) || other.lastMessageSent == lastMessageSent)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other._typingUsers, _typingUsers)&&const DeepCollectionEquality().equals(other._participantInfo, _participantInfo)&&const DeepCollectionEquality().equals(other._participants, _participants)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other._searchKeywords, _searchKeywords));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,chatId,info,lastMessage,lastMessageSent,const DeepCollectionEquality().hash(_typingUsers),const DeepCollectionEquality().hash(_participants),isArchived,isFavorite,createdAt,icon);
+int get hashCode => Object.hash(runtimeType,chatId,lastMessage,lastMessageSent,config,const DeepCollectionEquality().hash(_typingUsers),const DeepCollectionEquality().hash(_participantInfo),const DeepCollectionEquality().hash(_participants),createdAt,icon,const DeepCollectionEquality().hash(_searchKeywords));
 
 @override
 String toString() {
-  return 'Chat(chatId: $chatId, info: $info, lastMessage: $lastMessage, lastMessageSent: $lastMessageSent, typingUsers: $typingUsers, participants: $participants, isArchived: $isArchived, isFavorite: $isFavorite, createdAt: $createdAt, icon: $icon)';
+  return 'Chat(chatId: $chatId, lastMessage: $lastMessage, lastMessageSent: $lastMessageSent, config: $config, typingUsers: $typingUsers, participantInfo: $participantInfo, participants: $participants, createdAt: $createdAt, icon: $icon, searchKeywords: $searchKeywords)';
 }
 
 
@@ -289,11 +301,11 @@ abstract mixin class _$ChatCopyWith<$Res> implements $ChatCopyWith<$Res> {
   factory _$ChatCopyWith(_Chat value, $Res Function(_Chat) _then) = __$ChatCopyWithImpl;
 @override @useResult
 $Res call({
- String chatId, ChatInfo info, String lastMessage, DateTime lastMessageSent, List<String> typingUsers, List<String> participants, bool isArchived, bool isFavorite, DateTime createdAt, String icon
+ String chatId, String lastMessage,@TimestampConverter() DateTime lastMessageSent, ChatConfig config, List<String> typingUsers, Map<String, ParticipantInfo> participantInfo, List<String> participants,@TimestampConverter() DateTime createdAt, String icon, List<String> searchKeywords
 });
 
 
-@override $ChatInfoCopyWith<$Res> get info;
+@override $ChatConfigCopyWith<$Res> get config;
 
 }
 /// @nodoc
@@ -306,19 +318,19 @@ class __$ChatCopyWithImpl<$Res>
 
 /// Create a copy of Chat
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? chatId = null,Object? info = null,Object? lastMessage = null,Object? lastMessageSent = null,Object? typingUsers = null,Object? participants = null,Object? isArchived = null,Object? isFavorite = null,Object? createdAt = null,Object? icon = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? chatId = null,Object? lastMessage = null,Object? lastMessageSent = null,Object? config = null,Object? typingUsers = null,Object? participantInfo = null,Object? participants = null,Object? createdAt = null,Object? icon = null,Object? searchKeywords = null,}) {
   return _then(_Chat(
 chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
-as String,info: null == info ? _self.info : info // ignore: cast_nullable_to_non_nullable
-as ChatInfo,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
+as String,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
 as String,lastMessageSent: null == lastMessageSent ? _self.lastMessageSent : lastMessageSent // ignore: cast_nullable_to_non_nullable
-as DateTime,typingUsers: null == typingUsers ? _self._typingUsers : typingUsers // ignore: cast_nullable_to_non_nullable
-as List<String>,participants: null == participants ? _self._participants : participants // ignore: cast_nullable_to_non_nullable
-as List<String>,isArchived: null == isArchived ? _self.isArchived : isArchived // ignore: cast_nullable_to_non_nullable
-as bool,isFavorite: null == isFavorite ? _self.isFavorite : isFavorite // ignore: cast_nullable_to_non_nullable
-as bool,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,config: null == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
+as ChatConfig,typingUsers: null == typingUsers ? _self._typingUsers : typingUsers // ignore: cast_nullable_to_non_nullable
+as List<String>,participantInfo: null == participantInfo ? _self._participantInfo : participantInfo // ignore: cast_nullable_to_non_nullable
+as Map<String, ParticipantInfo>,participants: null == participants ? _self._participants : participants // ignore: cast_nullable_to_non_nullable
+as List<String>,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String,
+as String,searchKeywords: null == searchKeywords ? _self._searchKeywords : searchKeywords // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 
@@ -326,10 +338,10 @@ as String,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ChatInfoCopyWith<$Res> get info {
+$ChatConfigCopyWith<$Res> get config {
   
-  return $ChatInfoCopyWith<$Res>(_self.info, (value) {
-    return _then(_self.copyWith(info: value));
+  return $ChatConfigCopyWith<$Res>(_self.config, (value) {
+    return _then(_self.copyWith(config: value));
   });
 }
 }
