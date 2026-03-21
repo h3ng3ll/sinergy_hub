@@ -8,7 +8,7 @@ import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../gen/assets.gen.dart';
 import '../../../../../../chat/domain/models/e_chat_filter.dart';
-import '../../../../bloc/chats_filter_bloc/chats_filter_bloc.dart';
+import '../../../../../../chat/presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 import 'build_chat_filter_item/build_chat_filter_item.dart';
 
 class ChatFilterUIData {
@@ -42,10 +42,10 @@ class BuildChatFilters extends StatelessWidget {
       height: 70.0,
       child: ListView(
         // spacing: 10.0,
-        scrollDirection: .horizontal,
+        scrollDirection: Axis.horizontal,
         children: [
           Padding(
-            padding: .only(
+            padding: EdgeInsets.only(
               left: 20.0,
             ),
             child: BuildChatFilterItem(

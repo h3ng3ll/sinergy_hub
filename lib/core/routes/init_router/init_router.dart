@@ -5,11 +5,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../../features/auth/presentation/pages/authorization_page/authorization_page.dart';
 import '../../../features/auth/presentation/pages/register_page/register_page.dart';
-import '../../../features/calls/presentation/pages/call_page/call_page.dart';
 import '../../../features/chat/presentation/pages/chat_page/chat_page.dart';
 import '../../../features/home/presentation/home_bottom_bar/home_bottom_bar.dart';
 import '../../../features/home/presentation/home_root/home_root.dart';
 import '../../../features/matches/presentation/pages/discovery_page/discovery_page.dart';
+import '../../../features/matches/presentation/pages/match_result_page/match_result_page.dart';
 import '../../../features/matches/presentation/pages/matches_page/matches_page.dart';
 import '../../../features/home/presentation/edit_profile_page/edit_profile_page.dart';
 import '../../../features/home/presentation/tabs/profile_tab/profile_tab.dart';
@@ -17,6 +17,7 @@ import '../../../features/notifications/presentation/pages/notification_page/not
 import '../../../features/onboard_survey/presentation/pages/onboard_about_you_page/onboard_about_you_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_shell_page/onboard_shell_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
+import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
 import '../root_page/root_page.dart';
 
 part 'init_router.g.dart';
@@ -73,20 +74,25 @@ final GoRouter initRouter = GoRouter(
         ),
         TypedStatefulShellBranch(
           routes: [
+            TypedGoRoute<MatchResultPageRoute>(
+              path: '/match-result',
+            ),
             TypedGoRoute<ChatPageRoute>(
               path: '/chat',
             ),
             TypedGoRoute<EditProfilePageRoute>(
               path: '/edit-profile-page',
+              routes: [
+                TypedGoRoute<EditLookingForRoute>(
+                  path: 'looking-for-edit',
+                ),
+              ],
             ),
             TypedGoRoute<ProfilePageRoute>(
               path: '/profile',
             ),
             TypedGoRoute<NotificationPageRoute>(
               path: '/notification',
-            ),
-            TypedGoRoute<CallPageRoute>(
-              path: '/call',
             ),
           ],
         ),
@@ -95,7 +101,8 @@ final GoRouter initRouter = GoRouter(
   ],
 )
 class RootPageRoute extends ShellRouteData {
-  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+  // static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+  static final GlobalKey rootKey = GlobalKey();
 
   @override
   Widget builder(
@@ -104,6 +111,7 @@ class RootPageRoute extends ShellRouteData {
     Widget navigator,
   ) {
     return RootPage(
+      key: rootKey,
       navigator: navigator,
     );
   }
@@ -177,8 +185,7 @@ class OnboardAboutYouPageRoute extends GoRouteData
 }
 
 class HomeBottomBarRoute extends StatefulShellRouteData {
-  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
-
+  static final homeBottomBarKey = GlobalKey();
   @override
   Widget builder(
     BuildContext context,
@@ -186,6 +193,7 @@ class HomeBottomBarRoute extends StatefulShellRouteData {
     StatefulNavigationShell navigationShell,
   ) {
     return HomeBottomBar(
+      key: homeBottomBarKey,
       navigationShell: navigationShell,
     );
   }
@@ -218,8 +226,34 @@ class ProfilePageRoute extends GoRouteData with _$ProfilePageRoute {
   }
 }
 
+class EditLookingForRoute extends GoRouteData with _$EditLookingForRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      EditLookingForPage(),
+    );
+  }
+}
+
+class MatchResultPageRoute extends GoRouteData with _$MatchResultPageRoute {
+  final String matchId;
+
+  const MatchResultPageRoute({
+    required this.matchId,
+  });
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      MatchResultPage(
+        matchId: matchId,
+      ),
+    );
+  }
+}
+
 class HomeRootRoute extends StatefulShellRouteData {
-  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+  // static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
 
   @override
   Widget builder(
@@ -270,25 +304,6 @@ class EditProfilePageRoute extends GoRouteData with _$EditProfilePageRoute {
   }
 }
 
-class CallPageRoute extends GoRouteData with _$CallPageRoute {
-  final String? calleeId;
-  final String? callId;
-
-  CallPageRoute({
-    this.calleeId,
-    this.callId,
-  });
-
-  @override
-  Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return GoRouterPageBuilder.pageBuilder(
-      CallPage(
-        calleeId: calleeId,
-        callId: callId,
-      ),
-    );
-  }
-}
 
 class GoRouterPageBuilder {
   static CustomTransitionPage pageBuilder(Widget child) {

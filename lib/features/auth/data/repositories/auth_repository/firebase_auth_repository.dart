@@ -48,22 +48,35 @@ class FirebaseAuthRepository extends IAuthRepository {
       idToken: res.authentication.idToken,
     );
 
-    final authRes = await _auth.signInWithCredential(
-      credential,
-    );
+    // Retry logic for transient network errors
+    const maxRetries = 3;
+    int attempts = 0;
+    
+    while (attempts < maxRetries) {
+      try {
+        final authRes = await _auth.signInWithCredential(
+          credential,
+        );
 
-    // final uDoc = _firebaseFirestoreService.userDocument(
-    //   authRes.user!.uid,
-    // );
-    // final bool isExists = await _firebaseFirestoreService.isExistsDocument(
-    //   uDoc,
-    // );
-    // if (!isExists) {
-    //   uDoc.set(
-    //     {},
-    //   );
-    // }
-    return authRes;
+        return authRes;
+      } on FirebaseAuthException catch (e) {
+        attempts++;
+        // Retry only on network-related errors
+        if (attempts >= maxRetries ||
+            !(e.code == 'unknown' || 
+              e.message?.contains('I/O error') == true ||
+              e.message?.contains('Connection reset') == true)) {
+          rethrow;
+        }
+        // Wait before retrying (exponential backoff)
+        await Future.delayed(Duration(milliseconds: 500 * attempts));
+      }
+    }
+    
+    throw FirebaseAuthException(
+      code: 'max-retries-exceeded',
+      message: 'Failed to sign in after $maxRetries attempts',
+    );
   }
 
   @override

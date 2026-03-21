@@ -6,16 +6,16 @@ sealed class EditProfilePageEvent with _$EditProfilePageEvent {
     required String name,
   }) = _AddSkill;
 
-  const factory EditProfilePageEvent.initialize({
-    required String uid,
-  }) = _Initialize;
+  const factory EditProfilePageEvent.initialize() = _Initialize;
 
   const factory EditProfilePageEvent.removeSkill({
     required Skill skill,
   }) = _RemoveSkill;
 
   const factory EditProfilePageEvent.applyChanges({
-    required String name,
-    required String bio,
+    String? firstName,
+    String? lastName,
+    String? aboutMe,
+    Uint8List? img,
   }) = _ApplyChanges;
 }

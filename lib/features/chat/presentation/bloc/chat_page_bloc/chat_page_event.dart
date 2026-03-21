@@ -12,4 +12,11 @@ sealed class ChatPageEvent with _$ChatPageEvent {
   const factory ChatPageEvent.updateMessages({
     required List<ChatMessage> messages,
   }) = _UpdateMessages;
+
+ const factory ChatPageEvent.updateChat({
+    required Chat chat,
+  }) = _UpdateChat;
+
+  const factory ChatPageEvent.startTyping() = _StartTyping;
+  const factory ChatPageEvent.endTyping() = _EndTyping;
 }

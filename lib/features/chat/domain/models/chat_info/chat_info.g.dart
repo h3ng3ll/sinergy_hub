@@ -8,14 +8,12 @@ part of 'chat_info.dart';
 
 _ChatInfo _$ChatInfoFromJson(Map<String, dynamic> json) => _ChatInfo(
   title: json['title'] as String? ?? '',
-  lastMessage: json['lastMessage'] as String? ?? '',
   cover: json['cover'] as String?,
   specialization: $enumDecode(_$ESpecializationEnumMap, json['specialization']),
 );
 
 Map<String, dynamic> _$ChatInfoToJson(_ChatInfo instance) => <String, dynamic>{
   'title': instance.title,
-  'lastMessage': instance.lastMessage,
   'cover': instance.cover,
   'specialization': _$ESpecializationEnumMap[instance.specialization]!,
 };

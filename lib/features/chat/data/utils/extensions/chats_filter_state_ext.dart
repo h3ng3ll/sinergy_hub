@@ -1,4 +1,4 @@
-import '../../../../matches/presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
+import '../../../presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/e_chat_filter.dart';
 
@@ -17,38 +17,35 @@ extension ChatsFilterStateExt on ChatsFilterState {
   //     return fullName.contains(q);
   //   });
   // }
+  bool get isInitial => status == ChatsFilterStatus.initial;
+  bool get isEmpty => chatsState.chats.isEmpty;
 
-  Iterable<Chat> _filterByType(Iterable<Chat> chats) {
-    switch (filter) {
-      ///Todo Came up with some logic
-      case EChatFilter.recent:
-        return chats;
+  bool get isLoading => status == ChatsFilterStatus.loading;
 
-      case EChatFilter.unread:
-        return chats.where(
-          (e) => !e.hasRead,
-        );
+  bool get isApplied => query.isNotEmpty || filter != EChatFilter.all;
 
-      case EChatFilter.all:
-        return chats;
-
-      case EChatFilter.favorite:
-        return chats.where(
-          (e) => e.isFavorite,
-        );
-      case EChatFilter.archived:
-        return chats.where(
-          (e) => e.isArchived,
-        );
-    }
-  }
-
-  List<Chat> applyfilter(List<Chat> chats) {
-    return chats;
-    // return _filterByType(
-    //   // _filterByQuery(
-    //   //   chats,
-    //   // ),
-    // ).toList();
-  }
+  // Iterable<Chat> filterByType(Iterable<Chat> chats) {
+  //   switch (filter) {
+  //     ///Todo Came up with some logic
+  //     case EChatFilter.recent:
+  //       return chats;
+  //
+  //     // case EChatFilter.unread:
+  //     //   return chats.where(
+  //     //     (e) => !e.hasRead,
+  //     //   );
+  //
+  //     case EChatFilter.all:
+  //       return chats;
+  //
+  //     case EChatFilter.favorite:
+  //       return chats.where(
+  //         (e) => e.isFavorite,
+  //       );
+  //     case EChatFilter.archived:
+  //       return chats.where(
+  //         (e) => e.isArchived,
+  //       );
+  //   }
+  // }
 }

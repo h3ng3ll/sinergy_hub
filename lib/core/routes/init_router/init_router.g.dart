@@ -9,7 +9,6 @@ part of 'init_router.dart';
 List<RouteBase> get $appRoutes => [$rootPageRoute];
 
 RouteBase get $rootPageRoute => ShellRouteData.$route(
-  navigatorKey: RootPageRoute.$navigatorKey,
   factory: $RootPageRouteExtension._fromState,
   routes: [
     GoRouteData.$route(
@@ -66,12 +65,22 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
+              path: '/match-result',
+              factory: _$MatchResultPageRoute._fromState,
+            ),
+            GoRouteData.$route(
               path: '/chat',
               factory: _$ChatPageRoute._fromState,
             ),
             GoRouteData.$route(
               path: '/edit-profile-page',
               factory: _$EditProfilePageRoute._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: 'looking-for-edit',
+                  factory: _$EditLookingForRoute._fromState,
+                ),
+              ],
             ),
             GoRouteData.$route(
               path: '/profile',
@@ -80,10 +89,6 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
             GoRouteData.$route(
               path: '/notification',
               factory: _$NotificationPageRoute._fromState,
-            ),
-            GoRouteData.$route(
-              path: '/call',
-              factory: _$CallPageRoute._fromState,
             ),
           ],
         ),
@@ -235,6 +240,32 @@ mixin _$MatchesPageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
+mixin _$MatchResultPageRoute on GoRouteData {
+  static MatchResultPageRoute _fromState(GoRouterState state) =>
+      MatchResultPageRoute(matchId: state.uri.queryParameters['match-id']!);
+
+  MatchResultPageRoute get _self => this as MatchResultPageRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/match-result',
+    queryParams: {'match-id': _self.matchId},
+  );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
 mixin _$ChatPageRoute on GoRouteData {
   static ChatPageRoute _fromState(GoRouterState state) =>
       ChatPageRoute(chatId: state.uri.queryParameters['chat-id']!);
@@ -280,6 +311,28 @@ mixin _$EditProfilePageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
+mixin _$EditLookingForRoute on GoRouteData {
+  static EditLookingForRoute _fromState(GoRouterState state) =>
+      EditLookingForRoute();
+
+  @override
+  String get location =>
+      GoRouteData.$location('/edit-profile-page/looking-for-edit');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
 mixin _$ProfilePageRoute on GoRouteData {
   static ProfilePageRoute _fromState(GoRouterState state) => ProfilePageRoute();
 
@@ -306,37 +359,6 @@ mixin _$NotificationPageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/notification');
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-mixin _$CallPageRoute on GoRouteData {
-  static CallPageRoute _fromState(GoRouterState state) => CallPageRoute(
-    calleeId: state.uri.queryParameters['callee-id'],
-    callId: state.uri.queryParameters['call-id'],
-  );
-
-  CallPageRoute get _self => this as CallPageRoute;
-
-  @override
-  String get location => GoRouteData.$location(
-    '/call',
-    queryParams: {
-      if (_self.calleeId != null) 'callee-id': _self.calleeId,
-      if (_self.callId != null) 'call-id': _self.callId,
-    },
-  );
 
   @override
   void go(BuildContext context) => context.go(location);

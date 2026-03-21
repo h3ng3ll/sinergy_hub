@@ -1,9 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
 
-import '../../../../../../../gen/assets.gen.dart';
 import '../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../domain/models/chat/chat.dart';
 import 'widgets/message_builder/message_builder.dart';
@@ -23,7 +20,6 @@ class BuildChatCanvas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Expanded(
@@ -33,12 +29,14 @@ class BuildChatCanvas extends StatelessWidget {
         ),
         ...chat.typingUsers.map(
           (e) {
+            final user = users.firstWhereOrNull(
+                  (u) => e == u.uid,
+            );
+            if(user == null) return Container();
             return Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: BuildMessage.loading(
-                user: users.firstWhere(
-                  (u) => e == u.uid,
-                ),
+                user: user,
               ),
             );
           },

@@ -12,12 +12,12 @@ class UpdateUserUseCase {
     required IUserRepository userRepository,
     required IAuthRepository authRepository,
   }) : _userRepository = userRepository,
-       _authRepository = authRepository;
+        _authRepository = authRepository;
 
   Future<void> call(
-    UserData userData,
-    Uint8List? img,
-  ) async {
+      UserData userData,
+      Uint8List? img,
+      ) async {
     final uid = await _authRepository.requireUserId();
 
     userData = userData.copyWith(

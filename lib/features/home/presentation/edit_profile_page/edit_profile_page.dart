@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/injection.dart';
@@ -16,10 +17,11 @@ import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../core/widgets/build_user_avatar.dart';
 import '../../../onboard_survey/domain/models/skill/skill.dart';
-import '../../../user/domain/repositories/i_user_repository.dart';
+import '../../../onboard_survey/domain/use_cases/get_skills_use_case.dart';
+import '../../../user/domain/usecases/listen_current_user_data_use_case.dart';
 import '../../../user/domain/usecases/update_user_usecase.dart';
+import '../../../user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import '../../../user/presentation/bloc/user_bloc/user_bloc.dart';
-import '../../../user/presentation/bloc/user_update_cubit/user_update_cubit.dart';
 import '../home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import 'bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import 'widgets/build_grouped_input.dart';
@@ -43,17 +45,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Uint8List? image;
 
   late final EditProfilePageBloc _editProfilePageBloc;
-  late final UserUpdateCubit _userUpdateCubit;
 
   @override
   void initState() {
     final userCubit = context.read<UserBloc>();
-    _editProfilePageBloc = EditProfilePageBloc(
-      userRepository: getIt<IUserRepository>(),
-    );
-    _userUpdateCubit = UserUpdateCubit(
-      updateUserUseCase: getIt<UpdateUserUseCase>(),
-    );
+    _editProfilePageBloc =
+        EditProfilePageBloc(
+          listenCurrentUserDataUseCase: getIt<ListenCurrentUserDataUseCase>(),
+          updateUserUseCase: getIt<UpdateUserUseCase>(),
+        )..add(
+          EditProfilePageEvent.initialize(),
+        );
+
     _firstNameController.text =
         userCubit.state.userData?.firstName ?? _firstNameController.text;
     _lastNameController.text =
@@ -93,19 +96,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void onSaveChanges() {
-    final skills = _editProfilePageBloc.state.skills;
-    final userData = context.read<UserBloc>().state.userData!;
-
-    _userUpdateCubit.update(
-      userData.copyWith(
+    _editProfilePageBloc.add(
+      EditProfilePageEvent.applyChanges(
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
         aboutMe: _bioController.text,
-        profiler: userData.profiler.copyWith(
-          skills: skills,
-        ),
+        img: image,
       ),
-      image,
     );
   }
 
@@ -126,97 +123,116 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
-    final userData = context.read<UserBloc>().state.userData;
     return BlocProvider<EditProfilePageBloc>.value(
       value: _editProfilePageBloc,
-      child: BlocListener<UserBloc, UserState>(
+      child: BlocListener<EditProfilePageBloc, EditProfilePageState>(
         listener: (context, state) {
-          if (state.status == UserStatus.failed) {
+          if (state.isFailed) {
             UiMessageService.showError(
               state.errorMessage,
             );
-          } else if (state.status == UserStatus.updated) {
+          } else if (state.isUpdated) {
             UiMessageService.showSuccess(
               'Profile updated successfully',
             );
             context.pop();
           }
         },
-        child: BuildAnimatedBackground(
-          child: SafeArea(
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: CustomAppBar(
-                actions: [
-                  Spacer(),
-                  Center(
-                    child: Text(
-                      'Edit Profile',
-                      style: textTheme.bold20.copyWith(
-                        color: colorScheme.onPrimary,
-                      ),
-                    ),
-                  ),
-                  Spacer(),
-                ],
-              ),
-              body: SingleChildScrollView(
-                child: HorizontalPadding(
-                  child: Column(
-                    spacing: 20,
-                    children: [
-                      BuildUserAvatar(
-                        width: 100.0,
-                        height: 100.0,
-                        onTap: onTapAvatar,
-                        url: userData?.avatarUrl,
-                        cacheImg: image,
-                      ),
-                      BuildGroupedInput(
-                        title: 'FirstName',
-                        child: FirstNameInput(
-                          controller: _firstNameController,
-                        ),
-                      ),
-                      BuildGroupedInput(
-                        title: 'LastName',
-                        child: LastNameInput(
-                          controller: _lastNameController,
-                        ),
-                      ),
-                      BuildGroupedInput(
-                        title: 'Bio',
-                        child: BioInput(
-                          controller: _bioController,
-                        ),
-                      ),
-                      BuildSkillsSection(
-                        onRemoveExistingSkill: onRemoveExistingSkill,
-                        skillController: _skillController,
-                        onSubmitSkill: onSubmitSkill,
-                      ),
-                      Row(
-                        spacing: 20.0,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomTextBtn(
-                            onPressed: onCancel,
-                            text: 'Cancel',
+        child: BlocBuilder<EditProfilePageBloc, EditProfilePageState>(
+          builder: (context, state) {
+            final userData = state.userData;
+            final availableSkills = context.watch<SkillsBloc>().state.skills;
+
+            return BuildAnimatedBackground(
+              child: SafeArea(
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: CustomAppBar(
+                    actions: [
+                      Spacer(),
+                      Center(
+                        child: Text(
+                          'Edit Profile',
+                          style: textTheme.bold20.copyWith(
+                            color: colorScheme.onPrimary,
                           ),
-                          TranslucentBtn(
-                            onPressed: onSaveChanges,
-                            child: Text(
-                              'Save Changes',
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
+                      Spacer(),
                     ],
+                  ),
+                  body: HorizontalPadding(
+                    child: ListView(
+                      children: [
+                        Column(
+                          spacing: 20,
+
+                          children: [
+                            BuildUserAvatar(
+                              width: 100.0,
+                              height: 100.0,
+                              onTap: onTapAvatar,
+                              url: userData?.avatarUrl,
+                              cacheImg: image,
+                            ),
+                            BuildGroupedInput(
+                              title: 'FirstName',
+                              child: FirstNameInput(
+                                controller: _firstNameController,
+                              ),
+                            ),
+                            BuildGroupedInput(
+                              title: 'LastName',
+                              child: LastNameInput(
+                                controller: _lastNameController,
+                              ),
+                            ),
+                            BuildGroupedInput(
+                              title: 'Bio',
+                              child: BioInput(
+                                controller: _bioController,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Gap(15.0),
+                        Text(
+                          'Skills',
+                          style: textTheme.regular14.copyWith(
+                            color: colorScheme.onPrimary,
+                          ),
+                        ),
+                        Gap(15.0),
+                        BuildSkillsSection(
+                          onRemoveExistingSkill: onRemoveExistingSkill,
+                          onSubmitSkill: onSubmitSkill,
+                          skills: availableSkills,
+                          activeSkills: state.skills,
+                        ),
+                        Gap(15.0),
+                        Row(
+                          spacing: 20.0,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomTextBtn(
+                              onPressed: onCancel,
+                              text: 'Cancel',
+                            ),
+                            TranslucentBtn(
+                              onPressed: onSaveChanges,
+                              child: Text(
+                                'Save Changes',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

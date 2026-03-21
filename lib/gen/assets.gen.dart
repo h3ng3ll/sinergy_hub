@@ -11,6 +11,16 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsDataGen {
+  const $AssetsDataGen();
+
+  /// File path: assets/data/skills.json
+  String get skills => 'assets/data/skills.json';
+
+  /// List of all assets
+  List<String> get values => [skills];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -250,6 +260,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/group.png
   AssetGenImage get group => const AssetGenImage('assets/images/group.png');
 
+  /// File path: assets/images/ic_notification.png
+  AssetGenImage get icNotification =>
+      const AssetGenImage('assets/images/ic_notification.png');
+
   /// File path: assets/images/layer.png
   AssetGenImage get layer => const AssetGenImage('assets/images/layer.png');
 
@@ -284,6 +298,7 @@ class $AssetsImagesGen {
     crown,
     engine,
     group,
+    icNotification,
     layer,
     magicPattern,
     mobilePhone,
@@ -318,6 +333,7 @@ class Assets {
   const Assets._();
 
   static const String aEnv = '.env';
+  static const $AssetsDataGen data = $AssetsDataGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();

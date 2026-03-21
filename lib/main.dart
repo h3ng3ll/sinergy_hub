@@ -9,12 +9,17 @@ import 'core/di/injection.dart';
 import 'core/resources/app_locale.dart';
 import 'core/resources/app_theme.dart';
 import 'core/routes/init_router/init_router.dart';
+import 'core/services/firebase/firebase_auth_service.dart';
+import 'core/services/firebase/firebase_firestore_service.dart';
 import 'core/services/firebase/firebase_messaging_service.dart';
 import 'core/services/local_notification_service.dart';
-import 'core/services/ui_message_service.dart';
 import 'features/auth/domain/repostories/i_auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'features/notifications/domain/usecases/get_notification_config_use_case.dart';
+import 'features/notifications/domain/usecases/save_notification_config_use_case.dart';
+import 'features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
 import 'features/user/domain/repositories/i_user_repository.dart';
+import 'features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import 'features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'firebase_options.dart';
 
@@ -39,6 +44,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await getIt<FirebaseAuthService>().init();
+  await getIt<FirebaseFirestoreService>().init();
   await getIt<LocalNotificationService>().init();
   await getIt<FirebaseMessagingService>().init();
 
@@ -96,47 +103,73 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<UserBloc>.value(
           value: userBloc,
         ),
+        BlocProvider<SkillsBloc>(
+          create: (_) => getIt<SkillsBloc>()
+            ..add(
+              SkillsEvent.fetch(),
+            ),
+        ),
         BlocProvider<AuthBloc>.value(
           value: authBloc,
         ),
-      ],
-      child: BlocListener<AuthBloc, AuthState>(
-        listenWhen: (p, n) =>
-            (p.status == AuthStatus.authorized) ||
-            (p.status == AuthStatus.logout),
-
-        listener: (context, state) {
-          if (state.status == AuthStatus.authorized) {
-            userBloc.add(
-              UserEvent.init(
-                uid: state.uid!,
-              ),
-            );
-            // OnboardAboutYouPageRoute().go(context);
-          } else if (state.status == AuthStatus.logout) {
-            userBloc.add(
-              UserEvent.reset(),
-            );
-          }
-        },
-        child: BlocListener<UserBloc, UserState>(
-          listener: (context, state) {
-            if (state.isNoData && authBloc.state.isAuthorized) {
-              UiMessageService.showError(
-                'No data . Logout',
-              );
-              context.read<AuthBloc>().add(
-                AuthEvent.signOut(),
-              );
-            }
-          },
-          child: MaterialApp.router(
-            theme: AppThemeData.light,
-            supportedLocales: AppLocale.supportedLocales,
-            locale: AppLocale.startLocale,
-            routerConfig: initRouter,
+        BlocProvider(
+          create: (_) => NotificationConfigBloc(
+            getNotificationsConfigUseCase:
+                getIt<GetNotificationsConfigUseCase>(),
+            saveNotificationsConfigUseCase:
+                getIt<SaveNotificationsConfigUseCase>(),
+            firebaseMessagingService: getIt<FirebaseMessagingService>(),
           ),
         ),
+      ],
+      child: Builder(
+        builder: (context) {
+          return BlocListener<AuthBloc, AuthState>(
+            listenWhen: (p, n) =>
+                (p.status == AuthStatus.authorized) &&
+                    (n.status == AuthStatus.logout) ||
+                (p.status == AuthStatus.loading) &&
+                    (n.status == AuthStatus.authorized),
+
+            listener: (context, state) {
+              if (state.status == AuthStatus.authorized) {
+                userBloc.add(
+                  UserEvent.init(
+                    uid: state.uid!,
+                  ),
+                );
+                context.read<NotificationConfigBloc>().add(
+                  NotificationConfigEvent.init(),
+                );
+              } else if (state.status == AuthStatus.logout) {
+                userBloc.add(
+                  UserEvent.reset(),
+                );
+              }
+            },
+            child: BlocListener<UserBloc, UserState>(
+              listenWhen: (previous, current) {
+                return previous.status != current.status &&
+                    current.status == UserStatus.noData;
+              },
+              listener: (context, state) {
+                // Don't auto-logout - user might be new and hasn't completed onboarding
+                // Navigate to onboarding instead
+                if (state.isNoData && authBloc.state.isAuthorized) {
+                  OnboardAboutYouPageRoute().go(
+                    context,
+                  );
+                }
+              },
+              child: MaterialApp.router(
+                theme: AppThemeData.light,
+                supportedLocales: AppLocale.supportedLocales,
+                locale: AppLocale.startLocale,
+                routerConfig: initRouter,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

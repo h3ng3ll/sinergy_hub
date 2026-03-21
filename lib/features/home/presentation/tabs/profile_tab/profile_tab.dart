@@ -22,15 +22,19 @@ class ProfileTab extends StatefulWidget {
 }
 
 class _ProfileTabState extends State<ProfileTab> {
-  void onTapEditAbout(BuildContext context) {
+  void onTapEditAbout() {
     EditProfilePageRoute().push(
       context,
     );
   }
 
-  void onTapEditLookingFor(BuildContext context) {}
+  void onTapEditLookingFor() {
+    EditLookingForRoute().push(
+      context,
+    );
+  }
 
-  void onTapEditSkills(BuildContext context) {}
+  void onTapEditSkills() {}
 
   void onTapAvatar() {
     EditProfilePageRoute().push(
@@ -42,11 +46,10 @@ class _ProfileTabState extends State<ProfileTab> {
   Widget build(BuildContext context) {
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
-
-        if(state.status == UserStatus.loading) {
+        if (state.status == UserStatus.loading) {
           return LoadingDataWidget();
         }
-        
+
         final userData = state.userData!;
         return BuildAnimatedBackground(
           child: Scaffold(
@@ -67,22 +70,16 @@ class _ProfileTabState extends State<ProfileTab> {
                           Gap(20.0),
                           BuildAbout(
                             userData: userData,
-                            onTapEdit: () => onTapEditAbout(
-                              context,
-                            ),
+                            onTapEdit: onTapEditAbout,
                           ),
                           Gap(20.0),
                           BuildLookingFor(
-                            onTapEdit: () => onTapEditLookingFor(
-                              context,
-                            ),
+                            onTapEdit: onTapEditLookingFor,
                             userData: userData,
                           ),
                           Gap(20.0),
                           BuildSkillsNExpertise(
-                            onTapEdit: () => onTapEditSkills(
-                              context,
-                            ),
+                            onTapEdit: onTapEditSkills,
                           ),
                           Gap(20.0),
                         ],

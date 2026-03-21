@@ -7,12 +7,21 @@ enum EditProfilePageStatus {
   updated,
 }
 
-@freezed
-sealed class  EditProfilePageState with _$EditProfilePageState {
+extension EditProfilePageStateX on EditProfilePageState {
+  bool get isFailed => status == EditProfilePageStatus.failed;
 
-  const factory  EditProfilePageState({
-    @Default( EditProfilePageStatus.initial)  EditProfilePageStatus status,
+  bool get isLoading => status == EditProfilePageStatus.loading;
+
+  bool get isUpdated => status == EditProfilePageStatus.updated;
+
+}
+
+@freezed
+sealed class EditProfilePageState with _$EditProfilePageState {
+  const factory EditProfilePageState({
+    @Default(EditProfilePageStatus.initial) EditProfilePageStatus status,
     @Default([]) List<Skill> skills,
+    UserData? userData,
     @Default('') errorMessage,
   }) = _EditProfilePageState;
 }

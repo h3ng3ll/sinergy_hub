@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/core/di/injection.dart';
 import 'package:sinergy_hub/features/chat/data/models/chat_dto/chat_dto.dart';
-import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_info/chat_info.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_message/chat_message.dart';
 import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_message_repository.dart';
@@ -33,9 +32,9 @@ void main() {
           lastMessageSent: DateTime.now(),
           participants: [],
           createdAt: DateTime.now(),
-          info: ChatInfo(
-            specialization: ESpecialization.backendDeveloper,
-          ),
+          // info: ChatInfo(
+          //   specialization: ESpecialization.backendDeveloper,
+          // ),
         ),
       );
     },

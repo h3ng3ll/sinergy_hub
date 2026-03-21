@@ -55,14 +55,17 @@ extension ChatPageEventPatterns on ChatPageEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Subscribe value)?  subscribe,TResult Function( _Init value)?  init,TResult Function( _SendMessage value)?  sendMessage,TResult Function( _UpdateMessages value)?  updateMessages,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Subscribe value)?  subscribe,TResult Function( _Init value)?  init,TResult Function( _SendMessage value)?  sendMessage,TResult Function( _UpdateMessages value)?  updateMessages,TResult Function( _UpdateChat value)?  updateChat,TResult Function( _StartTyping value)?  startTyping,TResult Function( _EndTyping value)?  endTyping,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
 return subscribe(_that);case _Init() when init != null:
 return init(_that);case _SendMessage() when sendMessage != null:
 return sendMessage(_that);case _UpdateMessages() when updateMessages != null:
-return updateMessages(_that);case _:
+return updateMessages(_that);case _UpdateChat() when updateChat != null:
+return updateChat(_that);case _StartTyping() when startTyping != null:
+return startTyping(_that);case _EndTyping() when endTyping != null:
+return endTyping(_that);case _:
   return orElse();
 
 }
@@ -80,14 +83,17 @@ return updateMessages(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Subscribe value)  subscribe,required TResult Function( _Init value)  init,required TResult Function( _SendMessage value)  sendMessage,required TResult Function( _UpdateMessages value)  updateMessages,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Subscribe value)  subscribe,required TResult Function( _Init value)  init,required TResult Function( _SendMessage value)  sendMessage,required TResult Function( _UpdateMessages value)  updateMessages,required TResult Function( _UpdateChat value)  updateChat,required TResult Function( _StartTyping value)  startTyping,required TResult Function( _EndTyping value)  endTyping,}){
 final _that = this;
 switch (_that) {
 case _Subscribe():
 return subscribe(_that);case _Init():
 return init(_that);case _SendMessage():
 return sendMessage(_that);case _UpdateMessages():
-return updateMessages(_that);}
+return updateMessages(_that);case _UpdateChat():
+return updateChat(_that);case _StartTyping():
+return startTyping(_that);case _EndTyping():
+return endTyping(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -101,14 +107,17 @@ return updateMessages(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Subscribe value)?  subscribe,TResult? Function( _Init value)?  init,TResult? Function( _SendMessage value)?  sendMessage,TResult? Function( _UpdateMessages value)?  updateMessages,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Subscribe value)?  subscribe,TResult? Function( _Init value)?  init,TResult? Function( _SendMessage value)?  sendMessage,TResult? Function( _UpdateMessages value)?  updateMessages,TResult? Function( _UpdateChat value)?  updateChat,TResult? Function( _StartTyping value)?  startTyping,TResult? Function( _EndTyping value)?  endTyping,}){
 final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
 return subscribe(_that);case _Init() when init != null:
 return init(_that);case _SendMessage() when sendMessage != null:
 return sendMessage(_that);case _UpdateMessages() when updateMessages != null:
-return updateMessages(_that);case _:
+return updateMessages(_that);case _UpdateChat() when updateChat != null:
+return updateChat(_that);case _StartTyping() when startTyping != null:
+return startTyping(_that);case _EndTyping() when endTyping != null:
+return endTyping(_that);case _:
   return null;
 
 }
@@ -125,13 +134,16 @@ return updateMessages(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  subscribe,TResult Function()?  init,TResult Function( String message)?  sendMessage,TResult Function( List<ChatMessage> messages)?  updateMessages,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  subscribe,TResult Function()?  init,TResult Function( String message)?  sendMessage,TResult Function( List<ChatMessage> messages)?  updateMessages,TResult Function( Chat chat)?  updateChat,TResult Function()?  startTyping,TResult Function()?  endTyping,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
 return subscribe();case _Init() when init != null:
 return init();case _SendMessage() when sendMessage != null:
 return sendMessage(_that.message);case _UpdateMessages() when updateMessages != null:
-return updateMessages(_that.messages);case _:
+return updateMessages(_that.messages);case _UpdateChat() when updateChat != null:
+return updateChat(_that.chat);case _StartTyping() when startTyping != null:
+return startTyping();case _EndTyping() when endTyping != null:
+return endTyping();case _:
   return orElse();
 
 }
@@ -149,13 +161,16 @@ return updateMessages(_that.messages);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  subscribe,required TResult Function()  init,required TResult Function( String message)  sendMessage,required TResult Function( List<ChatMessage> messages)  updateMessages,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  subscribe,required TResult Function()  init,required TResult Function( String message)  sendMessage,required TResult Function( List<ChatMessage> messages)  updateMessages,required TResult Function( Chat chat)  updateChat,required TResult Function()  startTyping,required TResult Function()  endTyping,}) {final _that = this;
 switch (_that) {
 case _Subscribe():
 return subscribe();case _Init():
 return init();case _SendMessage():
 return sendMessage(_that.message);case _UpdateMessages():
-return updateMessages(_that.messages);}
+return updateMessages(_that.messages);case _UpdateChat():
+return updateChat(_that.chat);case _StartTyping():
+return startTyping();case _EndTyping():
+return endTyping();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -169,13 +184,16 @@ return updateMessages(_that.messages);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  subscribe,TResult? Function()?  init,TResult? Function( String message)?  sendMessage,TResult? Function( List<ChatMessage> messages)?  updateMessages,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  subscribe,TResult? Function()?  init,TResult? Function( String message)?  sendMessage,TResult? Function( List<ChatMessage> messages)?  updateMessages,TResult? Function( Chat chat)?  updateChat,TResult? Function()?  startTyping,TResult? Function()?  endTyping,}) {final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
 return subscribe();case _Init() when init != null:
 return init();case _SendMessage() when sendMessage != null:
 return sendMessage(_that.message);case _UpdateMessages() when updateMessages != null:
-return updateMessages(_that.messages);case _:
+return updateMessages(_that.messages);case _UpdateChat() when updateChat != null:
+return updateChat(_that.chat);case _StartTyping() when startTyping != null:
+return startTyping();case _EndTyping() when endTyping != null:
+return endTyping();case _:
   return null;
 
 }
@@ -386,9 +404,148 @@ as List<ChatMessage>,
 }
 
 /// @nodoc
+
+
+class _UpdateChat implements ChatPageEvent {
+  const _UpdateChat({required this.chat});
+  
+
+ final  Chat chat;
+
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateChatCopyWith<_UpdateChat> get copyWith => __$UpdateChatCopyWithImpl<_UpdateChat>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateChat&&(identical(other.chat, chat) || other.chat == chat));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,chat);
+
+@override
+String toString() {
+  return 'ChatPageEvent.updateChat(chat: $chat)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateChatCopyWith<$Res> implements $ChatPageEventCopyWith<$Res> {
+  factory _$UpdateChatCopyWith(_UpdateChat value, $Res Function(_UpdateChat) _then) = __$UpdateChatCopyWithImpl;
+@useResult
+$Res call({
+ Chat chat
+});
+
+
+$ChatCopyWith<$Res> get chat;
+
+}
+/// @nodoc
+class __$UpdateChatCopyWithImpl<$Res>
+    implements _$UpdateChatCopyWith<$Res> {
+  __$UpdateChatCopyWithImpl(this._self, this._then);
+
+  final _UpdateChat _self;
+  final $Res Function(_UpdateChat) _then;
+
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? chat = null,}) {
+  return _then(_UpdateChat(
+chat: null == chat ? _self.chat : chat // ignore: cast_nullable_to_non_nullable
+as Chat,
+  ));
+}
+
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ChatCopyWith<$Res> get chat {
+  
+  return $ChatCopyWith<$Res>(_self.chat, (value) {
+    return _then(_self.copyWith(chat: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class _StartTyping implements ChatPageEvent {
+  const _StartTyping();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StartTyping);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ChatPageEvent.startTyping()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _EndTyping implements ChatPageEvent {
+  const _EndTyping();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EndTyping);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ChatPageEvent.endTyping()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$ChatPageState {
 
- String get chatId; List<ChatMessage> get messages; List<UserData> get users; ChatPageStatus get status;// @Default(true) bool isOnlineUser,
+ String get chatId; List<ChatMessage> get messages; List<UserData> get users; Chat? get chat; ChatPageStatus get status;// @Default(true) bool isOnlineUser,
  dynamic get errorMessage;
 /// Create a copy of ChatPageState
 /// with the given fields replaced by the non-null parameter values.
@@ -400,16 +557,16 @@ $ChatPageStateCopyWith<ChatPageState> get copyWith => _$ChatPageStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatPageState&&(identical(other.chatId, chatId) || other.chatId == chatId)&&const DeepCollectionEquality().equals(other.messages, messages)&&const DeepCollectionEquality().equals(other.users, users)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatPageState&&(identical(other.chatId, chatId) || other.chatId == chatId)&&const DeepCollectionEquality().equals(other.messages, messages)&&const DeepCollectionEquality().equals(other.users, users)&&(identical(other.chat, chat) || other.chat == chat)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,chatId,const DeepCollectionEquality().hash(messages),const DeepCollectionEquality().hash(users),status,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,chatId,const DeepCollectionEquality().hash(messages),const DeepCollectionEquality().hash(users),chat,status,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatPageState(chatId: $chatId, messages: $messages, users: $users, status: $status, errorMessage: $errorMessage)';
+  return 'ChatPageState(chatId: $chatId, messages: $messages, users: $users, chat: $chat, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -420,11 +577,11 @@ abstract mixin class $ChatPageStateCopyWith<$Res>  {
   factory $ChatPageStateCopyWith(ChatPageState value, $Res Function(ChatPageState) _then) = _$ChatPageStateCopyWithImpl;
 @useResult
 $Res call({
- String chatId, List<ChatMessage> messages, List<UserData> users, ChatPageStatus status, dynamic errorMessage
+ String chatId, List<ChatMessage> messages, List<UserData> users, Chat? chat, ChatPageStatus status, dynamic errorMessage
 });
 
 
-
+$ChatCopyWith<$Res>? get chat;
 
 }
 /// @nodoc
@@ -437,17 +594,30 @@ class _$ChatPageStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatPageState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? chatId = null,Object? messages = null,Object? users = null,Object? status = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? chatId = null,Object? messages = null,Object? users = null,Object? chat = freezed,Object? status = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
 as String,messages: null == messages ? _self.messages : messages // ignore: cast_nullable_to_non_nullable
 as List<ChatMessage>,users: null == users ? _self.users : users // ignore: cast_nullable_to_non_nullable
-as List<UserData>,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as List<UserData>,chat: freezed == chat ? _self.chat : chat // ignore: cast_nullable_to_non_nullable
+as Chat?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ChatPageStatus,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as dynamic,
   ));
 }
+/// Create a copy of ChatPageState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ChatCopyWith<$Res>? get chat {
+    if (_self.chat == null) {
+    return null;
+  }
 
+  return $ChatCopyWith<$Res>(_self.chat!, (value) {
+    return _then(_self.copyWith(chat: value));
+  });
+}
 }
 
 
@@ -526,10 +696,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String chatId,  List<ChatMessage> messages,  List<UserData> users,  ChatPageStatus status,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String chatId,  List<ChatMessage> messages,  List<UserData> users,  Chat? chat,  ChatPageStatus status,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatPageState() when $default != null:
-return $default(_that.chatId,_that.messages,_that.users,_that.status,_that.errorMessage);case _:
+return $default(_that.chatId,_that.messages,_that.users,_that.chat,_that.status,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -547,10 +717,10 @@ return $default(_that.chatId,_that.messages,_that.users,_that.status,_that.error
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String chatId,  List<ChatMessage> messages,  List<UserData> users,  ChatPageStatus status,  dynamic errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String chatId,  List<ChatMessage> messages,  List<UserData> users,  Chat? chat,  ChatPageStatus status,  dynamic errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _ChatPageState():
-return $default(_that.chatId,_that.messages,_that.users,_that.status,_that.errorMessage);}
+return $default(_that.chatId,_that.messages,_that.users,_that.chat,_that.status,_that.errorMessage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -564,10 +734,10 @@ return $default(_that.chatId,_that.messages,_that.users,_that.status,_that.error
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String chatId,  List<ChatMessage> messages,  List<UserData> users,  ChatPageStatus status,  dynamic errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String chatId,  List<ChatMessage> messages,  List<UserData> users,  Chat? chat,  ChatPageStatus status,  dynamic errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatPageState() when $default != null:
-return $default(_that.chatId,_that.messages,_that.users,_that.status,_that.errorMessage);case _:
+return $default(_that.chatId,_that.messages,_that.users,_that.chat,_that.status,_that.errorMessage);case _:
   return null;
 
 }
@@ -579,7 +749,7 @@ return $default(_that.chatId,_that.messages,_that.users,_that.status,_that.error
 
 
 class _ChatPageState implements ChatPageState {
-   _ChatPageState({required this.chatId, final  List<ChatMessage> messages = const [], final  List<UserData> users = const [], this.status = ChatPageStatus.loading, this.errorMessage = ''}): _messages = messages,_users = users;
+   _ChatPageState({required this.chatId, final  List<ChatMessage> messages = const [], final  List<UserData> users = const [], this.chat, this.status = ChatPageStatus.loading, this.errorMessage = ''}): _messages = messages,_users = users;
   
 
 @override final  String chatId;
@@ -597,6 +767,7 @@ class _ChatPageState implements ChatPageState {
   return EqualUnmodifiableListView(_users);
 }
 
+@override final  Chat? chat;
 @override@JsonKey() final  ChatPageStatus status;
 // @Default(true) bool isOnlineUser,
 @override@JsonKey() final  dynamic errorMessage;
@@ -611,16 +782,16 @@ _$ChatPageStateCopyWith<_ChatPageState> get copyWith => __$ChatPageStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatPageState&&(identical(other.chatId, chatId) || other.chatId == chatId)&&const DeepCollectionEquality().equals(other._messages, _messages)&&const DeepCollectionEquality().equals(other._users, _users)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatPageState&&(identical(other.chatId, chatId) || other.chatId == chatId)&&const DeepCollectionEquality().equals(other._messages, _messages)&&const DeepCollectionEquality().equals(other._users, _users)&&(identical(other.chat, chat) || other.chat == chat)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,chatId,const DeepCollectionEquality().hash(_messages),const DeepCollectionEquality().hash(_users),status,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,chatId,const DeepCollectionEquality().hash(_messages),const DeepCollectionEquality().hash(_users),chat,status,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatPageState(chatId: $chatId, messages: $messages, users: $users, status: $status, errorMessage: $errorMessage)';
+  return 'ChatPageState(chatId: $chatId, messages: $messages, users: $users, chat: $chat, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -631,11 +802,11 @@ abstract mixin class _$ChatPageStateCopyWith<$Res> implements $ChatPageStateCopy
   factory _$ChatPageStateCopyWith(_ChatPageState value, $Res Function(_ChatPageState) _then) = __$ChatPageStateCopyWithImpl;
 @override @useResult
 $Res call({
- String chatId, List<ChatMessage> messages, List<UserData> users, ChatPageStatus status, dynamic errorMessage
+ String chatId, List<ChatMessage> messages, List<UserData> users, Chat? chat, ChatPageStatus status, dynamic errorMessage
 });
 
 
-
+@override $ChatCopyWith<$Res>? get chat;
 
 }
 /// @nodoc
@@ -648,18 +819,31 @@ class __$ChatPageStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatPageState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? chatId = null,Object? messages = null,Object? users = null,Object? status = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? chatId = null,Object? messages = null,Object? users = null,Object? chat = freezed,Object? status = null,Object? errorMessage = freezed,}) {
   return _then(_ChatPageState(
 chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
 as String,messages: null == messages ? _self._messages : messages // ignore: cast_nullable_to_non_nullable
 as List<ChatMessage>,users: null == users ? _self._users : users // ignore: cast_nullable_to_non_nullable
-as List<UserData>,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as List<UserData>,chat: freezed == chat ? _self.chat : chat // ignore: cast_nullable_to_non_nullable
+as Chat?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ChatPageStatus,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as dynamic,
   ));
 }
 
+/// Create a copy of ChatPageState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ChatCopyWith<$Res>? get chat {
+    if (_self.chat == null) {
+    return null;
+  }
 
+  return $ChatCopyWith<$Res>(_self.chat!, (value) {
+    return _then(_self.copyWith(chat: value));
+  });
+}
 }
 
 // dart format on

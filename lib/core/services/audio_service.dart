@@ -5,22 +5,22 @@ class AudioService {
 
   Future<void> playAsset(String pathToSound , {
     PlayerMode? mode,
-    ReleaseMode releaseMode= .release,
+    ReleaseMode releaseMode= ReleaseMode.release,
   }) async {
     await _player.setReleaseMode(
       releaseMode,
     );
     await _player.play(
 
-      AssetSource(
-        pathToSound
-            .split(
-              'assets/',
-            )
-            .last,
+        AssetSource(
+          pathToSound
+              .split(
+            'assets/',
+          )
+              .last,
 
-      ),
-      mode: mode
+        ),
+        mode: mode
     );
   }
 

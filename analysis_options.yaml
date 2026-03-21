@@ -33,9 +33,6 @@ analyzer:
   plugins:
     - custom_lint
 
-  #  enable-experiment:
-  #    - dot-shorthands
-
   exclude:
     -"**/*.g.dart"
     -"**/*.freezed.dart"

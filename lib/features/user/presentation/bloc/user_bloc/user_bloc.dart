@@ -29,14 +29,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<_Reset>(_reset);
   }
 
-  void _init(
+  Future<void> _init(
     _Init event,
     Emitter<UserState> emit,
   ) async => await emit.forEach<UserData?>(
     _userRepository.userDataStream(
       event.uid,
     ),
-    onData: (user) {
+    onData: (UserData? user) {
       return state.copyWith(
         userData: user,
         status: user != null ? UserStatus.loaded : UserStatus.noData,

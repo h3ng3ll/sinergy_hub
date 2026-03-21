@@ -10,9 +10,10 @@ import '../../../../user/domain/usecases/get_users_use_case.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/usecases/get_chat_by_id_use_case.dart';
 import '../../../domain/usecases/get_last_messages_use_case.dart';
+import '../../../domain/usecases/listen_chat_by_id_use_case.dart';
 import '../../../domain/usecases/listen_chat_messages_use_case.dart';
 import '../../../domain/usecases/send_message_use_case.dart';
-import '../../bloc/chat_bloc/chat_bloc.dart';
+import '../../../domain/usecases/update_typing_info_use_case.dart';
 import '../../bloc/chat_page_bloc/chat_page_bloc.dart';
 import 'widgets/app_bar/chat_app_bar.dart';
 import 'widgets/build_chat_bottom/build_chat_bottom.dart';
@@ -43,18 +44,30 @@ class _ChatPageState extends State<ChatPage> {
           getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
           listenChatMessagesUseCase: getIt<ListenChatMessagesUseCase>(),
           getUsersUseCase: getIt<GetUsersUseCase>(),
-          getLastMessageUseCase: getIt<GetLastMessagesUseCase>(),
+          getLastMessageUseCase: getIt<ListenLastMessagesUseCase>(),
+          updateTypingInfoUseCase: getIt<UpdateTypingInfoUseCase>(),
+          listenChatByIdUseCase: getIt<ListenChatByIdUseCase>(),
         )..add(
           ChatPageEvent.init(),
         );
-
+    _textEditingController.addListener(
+      onTextUpdate,
+    );
     super.initState();
   }
 
   @override
   void dispose() {
+
+    _chatPageBloc.close();
     _textEditingController.dispose();
     super.dispose();
+  }
+
+  void onTextUpdate() {
+    _chatPageBloc.add(
+      ChatPageEvent.startTyping(),
+    );
   }
 
   void onSendMessage(BuildContext context) {
@@ -75,13 +88,6 @@ class _ChatPageState extends State<ChatPage> {
 
   void onTapUser() {}
 
-  void onTapVideoCall(String calleeId) {
-    CallPageRoute(
-      calleeId: calleeId,
-    ).push(
-      context,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,51 +95,40 @@ class _ChatPageState extends State<ChatPage> {
       value: _chatPageBloc,
       child: SafeArea(
         top: false,
-        child: Builder(
-          builder: (context) {
-            final chatBloc = context.watch<ChatBloc>();
-            // final authBloc = context.read<AuthBloc>();
+        child: BlocBuilder<ChatPageBloc, ChatPageState>(
+          builder: (context, chatPageState) {
+            if (chatPageState.isLoading) {
+              return LoadingDataWidget();
+            }
+            final Chat chat = chatPageState.chat!;
 
-            return BlocBuilder<ChatPageBloc, ChatPageState>(
-              builder: (context, chatPageState) {
-                if (chatPageState.isLoading) {
-                  return LoadingDataWidget();
-                }
-                final Chat chat = chatBloc.state.chats.firstWhere(
-                  (e) => e.chatId == widget.chatId,
-                );
+            /// Todo: refactor for grouped chats
+            final UserData chatterUser = chatPageState.users.first;
 
-                /// Todo: refactor for grouped chats
-                final UserData chatterUser = chatPageState.users.first;
+            return Scaffold(
+              appBar: ChatAppBar(
 
-                return Scaffold(
-                  appBar: ChatAppBar(
-                    onTapVideoCall: () => onTapVideoCall(
-                      chatterUser.uid,
+                onTapUser: onTapUser,
+                user: chatterUser,
+              ),
+              body: Column(
+                children: [
+                  Expanded(
+                    child: BuildChatCanvas(
+                      onReachToEnd: onReachToEndMessages,
+                      chat: chat,
+                      users: [chatterUser],
                     ),
-                    onTapUser: onTapUser,
-                    user: chatterUser,
                   ),
-                  body: Column(
-                    children: [
-                      Expanded(
-                        child: BuildChatCanvas(
-                          onReachToEnd: onReachToEndMessages,
-                          chat: chat,
-                          users: [chatterUser],
-                        ),
-                      ),
-                      BuildChatBottom(
-                        onSendMessage: () => onSendMessage(
-                          context,
-                        ),
-                        onAttachMedia: onAttachMedia,
-                        chatController: _textEditingController,
-                      ),
-                    ],
+                  BuildChatBottom(
+                    onSendMessage: () => onSendMessage(
+                      context,
+                    ),
+                    onAttachMedia: onAttachMedia,
+                    chatController: _textEditingController,
                   ),
-                );
-              },
+                ],
+              ),
             );
           },
         ),

@@ -11,7 +11,6 @@ part 'chat_info.freezed.dart';
 abstract class ChatInfo with _$ChatInfo {
   const factory ChatInfo({
     @Default('') String title,
-    @Default('') String lastMessage,
     String? cover,
     required ESpecialization specialization,
   }) = _ChatInfo;

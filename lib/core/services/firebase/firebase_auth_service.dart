@@ -1,13 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../utils/app_config.dart';
+
 class FirebaseAuthService {
 
-  FirebaseAuthService() {
-    _firebaseAuth.setSettings(
-      // appVerificationDisabledForTesting: true,
-      // forceRecaptchaFlow: true
-    );
-  }
+
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
@@ -17,6 +14,19 @@ class FirebaseAuthService {
 
   Stream<User?> get userStream => _firebaseAuth.userChanges();
 
+
+  Future<void> init () async {
+    if (AppConfig.isQA) {
+      await _firebaseAuth.useAuthEmulator(
+        AppConfig.emulatorAddress(),
+        AppConfig.authEmulatorPort,
+      );
+    }
+    _firebaseAuth.setSettings(
+      // appVerificationDisabledForTesting: true,
+      // forceRecaptchaFlow: true
+    );
+  }
   Future<UserCredential> signInAnonymously() async {
     final credentials = await _firebaseAuth.signInAnonymously();
     return credentials;

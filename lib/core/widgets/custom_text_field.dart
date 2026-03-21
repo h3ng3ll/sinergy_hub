@@ -45,6 +45,7 @@ class CustomTextField extends StatelessWidget {
   final ScrollController? scrollController;
   final ScrollPhysics? scrollPhysics;
   final bool? isDense;
+  final FocusNode? focusNode;
 
   CustomTextField({
     super.key,
@@ -86,6 +87,7 @@ class CustomTextField extends StatelessWidget {
     this.isDense,
     this.errorBorder,
     this.border,
+    this.focusNode,
   }) : borderRadius =
            borderRadius ??
            BorderRadius.circular(
@@ -154,6 +156,7 @@ class CustomTextField extends StatelessWidget {
           }).toList(),
         );
       },
+      focusNode: focusNode,
       decoration: InputDecoration(
         filled: filled ?? true,
         isDense: isDense,
@@ -201,7 +204,7 @@ class CustomTextField extends StatelessWidget {
             focusedBorder ??
             OutlineInputBorder(
               borderSide: BorderSide(
-                color:AppColors.darkOrchid.value,
+                color: AppColors.darkOrchid.value,
                 width: 0.5,
               ),
               borderRadius: borderRadius,

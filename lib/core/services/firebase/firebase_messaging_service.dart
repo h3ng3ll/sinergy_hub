@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../di/injection.dart';
 import '../local_notification_service.dart';
@@ -7,6 +9,8 @@ class FirebaseMessagingService {
   final LocalNotificationService _localNotificationService;
 
   late String fcmToken ;
+  static bool _isBackgroundHandlerInitialized = false;
+  
   FirebaseMessagingService({
     required LocalNotificationService localNotificationService,
     required FirebaseMessaging firebaseMessaging,
@@ -17,22 +21,28 @@ class FirebaseMessagingService {
     // Запрос разрешений на iOS
     await _firebaseMessaging.requestPermission();
 
-    // Получаем токен устройства
-    String? token = await _firebaseMessaging.getToken();
-    print(
-      'FCM device token: $token',
-    );
-    if(token != null) {
-      fcmToken = token;
+    if(Platform.isAndroid) {
+      // Получаем токен устройства
+      String? token = await _firebaseMessaging.getToken();
+      print(
+        'FCM device token: $token',
+      );
+      if(token != null) {
+        fcmToken = token;
+      }
     }
+
 
     // Сохрани его в backend (для отправки пушей)
 
     // Слушаем foreground сообщения
     FirebaseMessaging.onMessage.listen(_handleMessage);
 
-    // Слушаем background сообщения
-    FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+    // Слушаем background сообщения - регистрируем только один раз
+    if (!_isBackgroundHandlerInitialized) {
+      FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+      _isBackgroundHandlerInitialized = true;
+    }
   }
 
   void _handleMessage(RemoteMessage message) {
@@ -41,6 +51,7 @@ class FirebaseMessagingService {
       _localNotificationService.sendNotification(
         title: notification.title ?? 'New Notification',
         body: notification.body ?? '',
+        payload: message.data,
       );
     }
   }
@@ -53,6 +64,7 @@ class FirebaseMessagingService {
       await localService.sendNotification(
         title: notification.title ?? 'New Notification',
         body: notification.body ?? '',
+        payload: message.data,
       );
     }
   }

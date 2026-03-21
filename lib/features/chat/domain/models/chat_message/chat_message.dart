@@ -10,6 +10,7 @@ abstract class ChatMessage with _$ChatMessage {
     @Default('') String id,
     @Default('') String message,
     @Default('') String sentUid,
+    @Default(false) bool hasRead,
     // @Default(false) bool hasRead,
     required DateTime createdAt,
   }) = _ChatMessage;

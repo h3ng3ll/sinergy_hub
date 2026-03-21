@@ -6,10 +6,12 @@ import '../../../../../../core/utils/shader_painter.dart';
 
 class BuildAnimatedBackground extends StatefulWidget {
   final Widget child;
+  final BorderRadius? clipper;
 
   const BuildAnimatedBackground({
     super.key,
     required this.child,
+    this.clipper,
   });
 
   @override
@@ -53,7 +55,7 @@ class _BuildAnimatedBackgroundState extends State<BuildAnimatedBackground>
   @override
   Widget build(BuildContext context) {
     return ShaderBuilder(
-          (context, shader, child) {
+      (context, shader, child) {
         return CustomPaint(
           painter: ShaderPainter(
             repaint: _controller,
@@ -77,7 +79,10 @@ class _BuildAnimatedBackgroundState extends State<BuildAnimatedBackground>
         );
       },
       assetKey: AppShaders.ve,
-      child: widget.child,
+      child: ClipRRect(
+        borderRadius: widget.clipper ?? BorderRadius.zero,
+        child: widget.child,
+      ),
     );
   }
 }

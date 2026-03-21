@@ -5,8 +5,11 @@ import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../user/domain/repositories/i_user_repository.dart';
 import '../../user/domain/usecases/update_user_profiler_use_case.dart';
 import '../data/repositories/onboard_survey_firebase_repository.dart';
+import '../data/repositories/skills_local_repository.dart';
 import '../domain/repositories/i_onboard_survey_repository.dart';
+import '../domain/repositories/i_skill_repository.dart';
 import '../domain/use_cases/get_completion_status_use_case.dart';
+import '../domain/use_cases/get_skills_use_case.dart';
 import '../domain/use_cases/set_completion_status_use_case.dart';
 
 void initOnboardSurveyFeature(GetIt getIt) {
@@ -14,6 +17,10 @@ void initOnboardSurveyFeature(GetIt getIt) {
     () => OnboardSurveyFirebaseRepository(
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
     ),
+  );
+
+  getIt.registerLazySingleton<ISkillRepository>(
+    () => SkillsLocalRepository(),
   );
 
   getIt.registerFactory<SetCompletionStatusUseCase>(
@@ -32,6 +39,11 @@ void initOnboardSurveyFeature(GetIt getIt) {
     () => UpdateUserProfilerUseCase(
       authRepository: getIt<IAuthRepository>(),
       userRepository: getIt<IUserRepository>(),
+    ),
+  );
+  getIt.registerFactory<GetSkillsUseCase>(
+    () => GetSkillsUseCase(
+      skillRepository: getIt<ISkillRepository>(),
     ),
   );
 }

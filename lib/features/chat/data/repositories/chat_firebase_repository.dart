@@ -1,7 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../domain/models/chat/chat.dart';
+import '../../domain/models/chat_config/chat_config.dart';
+import '../../domain/models/chat_pg_state.dart/chat_pg_state.dart';
+import '../../domain/models/e_chat_filter.dart';
 import '../../domain/repositories/i_chat_repository.dart';
+import '../exception/chat_no_data_exception.dart';
+import '../models/chat_config_dto/chat_config_dto.dart';
 import '../models/chat_dto/chat_dto.dart';
+import '../models/chat_dto_pg_state.dart/chat_dto_pg_state.dart';
 
 class ChatFirebaseRepository implements IChatRepository {
   final FirebaseFirestoreService _firebaseFirestoreService;
@@ -10,17 +18,22 @@ class ChatFirebaseRepository implements IChatRepository {
     required FirebaseFirestoreService firebaseFirestoreService,
   }) : _firebaseFirestoreService = firebaseFirestoreService;
 
+  ColRef get _chats => _firebaseFirestoreService.chats();
+
   @override
-  Future<Chat> create(Chat chat) async {
+  Future<Chat> create(
+    Chat chat,
+    String uid,
+  ) async {
     final String id = _firebaseFirestoreService.chats().doc().id;
-    await _firebaseFirestoreService
-        .chats()
+    await _chats
         .doc(
           id,
         )
         .set(
           ChatDto.fromDomain(
                 chat,
+                uid,
               )
               .copyWith(
                 chatId: id,
@@ -33,8 +46,8 @@ class ChatFirebaseRepository implements IChatRepository {
   }
 
   @override
-  Stream<List<ChatDto>> getStream(String uid) {
-    return _firebaseFirestoreService.chats().snapshots().map(
+  Stream<List<Chat>> getStream(String uid) {
+    return _chats.snapshots().map(
       (e) => e.docs
           .where(
             (e) {
@@ -49,19 +62,18 @@ class ChatFirebaseRepository implements IChatRepository {
           .map(
             (doc) => ChatDto.fromJson(
               doc.data(),
-            ),
+            ).toDomain(uid: uid),
           )
           .toList(),
     );
   }
 
   @override
-  Stream<ChatDto> listenByIdStream({
+  Stream<Chat> listenByIdStream({
     required String uid,
     required String chatId,
   }) {
-    return _firebaseFirestoreService
-        .chats()
+    return _chats
         .doc(
           chatId,
         )
@@ -71,7 +83,9 @@ class ChatFirebaseRepository implements IChatRepository {
             final dto = ChatDto.fromJson(
               e.data()!,
             );
-            return dto;
+            return dto.toDomain(
+              uid: uid,
+            );
           },
         );
   }
@@ -80,8 +94,7 @@ class ChatFirebaseRepository implements IChatRepository {
   Future<void> update({
     required ChatDto chat,
   }) async {
-    return await _firebaseFirestoreService
-        .chats()
+    return await _chats
         .doc(
           chat.chatId,
         )
@@ -91,26 +104,230 @@ class ChatFirebaseRepository implements IChatRepository {
   }
 
   @override
-  Future<List<Chat>> search({required String uid, required String query}) {
-    // TODO: implement search
-    throw UnimplementedError();
+  Future<ChatPgState> get({
+    required String uid,
+    required ChatPgState chatState,
+    String? query,
+    EChatFilter filter = EChatFilter.all,
+  }) async {
+    List<ChatDto> chats = [];
+
+    Query queryRef = _chats.where(
+      'participants',
+      arrayContains: uid,
+    );
+
+    queryRef = queryRef
+        .limit(
+          chatState.pageSize,
+        )
+        .orderBy(
+          'lastMessageSent',
+          descending: true,
+        );
+    if (chatState.lastDocument != null) {
+      queryRef = queryRef.startAfterDocument(
+        chatState.lastDocument!,
+      );
+    }
+    final data = await queryRef.get();
+
+    chats = data.docs
+        .map(
+          (doc) {
+            if (doc.data() == null) {
+              throw ChatNoDataException();
+            }
+            return ChatDto.fromJson(
+              doc.data() as Map<String, dynamic>,
+            );
+          },
+        )
+        .where(
+          (e) {
+            if (filter == EChatFilter.favorite) {
+              return e.config.favorite.contains(
+                uid,
+              );
+            } else if (filter == EChatFilter.archived) {
+              return e.config.archived.contains(
+                uid,
+              );
+            }
+            return true;
+          },
+        )
+        .toList();
+
+    // 4. Если query есть, фильтруем на клиенте по searchKeywords
+    if (query != null && query.isNotEmpty) {
+      chats = chats.where(
+        (chat) {
+          final keywords = chat.searchKeywords
+              .map(
+                (k) => k.toLowerCase(),
+              )
+              .toList();
+
+          if (keywords.isEmpty) return false;
+
+          return keywords.contains(
+            query.toLowerCase(),
+          );
+        },
+      ).toList();
+    }
+    final modelChats = chats
+        .map(
+          (e) => e.toDomain(
+            uid: uid,
+          ),
+        )
+        .toList();
+
+    return ChatPgState(
+      pageSize: chatState.pageSize,
+      chats: [
+        ...chatState.chats,
+        ...modelChats,
+      ],
+      hasMore: data.docs.isNotEmpty,
+      lastDocument: data.docs.isEmpty ? chatState.lastDocument : data.docs.last,
+    );
   }
 
   @override
-  Future<ChatDto> getById({
+  Future<Chat> getById({
     required String chatId,
+    required String uid,
   }) async {
-
-    final chatRow = await _firebaseFirestoreService
-        .chats()
+    final chatRow = await _chats
         .doc(
           chatId,
         )
         .get();
 
-    final chat = ChatDto.fromJson(
-      chatRow.data()!,
-    );
+    final chat =
+        ChatDto.fromJson(
+          chatRow.data()!,
+        ).toDomain(
+          uid: uid,
+        );
     return chat;
+  }
+
+  @override
+  Future<Chat?> chatByParticipates({
+    required String uid,
+    required List<String> participates,
+  }) async {
+    final chatRow = await _chats
+        .where(
+          'participants',
+          isEqualTo: participates,
+        )
+        .limit(
+          1,
+        )
+        .get();
+    if (chatRow.docs.isEmpty) {
+      return null;
+    }
+    final chat =
+        ChatDto.fromJson(
+          chatRow.docs.first.data(),
+        ).toDomain(
+          uid: uid,
+        );
+    return chat;
+  }
+
+  @override
+  Future<void> updateConfig({
+    required String uid,
+    required String chatId,
+    required ChatConfig config,
+  }) async {
+    final updates = <String, dynamic>{};
+
+    updates['config.favorite'] = config.favorite
+        ? FieldValue.arrayUnion([uid])
+        : FieldValue.arrayRemove([uid]);
+
+    updates['config.archived'] = config.archived
+        ? FieldValue.arrayUnion([uid])
+        : FieldValue.arrayRemove([uid]);
+
+    await _chats
+        .doc(
+          chatId,
+        )
+        .update(
+          updates,
+        );
+  }
+
+  @override
+  Future<ChatConfig> getConfig({
+    required String uid,
+    required String chatId,
+  }) async {
+    final data = await _chats
+        .doc(
+          chatId,
+        )
+        .get();
+    if (data.data() == null) {
+      return ChatConfig();
+    }
+    final config = ChatConfigDto.fromJson(
+      data.data()!['config'],
+    );
+    return config.toDomain(
+      uid,
+    );
+  }
+
+  @override
+  Stream<Chat> chatUpdates({
+    required String uid,
+  }) async* {
+    await for (final snapshot
+        in _chats
+            .where(
+              'participants',
+              arrayContains: uid,
+            )
+            .snapshots()) {
+      for (final change in snapshot.docChanges) {
+        if (change.type == DocumentChangeType.modified ||
+            change.type == DocumentChangeType.added) {
+          yield ChatDto.fromJson(
+            change.doc.data()!,
+          ).toDomain(
+            uid: uid,
+          );
+        }
+      }
+    }
+  }
+
+  @override
+  Future<void> updateTypeInfo({
+    required String uid,
+    required String chatId,
+    required bool isTyping,
+  }) async {
+    _chats
+        .doc(
+          chatId,
+        )
+        .update(
+          {
+            'typingUsers': isTyping
+                ? FieldValue.arrayUnion([uid])
+                : FieldValue.arrayRemove([uid]),
+          },
+        );
   }
 }

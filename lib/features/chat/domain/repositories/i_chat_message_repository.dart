@@ -7,6 +7,7 @@ abstract class IChatMessageRepository {
     required ChatMessage message,
   });
   Stream<List<ChatMessage>>  getLastMessagesStream({
+    required String uid,
     required String chatId,
   });
 }

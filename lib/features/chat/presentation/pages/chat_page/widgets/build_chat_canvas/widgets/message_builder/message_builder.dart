@@ -44,46 +44,54 @@ class _MessageBuilderState extends State<MessageBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatPageBloc, ChatPageState>(
-      builder: (context, state) {
-        if (state.status == ChatPageStatus.loading) {
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, userState) {
+        if (userState.status == UserStatus.loading) {
           return LoadingDataWidget();
         }
-        if (state.status == ChatPageStatus.initial && state.messages.isEmpty) {
-          return BuildEmptyChatMessages();
-        }
-        final uid = context.read<AuthBloc>().state.uid;
-        final curUser = context.read<UserBloc>().state.userData!;
+        return BlocBuilder<ChatPageBloc, ChatPageState>(
+          builder: (context, state) {
+            if (state.status == ChatPageStatus.loading) {
+              return LoadingDataWidget();
+            }
+            if (state.status == ChatPageStatus.initial &&
+                state.messages.isEmpty) {
+              return BuildEmptyChatMessages();
+            }
+            final uid = context.read<AuthBloc>().state.uid;
+            final curUser = userState.userData!;
 
-        final elements = List<ChatMessage>.from(
-          state.messages,
-        );
-
-        return GroupedListView<ChatMessage, DateTime>(
-          elements: elements,
-          reverse: true,
-          order: GroupedListOrder.DESC,
-          groupBy: (message) => DateTime(
-            message.createdAt.year,
-            message.createdAt.month,
-            message.createdAt.day,
-          ),
-          controller: _scrollController,
-          groupSeparatorBuilder: (time) {
-            return BuildChatSeparator(
-              time: time,
+            final elements = List<ChatMessage>.from(
+              state.messages,
             );
-          },
-          indexedItemBuilder: (context, message, index) {
-            final isSentByCurUser = message.sentUid == uid;
-            return BuildMessage(
-              message: message,
-              user: isSentByCurUser
-                  ? curUser
-                  : state.users.firstWhere(
-                      (e) => e.uid == message.sentUid,
-                    ),
-              isSentByCurUser: isSentByCurUser,
+
+            return GroupedListView<ChatMessage, DateTime>(
+              elements: elements,
+              reverse: true,
+              order: GroupedListOrder.DESC,
+              groupBy: (message) => DateTime(
+                message.createdAt.year,
+                message.createdAt.month,
+                message.createdAt.day,
+              ),
+              controller: _scrollController,
+              groupSeparatorBuilder: (time) {
+                return BuildChatSeparator(
+                  time: time,
+                );
+              },
+              indexedItemBuilder: (context, message, index) {
+                final isSentByCurUser = message.sentUid == uid;
+                return BuildMessage(
+                  message: message,
+                  user: isSentByCurUser
+                      ? curUser
+                      : state.users.firstWhere(
+                          (e) => e.uid == message.sentUid,
+                        ),
+                  isSentByCurUser: isSentByCurUser,
+                );
+              },
             );
           },
         );
