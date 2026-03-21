@@ -4,8 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../features/auth/di/auth_injection.dart';
-import '../../features/auth/domain/services/i_webrtc_service.dart';
-import '../../features/calls/domain/di/calls_injection.dart';
 import '../../features/chat/di/chat_injection.dart';
 import '../../features/home/domain/di/home_injection.dart';
 import '../../features/matches/di/matches_injection.dart';
@@ -21,7 +19,6 @@ import '../services/firebase/firebase_messaging_service.dart';
 import '../services/firebase/firebase_storage_service.dart';
 import '../services/local_notification_service.dart';
 import '../services/permission_requester_service.dart';
-import '../services/webrtc_service.dart';
 
 final getIt = GetIt.instance;
 
@@ -49,9 +46,7 @@ Future<void> initDependencies() async {
       firebaseFunctions: getIt<FirebaseFunctions>(),
     ),
   );
-  getIt.registerLazySingleton<IWebRtcService>(
-        () => WebrtcService(),
-  );
+
 
   // Auth feature
 
@@ -78,9 +73,7 @@ Future<void> initDependencies() async {
   initNotificationFeature(
     getIt,
   );
-  initCallsFeature(
-    getIt,
-  );
+
   initUserChatFeature(
     getIt,
   );

@@ -88,13 +88,6 @@ class _ChatPageState extends State<ChatPage> {
 
   void onTapUser() {}
 
-  void onTapVideoCall(String calleeId) {
-    CallPageRoute(
-      calleeId: calleeId,
-    ).push(
-      context,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,9 +107,7 @@ class _ChatPageState extends State<ChatPage> {
 
             return Scaffold(
               appBar: ChatAppBar(
-                onTapVideoCall: () => onTapVideoCall(
-                  chatterUser.uid,
-                ),
+
                 onTapUser: onTapUser,
                 user: chatterUser,
               ),

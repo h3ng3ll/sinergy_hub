@@ -90,10 +90,6 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
               path: '/notification',
               factory: _$NotificationPageRoute._fromState,
             ),
-            GoRouteData.$route(
-              path: '/call',
-              factory: _$CallPageRoute._fromState,
-            ),
           ],
         ),
       ],
@@ -363,37 +359,6 @@ mixin _$NotificationPageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/notification');
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-mixin _$CallPageRoute on GoRouteData {
-  static CallPageRoute _fromState(GoRouterState state) => CallPageRoute(
-    calleeId: state.uri.queryParameters['callee-id'],
-    callId: state.uri.queryParameters['call-id'],
-  );
-
-  CallPageRoute get _self => this as CallPageRoute;
-
-  @override
-  String get location => GoRouteData.$location(
-    '/call',
-    queryParams: {
-      if (_self.calleeId != null) 'callee-id': _self.calleeId,
-      if (_self.callId != null) 'call-id': _self.callId,
-    },
-  );
 
   @override
   void go(BuildContext context) => context.go(location);

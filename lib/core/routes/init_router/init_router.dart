@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../features/auth/presentation/pages/authorization_page/authorization_page.dart';
 import '../../../features/auth/presentation/pages/register_page/register_page.dart';
-import '../../../features/calls/presentation/pages/call_page/call_page.dart';
 import '../../../features/chat/presentation/pages/chat_page/chat_page.dart';
 import '../../../features/home/presentation/home_bottom_bar/home_bottom_bar.dart';
 import '../../../features/home/presentation/home_root/home_root.dart';
@@ -94,9 +93,6 @@ final GoRouter initRouter = GoRouter(
             ),
             TypedGoRoute<NotificationPageRoute>(
               path: '/notification',
-            ),
-            TypedGoRoute<CallPageRoute>(
-              path: '/call',
             ),
           ],
         ),
@@ -308,25 +304,6 @@ class EditProfilePageRoute extends GoRouteData with _$EditProfilePageRoute {
   }
 }
 
-class CallPageRoute extends GoRouteData with _$CallPageRoute {
-  final String? calleeId;
-  final String? callId;
-
-  CallPageRoute({
-    this.calleeId,
-    this.callId,
-  });
-
-  @override
-  Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return GoRouterPageBuilder.pageBuilder(
-      CallPage(
-        calleeId: calleeId,
-        callId: callId,
-      ),
-    );
-  }
-}
 
 class GoRouterPageBuilder {
   static CustomTransitionPage pageBuilder(Widget child) {
