@@ -31,6 +31,13 @@ workflows:
       - name: Create firebase options File
         script:  echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
 
+      - name: Create .env file
+        script: |
+          cat >> "$CM_BUILD_DIR/.env" <<EOF
+          SECRET_KEY=$CM_SECRET_KEY
+          FIREBASE_WEB_PUSH_CERTIFICATE=$FIREBASE_WEB_PUSH_CERTIFICATE
+          EOF
+
       - name: Build web
         script: flutter build web --release
 
