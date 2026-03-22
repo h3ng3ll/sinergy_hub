@@ -16,13 +16,11 @@ class FirebaseAuthRepository extends IAuthRepository {
   final GoogleSignInService _googleSignInService;
 
   FirebaseAuthRepository({
-    // required FirebaseAuthService firebaseAuthService,
     required FirebaseAuth auth,
     required GoogleSignIn googleSignIn,
     required FirebaseFirestoreService firebaseFirestoreService,
     required GoogleSignInService googleSignInService,
-  }) : // _firebaseAuthService = firebaseAuthService,
-       _auth = auth,
+  }) : _auth = auth,
        _googleSignInService = googleSignInService,
        _googleSignIn = googleSignIn {
     if (kIsWeb) {
@@ -55,38 +53,6 @@ class FirebaseAuthRepository extends IAuthRepository {
         }
       },
     );
-    // _googleSignIn.authenticationEvents.listen(
-    //   (event) => listenAuthEvents(
-    //     event,
-    //   ),
-    //   onError: (e) {
-    //     print(
-    //       e.toString(),
-    //     );
-    //   },
-    // );
-  }
-
-  Future<void> listenAuthEvents(
-    GoogleSignInAuthenticationEvent event,
-  ) async {
-    // final GoogleSignIn
-    final GoogleSignInAccount? user = switch (event) {
-      GoogleSignInAuthenticationEventSignIn() => event.user,
-      GoogleSignInAuthenticationEventSignOut() => null,
-    };
-    if (user != null) {
-      // Retrieve the authentication tokens (synchronous getter in v7.0.0+)
-      final GoogleSignInAuthentication auth = user.authentication;
-
-      // **CRITICAL FIX: Retrieve and Store the ID Token**
-      final String? token = auth.idToken;
-      if (token != null) {
-        _signInWithCredentials(
-          token,
-        );
-      }
-    }
   }
 
   Future<UserCredential> _signInWithCredentials(String idToken) async {

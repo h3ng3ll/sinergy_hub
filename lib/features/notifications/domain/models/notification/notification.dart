@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../../core/utils/converters/timestamp_convertor.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../matches/presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 
@@ -16,7 +18,7 @@ sealed class Notification with _$Notification {
     @Default('') String title,
     @Default('') String description,
     @Default(false) bool hasRead,
-    required DateTime createdAt,
+    @TimestampConverter() required DateTime createdAt,
   }) = _Notification;
 
   factory Notification.fromJson(Map<String, Object?> json) =>

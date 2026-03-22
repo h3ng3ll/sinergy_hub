@@ -4,7 +4,7 @@ workflows:
     environment:
       flutter: stable
       vars:
-        FIREBASE_PROJECT_ID: your-project-id
+        FIREBASE_PROJECT_ID: synergyhub-a3e1b
 
     scripts:
       - name: Get packages
@@ -22,3 +22,10 @@ workflows:
             --only hosting \
             --project $FIREBASE_PROJECT_ID \
             --token $FIREBASE_TOKEN
+
+  triggering:
+    events:
+      - push
+    branch_patterns:
+      - pattern: main
+        include: true

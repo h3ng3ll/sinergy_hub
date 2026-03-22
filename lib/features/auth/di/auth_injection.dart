@@ -13,7 +13,7 @@ void initAuthFeature(GetIt getIt) {
   getIt.registerLazySingleton<IAuthRepository>(
     () => FirebaseAuthRepository(
       auth: getIt<FirebaseAuth>(),
-      googleSignIn: GoogleSignIn.instance,
+      googleSignIn: getIt<GoogleSignIn>(),
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
       googleSignInService: getIt<GoogleSignInService>(),
     ),

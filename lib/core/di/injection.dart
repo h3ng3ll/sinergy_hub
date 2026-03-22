@@ -2,6 +2,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../features/auth/di/auth_injection.dart';
 import '../../features/chat/di/chat_injection.dart';
@@ -35,6 +36,7 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => FirebaseStorageService());
   getIt.registerLazySingleton(() => LocalNotificationService());
   getIt.registerLazySingleton(() => AudioService());
+  getIt.registerLazySingleton(() => GoogleSignIn.instance);
   getIt.registerLazySingleton(
     () => GoogleSignInService.instance,
   );

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Notification {
 
- String get id; String get uid; String get deviceToken; String get title; String get description; bool get hasRead; DateTime get createdAt;
+ String get id; String get uid; String get deviceToken; String get title; String get description; bool get hasRead;@TimestampConverter() DateTime get createdAt;
 /// Create a copy of Notification
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $NotificationCopyWith<$Res>  {
   factory $NotificationCopyWith(Notification value, $Res Function(Notification) _then) = _$NotificationCopyWithImpl;
 @useResult
 $Res call({
- String id, String uid, String deviceToken, String title, String description, bool hasRead, DateTime createdAt
+ String id, String uid, String deviceToken, String title, String description, bool hasRead,@TimestampConverter() DateTime createdAt
 });
 
 
@@ -156,7 +156,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String uid,  String deviceToken,  String title,  String description,  bool hasRead,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String uid,  String deviceToken,  String title,  String description,  bool hasRead, @TimestampConverter()  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Notification() when $default != null:
 return $default(_that.id,_that.uid,_that.deviceToken,_that.title,_that.description,_that.hasRead,_that.createdAt);case _:
@@ -177,7 +177,7 @@ return $default(_that.id,_that.uid,_that.deviceToken,_that.title,_that.descripti
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String uid,  String deviceToken,  String title,  String description,  bool hasRead,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String uid,  String deviceToken,  String title,  String description,  bool hasRead, @TimestampConverter()  DateTime createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Notification():
 return $default(_that.id,_that.uid,_that.deviceToken,_that.title,_that.description,_that.hasRead,_that.createdAt);}
@@ -194,7 +194,7 @@ return $default(_that.id,_that.uid,_that.deviceToken,_that.title,_that.descripti
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String uid,  String deviceToken,  String title,  String description,  bool hasRead,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String uid,  String deviceToken,  String title,  String description,  bool hasRead, @TimestampConverter()  DateTime createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Notification() when $default != null:
 return $default(_that.id,_that.uid,_that.deviceToken,_that.title,_that.description,_that.hasRead,_that.createdAt);case _:
@@ -209,7 +209,7 @@ return $default(_that.id,_that.uid,_that.deviceToken,_that.title,_that.descripti
 @JsonSerializable()
 
 class _Notification implements Notification {
-  const _Notification({this.id = '', this.uid = '', this.deviceToken = '', this.title = '', this.description = '', this.hasRead = false, required this.createdAt});
+  const _Notification({this.id = '', this.uid = '', this.deviceToken = '', this.title = '', this.description = '', this.hasRead = false, @TimestampConverter() required this.createdAt});
   factory _Notification.fromJson(Map<String, dynamic> json) => _$NotificationFromJson(json);
 
 @override@JsonKey() final  String id;
@@ -218,7 +218,7 @@ class _Notification implements Notification {
 @override@JsonKey() final  String title;
 @override@JsonKey() final  String description;
 @override@JsonKey() final  bool hasRead;
-@override final  DateTime createdAt;
+@override@TimestampConverter() final  DateTime createdAt;
 
 /// Create a copy of Notification
 /// with the given fields replaced by the non-null parameter values.
@@ -253,7 +253,7 @@ abstract mixin class _$NotificationCopyWith<$Res> implements $NotificationCopyWi
   factory _$NotificationCopyWith(_Notification value, $Res Function(_Notification) _then) = __$NotificationCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String uid, String deviceToken, String title, String description, bool hasRead, DateTime createdAt
+ String id, String uid, String deviceToken, String title, String description, bool hasRead,@TimestampConverter() DateTime createdAt
 });
 
 

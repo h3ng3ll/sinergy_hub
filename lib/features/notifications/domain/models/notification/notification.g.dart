@@ -14,7 +14,9 @@ _Notification _$NotificationFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String? ?? '',
       description: json['description'] as String? ?? '',
       hasRead: json['hasRead'] as bool? ?? false,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: const TimestampConverter().fromJson(
+        json['createdAt'] as Timestamp,
+      ),
     );
 
 Map<String, dynamic> _$NotificationToJson(_Notification instance) =>
@@ -25,5 +27,5 @@ Map<String, dynamic> _$NotificationToJson(_Notification instance) =>
       'title': instance.title,
       'description': instance.description,
       'hasRead': instance.hasRead,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'createdAt': const TimestampConverter().toJson(instance.createdAt),
     };
