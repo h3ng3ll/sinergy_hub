@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../core/utils/extensions/bloc_ext.dart';
 import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
-import '../../../../user/domain/usecases/get_user_data_use_case.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/chat_pg_state.dart/chat_pg_state.dart';
 import '../../../domain/models/e_chat_filter.dart';

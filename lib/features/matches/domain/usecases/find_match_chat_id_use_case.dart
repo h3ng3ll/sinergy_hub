@@ -1,10 +1,7 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../../../chat/domain/exception/no_found_chat_exception.dart';
 import '../../../chat/domain/repositories/i_chat_repository.dart';
-import '../../../user/domain/models/users_data_pg_state/users_data_pg_state.dart';
-import '../../../user/domain/repositories/i_user_repository.dart';
-import '../models/matches_filter/matches_filter.dart';
-import 'get_excluded_matches_use_case.dart';
+
 
 class LookForMatchesUseCase {
   final IAuthRepository _authRepository;

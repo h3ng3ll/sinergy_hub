@@ -9,7 +9,7 @@ typedef QuerySnap = QuerySnapshot<Map<String, dynamic>>;
 typedef ColRef = CollectionReference<Map<String, dynamic>>;
 
 class FirebaseFirestoreService {
-  final int _batchLimit = 500;
+  // final int _batchLimit = 500;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   Future<void> init() async {
@@ -119,42 +119,4 @@ class FirebaseFirestoreService {
 
   WriteBatch batch() => _firebaseFirestore.batch();
 
-  // Query pagination({
-  //   required ColRef ref,
-  //   required Pageable pageable,
-  // }) {
-  //   Query query = ref
-  //       .sk limit(
-  //         pageable.pageSize,
-  //       );
-  //
-  //   if (lastDoc != null) {
-  //     query = query.startAfterDocument(
-  //       lastDoc,
-  //     );
-  //   }
-  //   return query;
-  // }
-
-  ColRef _subscriptionCol(
-    String uid,
-  ) =>
-      userDocument(
-        uid,
-      ).collection(
-        'subscription',
-      );
-
-  DocRef get _subscriptionDoc => _firebaseFirestore
-      .collection(
-        'app',
-      )
-      .doc(
-        'subscriptions',
-      );
-
-  final _keywords = 'keywords';
-  final _totalAudioRecordsDuration = 'total_audio_records_duration';
-
-  /// End ref
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
 
@@ -16,7 +15,6 @@ class BuildUserTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

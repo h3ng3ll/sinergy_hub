@@ -12,7 +12,6 @@ import '../../../../user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import '../../../domain/models/matches_filter/matches_filter.dart';
 import 'widgets/experience_level_section.dart';
 import 'widgets/filter_header.dart';
-import 'widgets/skills_section.dart';
 import 'widgets/specialization_section.dart';
 
 /// Matches filters modal bottom sheet widget.
@@ -185,7 +184,6 @@ class _ApplyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = AppTextTheme.of(context);
 
     return Center(
       child: PrimaryBtn(

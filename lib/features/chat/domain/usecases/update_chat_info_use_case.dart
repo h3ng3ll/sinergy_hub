@@ -1,6 +1,4 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
-import '../../../user/domain/repositories/i_user_repository.dart';
-import '../../data/models/chat_dto/chat_dto.dart';
 import '../models/chat/chat.dart';
 import '../repositories/i_chat_repository.dart';
 

@@ -51,7 +51,6 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
-    final textTheme = AppTextTheme.of(context);
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {

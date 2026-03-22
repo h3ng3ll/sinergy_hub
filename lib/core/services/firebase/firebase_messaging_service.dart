@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -22,16 +21,15 @@ class FirebaseMessagingService {
   }) : _localNotificationService = localNotificationService,
        _firebaseMessaging = firebaseMessaging;
 
-  void _saveToken () {
-
-  }
   Future<void> init() async {
     // Запрос разрешений на iOS
     await _firebaseMessaging.requestPermission();
 
     if (!kIsWeb) {
       String? token = await _firebaseMessaging.getToken();
-      print('FCM device token: $token');
+      if (kDebugMode) {
+        print('FCM device token: $token');
+      }
 
       if (token != null) {
         fcmToken = token;
@@ -47,7 +45,9 @@ class FirebaseMessagingService {
         vapidKey: dotenv.env['FIREBASE_WEB_PUSH_CERTIFICATE'],
       );
 
-      print('FCM WEB token: $token');
+      if (kDebugMode) {
+        print('FCM WEB token: $token');
+      }
 
       if (token != null) {
         fcmToken = token;

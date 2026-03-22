@@ -11,7 +11,7 @@ abstract class AppThemeData {
     useMaterial3: true,
     scaffoldBackgroundColor: const Color(0xffFDFDFD),
     appBarTheme: const AppBarTheme(
-      color: Colors.transparent,
+      backgroundColor: Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: Color(0xff1C1C1C)),
     ),
@@ -42,7 +42,7 @@ abstract class AppThemeData {
     useMaterial3: false,
     scaffoldBackgroundColor: const Color(0xff1C1C1C),
     appBarTheme: const AppBarTheme(
-      color: Color(0xff1C1C1C),
+      backgroundColor: Color(0xff1C1C1C),
       iconTheme: IconThemeData(color: Color(0xffFDFDFD)),
     ),
     textSelectionTheme: const TextSelectionThemeData(

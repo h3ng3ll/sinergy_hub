@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 
-import '../../../../../../core/resources/text/app_text_theme.dart';
+
 import '../../../../../onboard_survey/domain/models/skill/skill.dart';
 import '../../../tabs/profile_tab/widgets/build_skills_n_expertise/build_skill_item.dart';
-import '../../bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
-import '../build_grouped_input.dart';
 import '../../../../../../core/widgets/inputs/skill_input.dart';
-import 'build_selected_skill_item.dart';
 
 class BuildSkillsSection extends StatelessWidget {
   final Function(String) onSubmitSkill;
@@ -31,7 +26,6 @@ class BuildSkillsSection extends StatelessWidget {
     TextEditingController? autoController;
     FocusNode? focusNode;
 
-    final textTheme = AppTextTheme.of(context);
     return Column(
       spacing: 15,
       crossAxisAlignment: CrossAxisAlignment.start,

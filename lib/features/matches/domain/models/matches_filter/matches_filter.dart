@@ -4,8 +4,6 @@ import '../../../../../core/services/ui_message_service.dart';
 import '../../../../onboard_survey/domain/models/experience/experience.dart';
 import '../../../../onboard_survey/domain/models/skill/skill.dart';
 import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
-import '../../../../user/domain/models/user_data/user_data.dart';
-import '../../../presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 
 part 'matches_filter.g.dart';
 

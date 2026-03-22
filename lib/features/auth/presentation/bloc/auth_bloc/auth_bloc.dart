@@ -31,6 +31,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _authRepository.watchUser(),
       onData: (User? user) {
         return state.copyWith(
+          status: user == null ? AuthStatus.logout : AuthStatus.authorized,
           user: user,
         );
       },
@@ -99,18 +100,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
-      emit(
-        state.copyWith(
-          status: AuthStatus.loading,
-        ),
-      );
       await _authRepository.signOut();
-
-      emit(
-        state.copyWith(
-          status: AuthStatus.logout,
-        ),
-      );
     } catch (e) {
       emit(
         state.copyWith(

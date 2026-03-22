@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../utils/app_config.dart';
 
@@ -21,6 +22,9 @@ class FirebaseAuthService {
         AppConfig.emulatorAddress(),
         AppConfig.authEmulatorPort,
       );
+    }
+    if(kIsWeb) {
+      // _firebaseAuth
     }
     _firebaseAuth.setSettings(
       // appVerificationDisabledForTesting: true,

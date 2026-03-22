@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../gen/assets.gen.dart';
 import '../resources/colors/app_color_scheme.dart';
-import '../resources/colors/app_colors.dart';
 
 class BuildImage extends StatelessWidget {
   final Uint8List? cacheImg;

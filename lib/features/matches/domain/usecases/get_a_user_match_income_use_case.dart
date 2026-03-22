@@ -1,5 +1,4 @@
 import '../../data/models/matches_dto/matches_dto.dart';
-import '../../presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../../user/domain/repositories/i_user_repository.dart';
 import '../models/user_match/matches.dart';
 import '../repositories/i_matches_repository.dart';

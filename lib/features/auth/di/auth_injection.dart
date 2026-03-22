@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../core/services/firebase/firebase_firestore_service.dart';
+import '../../../core/services/google_sign_in_service/google_sign_in_service.dart';
 import '../../user/domain/repositories/i_user_repository.dart';
 import '../data/repositories/auth_repository/firebase_auth_repository.dart';
 import '../domain/repostories/i_auth_repository.dart';
@@ -14,6 +15,7 @@ void initAuthFeature(GetIt getIt) {
       auth: getIt<FirebaseAuth>(),
       googleSignIn: GoogleSignIn.instance,
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
+      googleSignInService: getIt<GoogleSignInService>(),
     ),
   );
 

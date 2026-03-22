@@ -12,6 +12,7 @@ import 'core/routes/init_router/init_router.dart';
 import 'core/services/firebase/firebase_auth_service.dart';
 import 'core/services/firebase/firebase_firestore_service.dart';
 import 'core/services/firebase/firebase_messaging_service.dart';
+import 'core/services/google_sign_in_service/google_sign_in_service.dart';
 import 'core/services/local_notification_service.dart';
 import 'features/auth/domain/repostories/i_auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
@@ -48,6 +49,7 @@ void main() async {
   await getIt<FirebaseFirestoreService>().init();
   await getIt<LocalNotificationService>().init();
   await getIt<FirebaseMessagingService>().init();
+  await getIt<GoogleSignInService>().init();
 
   Bloc.observer = AppObserver.instance();
 

@@ -17,6 +17,7 @@ import '../services/firebase/firebase_firestore_service.dart';
 import '../services/firebase/firebase_functions_service.dart';
 import '../services/firebase/firebase_messaging_service.dart';
 import '../services/firebase/firebase_storage_service.dart';
+import '../services/google_sign_in_service/google_sign_in_service.dart';
 import '../services/local_notification_service.dart';
 import '../services/permission_requester_service.dart';
 
@@ -34,19 +35,21 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => FirebaseStorageService());
   getIt.registerLazySingleton(() => LocalNotificationService());
   getIt.registerLazySingleton(() => AudioService());
+  getIt.registerLazySingleton(
+    () => GoogleSignInService.instance,
+  );
 
   getIt.registerLazySingleton(
-        () => FirebaseMessagingService(
+    () => FirebaseMessagingService(
       localNotificationService: getIt<LocalNotificationService>(),
       firebaseMessaging: getIt<FirebaseMessaging>(),
     ),
   );
   getIt.registerLazySingleton<FirebaseFunctionsService>(
-        () => FirebaseFunctionsService(
+    () => FirebaseFunctionsService(
       firebaseFunctions: getIt<FirebaseFunctions>(),
     ),
   );
-
 
   // Auth feature
 

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../../core/widgets/build_user_avatar.dart';
 import '../../../../../../../user/domain/models/user_data/user_data.dart';
-import '../../../../../bloc/chat_page_bloc/chat_page_bloc.dart';
 
 class BuildChatUserInfo extends StatelessWidget {
   final VoidCallback onTapUser;
@@ -20,7 +18,6 @@ class BuildChatUserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chatPageBloc = context.watch<ChatPageBloc>().state;
 
     final textTheme = AppTextTheme.of(context);
 

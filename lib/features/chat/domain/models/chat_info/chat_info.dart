@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
-import '../../../../user/domain/models/user_data/user_data.dart';
 
 part 'chat_info.g.dart';
 

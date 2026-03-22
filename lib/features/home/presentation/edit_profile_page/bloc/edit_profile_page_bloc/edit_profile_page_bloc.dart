@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../onboard_survey/domain/models/skill/skill.dart';
-import '../../../../../onboard_survey/domain/use_cases/get_skills_use_case.dart';
 import '../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../user/domain/usecases/listen_current_user_data_use_case.dart';
 import '../../../../../user/domain/usecases/update_user_usecase.dart';

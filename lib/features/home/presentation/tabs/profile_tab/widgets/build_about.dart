@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../onboard_survey/domain/models/experiences/experiences.dart';
 import '../../../../../user/domain/models/user_data/user_data.dart';

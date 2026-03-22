@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../gen/assets.gen.dart';
 
@@ -22,7 +21,6 @@ class BuildMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
 
     return InkWell(
