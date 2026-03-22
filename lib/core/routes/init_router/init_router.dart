@@ -117,7 +117,7 @@ class RootPageRoute extends ShellRouteData {
   }
 }
 
-class AuthorizationPageRoute extends GoRouteData with _$AuthorizationPageRoute {
+class AuthorizationPageRoute extends GoRouteData with $AuthorizationPageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
@@ -137,7 +137,7 @@ class AuthorizationPageRoute extends GoRouteData with _$AuthorizationPageRoute {
   // }
 }
 
-class RegisterPageRoute extends GoRouteData with _$RegisterPageRoute {
+class RegisterPageRoute extends GoRouteData with $RegisterPageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
@@ -165,7 +165,7 @@ class OnboardShellPageRoute extends ShellRouteData {
   }
 }
 
-class OnboardSurveyPageRoute extends GoRouteData with _$OnboardSurveyPageRoute {
+class OnboardSurveyPageRoute extends GoRouteData with $OnboardSurveyPageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
@@ -175,7 +175,7 @@ class OnboardSurveyPageRoute extends GoRouteData with _$OnboardSurveyPageRoute {
 }
 
 class OnboardAboutYouPageRoute extends GoRouteData
-    with _$OnboardAboutYouPageRoute {
+    with $OnboardAboutYouPageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
@@ -186,6 +186,7 @@ class OnboardAboutYouPageRoute extends GoRouteData
 
 class HomeBottomBarRoute extends StatefulShellRouteData {
   static final homeBottomBarKey = GlobalKey();
+
   @override
   Widget builder(
     BuildContext context,
@@ -199,7 +200,7 @@ class HomeBottomBarRoute extends StatefulShellRouteData {
   }
 }
 
-class DiscoveryPageRoute extends GoRouteData with _$DiscoveryPageRoute {
+class DiscoveryPageRoute extends GoRouteData with $DiscoveryPageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
@@ -208,7 +209,7 @@ class DiscoveryPageRoute extends GoRouteData with _$DiscoveryPageRoute {
   }
 }
 
-class MatchesPageRoute extends GoRouteData with _$MatchesPageRoute {
+class MatchesPageRoute extends GoRouteData with $MatchesPageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
@@ -217,7 +218,7 @@ class MatchesPageRoute extends GoRouteData with _$MatchesPageRoute {
   }
 }
 
-class ProfilePageRoute extends GoRouteData with _$ProfilePageRoute {
+class ProfilePageRoute extends GoRouteData with $ProfilePageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
@@ -226,7 +227,7 @@ class ProfilePageRoute extends GoRouteData with _$ProfilePageRoute {
   }
 }
 
-class EditLookingForRoute extends GoRouteData with _$EditLookingForRoute {
+class EditLookingForRoute extends GoRouteData with $EditLookingForRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
@@ -235,7 +236,7 @@ class EditLookingForRoute extends GoRouteData with _$EditLookingForRoute {
   }
 }
 
-class MatchResultPageRoute extends GoRouteData with _$MatchResultPageRoute {
+class MatchResultPageRoute extends GoRouteData with $MatchResultPageRoute {
   final String matchId;
 
   const MatchResultPageRoute({
@@ -267,7 +268,7 @@ class HomeRootRoute extends StatefulShellRouteData {
   }
 }
 
-class ChatPageRoute extends GoRouteData with _$ChatPageRoute {
+class ChatPageRoute extends GoRouteData with $ChatPageRoute {
   final String chatId;
 
   ChatPageRoute({
@@ -284,7 +285,7 @@ class ChatPageRoute extends GoRouteData with _$ChatPageRoute {
   }
 }
 
-class NotificationPageRoute extends GoRouteData with _$NotificationPageRoute {
+class NotificationPageRoute extends GoRouteData with $NotificationPageRoute {
   NotificationPageRoute();
 
   @override
@@ -295,7 +296,7 @@ class NotificationPageRoute extends GoRouteData with _$NotificationPageRoute {
   }
 }
 
-class EditProfilePageRoute extends GoRouteData with _$EditProfilePageRoute {
+class EditProfilePageRoute extends GoRouteData with $EditProfilePageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
@@ -303,7 +304,6 @@ class EditProfilePageRoute extends GoRouteData with _$EditProfilePageRoute {
     );
   }
 }
-
 
 class GoRouterPageBuilder {
   static CustomTransitionPage pageBuilder(Widget child) {

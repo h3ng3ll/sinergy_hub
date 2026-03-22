@@ -13,11 +13,11 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
   routes: [
     GoRouteData.$route(
       path: '/',
-      factory: _$AuthorizationPageRoute._fromState,
+      factory: $AuthorizationPageRoute._fromState,
       routes: [
         GoRouteData.$route(
           path: '/sign-out',
-          factory: _$RegisterPageRoute._fromState,
+          factory: $RegisterPageRoute._fromState,
         ),
       ],
     ),
@@ -26,11 +26,11 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
       routes: [
         GoRouteData.$route(
           path: '/onboard',
-          factory: _$OnboardSurveyPageRoute._fromState,
+          factory: $OnboardSurveyPageRoute._fromState,
         ),
         GoRouteData.$route(
           path: '/onboard-about',
-          factory: _$OnboardAboutYouPageRoute._fromState,
+          factory: $OnboardAboutYouPageRoute._fromState,
         ),
       ],
     ),
@@ -46,7 +46,7 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                   routes: [
                     GoRouteData.$route(
                       path: '/discovery',
-                      factory: _$DiscoveryPageRoute._fromState,
+                      factory: $DiscoveryPageRoute._fromState,
                     ),
                   ],
                 ),
@@ -54,7 +54,7 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                   routes: [
                     GoRouteData.$route(
                       path: '/matches',
-                      factory: _$MatchesPageRoute._fromState,
+                      factory: $MatchesPageRoute._fromState,
                     ),
                   ],
                 ),
@@ -66,29 +66,29 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
           routes: [
             GoRouteData.$route(
               path: '/match-result',
-              factory: _$MatchResultPageRoute._fromState,
+              factory: $MatchResultPageRoute._fromState,
             ),
             GoRouteData.$route(
               path: '/chat',
-              factory: _$ChatPageRoute._fromState,
+              factory: $ChatPageRoute._fromState,
             ),
             GoRouteData.$route(
               path: '/edit-profile-page',
-              factory: _$EditProfilePageRoute._fromState,
+              factory: $EditProfilePageRoute._fromState,
               routes: [
                 GoRouteData.$route(
                   path: 'looking-for-edit',
-                  factory: _$EditLookingForRoute._fromState,
+                  factory: $EditLookingForRoute._fromState,
                 ),
               ],
             ),
             GoRouteData.$route(
               path: '/profile',
-              factory: _$ProfilePageRoute._fromState,
+              factory: $ProfilePageRoute._fromState,
             ),
             GoRouteData.$route(
               path: '/notification',
-              factory: _$NotificationPageRoute._fromState,
+              factory: $NotificationPageRoute._fromState,
             ),
           ],
         ),
@@ -101,7 +101,7 @@ extension $RootPageRouteExtension on RootPageRoute {
   static RootPageRoute _fromState(GoRouterState state) => RootPageRoute();
 }
 
-mixin _$AuthorizationPageRoute on GoRouteData {
+mixin $AuthorizationPageRoute on GoRouteData {
   static AuthorizationPageRoute _fromState(GoRouterState state) =>
       AuthorizationPageRoute();
 
@@ -122,7 +122,7 @@ mixin _$AuthorizationPageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$RegisterPageRoute on GoRouteData {
+mixin $RegisterPageRoute on GoRouteData {
   static RegisterPageRoute _fromState(GoRouterState state) =>
       RegisterPageRoute();
 
@@ -148,7 +148,7 @@ extension $OnboardShellPageRouteExtension on OnboardShellPageRoute {
       OnboardShellPageRoute();
 }
 
-mixin _$OnboardSurveyPageRoute on GoRouteData {
+mixin $OnboardSurveyPageRoute on GoRouteData {
   static OnboardSurveyPageRoute _fromState(GoRouterState state) =>
       OnboardSurveyPageRoute();
 
@@ -169,7 +169,7 @@ mixin _$OnboardSurveyPageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$OnboardAboutYouPageRoute on GoRouteData {
+mixin $OnboardAboutYouPageRoute on GoRouteData {
   static OnboardAboutYouPageRoute _fromState(GoRouterState state) =>
       OnboardAboutYouPageRoute();
 
@@ -199,7 +199,7 @@ extension $HomeBottomBarRouteExtension on HomeBottomBarRoute {
       HomeBottomBarRoute();
 }
 
-mixin _$DiscoveryPageRoute on GoRouteData {
+mixin $DiscoveryPageRoute on GoRouteData {
   static DiscoveryPageRoute _fromState(GoRouterState state) =>
       DiscoveryPageRoute();
 
@@ -220,7 +220,7 @@ mixin _$DiscoveryPageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$MatchesPageRoute on GoRouteData {
+mixin $MatchesPageRoute on GoRouteData {
   static MatchesPageRoute _fromState(GoRouterState state) => MatchesPageRoute();
 
   @override
@@ -240,7 +240,7 @@ mixin _$MatchesPageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$MatchResultPageRoute on GoRouteData {
+mixin $MatchResultPageRoute on GoRouteData {
   static MatchResultPageRoute _fromState(GoRouterState state) =>
       MatchResultPageRoute(matchId: state.uri.queryParameters['match-id']!);
 
@@ -266,7 +266,7 @@ mixin _$MatchResultPageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$ChatPageRoute on GoRouteData {
+mixin $ChatPageRoute on GoRouteData {
   static ChatPageRoute _fromState(GoRouterState state) =>
       ChatPageRoute(chatId: state.uri.queryParameters['chat-id']!);
 
@@ -290,7 +290,7 @@ mixin _$ChatPageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$EditProfilePageRoute on GoRouteData {
+mixin $EditProfilePageRoute on GoRouteData {
   static EditProfilePageRoute _fromState(GoRouterState state) =>
       EditProfilePageRoute();
 
@@ -311,7 +311,7 @@ mixin _$EditProfilePageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$EditLookingForRoute on GoRouteData {
+mixin $EditLookingForRoute on GoRouteData {
   static EditLookingForRoute _fromState(GoRouterState state) =>
       EditLookingForRoute();
 
@@ -333,7 +333,7 @@ mixin _$EditLookingForRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$ProfilePageRoute on GoRouteData {
+mixin $ProfilePageRoute on GoRouteData {
   static ProfilePageRoute _fromState(GoRouterState state) => ProfilePageRoute();
 
   @override
@@ -353,7 +353,7 @@ mixin _$ProfilePageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$NotificationPageRoute on GoRouteData {
+mixin $NotificationPageRoute on GoRouteData {
   static NotificationPageRoute _fromState(GoRouterState state) =>
       NotificationPageRoute();
 
