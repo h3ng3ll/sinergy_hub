@@ -13,6 +13,7 @@ workflows:
       flutter: 3.38.5
       groups:
         - env
+        - files
       vars:
         FIREBASE_PROJECT_ID: synergyhub-a3e1b
     cache:
@@ -26,6 +27,9 @@ workflows:
 
       - name: Code generation
         script: dart run build_runner build -d
+
+      - name: Create firebase options File
+        script:  echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
 
       - name: Build web
         script: flutter build web --release
