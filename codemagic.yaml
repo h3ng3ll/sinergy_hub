@@ -1,6 +1,14 @@
 workflows:
   web-deploy:
     name: Web Deploy
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+
     environment:
       flutter: stable
       vars:
@@ -23,9 +31,3 @@ workflows:
             --project $FIREBASE_PROJECT_ID \
             --token $FIREBASE_TOKEN
 
-  triggering:
-    events:
-      - push
-    branch_patterns:
-      - pattern: main
-        include: true
