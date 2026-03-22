@@ -21,7 +21,6 @@ workflows:
         - ~/.pub-cache
         - .flutter
         - build/
-        -
     scripts:
       - name: Get packages
         script: flutter pub get
