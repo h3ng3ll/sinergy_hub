@@ -31,6 +31,9 @@ workflows:
       - name: Create firebase options File
         script:  echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
 
+      - name: Create firebase.json file
+        script:  echo "$FIREBASE_JSON" > firebase.json
+
       - name: Create .env file
         script: |
           echo "FIREBASE_WEB_API_KEY=$FIREBASE_WEB_API_KEY" > .env
