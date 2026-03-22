@@ -10,12 +10,18 @@ workflows:
           include: true
 
     environment:
-      flutter: stable
+      flutter: 3.38.5
+      dart:  3.10.4
       groups:
         - env
       vars:
         FIREBASE_PROJECT_ID: synergyhub-a3e1b
-
+    cache:
+      cache_paths:
+        - ~/.pub-cache
+        - .flutter
+        - build/
+        -
     scripts:
       - name: Get packages
         script: flutter pub get
