@@ -11,12 +11,17 @@ workflows:
 
     environment:
       flutter: stable
+      groups:
+        - env
       vars:
         FIREBASE_PROJECT_ID: synergyhub-a3e1b
 
     scripts:
       - name: Get packages
         script: flutter pub get
+
+      - name: Code generation
+        script: dart run build_runner build -d
 
       - name: Build web
         script: flutter build web --release
