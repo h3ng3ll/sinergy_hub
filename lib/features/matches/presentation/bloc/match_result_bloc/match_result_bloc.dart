@@ -18,13 +18,13 @@ class MatchResultBloc extends Bloc<MatchResultEvent, MatchResultState> {
   final GetMatchByIdUseCase _getMatchByIdUseCase;
   final GetCurrentUserDataUseCase _getCurrentUserDataUseCase;
   final MarkAsNotifiedMatchUseCase _markAsNotifiedMatchUseCase;
-  final LookForMatchesUseCase _lookForMatchesUseCase;
+  final FindMatchChatIdUseCase _lookForMatchesUseCase;
 
   MatchResultBloc({
     required GetMatchByIdUseCase getMatchByIdUseCase,
     required GetCurrentUserDataUseCase getCurrentUserDataUseCase,
     required MarkAsNotifiedMatchUseCase markAsNotifiedMatchUseCase,
-    required LookForMatchesUseCase lookForMatchesUseCase,
+    required FindMatchChatIdUseCase lookForMatchesUseCase,
   }) : _getMatchByIdUseCase = getMatchByIdUseCase,
        _markAsNotifiedMatchUseCase = markAsNotifiedMatchUseCase,
        _getCurrentUserDataUseCase = getCurrentUserDataUseCase,

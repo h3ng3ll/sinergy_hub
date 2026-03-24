@@ -36,7 +36,7 @@ class _MatchResultPageState extends State<MatchResultPage> {
           getMatchByIdUseCase: getIt<GetMatchByIdUseCase>(),
           getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
           markAsNotifiedMatchUseCase: getIt<MarkAsNotifiedMatchUseCase>(),
-          lookForMatchesUseCase: getIt<LookForMatchesUseCase>(),
+          lookForMatchesUseCase: getIt<FindMatchChatIdUseCase>(),
         )..add(
           MatchResultEvent.getResult(
             matchId: widget.matchId,

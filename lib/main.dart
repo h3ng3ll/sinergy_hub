@@ -131,7 +131,7 @@ class _MyAppState extends State<MyApp> {
                 (p.status == AuthStatus.authorized) &&
                     (n.status == AuthStatus.logout) ||
                 (p.status == AuthStatus.loading) &&
-                    (n.status == AuthStatus.authorized),
+                    (n.status == AuthStatus.authorized && n.uid != null),
 
             listener: (context, state) {
               if (state.status == AuthStatus.authorized) {

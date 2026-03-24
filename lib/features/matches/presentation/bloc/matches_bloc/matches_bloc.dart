@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -8,7 +7,9 @@ import '../../../domain/usecases/listen_two_way_match_use_case.dart';
 import '../tinder_card_cubit/tinder_card_cubit.dart';
 
 part 'matches_event.dart';
+
 part 'matches_state.dart';
+
 part 'matches_bloc.freezed.dart';
 
 class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
@@ -18,9 +19,9 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
   MatchesBloc({
     required ListenTwoWayMatchUseCase listenTwoWayMatchUseCase,
     required CreateUserMatchesUseCase createUserMatchesUseCase,
-  })  : _listenTwoWayMatchUseCase = listenTwoWayMatchUseCase,
-        _createUserMatchesUseCase = createUserMatchesUseCase,
-        super(const MatchesState()) {
+  }) : _listenTwoWayMatchUseCase = listenTwoWayMatchUseCase,
+       _createUserMatchesUseCase = createUserMatchesUseCase,
+       super(const MatchesState()) {
     on<_StartListening>(_startListening);
     on<_Create>(_create);
   }
@@ -29,7 +30,7 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
     _StartListening event,
     Emitter<MatchesState> emit,
   ) async {
-   await emit.forEach(
+    await emit.forEach(
       _listenTwoWayMatchUseCase.call(),
       onData: (Matches? userMatch) {
         if (userMatch != null) {
@@ -53,29 +54,26 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
     _Create event,
     Emitter<MatchesState> emit,
   ) async {
-    try {
-      emit(
-        state.copyWith(
-          status: MatchesStatus.loading,
-        ),
-      );
-      await _createUserMatchesUseCase.call(
-        status: event.status,
-        matchedID: event.matchedID,
-      );
-      emit(
-        state.copyWith(
-          status: MatchesStatus.initial,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: MatchesStatus.failed,
-          errorMessage: e.toString(),
-        ),
-      );
-      rethrow;
-    }
+    final res = await _createUserMatchesUseCase.call(
+      status: event.status,
+      matchedID: event.matchedID,
+    );
+    res.fold(
+      (_) {
+        emit(
+          state.copyWith(
+            status: MatchesStatus.initial,
+          ),
+        );
+      },
+      (e) {
+        emit(
+          state.copyWith(
+            status: MatchesStatus.failed,
+            errorMessage: e.message,
+          ),
+        );
+      },
+    );
   }
 }

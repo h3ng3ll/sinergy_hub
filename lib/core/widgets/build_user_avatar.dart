@@ -33,7 +33,7 @@ class BuildUserAvatar extends StatelessWidget {
         ),
         child: BuildImage(
           url: url,
-          cacheImg: cacheImg,
+          bytes: cacheImg,
           shape: BoxShape.circle,
           border: Border.all(
             color: AppColors.white.value,

@@ -3,11 +3,11 @@ import '../../../chat/domain/exception/no_found_chat_exception.dart';
 import '../../../chat/domain/repositories/i_chat_repository.dart';
 
 
-class LookForMatchesUseCase {
+class FindMatchChatIdUseCase {
   final IAuthRepository _authRepository;
   final IChatRepository _chatRepository;
 
-  LookForMatchesUseCase({
+  FindMatchChatIdUseCase({
     required IAuthRepository authRepository,
     required IChatRepository chatRepository,
   }) : _authRepository = authRepository,

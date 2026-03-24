@@ -8,124 +8,100 @@ import '../../gen/assets.gen.dart';
 import '../resources/colors/app_color_scheme.dart';
 
 class BuildImage extends StatelessWidget {
-  final Uint8List? cacheImg;
-  final String? img;
-  final BoxShape shape;
-  final BoxFit fit;
+  final String? url;
+  final Uint8List? bytes;
+  final String? asset;
   final double? width;
   final double? height;
+
+  final BoxShape shape;
+  final BoxFit fit;
   final BorderRadius? borderRadius;
   final Border? border;
-  final String? url;
 
   const BuildImage({
     super.key,
-    required this.url,
+    this.url,
+    this.bytes,
+    this.asset,
     this.width,
     this.height,
     this.shape = BoxShape.rectangle,
-    this.border,
-    this.cacheImg,
-    this.img,
     this.fit = BoxFit.cover,
     this.borderRadius,
+    this.border,
   });
+
+  bool get _hasImage => url != null || bytes != null || asset != null;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
 
-    if (url == null && cacheImg == null) {
-      return Center(
-        child: SvgPicture.asset(
-          Assets.icons.user,
-          width: 40.0,
-          height: 40.0,
-          colorFilter: ColorFilter.mode(
-            colorScheme.onPrimary.withValues(
-              alpha: 0.6,
-            ),
-            BlendMode.srcIn,
-          ),
-        ),
-      );
-    // return Container(
-    //   width: width,
-    //   height: height,
-    //
-    //   decoration: BoxDecoration(
-    //     borderRadius: borderRadius,
-    //     color: AppColors.antiFlashWhite.value,
-    //   ),
-    //   child: Center(
-    //     child: SvgPicture.asset(
-    //       Assets.icons.user,
-    //       width: width != null ? width! * 0.5 : null,
-    //       height: height != null ? height! * 0.5 : null,
-    //       colorFilter: ColorFilter.mode(
-    //         AppColors.jacarta.value,
-    //         BlendMode.srcIn,
-    //       ),
-    //     ),
-    //   ),
-    // );
+    if (!_hasImage) {
+      return _placeholder(colorScheme);
     }
 
+    Widget image;
+
+    if (bytes != null) {
+      image = Image.memory(bytes!, fit: fit);
+    } else if (asset != null) {
+      image = Image.asset(asset!, fit: fit);
+    } else {
+      image = CachedNetworkImage(
+        imageUrl: url!,
+        fit: fit,
+        placeholder: (context, _) => _loading(),
+        errorWidget: (context, _, __) => _placeholder(colorScheme),
+      );
+    }
+
+    return _wrap(image);
+  }
+
+  Widget _wrap(Widget child) {
+    Widget result = child;
+
     if (shape == BoxShape.circle) {
-    return ClipOval(
-    child: Container(
-    width: width,
-    height: height,
-    decoration: BoxDecoration(
-    border: border,
-    image: url != null || cacheImg != null
-    ? DecorationImage(
-    fit: fit,
-    image: cacheImg != null
-    ? MemoryImage(cacheImg!)
-        : CachedNetworkImageProvider(url!),
-    )
-        : null,
-    ),
-    ),
-    );
+      result = ClipOval(child: result);
     }
 
     if (borderRadius != null) {
-    return ClipRRect(
-    borderRadius: borderRadius!,
-    child: Container(
-    width: width,
-    height: height,
-    decoration: BoxDecoration(
-    border: border,
-    image: url != null || cacheImg != null
-    ? DecorationImage(
-    fit: fit,
-    image: cacheImg != null
-    ? MemoryImage(cacheImg!)
-        : CachedNetworkImageProvider(url!),
-    )
-        : null,
-    ),
-    ),
-    );
+      result = ClipRRect(borderRadius: borderRadius!, child: result);
     }
 
-    return Container(
-    width: width,
-    height: height,
-    decoration: BoxDecoration(
-    border: border,
-    image: url != null || cacheImg != null
-    ? DecorationImage(
-    fit: fit,
-    image: cacheImg != null
-    ? MemoryImage(cacheImg!)
-        : CachedNetworkImageProvider(url!),
-    )
-        : null,
-    ),
+    return SizedBox(
+      width: width,
+      height: height,
+      child: Container(
+        decoration: BoxDecoration(border: border),
+        child: result,
+      ),
+    );
+  }
+
+  Widget _loading() {
+    return const Center(
+      child: SizedBox(
+        width: 18,
+        height: 18,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      ),
+    );
+  }
+
+  Widget _placeholder(AppColorScheme colorScheme) {
+    return Center(
+      child: SvgPicture.asset(
+        Assets.icons.user,
+        width: 40,
+        height: 40,
+        colorFilter: ColorFilter.mode(
+          colorScheme.onPrimary.withValues(alpha: 0.6),
+          BlendMode.srcIn,
+        ),
+      ),
     );
   }
 }
