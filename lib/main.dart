@@ -127,26 +127,17 @@ class _MyAppState extends State<MyApp> {
       child: Builder(
         builder: (context) {
           return BlocListener<AuthBloc, AuthState>(
-            listenWhen: (p, n) =>
-                (p.status == AuthStatus.authorized) &&
-                    (n.status == AuthStatus.logout) ||
-                (p.status == AuthStatus.loading) &&
-                    (n.status == AuthStatus.authorized && n.uid != null),
-
             listener: (context, state) {
-              if (state.status == AuthStatus.authorized) {
-                userBloc.add(
-                  UserEvent.init(
-                    uid: state.uid!,
-                  ),
-                );
+              if (state.status == AuthStatus.authorized && state.uid != null) {
+                userBloc.add(UserEvent.init(uid: state.uid!));
+
                 context.read<NotificationConfigBloc>().add(
                   NotificationConfigEvent.init(),
                 );
-              } else if (state.status == AuthStatus.logout) {
-                userBloc.add(
-                  UserEvent.reset(),
-                );
+              }
+
+              if (state.status == AuthStatus.logout) {
+                userBloc.add(UserEvent.reset());
               }
             },
             child: BlocListener<UserBloc, UserState>(

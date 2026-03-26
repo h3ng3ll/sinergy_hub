@@ -16,9 +16,16 @@ class EmailInput extends StatelessWidget {
       hintText: 'Email',
       maxLength: 50,
       validator: (value) {
-        if (value?.isEmpty ?? true) {
+        if (value == null || value.isEmpty) {
           return 'Error . Email is empty ';
-        } else if (!value!.contains('@')) {
+        }
+        final emailRegex = RegExp(
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@"
+          r'[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?'
+          r'(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$',
+        );
+
+        if (!emailRegex.hasMatch(value)) {
           return 'Invalid email format';
         }
         return null;

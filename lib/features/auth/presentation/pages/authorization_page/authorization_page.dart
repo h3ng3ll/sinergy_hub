@@ -36,6 +36,12 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
     );
   }
 
+ void onLogin() {
+    LoginPageRoute().push(
+      context,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
@@ -68,6 +74,15 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                             onPressed: onRegister,
                             child: Text(
                               'Register',
+                              style: textTheme.medium16.copyWith(
+                                color: AppColors.white.value,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: onLogin,
+                            child: Text(
+                              'Login',
                               style: textTheme.medium16.copyWith(
                                 color: AppColors.white.value,
                               ),

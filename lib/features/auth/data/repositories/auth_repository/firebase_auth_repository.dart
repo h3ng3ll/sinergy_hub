@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/models/exceptions.dart';
+import '../../../../../core/models/failures.dart';
 import '../../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../../../core/services/google_sign_in_service/google_sign_in_service.dart';
 import '../../../domain/exception/failed_sign_with_google.dart';
@@ -12,6 +13,9 @@ import '../../../domain/exception/max_tries_exceeded_exception.dart';
 import '../../../domain/exception/user_canceled_sign_in_exception.dart';
 import '../../../domain/failures/auth_failures.dart';
 import '../../../domain/failures/auth_unreachable_failure.dart';
+import '../../../domain/failures/login_or_password_incorrect_failure.dart';
+import '../../../domain/failures/something_went_wrong_sign_in_failure.dart';
+import '../../../domain/failures/such_user_not_exists_failure.dart';
 import '../../../domain/failures/unauthorized_failure.dart';
 import '../../../domain/failures/user_exists_with_such_email_failure.dart';
 import '../../../domain/repostories/i_auth_repository.dart';
@@ -161,14 +165,35 @@ class FirebaseAuthRepository extends IAuthRepository {
     }
   }
 
-  Future<void> signInWithEmailAndPassword({
+  @override
+  Future<Either<void, AuthFailure>> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return Left(
+        null,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-credential') {
+        return Right(
+          LoginOrPasswordIncorrectFailure(),
+        );
+      } else if (e.code == 'user-not-found') {
+        return Right(
+          SuchUserNotExistsFailure(),
+        );
+      }
+      rethrow;
+    } catch (_) {
+      return Right(
+        SomethingWentWrongSignInFailure(),
+      );
+    }
   }
 
   @override

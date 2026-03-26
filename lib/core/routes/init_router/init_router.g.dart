@@ -16,8 +16,12 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
       factory: $AuthorizationPageRoute._fromState,
       routes: [
         GoRouteData.$route(
-          path: '/sign-out',
+          path: '/sign-up',
           factory: $RegisterPageRoute._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/sign-in',
+          factory: $LoginPageRoute._fromState,
         ),
       ],
     ),
@@ -127,7 +131,27 @@ mixin $RegisterPageRoute on GoRouteData {
       RegisterPageRoute();
 
   @override
-  String get location => GoRouteData.$location('/sign-out');
+  String get location => GoRouteData.$location('/sign-up');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $LoginPageRoute on GoRouteData {
+  static LoginPageRoute _fromState(GoRouterState state) => LoginPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/sign-in');
 
   @override
   void go(BuildContext context) => context.go(location);

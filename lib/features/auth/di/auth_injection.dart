@@ -7,6 +7,7 @@ import '../../../core/services/google_sign_in_service/google_sign_in_service.dar
 import '../../user/domain/repositories/i_user_repository.dart';
 import '../data/repositories/auth_repository/firebase_auth_repository.dart';
 import '../domain/repostories/i_auth_repository.dart';
+import '../domain/use_cases/login_use_case.dart';
 import '../domain/use_cases/register_use_case.dart';
 
 void initAuthFeature(GetIt getIt) {
@@ -23,6 +24,11 @@ void initAuthFeature(GetIt getIt) {
     () => RegisterUseCase(
       authRepository: getIt<IAuthRepository>(),
       userRepository: getIt<IUserRepository>(),
+    ),
+  );
+  getIt.registerFactory(
+    () => LoginUseCase(
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
 }

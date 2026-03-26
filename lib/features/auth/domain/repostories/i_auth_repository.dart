@@ -24,5 +24,10 @@ abstract class IAuthRepository {
     required String password,
   });
 
+  Future<Either<void, AuthFailure>> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  });
+
   Future<String> requireUserId();
 }
