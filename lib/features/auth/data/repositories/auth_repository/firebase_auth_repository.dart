@@ -1,11 +1,19 @@
+import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../../../../core/models/exceptions.dart';
 import '../../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../../../core/services/google_sign_in_service/google_sign_in_service.dart';
+import '../../../domain/exception/failed_sign_with_google.dart';
+import '../../../domain/exception/max_tries_exceeded_exception.dart';
+import '../../../domain/exception/user_canceled_sign_in_exception.dart';
 import '../../../domain/failures/auth_failures.dart';
+import '../../../domain/failures/auth_unreachable_failure.dart';
+import '../../../domain/failures/unauthorized_failure.dart';
+import '../../../domain/failures/user_exists_with_such_email_failure.dart';
 import '../../../domain/repostories/i_auth_repository.dart';
 
 class FirebaseAuthRepository extends IAuthRepository {
@@ -55,52 +63,65 @@ class FirebaseAuthRepository extends IAuthRepository {
     );
   }
 
-  Future<UserCredential> _signInWithCredentials(String idToken) async {
-    final OAuthCredential credential = GoogleAuthProvider.credential(
-      idToken: idToken,
-    );
+  Future<Either<UserCredential, Exceptions>> _signInWithCredentials(
+    String idToken,
+  ) async {
+    try {
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        idToken: idToken,
+      );
 
-    // Retry logic for transient network errors
-    const maxRetries = 3;
-    int attempts = 0;
+      // Retry logic for transient network errors
+      const maxRetries = 3;
+      int attempts = 0;
 
-    while (attempts < maxRetries) {
-      try {
-        final authRes = await _auth.signInWithCredential(
-          credential,
-        );
+      while (attempts < maxRetries) {
+        try {
+          final authRes = await _auth.signInWithCredential(
+            credential,
+          );
 
-        return authRes;
-      } on FirebaseAuthException catch (e) {
-        attempts++;
-        // Retry only on network-related errors
-        if (attempts >= maxRetries ||
-            !(e.code == 'unknown' ||
-                e.message?.contains('I/O error') == true ||
-                e.message?.contains('Connection reset') == true)) {
-          rethrow;
+          return Left(authRes);
+        } on FirebaseAuthException catch (e) {
+          attempts++;
+          // Retry only on network-related errors
+          if (attempts >= maxRetries ||
+              !(e.code == 'unknown' ||
+                  e.message?.contains('I/O error') == true ||
+                  e.message?.contains('Connection reset') == true)) {
+            rethrow;
+          }
+          // Wait before retrying (exponential backoff)
+          await Future.delayed(Duration(milliseconds: 500 * attempts));
         }
-        // Wait before retrying (exponential backoff)
-        await Future.delayed(Duration(milliseconds: 500 * attempts));
       }
+      return Right(
+        MaxTriesExceededException(),
+      );
+    } catch (_) {
+      return Right(
+        FailedSignWithGoogle(),
+      );
     }
-
-    throw FirebaseAuthException(
-      code: 'max-retries-exceeded',
-      message: 'Failed to sign in after $maxRetries attempts',
-    );
   }
 
   @override
-  Future<UserCredential> signInWithGoogle() async {
-    await _googleSignIn.initialize(
-      serverClientId: dotenv.get('FIREBASE_WEB_API_KEY'),
-    );
-    final GoogleSignInAccount res = await _googleSignIn.authenticate();
+  Future<Either<UserCredential, Exceptions>> signInWithGoogle() async {
+    try {
+      await _googleSignIn.initialize(
+        serverClientId: dotenv.get('FIREBASE_WEB_API_KEY'),
+      );
+      final GoogleSignInAccount res = await _googleSignIn.authenticate();
 
-    return await _signInWithCredentials(
-      res.authentication.idToken!,
-    );
+      return await _signInWithCredentials(
+        res.authentication.idToken!,
+      );
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) {
+        return Right(UserCanceledSignInException());
+      }
+      return Right(FailedSignWithGoogle());
+    }
   }
 
   @override
@@ -115,14 +136,29 @@ class FirebaseAuthRepository extends IAuthRepository {
   }
 
   @override
-  Future<void> register({
+  Future<Either<void, AuthFailure>> register({
     required String email,
     required String password,
   }) async {
-    await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return Left(
+        null,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'unknown') {
+        return Right(AuthUnreachableFailure());
+      }
+      rethrow;
+    } on FirebaseException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        return Right(UserExistsWithSuchEmailFailure());
+      }
+      rethrow;
+    }
   }
 
   Future<void> signInWithEmailAndPassword({
@@ -141,7 +177,7 @@ class FirebaseAuthRepository extends IAuthRepository {
     final uid = user?.uid;
 
     if (uid == null) {
-      throw AuthFailure();
+      throw UnauthorizedFailure();
     }
 
     return uid;

@@ -22,10 +22,7 @@ class FindMatchChatIdUseCase {
 
     final chat = await _chatRepository.chatByParticipates(
       uid: uid,
-      participates: [
-        uid,
-        matchId,
-      ],
+      participates:  matchId.split('_').toList(),
     );
     if (chat == null) {
       throw NoFoundChatException();

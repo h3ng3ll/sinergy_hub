@@ -70,29 +70,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _SignInViaGoogle event,
     Emitter<AuthState> emit,
   ) async {
-    try {
-      emit(
-        state.copyWith(
-          status: AuthStatus.loading,
-        ),
-      );
+    emit(
+      state.copyWith(
+        status: AuthStatus.loading,
+      ),
+    );
+    final res = await _authRepository.signInWithGoogle();
 
-      await _authRepository.signInWithGoogle();
-
-      emit(
-        state.copyWith(
-          status: AuthStatus.authorized,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: AuthStatus.failed,
-          errorMessage: e.toString(),
-        ),
-      );
-      rethrow;
-    }
+    res.fold(
+      (_) {},
+      (e) {
+        emit(
+          state.copyWith(
+            status: AuthStatus.failed,
+            errorMessage: e.message,
+          ),
+        );
+      },
+    );
   }
 
   void _signOut(

@@ -69,18 +69,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
     return BuildAnimatedBackground(
       child: Scaffold(
-        appBar: CustomAppBar(
-
-        ),
+        appBar: CustomAppBar(),
         backgroundColor: Colors.transparent,
         body: BlocListener<RegisterBloc, RegisterState>(
           bloc: _registerBloc,
           listener: (context, state) {
-            if (state.status == RegisterStatus.authorized) {
-              OnboardAboutYouPageRoute().go(
-                context,
-              );
-            } else if (state.status == RegisterStatus.failed) {
+            if (state.status == RegisterStatus.failed) {
               UiMessageService.showError(
                 state.errorMessage,
               );

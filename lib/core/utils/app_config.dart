@@ -3,7 +3,7 @@ abstract class AppConfig {
 
   static String emulatorAddress() {
     // return '10.0.2.2';
-    return '192.168.68.53';
+    return '192.168.68.52';
   }
 
   static int get firestoreEmulatorPort => 8080;

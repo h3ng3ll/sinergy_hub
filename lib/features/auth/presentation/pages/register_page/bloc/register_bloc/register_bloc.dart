@@ -20,30 +20,25 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   void _register(_Register event, emit) async {
-    try {
-      emit(
-        state.copyWith(
-          status: RegisterStatus.loading,
-        ),
-      );
-      await _registerUseCase.call(
-        email: event.email,
-        password: event.password,
-      );
-
-      emit(
-        state.copyWith(
-          status: RegisterStatus.authorized,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: RegisterStatus.failed,
-          errorMessage: e.toString(),
-        ),
-      );
-      rethrow;
-    }
+    emit(
+      state.copyWith(
+        status: RegisterStatus.loading,
+      ),
+    );
+    final res = await _registerUseCase.call(
+      email: event.email,
+      password: event.password,
+    );
+    res.fold(
+      (_) {},
+      (e) {
+        emit(
+          state.copyWith(
+            status: RegisterStatus.failed,
+            errorMessage: e.message,
+          ),
+        );
+      },
+    );
   }
 }
