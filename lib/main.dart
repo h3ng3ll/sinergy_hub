@@ -48,7 +48,9 @@ void main() async {
   await getIt<FirebaseAuthService>().init();
   await getIt<FirebaseFirestoreService>().init();
   await getIt<LocalNotificationService>().init();
-  await getIt<FirebaseMessagingService>().init();
+
+  /// not blocking loading
+  getIt<FirebaseMessagingService>().init();
   await getIt<GoogleSignInService>().init();
 
   Bloc.observer = AppObserver.instance();
