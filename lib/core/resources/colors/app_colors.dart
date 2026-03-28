@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 enum AppColors {
 
-  black(Colors.black),
+  black(Color(0xFF000000)),
+  transparent(Color(0x00000000)),
 
   buttonBlue(Color(0xff2196F3)),
   darkOrchid(Color(0xff9C27B0)),
@@ -45,7 +46,17 @@ enum AppColors {
   goldCrayola(Color(0xffF1B488)),
   whiteLilac(Color(0xffF8F7FC)),
 
-  white(Colors.white);
+  // Match result page colors
+  gold(Color(0xFFFFD700)),
+  skillsMatchGreen(Color(0xFF4ECCA3)),
+  visionAlignBlue(Color(0xFF5DADE2)),
+  experiencePurple(Color(0xFFBB86FC)),
+  startChatOrange(Color(0xFFF27361)),
+  heartRed(Color(0xFFE53935)),
+  statusGreen(Color(0xFF43A047)),
+  statusBlue(Color(0xFF1E88E5)),
+  greyLight(Color(0xFFBDBDBD)),
+  white(Color(0xFFFFFFFF));
 
   final Color value;
   const AppColors(this.value);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import 'core/bloc/app_observer.dart';
 import 'core/di/injection.dart';
@@ -156,11 +157,35 @@ class _MyAppState extends State<MyApp> {
                   );
                 }
               },
-              child: MaterialApp.router(
-                theme: AppThemeData.light,
-                supportedLocales: AppLocale.supportedLocales,
-                locale: AppLocale.startLocale,
-                routerConfig: initRouter,
+              child: ResponsiveBreakpoints(
+                breakpoints: [
+                  const Breakpoint(
+                    start: 0,
+                    end: 450,
+                    name: MOBILE,
+                  ),
+                  const Breakpoint(
+                    start: 451,
+                    end: 900,
+                    name: TABLET,
+                  ),
+                  const Breakpoint(
+                    start: 900,
+                    end: 1920,
+                    name: DESKTOP,
+                  ),
+                  const Breakpoint(
+                    start: 1921,
+                    end: double.infinity,
+                    name: '4K',
+                  ),
+                ],
+                child: MaterialApp.router(
+                  theme: AppThemeData.light,
+                  supportedLocales: AppLocale.supportedLocales,
+                  locale: AppLocale.startLocale,
+                  routerConfig: initRouter,
+                ),
               ),
             ),
           );
