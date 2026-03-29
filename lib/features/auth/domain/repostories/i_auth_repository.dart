@@ -13,7 +13,7 @@ abstract class IAuthRepository {
 
   Future<UserCredential> signInAnonymously();
 
-  Future<Either<UserCredential, Exceptions>> signInWithGoogle();
+  Future<Either<void, Exceptions>> signInWithGoogle();
 
   Future<void> signOut();
 

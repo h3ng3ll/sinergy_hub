@@ -55,7 +55,7 @@ class _MatchResultPageState extends State<MatchResultPage> {
   void onStartChat(BuildContext context) {
     ChatPageRoute(
       chatId: _matchResultBloc.state.chatId,
-    ).push(context);
+    ).replace(context);
   }
 
   @override

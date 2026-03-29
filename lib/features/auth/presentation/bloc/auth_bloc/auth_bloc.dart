@@ -62,7 +62,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           errorMessage: e.toString(),
         ),
       );
-      rethrow;
     }
   }
 
@@ -103,7 +102,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           errorMessage: e.toString(),
         ),
       );
-      rethrow;
     }
   }
 }
