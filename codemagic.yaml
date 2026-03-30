@@ -14,6 +14,7 @@ workflows:
       groups:
         - env
         - files
+        - notifier
       vars:
         FIREBASE_PROJECT_ID: synergyhub-a3e1b
     cache:
@@ -49,3 +50,19 @@ workflows:
             --project $FIREBASE_PROJECT_ID \
             --token $FIREBASE_TOKEN
 
+      - name: Telegram notify
+        script: |
+          if [ "$CM_BUILD_STATUS" = "success" ]; then
+            MESSAGE="✅ Build succeeded"
+          else
+            MESSAGE="❌ Build failed"
+          fi
+          
+          DEPLOY_URL="https://$FIREBASE_PROJECT_ID.web.app"
+          
+          MESSAGE="$STATUS%0A🚀 Deploy: $DEPLOY_URL%0A📦 Build: $CM_BUILD_ID"
+                                   
+          curl -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+          -d chat_id=$TELEGRAM_CHAT_ID \
+          -d text="$MESSAGE"
+         

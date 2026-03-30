@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../core/resources/text/app_text_theme.dart';
@@ -9,6 +10,8 @@ import '../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../home_drawer/home_drawer.dart';
 import 'widgets/build_animated_background/build_animated_background.dart';
 import 'widgets/custom_bottom_bar_container.dart';
+import 'widgets/custom_bottom_bar_item.dart';
+import 'widgets/home_app_bar_web.dart';
 
 class HomeBottomBar extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -51,7 +54,10 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
-
+    final geTablet = ResponsiveBreakpoints.of(context).largerOrEqualTo(
+      TABLET,
+    );
+    final selectedIndex = widget.navigationShell.currentIndex;
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state.status == AuthStatus.logout) {
@@ -60,32 +66,45 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
       },
       child: BuildAnimatedBackground(
         child: Scaffold(
-          appBar: AppBar(
-            actions: [
-              InkWell(
-                onTap: onTapNotifications,
-                child: Icon(
-                  Icons.notifications,
-                  color: colorScheme.secondary,
+          appBar: geTablet
+              ? HomeAppBarWeb(
+                  onTapNotifications: onTapNotifications,
+                  onTapItem: _goBranch,
+                  selectedIndex: selectedIndex,
+                  onTapAccount: onTapAccount,
+                  onTapPrivacyPolicy: onTapPrivacyPolicy,
+                  onTapLogOut: onTapLogOut,
+                )
+              : AppBar(
+                  actions: [
+                    InkWell(
+                      onTap: onTapNotifications,
+                      child: Icon(
+                        Icons.notifications,
+                        color: colorScheme.secondary,
+                      ),
+                    ),
+                    Icon(
+                      Icons.more_vert,
+                    ),
+                  ],
                 ),
-              ),
-              Icon(
-                Icons.more_vert,
-              ),
-            ],
-          ),
           body: widget.navigationShell,
-          drawer: HomeDrawer(
-            onTapNotifications: onTapNotifications,
-            onTapAccount: onTapAccount,
-            onTapPrivacyPolicy: onTapPrivacyPolicy,
-            onTapLogOut: onTapLogOut,
-          ),
+          drawer: geTablet
+              ? null
+              : HomeDrawer(
+                  onTapNotifications: onTapNotifications,
+                  onTapAccount: onTapAccount,
+                  onTapPrivacyPolicy: onTapPrivacyPolicy,
+                  onTapLogOut: onTapLogOut,
+                ),
           backgroundColor: Colors.transparent,
-          bottomNavigationBar: CustomBottomBarContainer(
-            selectedIndex: widget.navigationShell.currentIndex,
-            onTapItem: _goBranch,
-          ),
+          bottomNavigationBar: geTablet
+              ? null
+              : CustomBottomBarContainer(
+                  selectedIndex: selectedIndex,
+                  onTapItem: _goBranch,
+                ),
         ),
       ),
     );
