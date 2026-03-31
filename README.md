@@ -7,13 +7,28 @@ A new Flutter project.
 0. generate files
    flutter pub get
    flutter pub run build_runner build -d
-1. fill .env file 
+1. fill .env file
 2. setup firebase
+```shell
    dart pub global activate flutterfire_cli
    flutterfire configure --project=synergyhub-a3e1b
-3. Ensure Firebase has fingerprints for both debug and release modes by
-   cd android  && ./gradlew signingReport && cd ..
+```
 
+3. Ensure Firebase has fingerprints for both debug and release modes by
+   
+```shell
+   cd android  && ./gradlew signingReport && cd ..
+```
+
+4. Setup cors for firebase web
+```shell
+    gsutil cors set cors.json   gs://synergyhub-a3e1b.firebasestorage.app
+    # Or recommended new  way
+    gcloud storage buckets update gs://synergyhub-a3e1b.firebasestorage.app \
+  --cors-file=cors.json
+```
+
+   
 
 This project is a starting point for a Flutter application.
 
