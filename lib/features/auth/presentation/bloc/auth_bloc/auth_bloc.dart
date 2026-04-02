@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/repostories/i_auth_repository.dart';
+import '../../../domain/use_cases/sign_in_with_google_use_case.dart';
 
 part 'auth_event.dart';
 
@@ -12,10 +13,13 @@ part 'auth_bloc.freezed.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final IAuthRepository _authRepository;
+  final SignInWithGoogleUseCase _signInWithGoogleUseCase;
 
   AuthBloc({
     required IAuthRepository authRepository,
+    required SignInWithGoogleUseCase signInWithGoogleUseCase,
   }) : _authRepository = authRepository,
+       _signInWithGoogleUseCase = signInWithGoogleUseCase,
        super(const AuthState()) {
     on<_Init>(_init);
     on<_Listen>(_listen);
@@ -74,7 +78,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         status: AuthStatus.loading,
       ),
     );
-    final res = await _authRepository.signInWithGoogle();
+    final res = await _signInWithGoogleUseCase.call();
 
     res.fold(
       (_) {},

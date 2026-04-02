@@ -8,13 +8,14 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/features/auth/domain/exception/failed_sign_with_google.dart';
 import 'package:sinergy_hub/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 
+import '../../../chats/domain/usecases/send_message_use_case_test.dart';
 import '../../data/repositories/auth_repository_mock.dart';
-
-
+import '../../domain/use_cases/sign_in_with_google_use_case_mock.dart';
 
 class FakeUser extends Fake implements User {}
 
 void main() {
+  late SignInWithGoogleUseCaseMock signInWithGoogleUseCaseMock;
   late AuthRepositoryMock authRepository;
   late AuthBloc authBloc;
 
@@ -23,8 +24,12 @@ void main() {
   });
 
   setUp(() {
+    signInWithGoogleUseCaseMock = SignInWithGoogleUseCaseMock();
     authRepository = AuthRepositoryMock();
-    authBloc = AuthBloc(authRepository: authRepository);
+    authBloc = AuthBloc(
+      authRepository: authRepository,
+      signInWithGoogleUseCase: signInWithGoogleUseCaseMock,
+    );
   });
 
   tearDown(() {
@@ -32,14 +37,12 @@ void main() {
   });
 
   group('AuthBloc', () {
-
     // ================= INIT =================
 
     blocTest<AuthBloc, AuthState>(
       'Init → loading → authorized (коли користувач авторизований)',
       build: () {
-        when(() => authRepository.isAuthorized())
-            .thenAnswer((_) async => true);
+        when(() => authRepository.isAuthorized()).thenAnswer((_) async => true);
         return authBloc;
       },
       act: (bloc) => bloc.add(const AuthEvent.init()),
@@ -52,8 +55,9 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'Init → loading → logout (коли не авторизований)',
       build: () {
-        when(() => authRepository.isAuthorized())
-            .thenAnswer((_) async => false);
+        when(
+          () => authRepository.isAuthorized(),
+        ).thenAnswer((_) async => false);
         return authBloc;
       },
       act: (bloc) => bloc.add(const AuthEvent.init()),
@@ -66,15 +70,14 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'Init → loading → failed (при помилці)',
       build: () {
-        when(() => authRepository.isAuthorized())
-            .thenThrow(Exception('error'));
+        when(() => authRepository.isAuthorized()).thenThrow(Exception('error'));
         return authBloc;
       },
       act: (bloc) => bloc.add(const AuthEvent.init()),
       expect: () => [
         const AuthState(status: AuthStatus.loading),
         isA<AuthState>().having(
-              (s) => s.status,
+          (s) => s.status,
           'status',
           AuthStatus.failed,
         ),
@@ -88,8 +91,9 @@ void main() {
       build: () {
         final controller = StreamController<User?>();
 
-        when(() => authRepository.watchUser())
-            .thenAnswer((_) => controller.stream);
+        when(
+          () => authRepository.watchUser(),
+        ).thenAnswer((_) => controller.stream);
 
         // додаємо значення після запуску
         Future.microtask(() {
@@ -101,7 +105,7 @@ void main() {
       act: (bloc) => bloc.add(const AuthEvent.listen()),
       expect: () => [
         isA<AuthState>().having(
-              (s) => s.status,
+          (s) => s.status,
           'status',
           AuthStatus.authorized,
         ),
@@ -113,8 +117,9 @@ void main() {
       build: () {
         final controller = StreamController<User?>();
 
-        when(() => authRepository.watchUser())
-            .thenAnswer((_) => controller.stream);
+        when(
+          () => authRepository.watchUser(),
+        ).thenAnswer((_) => controller.stream);
 
         Future.microtask(() {
           controller.add(null);
@@ -125,7 +130,7 @@ void main() {
       act: (bloc) => bloc.add(const AuthEvent.listen()),
       expect: () => [
         isA<AuthState>().having(
-              (s) => s.status,
+          (s) => s.status,
           'status',
           AuthStatus.logout,
         ),
@@ -137,8 +142,9 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'SignIn → loading (успішний виклик без помилки)',
       build: () {
-        when(() => authRepository.signInWithGoogle())
-            .thenAnswer((_) async => const Left(null));
+        when(
+          () => authRepository.signInWithGoogle(),
+        ).thenAnswer((_) async => const Left(null));
         return authBloc;
       },
       act: (bloc) => bloc.add(const AuthEvent.signInViaGoogle()),
@@ -150,16 +156,16 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'SignIn → loading → failed (при помилці)',
       build: () {
-
-        when(() => authRepository.signInWithGoogle())
-            .thenAnswer((_) async => Right(FailedSignWithGoogle()));
+        when(
+          () => authRepository.signInWithGoogle(),
+        ).thenAnswer((_) async => Right(FailedSignWithGoogle()));
         return authBloc;
       },
       act: (bloc) => bloc.add(const AuthEvent.signInViaGoogle()),
       expect: () => [
         const AuthState(status: AuthStatus.loading),
         isA<AuthState>().having(
-              (s) => s.status,
+          (s) => s.status,
           'status',
           AuthStatus.failed,
         ),
@@ -171,8 +177,7 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'SignOut викликає repository.signOut',
       build: () {
-        when(() => authRepository.signOut())
-            .thenAnswer((_) async {});
+        when(() => authRepository.signOut()).thenAnswer((_) async {});
         return authBloc;
       },
       act: (bloc) => bloc.add(const AuthEvent.signOut()),
@@ -184,14 +189,13 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'SignOut → failed при помилці',
       build: () {
-        when(() => authRepository.signOut())
-            .thenThrow(Exception('fail'));
+        when(() => authRepository.signOut()).thenThrow(Exception('fail'));
         return authBloc;
       },
       act: (bloc) => bloc.add(const AuthEvent.signOut()),
       expect: () => [
         isA<AuthState>().having(
-              (s) => s.status,
+          (s) => s.status,
           'status',
           AuthStatus.failed,
         ),

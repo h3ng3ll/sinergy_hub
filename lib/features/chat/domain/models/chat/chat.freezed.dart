@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Chat {
 
- String get chatId; String get lastMessage;@TimestampConverter() DateTime get lastMessageSent; ChatConfig get config; List<String> get typingUsers; Map<String, ParticipantInfo> get participantInfo;/// who access this chat
+ String get chatId; String get lastMessage;@TimestampConverter() DateTime get lastMessageSent; String get lastMessageSentBy; ChatConfig get config; List<String> get typingUsers; Map<String, ParticipantInfo> get participantInfo;/// who access this chat
  List<String> get participants;@TimestampConverter() DateTime get createdAt; String get icon; List<String> get searchKeywords;
 /// Create a copy of Chat
 /// with the given fields replaced by the non-null parameter values.
@@ -29,16 +29,16 @@ $ChatCopyWith<Chat> get copyWith => _$ChatCopyWithImpl<Chat>(this as Chat, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Chat&&(identical(other.chatId, chatId) || other.chatId == chatId)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.lastMessageSent, lastMessageSent) || other.lastMessageSent == lastMessageSent)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other.typingUsers, typingUsers)&&const DeepCollectionEquality().equals(other.participantInfo, participantInfo)&&const DeepCollectionEquality().equals(other.participants, participants)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other.searchKeywords, searchKeywords));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Chat&&(identical(other.chatId, chatId) || other.chatId == chatId)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.lastMessageSent, lastMessageSent) || other.lastMessageSent == lastMessageSent)&&(identical(other.lastMessageSentBy, lastMessageSentBy) || other.lastMessageSentBy == lastMessageSentBy)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other.typingUsers, typingUsers)&&const DeepCollectionEquality().equals(other.participantInfo, participantInfo)&&const DeepCollectionEquality().equals(other.participants, participants)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other.searchKeywords, searchKeywords));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,chatId,lastMessage,lastMessageSent,config,const DeepCollectionEquality().hash(typingUsers),const DeepCollectionEquality().hash(participantInfo),const DeepCollectionEquality().hash(participants),createdAt,icon,const DeepCollectionEquality().hash(searchKeywords));
+int get hashCode => Object.hash(runtimeType,chatId,lastMessage,lastMessageSent,lastMessageSentBy,config,const DeepCollectionEquality().hash(typingUsers),const DeepCollectionEquality().hash(participantInfo),const DeepCollectionEquality().hash(participants),createdAt,icon,const DeepCollectionEquality().hash(searchKeywords));
 
 @override
 String toString() {
-  return 'Chat(chatId: $chatId, lastMessage: $lastMessage, lastMessageSent: $lastMessageSent, config: $config, typingUsers: $typingUsers, participantInfo: $participantInfo, participants: $participants, createdAt: $createdAt, icon: $icon, searchKeywords: $searchKeywords)';
+  return 'Chat(chatId: $chatId, lastMessage: $lastMessage, lastMessageSent: $lastMessageSent, lastMessageSentBy: $lastMessageSentBy, config: $config, typingUsers: $typingUsers, participantInfo: $participantInfo, participants: $participants, createdAt: $createdAt, icon: $icon, searchKeywords: $searchKeywords)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $ChatCopyWith<$Res>  {
   factory $ChatCopyWith(Chat value, $Res Function(Chat) _then) = _$ChatCopyWithImpl;
 @useResult
 $Res call({
- String chatId, String lastMessage,@TimestampConverter() DateTime lastMessageSent, ChatConfig config, List<String> typingUsers, Map<String, ParticipantInfo> participantInfo, List<String> participants,@TimestampConverter() DateTime createdAt, String icon, List<String> searchKeywords
+ String chatId, String lastMessage,@TimestampConverter() DateTime lastMessageSent, String lastMessageSentBy, ChatConfig config, List<String> typingUsers, Map<String, ParticipantInfo> participantInfo, List<String> participants,@TimestampConverter() DateTime createdAt, String icon, List<String> searchKeywords
 });
 
 
@@ -66,12 +66,13 @@ class _$ChatCopyWithImpl<$Res>
 
 /// Create a copy of Chat
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? chatId = null,Object? lastMessage = null,Object? lastMessageSent = null,Object? config = null,Object? typingUsers = null,Object? participantInfo = null,Object? participants = null,Object? createdAt = null,Object? icon = null,Object? searchKeywords = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? chatId = null,Object? lastMessage = null,Object? lastMessageSent = null,Object? lastMessageSentBy = null,Object? config = null,Object? typingUsers = null,Object? participantInfo = null,Object? participants = null,Object? createdAt = null,Object? icon = null,Object? searchKeywords = null,}) {
   return _then(_self.copyWith(
 chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
 as String,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
 as String,lastMessageSent: null == lastMessageSent ? _self.lastMessageSent : lastMessageSent // ignore: cast_nullable_to_non_nullable
-as DateTime,config: null == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
+as DateTime,lastMessageSentBy: null == lastMessageSentBy ? _self.lastMessageSentBy : lastMessageSentBy // ignore: cast_nullable_to_non_nullable
+as String,config: null == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
 as ChatConfig,typingUsers: null == typingUsers ? _self.typingUsers : typingUsers // ignore: cast_nullable_to_non_nullable
 as List<String>,participantInfo: null == participantInfo ? _self.participantInfo : participantInfo // ignore: cast_nullable_to_non_nullable
 as Map<String, ParticipantInfo>,participants: null == participants ? _self.participants : participants // ignore: cast_nullable_to_non_nullable
@@ -172,10 +173,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String chatId,  String lastMessage, @TimestampConverter()  DateTime lastMessageSent,  ChatConfig config,  List<String> typingUsers,  Map<String, ParticipantInfo> participantInfo,  List<String> participants, @TimestampConverter()  DateTime createdAt,  String icon,  List<String> searchKeywords)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String chatId,  String lastMessage, @TimestampConverter()  DateTime lastMessageSent,  String lastMessageSentBy,  ChatConfig config,  List<String> typingUsers,  Map<String, ParticipantInfo> participantInfo,  List<String> participants, @TimestampConverter()  DateTime createdAt,  String icon,  List<String> searchKeywords)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Chat() when $default != null:
-return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.config,_that.typingUsers,_that.participantInfo,_that.participants,_that.createdAt,_that.icon,_that.searchKeywords);case _:
+return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.lastMessageSentBy,_that.config,_that.typingUsers,_that.participantInfo,_that.participants,_that.createdAt,_that.icon,_that.searchKeywords);case _:
   return orElse();
 
 }
@@ -193,10 +194,10 @@ return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.confi
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String chatId,  String lastMessage, @TimestampConverter()  DateTime lastMessageSent,  ChatConfig config,  List<String> typingUsers,  Map<String, ParticipantInfo> participantInfo,  List<String> participants, @TimestampConverter()  DateTime createdAt,  String icon,  List<String> searchKeywords)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String chatId,  String lastMessage, @TimestampConverter()  DateTime lastMessageSent,  String lastMessageSentBy,  ChatConfig config,  List<String> typingUsers,  Map<String, ParticipantInfo> participantInfo,  List<String> participants, @TimestampConverter()  DateTime createdAt,  String icon,  List<String> searchKeywords)  $default,) {final _that = this;
 switch (_that) {
 case _Chat():
-return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.config,_that.typingUsers,_that.participantInfo,_that.participants,_that.createdAt,_that.icon,_that.searchKeywords);case _:
+return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.lastMessageSentBy,_that.config,_that.typingUsers,_that.participantInfo,_that.participants,_that.createdAt,_that.icon,_that.searchKeywords);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +214,10 @@ return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.confi
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String chatId,  String lastMessage, @TimestampConverter()  DateTime lastMessageSent,  ChatConfig config,  List<String> typingUsers,  Map<String, ParticipantInfo> participantInfo,  List<String> participants, @TimestampConverter()  DateTime createdAt,  String icon,  List<String> searchKeywords)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String chatId,  String lastMessage, @TimestampConverter()  DateTime lastMessageSent,  String lastMessageSentBy,  ChatConfig config,  List<String> typingUsers,  Map<String, ParticipantInfo> participantInfo,  List<String> participants, @TimestampConverter()  DateTime createdAt,  String icon,  List<String> searchKeywords)?  $default,) {final _that = this;
 switch (_that) {
 case _Chat() when $default != null:
-return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.config,_that.typingUsers,_that.participantInfo,_that.participants,_that.createdAt,_that.icon,_that.searchKeywords);case _:
+return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.lastMessageSentBy,_that.config,_that.typingUsers,_that.participantInfo,_that.participants,_that.createdAt,_that.icon,_that.searchKeywords);case _:
   return null;
 
 }
@@ -228,12 +229,13 @@ return $default(_that.chatId,_that.lastMessage,_that.lastMessageSent,_that.confi
 @JsonSerializable()
 
 class _Chat implements Chat {
-  const _Chat({this.chatId = '', this.lastMessage = '', @TimestampConverter() required this.lastMessageSent, required this.config, final  List<String> typingUsers = const [], final  Map<String, ParticipantInfo> participantInfo = const {}, required final  List<String> participants, @TimestampConverter() required this.createdAt, this.icon = '', final  List<String> searchKeywords = const []}): _typingUsers = typingUsers,_participantInfo = participantInfo,_participants = participants,_searchKeywords = searchKeywords;
+  const _Chat({this.chatId = '', this.lastMessage = '', @TimestampConverter() required this.lastMessageSent, this.lastMessageSentBy = '', required this.config, final  List<String> typingUsers = const [], final  Map<String, ParticipantInfo> participantInfo = const {}, required final  List<String> participants, @TimestampConverter() required this.createdAt, this.icon = '', final  List<String> searchKeywords = const []}): _typingUsers = typingUsers,_participantInfo = participantInfo,_participants = participants,_searchKeywords = searchKeywords;
   factory _Chat.fromJson(Map<String, dynamic> json) => _$ChatFromJson(json);
 
 @override@JsonKey() final  String chatId;
 @override@JsonKey() final  String lastMessage;
 @override@TimestampConverter() final  DateTime lastMessageSent;
+@override@JsonKey() final  String lastMessageSentBy;
 @override final  ChatConfig config;
  final  List<String> _typingUsers;
 @override@JsonKey() List<String> get typingUsers {
@@ -281,16 +283,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Chat&&(identical(other.chatId, chatId) || other.chatId == chatId)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.lastMessageSent, lastMessageSent) || other.lastMessageSent == lastMessageSent)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other._typingUsers, _typingUsers)&&const DeepCollectionEquality().equals(other._participantInfo, _participantInfo)&&const DeepCollectionEquality().equals(other._participants, _participants)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other._searchKeywords, _searchKeywords));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Chat&&(identical(other.chatId, chatId) || other.chatId == chatId)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.lastMessageSent, lastMessageSent) || other.lastMessageSent == lastMessageSent)&&(identical(other.lastMessageSentBy, lastMessageSentBy) || other.lastMessageSentBy == lastMessageSentBy)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other._typingUsers, _typingUsers)&&const DeepCollectionEquality().equals(other._participantInfo, _participantInfo)&&const DeepCollectionEquality().equals(other._participants, _participants)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other._searchKeywords, _searchKeywords));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,chatId,lastMessage,lastMessageSent,config,const DeepCollectionEquality().hash(_typingUsers),const DeepCollectionEquality().hash(_participantInfo),const DeepCollectionEquality().hash(_participants),createdAt,icon,const DeepCollectionEquality().hash(_searchKeywords));
+int get hashCode => Object.hash(runtimeType,chatId,lastMessage,lastMessageSent,lastMessageSentBy,config,const DeepCollectionEquality().hash(_typingUsers),const DeepCollectionEquality().hash(_participantInfo),const DeepCollectionEquality().hash(_participants),createdAt,icon,const DeepCollectionEquality().hash(_searchKeywords));
 
 @override
 String toString() {
-  return 'Chat(chatId: $chatId, lastMessage: $lastMessage, lastMessageSent: $lastMessageSent, config: $config, typingUsers: $typingUsers, participantInfo: $participantInfo, participants: $participants, createdAt: $createdAt, icon: $icon, searchKeywords: $searchKeywords)';
+  return 'Chat(chatId: $chatId, lastMessage: $lastMessage, lastMessageSent: $lastMessageSent, lastMessageSentBy: $lastMessageSentBy, config: $config, typingUsers: $typingUsers, participantInfo: $participantInfo, participants: $participants, createdAt: $createdAt, icon: $icon, searchKeywords: $searchKeywords)';
 }
 
 
@@ -301,7 +303,7 @@ abstract mixin class _$ChatCopyWith<$Res> implements $ChatCopyWith<$Res> {
   factory _$ChatCopyWith(_Chat value, $Res Function(_Chat) _then) = __$ChatCopyWithImpl;
 @override @useResult
 $Res call({
- String chatId, String lastMessage,@TimestampConverter() DateTime lastMessageSent, ChatConfig config, List<String> typingUsers, Map<String, ParticipantInfo> participantInfo, List<String> participants,@TimestampConverter() DateTime createdAt, String icon, List<String> searchKeywords
+ String chatId, String lastMessage,@TimestampConverter() DateTime lastMessageSent, String lastMessageSentBy, ChatConfig config, List<String> typingUsers, Map<String, ParticipantInfo> participantInfo, List<String> participants,@TimestampConverter() DateTime createdAt, String icon, List<String> searchKeywords
 });
 
 
@@ -318,12 +320,13 @@ class __$ChatCopyWithImpl<$Res>
 
 /// Create a copy of Chat
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? chatId = null,Object? lastMessage = null,Object? lastMessageSent = null,Object? config = null,Object? typingUsers = null,Object? participantInfo = null,Object? participants = null,Object? createdAt = null,Object? icon = null,Object? searchKeywords = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? chatId = null,Object? lastMessage = null,Object? lastMessageSent = null,Object? lastMessageSentBy = null,Object? config = null,Object? typingUsers = null,Object? participantInfo = null,Object? participants = null,Object? createdAt = null,Object? icon = null,Object? searchKeywords = null,}) {
   return _then(_Chat(
 chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
 as String,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
 as String,lastMessageSent: null == lastMessageSent ? _self.lastMessageSent : lastMessageSent // ignore: cast_nullable_to_non_nullable
-as DateTime,config: null == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
+as DateTime,lastMessageSentBy: null == lastMessageSentBy ? _self.lastMessageSentBy : lastMessageSentBy // ignore: cast_nullable_to_non_nullable
+as String,config: null == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
 as ChatConfig,typingUsers: null == typingUsers ? _self._typingUsers : typingUsers // ignore: cast_nullable_to_non_nullable
 as List<String>,participantInfo: null == participantInfo ? _self._participantInfo : participantInfo // ignore: cast_nullable_to_non_nullable
 as Map<String, ParticipantInfo>,participants: null == participants ? _self._participants : participants // ignore: cast_nullable_to_non_nullable

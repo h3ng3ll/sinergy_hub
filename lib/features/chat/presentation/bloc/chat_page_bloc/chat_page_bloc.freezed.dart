@@ -55,7 +55,7 @@ extension ChatPageEventPatterns on ChatPageEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Subscribe value)?  subscribe,TResult Function( _Init value)?  init,TResult Function( _SendMessage value)?  sendMessage,TResult Function( _UpdateMessages value)?  updateMessages,TResult Function( _UpdateChat value)?  updateChat,TResult Function( _StartTyping value)?  startTyping,TResult Function( _EndTyping value)?  endTyping,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Subscribe value)?  subscribe,TResult Function( _Init value)?  init,TResult Function( _SendMessage value)?  sendMessage,TResult Function( _UpdateMessages value)?  updateMessages,TResult Function( _UpdateChat value)?  updateChat,TResult Function( _StartTyping value)?  startTyping,TResult Function( _EndTyping value)?  endTyping,TResult Function( _UpdateUserData value)?  updateUserData,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
@@ -65,7 +65,8 @@ return sendMessage(_that);case _UpdateMessages() when updateMessages != null:
 return updateMessages(_that);case _UpdateChat() when updateChat != null:
 return updateChat(_that);case _StartTyping() when startTyping != null:
 return startTyping(_that);case _EndTyping() when endTyping != null:
-return endTyping(_that);case _:
+return endTyping(_that);case _UpdateUserData() when updateUserData != null:
+return updateUserData(_that);case _:
   return orElse();
 
 }
@@ -83,7 +84,7 @@ return endTyping(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Subscribe value)  subscribe,required TResult Function( _Init value)  init,required TResult Function( _SendMessage value)  sendMessage,required TResult Function( _UpdateMessages value)  updateMessages,required TResult Function( _UpdateChat value)  updateChat,required TResult Function( _StartTyping value)  startTyping,required TResult Function( _EndTyping value)  endTyping,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Subscribe value)  subscribe,required TResult Function( _Init value)  init,required TResult Function( _SendMessage value)  sendMessage,required TResult Function( _UpdateMessages value)  updateMessages,required TResult Function( _UpdateChat value)  updateChat,required TResult Function( _StartTyping value)  startTyping,required TResult Function( _EndTyping value)  endTyping,required TResult Function( _UpdateUserData value)  updateUserData,}){
 final _that = this;
 switch (_that) {
 case _Subscribe():
@@ -93,7 +94,8 @@ return sendMessage(_that);case _UpdateMessages():
 return updateMessages(_that);case _UpdateChat():
 return updateChat(_that);case _StartTyping():
 return startTyping(_that);case _EndTyping():
-return endTyping(_that);}
+return endTyping(_that);case _UpdateUserData():
+return updateUserData(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -107,7 +109,7 @@ return endTyping(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Subscribe value)?  subscribe,TResult? Function( _Init value)?  init,TResult? Function( _SendMessage value)?  sendMessage,TResult? Function( _UpdateMessages value)?  updateMessages,TResult? Function( _UpdateChat value)?  updateChat,TResult? Function( _StartTyping value)?  startTyping,TResult? Function( _EndTyping value)?  endTyping,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Subscribe value)?  subscribe,TResult? Function( _Init value)?  init,TResult? Function( _SendMessage value)?  sendMessage,TResult? Function( _UpdateMessages value)?  updateMessages,TResult? Function( _UpdateChat value)?  updateChat,TResult? Function( _StartTyping value)?  startTyping,TResult? Function( _EndTyping value)?  endTyping,TResult? Function( _UpdateUserData value)?  updateUserData,}){
 final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
@@ -117,7 +119,8 @@ return sendMessage(_that);case _UpdateMessages() when updateMessages != null:
 return updateMessages(_that);case _UpdateChat() when updateChat != null:
 return updateChat(_that);case _StartTyping() when startTyping != null:
 return startTyping(_that);case _EndTyping() when endTyping != null:
-return endTyping(_that);case _:
+return endTyping(_that);case _UpdateUserData() when updateUserData != null:
+return updateUserData(_that);case _:
   return null;
 
 }
@@ -134,16 +137,17 @@ return endTyping(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  subscribe,TResult Function()?  init,TResult Function( String message)?  sendMessage,TResult Function( List<ChatMessage> messages)?  updateMessages,TResult Function( Chat chat)?  updateChat,TResult Function()?  startTyping,TResult Function()?  endTyping,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String uid)?  subscribe,TResult Function()?  init,TResult Function( String message)?  sendMessage,TResult Function( List<ChatMessage> messages)?  updateMessages,TResult Function( Chat chat)?  updateChat,TResult Function()?  startTyping,TResult Function()?  endTyping,TResult Function( UserData user)?  updateUserData,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
-return subscribe();case _Init() when init != null:
+return subscribe(_that.uid);case _Init() when init != null:
 return init();case _SendMessage() when sendMessage != null:
 return sendMessage(_that.message);case _UpdateMessages() when updateMessages != null:
 return updateMessages(_that.messages);case _UpdateChat() when updateChat != null:
 return updateChat(_that.chat);case _StartTyping() when startTyping != null:
 return startTyping();case _EndTyping() when endTyping != null:
-return endTyping();case _:
+return endTyping();case _UpdateUserData() when updateUserData != null:
+return updateUserData(_that.user);case _:
   return orElse();
 
 }
@@ -161,16 +165,17 @@ return endTyping();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  subscribe,required TResult Function()  init,required TResult Function( String message)  sendMessage,required TResult Function( List<ChatMessage> messages)  updateMessages,required TResult Function( Chat chat)  updateChat,required TResult Function()  startTyping,required TResult Function()  endTyping,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String uid)  subscribe,required TResult Function()  init,required TResult Function( String message)  sendMessage,required TResult Function( List<ChatMessage> messages)  updateMessages,required TResult Function( Chat chat)  updateChat,required TResult Function()  startTyping,required TResult Function()  endTyping,required TResult Function( UserData user)  updateUserData,}) {final _that = this;
 switch (_that) {
 case _Subscribe():
-return subscribe();case _Init():
+return subscribe(_that.uid);case _Init():
 return init();case _SendMessage():
 return sendMessage(_that.message);case _UpdateMessages():
 return updateMessages(_that.messages);case _UpdateChat():
 return updateChat(_that.chat);case _StartTyping():
 return startTyping();case _EndTyping():
-return endTyping();}
+return endTyping();case _UpdateUserData():
+return updateUserData(_that.user);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -184,16 +189,17 @@ return endTyping();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  subscribe,TResult? Function()?  init,TResult? Function( String message)?  sendMessage,TResult? Function( List<ChatMessage> messages)?  updateMessages,TResult? Function( Chat chat)?  updateChat,TResult? Function()?  startTyping,TResult? Function()?  endTyping,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String uid)?  subscribe,TResult? Function()?  init,TResult? Function( String message)?  sendMessage,TResult? Function( List<ChatMessage> messages)?  updateMessages,TResult? Function( Chat chat)?  updateChat,TResult? Function()?  startTyping,TResult? Function()?  endTyping,TResult? Function( UserData user)?  updateUserData,}) {final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
-return subscribe();case _Init() when init != null:
+return subscribe(_that.uid);case _Init() when init != null:
 return init();case _SendMessage() when sendMessage != null:
 return sendMessage(_that.message);case _UpdateMessages() when updateMessages != null:
 return updateMessages(_that.messages);case _UpdateChat() when updateChat != null:
 return updateChat(_that.chat);case _StartTyping() when startTyping != null:
 return startTyping();case _EndTyping() when endTyping != null:
-return endTyping();case _:
+return endTyping();case _UpdateUserData() when updateUserData != null:
+return updateUserData(_that.user);case _:
   return null;
 
 }
@@ -205,33 +211,67 @@ return endTyping();case _:
 
 
 class _Subscribe implements ChatPageEvent {
-  const _Subscribe();
+  const _Subscribe({required this.uid});
   
 
+ final  String uid;
 
-
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SubscribeCopyWith<_Subscribe> get copyWith => __$SubscribeCopyWithImpl<_Subscribe>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Subscribe);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Subscribe&&(identical(other.uid, uid) || other.uid == uid));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,uid);
 
 @override
 String toString() {
-  return 'ChatPageEvent.subscribe()';
+  return 'ChatPageEvent.subscribe(uid: $uid)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$SubscribeCopyWith<$Res> implements $ChatPageEventCopyWith<$Res> {
+  factory _$SubscribeCopyWith(_Subscribe value, $Res Function(_Subscribe) _then) = __$SubscribeCopyWithImpl;
+@useResult
+$Res call({
+ String uid
+});
 
 
+
+
+}
+/// @nodoc
+class __$SubscribeCopyWithImpl<$Res>
+    implements _$SubscribeCopyWith<$Res> {
+  __$SubscribeCopyWithImpl(this._self, this._then);
+
+  final _Subscribe _self;
+  final $Res Function(_Subscribe) _then;
+
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? uid = null,}) {
+  return _then(_Subscribe(
+uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
@@ -541,6 +581,81 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class _UpdateUserData implements ChatPageEvent {
+  const _UpdateUserData({required this.user});
+  
+
+ final  UserData user;
+
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateUserDataCopyWith<_UpdateUserData> get copyWith => __$UpdateUserDataCopyWithImpl<_UpdateUserData>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateUserData&&(identical(other.user, user) || other.user == user));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,user);
+
+@override
+String toString() {
+  return 'ChatPageEvent.updateUserData(user: $user)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateUserDataCopyWith<$Res> implements $ChatPageEventCopyWith<$Res> {
+  factory _$UpdateUserDataCopyWith(_UpdateUserData value, $Res Function(_UpdateUserData) _then) = __$UpdateUserDataCopyWithImpl;
+@useResult
+$Res call({
+ UserData user
+});
+
+
+$UserDataCopyWith<$Res> get user;
+
+}
+/// @nodoc
+class __$UpdateUserDataCopyWithImpl<$Res>
+    implements _$UpdateUserDataCopyWith<$Res> {
+  __$UpdateUserDataCopyWithImpl(this._self, this._then);
+
+  final _UpdateUserData _self;
+  final $Res Function(_UpdateUserData) _then;
+
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
+  return _then(_UpdateUserData(
+user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as UserData,
+  ));
+}
+
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserDataCopyWith<$Res> get user {
+  
+  return $UserDataCopyWith<$Res>(_self.user, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}
+}
 
 /// @nodoc
 mixin _$ChatPageState {

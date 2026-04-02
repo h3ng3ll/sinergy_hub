@@ -12,15 +12,20 @@ enum ChatsFilterStatus {
 }
 
 extension ChatsFilterStateX on ChatsFilterState {
-  get isFailed => status == ChatsFilterStatus.failed;
+  bool get isFailed => status == ChatsFilterStatus.failed;
 
-  get isArchived => status == ChatsFilterStatus.archived;
+  bool get isArchived => status == ChatsFilterStatus.archived;
 
-  get isUnArchived => status == ChatsFilterStatus.unArchived;
+  bool get isUnArchived => status == ChatsFilterStatus.unArchived;
 
-  get isFavorite => status == ChatsFilterStatus.favorite;
+  bool get isFavorite => status == ChatsFilterStatus.favorite;
 
-  get isUnFavorite => status == ChatsFilterStatus.unFavorite;
+  bool get isUnFavorite => status == ChatsFilterStatus.unFavorite;
+
+  List<String> get onlineUsers => onlineStatuses.entries
+      .where((e) => e.value)
+      .map((e) => e.key)
+      .toList();
 
   ChatsFilterStatus? resolveStatus(Chat old, Chat newChat, String uid) {
     if (old.isArchived(uid) != newChat.isArchived(uid)) {
@@ -44,6 +49,7 @@ sealed class ChatsFilterState with _$ChatsFilterState {
   const factory ChatsFilterState({
     @Default(ChatsFilterStatus.initial) ChatsFilterStatus status,
     @Default(ChatPgState()) ChatPgState chatsState,
+    @Default({}) Map<String, bool> onlineStatuses,
     @Default(EChatFilter.all) EChatFilter filter,
     @Default('') String query,
     @Default('') String uid,

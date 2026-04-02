@@ -16,7 +16,9 @@ import 'core/services/firebase/firebase_messaging_service.dart';
 import 'core/services/google_sign_in_service/google_sign_in_service.dart';
 import 'core/services/local_notification_service.dart';
 import 'features/auth/domain/repostories/i_auth_repository.dart';
+import 'features/auth/domain/use_cases/sign_in_with_google_use_case.dart';
 import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'features/chat/domain/services/i_presence_service.dart';
 import 'features/notifications/domain/usecases/get_notification_config_use_case.dart';
 import 'features/notifications/domain/usecases/save_notification_config_use_case.dart';
 import 'features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
@@ -50,10 +52,10 @@ void main() async {
   await getIt<FirebaseFirestoreService>().init();
   await getIt<LocalNotificationService>().init();
 
-  /// not blocking loading
-  getIt<FirebaseMessagingService>().init();
-  await getIt<GoogleSignInService>().init();
 
+  await getIt<FirebaseMessagingService>().init();
+  await getIt<GoogleSignInService>().init();
+  await getIt<IPresenceService>().init();
   Bloc.observer = AppObserver.instance();
 
   runApp(
@@ -68,7 +70,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   bool initialized = false;
   late final UserBloc userBloc;
   late final AuthBloc authBloc;
@@ -76,8 +78,16 @@ class _MyAppState extends State<MyApp> {
   // late final
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
     loadData();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    getIt<IPresenceService>().onChangeState(
+      state,
+    );
   }
 
   void loadData() async {
@@ -87,6 +97,7 @@ class _MyAppState extends State<MyApp> {
     authBloc =
         AuthBloc(
             authRepository: getIt<IAuthRepository>(),
+            signInWithGoogleUseCase: getIt<SignInWithGoogleUseCase>(),
           )
           ..add(
             AuthEvent.init(),
@@ -96,6 +107,14 @@ class _MyAppState extends State<MyApp> {
           );
     initialized = true;
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(
+      this,
+    );
+    super.dispose();
   }
 
   @override

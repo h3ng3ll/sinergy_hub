@@ -18,9 +18,7 @@ class BuildChatUserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final textTheme = AppTextTheme.of(context);
-
 
     return Row(
       children: [
@@ -39,14 +37,14 @@ class BuildChatUserInfo extends StatelessWidget {
                 color: AppColors.black.value,
               ),
             ),
-            // Text(
-            //   chatPageBloc.isOnlineUser ? 'Online now' : 'Offline now',
-            //   style: textTheme.medium16.copyWith(
-            //     color: chatPageBloc.isOnlineUser
-            //         ? AppColors.greenCrayola.value
-            //         : AppColors.tartOrange.value,
-            //   ),
-            // ),
+            Text(
+              user.isOnline ? 'Online now' : 'Offline now',
+              style: textTheme.medium16.copyWith(
+                color: user.isOnline
+                    ? AppColors.greenCrayola.value
+                    : AppColors.tartOrange.value,
+              ),
+            ),
           ],
         ),
       ],

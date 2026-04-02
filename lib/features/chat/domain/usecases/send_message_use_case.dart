@@ -1,4 +1,5 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
+import '../models/chat/chat.dart';
 import '../models/chat_message/chat_message.dart';
 import '../repositories/i_chat_message_repository.dart';
 import 'get_chat_by_id_use_case.dart';
@@ -35,11 +36,12 @@ class SendMessageUseCase {
       message: chatMessage,
       chatId: chatId,
     );
-    final chat = await _getChatByIdUseCase.call(
+    final Chat chat = await _getChatByIdUseCase.call(
       chatId: chatId,
     );
     final updatedChat = chat.copyWith(
       lastMessage: message,
+      lastMessageSentBy: uid,
     );
     await _updateChatInfoUseCase(
       chatId: chat.chatId,

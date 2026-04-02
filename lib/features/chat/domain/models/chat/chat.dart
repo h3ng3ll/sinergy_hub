@@ -18,6 +18,7 @@ abstract class Chat with _$Chat {
     @Default('') String chatId,
     @Default('') String lastMessage,
     @TimestampConverter() required DateTime lastMessageSent,
+    @Default('')  String lastMessageSentBy,
     required ChatConfig config,
     @Default([]) List<String> typingUsers,
     @Default({}) Map<String, ParticipantInfo> participantInfo,

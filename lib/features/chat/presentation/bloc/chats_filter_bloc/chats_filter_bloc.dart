@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../core/utils/extensions/bloc_ext.dart';
+import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
+import '../../../../user/domain/usecases/get_user_data_use_case.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/chat_pg_state.dart/chat_pg_state.dart';
 import '../../../domain/models/e_chat_filter.dart';
@@ -23,6 +25,7 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
   final ToggleFavoriteChatUseCase _toggleFavoriteChatUseCase;
   final ListenChatUpdatesUseCase _listenChatUpdatesUseCase;
   final GetCurrentUserDataUseCase _getCurrentUserDataUseCase;
+  final GetUserDataUseCase _getUserDataUseCase;
 
   ChatsFilterBloc({
     required SearchChatsUseCase searchChatsUseCase,
@@ -30,11 +33,13 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     required ToggleFavoriteChatUseCase toggleFavoriteChatUseCase,
     required ListenChatUpdatesUseCase listenChatUpdatesUseCase,
     required GetCurrentUserDataUseCase getCurrentUserDataUseCase,
+    required GetUserDataUseCase getUserDataUseCase,
   }) : _searchChatsUseCase = searchChatsUseCase,
        _toggleArchiveChatUseCase = toggleArchiveChatUseCase,
        _listenChatUpdatesUseCase = listenChatUpdatesUseCase,
        _toggleFavoriteChatUseCase = toggleFavoriteChatUseCase,
        _getCurrentUserDataUseCase = getCurrentUserDataUseCase,
+       _getUserDataUseCase = getUserDataUseCase,
        super(const ChatsFilterState()) {
     on<_ApplyFilter>(_applyFilter);
     on<_Search>(
@@ -51,6 +56,32 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     on<_Init>(_init);
   }
 
+  Future<Map<String, bool>> _fillOnline(
+    List<Chat> chats,
+    Map<String, bool> online,
+  ) async {
+    final lastMessage = chats.map(
+      (Chat e) => e.lastMessageSentBy,
+    );
+    Map<String, bool> onlineStatuses = {...online};
+
+    for (final uid in lastMessage) {
+      if (online.containsKey(uid)) continue;
+      final UserData? user = await _getUserDataUseCase.call(
+        id: uid,
+      );
+      onlineStatuses.addEntries(
+        {
+          MapEntry(
+            uid,
+            user?.isOnline ?? false,
+          ),
+        },
+      );
+    }
+    return onlineStatuses;
+  }
+
   void _applyFilter(_ApplyFilter event, emit) async {
     try {
       emit(
@@ -64,9 +95,14 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
         query: state.query,
         filter: event.filter,
       );
+      final online = await _fillOnline(
+        chatsState.chats,
+        state.onlineStatuses,
+      );
       emit(
         state.copyWith(
           filter: event.filter,
+          onlineStatuses: online,
           chatsState: chatsState,
           status: ChatsFilterStatus.initial,
         ),
@@ -172,10 +208,17 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
         query: event.query,
         filter: state.filter,
       );
+
+      final online = await _fillOnline(
+        chatState.chats,
+        state.onlineStatuses,
+      );
+
       emit(
         state.copyWith(
           query: event.query,
           chatsState: chatState,
+          onlineStatuses: online,
           status: ChatsFilterStatus.initial,
         ),
       );

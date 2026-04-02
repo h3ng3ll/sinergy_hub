@@ -544,7 +544,7 @@ String toString() {
 /// @nodoc
 mixin _$ChatsFilterState {
 
- ChatsFilterStatus get status; ChatPgState get chatsState; EChatFilter get filter; String get query; String get uid; dynamic get errorMessage;
+ ChatsFilterStatus get status; ChatPgState get chatsState; Map<String, bool> get onlineStatuses; EChatFilter get filter; String get query; String get uid; dynamic get errorMessage;
 /// Create a copy of ChatsFilterState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -555,16 +555,16 @@ $ChatsFilterStateCopyWith<ChatsFilterState> get copyWith => _$ChatsFilterStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatsFilterState&&(identical(other.status, status) || other.status == status)&&(identical(other.chatsState, chatsState) || other.chatsState == chatsState)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&(identical(other.uid, uid) || other.uid == uid)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatsFilterState&&(identical(other.status, status) || other.status == status)&&(identical(other.chatsState, chatsState) || other.chatsState == chatsState)&&const DeepCollectionEquality().equals(other.onlineStatuses, onlineStatuses)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&(identical(other.uid, uid) || other.uid == uid)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,chatsState,filter,query,uid,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,status,chatsState,const DeepCollectionEquality().hash(onlineStatuses),filter,query,uid,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatsFilterState(status: $status, chatsState: $chatsState, filter: $filter, query: $query, uid: $uid, errorMessage: $errorMessage)';
+  return 'ChatsFilterState(status: $status, chatsState: $chatsState, onlineStatuses: $onlineStatuses, filter: $filter, query: $query, uid: $uid, errorMessage: $errorMessage)';
 }
 
 
@@ -575,7 +575,7 @@ abstract mixin class $ChatsFilterStateCopyWith<$Res>  {
   factory $ChatsFilterStateCopyWith(ChatsFilterState value, $Res Function(ChatsFilterState) _then) = _$ChatsFilterStateCopyWithImpl;
 @useResult
 $Res call({
- ChatsFilterStatus status, ChatPgState chatsState, EChatFilter filter, String query, String uid, dynamic errorMessage
+ ChatsFilterStatus status, ChatPgState chatsState, Map<String, bool> onlineStatuses, EChatFilter filter, String query, String uid, dynamic errorMessage
 });
 
 
@@ -592,11 +592,12 @@ class _$ChatsFilterStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatsFilterState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? chatsState = null,Object? filter = null,Object? query = null,Object? uid = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? chatsState = null,Object? onlineStatuses = null,Object? filter = null,Object? query = null,Object? uid = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ChatsFilterStatus,chatsState: null == chatsState ? _self.chatsState : chatsState // ignore: cast_nullable_to_non_nullable
-as ChatPgState,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
+as ChatPgState,onlineStatuses: null == onlineStatuses ? _self.onlineStatuses : onlineStatuses // ignore: cast_nullable_to_non_nullable
+as Map<String, bool>,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
 as EChatFilter,query: null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
 as String,uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -691,10 +692,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  ChatPgState chatsState,  EChatFilter filter,  String query,  String uid,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  ChatPgState chatsState,  Map<String, bool> onlineStatuses,  EChatFilter filter,  String query,  String uid,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatsFilterState() when $default != null:
-return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.uid,_that.errorMessage);case _:
+return $default(_that.status,_that.chatsState,_that.onlineStatuses,_that.filter,_that.query,_that.uid,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -712,10 +713,10 @@ return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.uid
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  ChatPgState chatsState,  EChatFilter filter,  String query,  String uid,  dynamic errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ChatsFilterStatus status,  ChatPgState chatsState,  Map<String, bool> onlineStatuses,  EChatFilter filter,  String query,  String uid,  dynamic errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _ChatsFilterState():
-return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.uid,_that.errorMessage);}
+return $default(_that.status,_that.chatsState,_that.onlineStatuses,_that.filter,_that.query,_that.uid,_that.errorMessage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -729,10 +730,10 @@ return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.uid
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ChatsFilterStatus status,  ChatPgState chatsState,  EChatFilter filter,  String query,  String uid,  dynamic errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ChatsFilterStatus status,  ChatPgState chatsState,  Map<String, bool> onlineStatuses,  EChatFilter filter,  String query,  String uid,  dynamic errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatsFilterState() when $default != null:
-return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.uid,_that.errorMessage);case _:
+return $default(_that.status,_that.chatsState,_that.onlineStatuses,_that.filter,_that.query,_that.uid,_that.errorMessage);case _:
   return null;
 
 }
@@ -744,11 +745,18 @@ return $default(_that.status,_that.chatsState,_that.filter,_that.query,_that.uid
 
 
 class _ChatsFilterState implements ChatsFilterState {
-  const _ChatsFilterState({this.status = ChatsFilterStatus.initial, this.chatsState = const ChatPgState(), this.filter = EChatFilter.all, this.query = '', this.uid = '', this.errorMessage = ''});
+  const _ChatsFilterState({this.status = ChatsFilterStatus.initial, this.chatsState = const ChatPgState(), final  Map<String, bool> onlineStatuses = const {}, this.filter = EChatFilter.all, this.query = '', this.uid = '', this.errorMessage = ''}): _onlineStatuses = onlineStatuses;
   
 
 @override@JsonKey() final  ChatsFilterStatus status;
 @override@JsonKey() final  ChatPgState chatsState;
+ final  Map<String, bool> _onlineStatuses;
+@override@JsonKey() Map<String, bool> get onlineStatuses {
+  if (_onlineStatuses is EqualUnmodifiableMapView) return _onlineStatuses;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_onlineStatuses);
+}
+
 @override@JsonKey() final  EChatFilter filter;
 @override@JsonKey() final  String query;
 @override@JsonKey() final  String uid;
@@ -764,16 +772,16 @@ _$ChatsFilterStateCopyWith<_ChatsFilterState> get copyWith => __$ChatsFilterStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatsFilterState&&(identical(other.status, status) || other.status == status)&&(identical(other.chatsState, chatsState) || other.chatsState == chatsState)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&(identical(other.uid, uid) || other.uid == uid)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatsFilterState&&(identical(other.status, status) || other.status == status)&&(identical(other.chatsState, chatsState) || other.chatsState == chatsState)&&const DeepCollectionEquality().equals(other._onlineStatuses, _onlineStatuses)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.query, query) || other.query == query)&&(identical(other.uid, uid) || other.uid == uid)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,chatsState,filter,query,uid,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,status,chatsState,const DeepCollectionEquality().hash(_onlineStatuses),filter,query,uid,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatsFilterState(status: $status, chatsState: $chatsState, filter: $filter, query: $query, uid: $uid, errorMessage: $errorMessage)';
+  return 'ChatsFilterState(status: $status, chatsState: $chatsState, onlineStatuses: $onlineStatuses, filter: $filter, query: $query, uid: $uid, errorMessage: $errorMessage)';
 }
 
 
@@ -784,7 +792,7 @@ abstract mixin class _$ChatsFilterStateCopyWith<$Res> implements $ChatsFilterSta
   factory _$ChatsFilterStateCopyWith(_ChatsFilterState value, $Res Function(_ChatsFilterState) _then) = __$ChatsFilterStateCopyWithImpl;
 @override @useResult
 $Res call({
- ChatsFilterStatus status, ChatPgState chatsState, EChatFilter filter, String query, String uid, dynamic errorMessage
+ ChatsFilterStatus status, ChatPgState chatsState, Map<String, bool> onlineStatuses, EChatFilter filter, String query, String uid, dynamic errorMessage
 });
 
 
@@ -801,11 +809,12 @@ class __$ChatsFilterStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatsFilterState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? chatsState = null,Object? filter = null,Object? query = null,Object? uid = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? chatsState = null,Object? onlineStatuses = null,Object? filter = null,Object? query = null,Object? uid = null,Object? errorMessage = freezed,}) {
   return _then(_ChatsFilterState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ChatsFilterStatus,chatsState: null == chatsState ? _self.chatsState : chatsState // ignore: cast_nullable_to_non_nullable
-as ChatPgState,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
+as ChatPgState,onlineStatuses: null == onlineStatuses ? _self._onlineStatuses : onlineStatuses // ignore: cast_nullable_to_non_nullable
+as Map<String, bool>,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
 as EChatFilter,query: null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
 as String,uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable

@@ -35,10 +35,6 @@ class BuildUserAvatar extends StatelessWidget {
           url: url,
           bytes: cacheImg,
           shape: BoxShape.circle,
-          border: Border.all(
-            color: AppColors.white.value,
-            width: 3,
-          ),
           width: width,
           height: height,
         ),

@@ -16,6 +16,7 @@ import '../../../../chat/domain/usecases/toggle_favorite_chat_use_case.dart';
 import '../../../../onboard_survey/presentation/pages/onboard_survey_page/stages/specialization_stage/widgets/search_input.dart';
 import '../../../../chat/presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
+import '../../../../user/domain/usecases/get_user_data_use_case.dart';
 import 'widgets/build_chat_filters/build_chat_filters.dart';
 import 'widgets/chats_builder/chats_builder.dart';
 import 'widgets/chats_builder/widgets/build_chats_empty.dart';
@@ -36,6 +37,7 @@ class _MatchesPageState extends State<MatchesPage> {
         toggleFavoriteChatUseCase: getIt<ToggleFavoriteChatUseCase>(),
         listenChatUpdatesUseCase: getIt<ListenChatUpdatesUseCase>(),
         getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
+        getUserDataUseCase: getIt<GetUserDataUseCase>(),
       )..add(
         ChatsFilterEvent.init(),
       );
@@ -160,6 +162,7 @@ class _MatchesPageState extends State<MatchesPage> {
                         onTapChat: onTapChat,
                         chats: chats,
                         showChatActions: _showChatActions,
+                        onlineUsers: state.onlineUsers,
                       ),
                     );
                   },

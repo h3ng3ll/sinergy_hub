@@ -10,8 +10,9 @@ _Chat _$ChatFromJson(Map<String, dynamic> json) => _Chat(
   chatId: json['chatId'] as String? ?? '',
   lastMessage: json['lastMessage'] as String? ?? '',
   lastMessageSent: const TimestampConverter().fromJson(
-    json['lastMessageSent'] as Timestamp,
+    json['lastMessageSent'] as Timestamp?,
   ),
+  lastMessageSentBy: json['lastMessageSentBy'] as String? ?? '',
   config: ChatConfig.fromJson(json['config'] as Map<String, dynamic>),
   typingUsers:
       (json['typingUsers'] as List<dynamic>?)
@@ -28,7 +29,7 @@ _Chat _$ChatFromJson(Map<String, dynamic> json) => _Chat(
       .map((e) => e as String)
       .toList(),
   createdAt: const TimestampConverter().fromJson(
-    json['createdAt'] as Timestamp,
+    json['createdAt'] as Timestamp?,
   ),
   icon: json['icon'] as String? ?? '',
   searchKeywords:
@@ -44,6 +45,7 @@ Map<String, dynamic> _$ChatToJson(_Chat instance) => <String, dynamic>{
   'lastMessageSent': const TimestampConverter().toJson(
     instance.lastMessageSent,
   ),
+  'lastMessageSentBy': instance.lastMessageSentBy,
   'config': instance.config.toJson(),
   'typingUsers': instance.typingUsers,
   'participantInfo': instance.participantInfo.map(

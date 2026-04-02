@@ -23,6 +23,8 @@ sealed class UserData with _$UserData {
     String? aboutMe,
     required UserProfiler profiler,
     @TimestampConverter() required DateTime createdAt,
+    @Default(false) isOnline,
+    @TimestampConverter() required DateTime lastSeen,
   }) = _UserData;
 
   factory UserData.fromJson(
@@ -33,6 +35,7 @@ sealed class UserData with _$UserData {
     uid: 'uid',
     profiler: UserProfiler.none(),
     createdAt: DateTime.now(),
+    lastSeen: DateTime.now(),
   );
 
   @override

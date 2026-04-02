@@ -4,7 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../user/domain/models/user_data/user_data.dart';
+import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
 import '../../../../user/domain/usecases/get_users_use_case.dart';
+import '../../../../user/domain/usecases/listen_user_data_use_case.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/chat_message/chat_message.dart';
 import '../../../domain/usecases/get_chat_by_id_use_case.dart';
@@ -23,34 +25,37 @@ part 'chat_page_bloc.freezed.dart';
 class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   final SendMessageUseCase _sendMessageUseCase;
 
-  final ListenChatMessagesUseCase _listenChatMessagesUseCase;
   final ListenChatByIdUseCase _listenChatByIdUseCase;
   final ListenLastMessagesUseCase _getLastMessagesUseCase;
 
   final GetUsersUseCase _getUsersUseCase;
   final GetChatByIdUseCase _getChatByIdUseCase;
-
+  final ListenUserDataUseCase _listenUserDataUseCase;
   final UpdateTypingInfoUseCase _updateTypingInfoUseCase;
+  final GetCurrentUserDataUseCase _getCurrentUserDataUseCase;
 
   StreamSubscription? _lastMessageSubscription;
   StreamSubscription? _updateChatSubscription;
+  StreamSubscription? _userDataSubscription;
 
   ChatPageBloc({
     required String chatId,
     required SendMessageUseCase sendMessageUseCase,
     required ListenLastMessagesUseCase getLastMessageUseCase,
-    required ListenChatMessagesUseCase listenChatMessagesUseCase,
     required ListenChatByIdUseCase listenChatByIdUseCase,
     required GetUsersUseCase getUsersUseCase,
     required UpdateTypingInfoUseCase updateTypingInfoUseCase,
     required GetChatByIdUseCase getChatByIdUseCase,
+    required ListenUserDataUseCase listenUserDataUseCase,
+    required GetCurrentUserDataUseCase getCurrentUserDataUseCase,
   }) : _sendMessageUseCase = sendMessageUseCase,
-       _listenChatMessagesUseCase = listenChatMessagesUseCase,
        _getUsersUseCase = getUsersUseCase,
        _getLastMessagesUseCase = getLastMessageUseCase,
        _updateTypingInfoUseCase = updateTypingInfoUseCase,
        _getChatByIdUseCase = getChatByIdUseCase,
        _listenChatByIdUseCase = listenChatByIdUseCase,
+       _listenUserDataUseCase = listenUserDataUseCase,
+       _getCurrentUserDataUseCase = getCurrentUserDataUseCase,
 
        super(
          ChatPageState(
@@ -66,6 +71,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     on<_StartTyping>(_startTyping);
     on<_EndTyping>(_endTyping);
     on<_UpdateChat>(_updateChat);
+    on<_UpdateUserData>(_updateUserData);
   }
 
   void _updateMessages(
@@ -89,8 +95,33 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     ),
   );
 
+  void _updateUserData(
+    _UpdateUserData event,
+    Emitter<ChatPageState> emit,
+  ) {
+    final users = [...state.users];
+    final index = users.indexWhere(
+      (e) => e.uid == event.user.uid,
+    );
+    if (index == -1) {
+      emit(
+        state.copyWith(
+          users: users,
+        ),
+      );
+    } else {
+      users[index] = event.user;
+
+      emit(
+        state.copyWith(
+          users: users,
+        ),
+      );
+    }
+  }
+
   void _subscribe(
-    ChatPageEvent event,
+    _Subscribe event,
     Emitter<ChatPageState> emit,
   ) async {
     _lastMessageSubscription = _getLastMessagesUseCase
@@ -115,6 +146,21 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
             ),
           ),
         );
+    _userDataSubscription = _listenUserDataUseCase
+        .call(
+          event.uid,
+        )
+        .listen(
+          (user) {
+            if (user != null) {
+              add(
+                ChatPageEvent.updateUserData(
+                  user: user,
+                ),
+              );
+            }
+          },
+        );
   }
 
   void _init(
@@ -130,12 +176,19 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       final Chat chat = await _getChatByIdUseCase.call(
         chatId: state.chatId,
       );
-      final  List<UserData> users = await _getUsersUseCase.call(
+      final List<UserData> users = await _getUsersUseCase.call(
         ids: chat.participants,
       );
+      final userData = await _getCurrentUserDataUseCase.call();
+
+
 
       add(
-        ChatPageEvent.subscribe(),
+        ChatPageEvent.subscribe(
+          uid: users.firstWhere(
+            (e) => e.uid != userData.uid,
+          ).uid,
+        ),
       );
 
       emit(
@@ -156,7 +209,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     }
   }
 
-  void _sendMessage(event, emit) async {
+  void _sendMessage(_SendMessage event, emit) async {
     try {
       emit(
         state.copyWith(
@@ -242,6 +295,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   Future<void> close() {
     _updateChatSubscription?.cancel();
     _lastMessageSubscription?.cancel();
+    _userDataSubscription?.cancel();
     add(
       ChatPageEvent.endTyping(),
     );

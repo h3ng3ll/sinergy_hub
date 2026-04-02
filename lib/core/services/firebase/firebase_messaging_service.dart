@@ -23,7 +23,16 @@ class FirebaseMessagingService {
 
   Future<void> init() async {
     // Запрос разрешений на iOS
-    await _firebaseMessaging.requestPermission();
+    /// not blocking loading not await
+    _firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
 
     if (!kIsWeb) {
       String? token = await _firebaseMessaging.getToken();
@@ -63,8 +72,14 @@ class FirebaseMessagingService {
   }
 
   void _handleMessage(RemoteMessage message) {
+
     final notification = message.notification;
     if (notification != null) {
+      debugPrint('Message notification details: ');
+      debugPrint('Title: ${message.notification?.title}');
+      debugPrint('Body: ${message.notification?.body}');
+      debugPrint('Data: ${message.data}');
+
       _localNotificationService.sendNotification(
         title: notification.title ?? 'New Notification',
         body: notification.body ?? '',

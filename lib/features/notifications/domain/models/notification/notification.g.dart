@@ -15,7 +15,7 @@ _Notification _$NotificationFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String? ?? '',
       hasRead: json['hasRead'] as bool? ?? false,
       createdAt: const TimestampConverter().fromJson(
-        json['createdAt'] as Timestamp,
+        json['createdAt'] as Timestamp?,
       ),
     );
 

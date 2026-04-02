@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../../core/utils/extensions/scroll_controller_ext.dart';
 
 import '../../../../../../chat/domain/models/chat/chat.dart';
 
+import '../../../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'widgets/chat_tile_item.dart';
 
 class ChatsBuilder extends StatefulWidget {
@@ -12,6 +14,7 @@ class ChatsBuilder extends StatefulWidget {
   final List<Chat> chats;
   final Function(Chat chat) onTapChat;
   final Function(Chat chat) showChatActions;
+  final List<String> onlineUsers;
 
   const ChatsBuilder({
     super.key,
@@ -19,6 +22,7 @@ class ChatsBuilder extends StatefulWidget {
     required this.onTapChat,
     required this.chats,
     required this.showChatActions,
+    required this.onlineUsers,
   });
 
   @override
@@ -44,6 +48,8 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    final uid = context.watch<UserBloc>().state.userData!.uid;
+
     return ListView.separated(
       controller: _scrollController,
       itemCount: widget.chats.length,
@@ -52,6 +58,8 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
       ),
       itemBuilder: (context, index) {
         final chat = widget.chats[index];
+        final otherUser = chat.otherUser(uid);
+
         return ChatTileItem(
           chat: chat,
           onTap: () => widget.onTapChat(
@@ -60,6 +68,10 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
           onLongPress: () => widget.showChatActions(
             chat,
           ),
+          isOnlineUser: widget.onlineUsers.contains(
+            otherUser?.id,
+          ),
+          otherUser: otherUser,
         );
       },
       separatorBuilder: (_, _) => Gap(

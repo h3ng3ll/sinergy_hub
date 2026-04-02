@@ -19,7 +19,7 @@ _MatchesDto _$MatchesDtoFromJson(Map<String, dynamic> json) => _MatchesDto(
   matchStatus: $enumDecode(_$TinderCardStatusEnumMap, json['matchStatus']),
   skillsMatch: json['skillsMatch'] ?? 0,
   skillsScore: (json['skillsScore'] as num?)?.toInt() ?? 0,
-  time: const TimestampConverter().fromJson(json['time'] as Timestamp),
+  time: const TimestampConverter().fromJson(json['time'] as Timestamp?),
   users: (json['users'] as List<dynamic>).map((e) => e as String).toList(),
   visionScore: (json['visionScore'] as num?)?.toInt() ?? 0,
 );

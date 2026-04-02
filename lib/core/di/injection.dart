@@ -1,5 +1,6 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,6 +18,7 @@ import '../services/firebase/firebase_auth_service.dart';
 import '../services/firebase/firebase_firestore_service.dart';
 import '../services/firebase/firebase_functions_service.dart';
 import '../services/firebase/firebase_messaging_service.dart';
+import '../services/firebase/firebase_realtime_db_service.dart';
 import '../services/firebase/firebase_storage_service.dart';
 import '../services/google_sign_in_service/google_sign_in_service.dart';
 import '../services/local_notification_service.dart';
@@ -39,6 +41,11 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => GoogleSignIn.instance);
   getIt.registerLazySingleton(
     () => GoogleSignInService.instance,
+  );
+  getIt.registerLazySingleton<FirebaseRealtimeDbService>(
+    () => FirebaseRealtimeDbService(
+      database: FirebaseDatabase.instance,
+    ),
   );
 
   getIt.registerLazySingleton(

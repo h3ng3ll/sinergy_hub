@@ -6,7 +6,9 @@ import '../../../../../core/di/injection.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
+import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
 import '../../../../user/domain/usecases/get_users_use_case.dart';
+import '../../../../user/domain/usecases/listen_user_data_use_case.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/usecases/get_chat_by_id_use_case.dart';
 import '../../../domain/usecases/get_last_messages_use_case.dart';
@@ -42,11 +44,12 @@ class _ChatPageState extends State<ChatPage> {
           chatId: widget.chatId,
           sendMessageUseCase: getIt<SendMessageUseCase>(),
           getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
-          listenChatMessagesUseCase: getIt<ListenChatMessagesUseCase>(),
+          listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
           getUsersUseCase: getIt<GetUsersUseCase>(),
           getLastMessageUseCase: getIt<ListenLastMessagesUseCase>(),
           updateTypingInfoUseCase: getIt<UpdateTypingInfoUseCase>(),
           listenChatByIdUseCase: getIt<ListenChatByIdUseCase>(),
+          getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
         )..add(
           ChatPageEvent.init(),
         );
