@@ -1,9 +1,28 @@
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../di/injection.dart';
 import '../local_notification_service.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
+  // Нужно инициализировать сервис, если он есть в background
+  final localService = getIt<LocalNotificationService>();
+  final notification = message.notification;
+  if (notification != null) {
+    debugPrint('Background Message notification details: ');
+    debugPrint('Title: ${message.notification?.title}');
+    debugPrint('Body: ${message.notification?.body}');
+    debugPrint('Data: ${message.data}');
+    await localService.sendNotification(
+      title: notification.title ?? 'New Notification',
+      body: notification.body ?? '',
+      payload: message.data,
+    );
+  }
+}
 
 class FirebaseMessagingService {
   final FirebaseMessaging _firebaseMessaging;
@@ -14,7 +33,6 @@ class FirebaseMessagingService {
 
   static bool _isBackgroundHandlerInitialized = false;
 
-
   FirebaseMessagingService({
     required LocalNotificationService localNotificationService,
     required FirebaseMessaging firebaseMessaging,
@@ -24,7 +42,10 @@ class FirebaseMessagingService {
   Future<void> init() async {
     // Запрос разрешений на iOS
     /// not blocking loading not await
-    _firebaseMessaging.requestPermission(
+
+    /// Do not have APN token yet skip...
+    // if (!kIsWeb && Platform.isIOS) return;
+    await _firebaseMessaging.requestPermission(
       alert: true,
       announcement: true,
       badge: true,
@@ -45,7 +66,9 @@ class FirebaseMessagingService {
       }
       // Слушаем background сообщения - регистрируем только один раз
       if (!_isBackgroundHandlerInitialized) {
-        FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+        FirebaseMessaging.onBackgroundMessage(
+          _firebaseBackgroundHandler,
+        );
         _isBackgroundHandlerInitialized = true;
       }
     } else {
@@ -67,33 +90,19 @@ class FirebaseMessagingService {
 
     // Слушаем foreground сообщения
     FirebaseMessaging.onMessage.listen(_handleMessage);
-
-
   }
 
   void _handleMessage(RemoteMessage message) {
-
     final notification = message.notification;
+    print('Has notification $notification');
     if (notification != null) {
       debugPrint('Message notification details: ');
       debugPrint('Title: ${message.notification?.title}');
       debugPrint('Body: ${message.notification?.body}');
       debugPrint('Data: ${message.data}');
 
-      _localNotificationService.sendNotification(
-        title: notification.title ?? 'New Notification',
-        body: notification.body ?? '',
-        payload: message.data,
-      );
-    }
-  }
 
-  static Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
-    // Нужно инициализировать сервис, если он есть в background
-    final localService = getIt<LocalNotificationService>();
-    final notification = message.notification;
-    if (notification != null) {
-      await localService.sendNotification(
+      _localNotificationService.sendNotification(
         title: notification.title ?? 'New Notification',
         body: notification.body ?? '',
         payload: message.data,

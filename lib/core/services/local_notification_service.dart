@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
@@ -123,36 +124,6 @@ class LocalNotificationService {
 
     /// Map<String , dynamic> by default
   }) async {
-    String? largeIconPath =
-        icon ??
-        await copyAssetToTemp(
-          'assets/images/ic_notification.png',
-          'ic_notification.png',
-        );
-
-    final androidNotificationDetails = AndroidNotificationDetails(
-      'game-notification',
-      'game-notification',
-      actions: [],
-      priority: Priority.high,
-      largeIcon: FilePathAndroidBitmap(
-        largeIconPath,
-      ),
-    );
-
-    final darwinNotificationDetails = DarwinNotificationDetails(
-      attachments: [
-        DarwinNotificationAttachment(
-          largeIconPath,
-        ),
-      ],
-    );
-
-    final NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: darwinNotificationDetails,
-    );
-
     final payloadData = payload != null
         ? jsonEncode(
             payload,
@@ -175,12 +146,63 @@ class LocalNotificationService {
       }
     }
 
-    await _flutterLocalNotificationsPlugin.show(
-      id: 0,
-      title: title,
-      body: body,
-      notificationDetails: notificationDetails,
-      payload: payloadData,
-    );
+    if (kIsWeb) {
+      final androidNotificationDetails = AndroidNotificationDetails(
+        'game-notification',
+        'game-notification',
+        actions: [],
+        priority: Priority.high,
+      );
+
+      final darwinNotificationDetails = DarwinNotificationDetails(
+        attachments: [],
+      );
+      await _flutterLocalNotificationsPlugin.show(
+        id: 2,
+        title: title,
+        body: body,
+        notificationDetails: NotificationDetails(
+          android: androidNotificationDetails,
+          iOS: darwinNotificationDetails,
+          // no iOS attachments, no File
+        ),
+      );
+    } else {
+      String? largeIconPath =
+          icon ??
+          await copyAssetToTemp(
+            'assets/images/ic_notification.png',
+            'ic_notification.png',
+          );
+
+      final androidNotificationDetails = AndroidNotificationDetails(
+        'game-notification',
+        'game-notification',
+        actions: [],
+        priority: Priority.high,
+        largeIcon: FilePathAndroidBitmap(
+          largeIconPath,
+        ),
+      );
+
+      final darwinNotificationDetails = DarwinNotificationDetails(
+        attachments: [
+          DarwinNotificationAttachment(
+            largeIconPath,
+          ),
+        ],
+      );
+
+      await _flutterLocalNotificationsPlugin.show(
+        id: 0,
+        title: title,
+        body: body,
+        notificationDetails: NotificationDetails(
+          android: androidNotificationDetails,
+          iOS: darwinNotificationDetails,
+        ),
+        payload: payloadData,
+      );
+    }
   }
 }

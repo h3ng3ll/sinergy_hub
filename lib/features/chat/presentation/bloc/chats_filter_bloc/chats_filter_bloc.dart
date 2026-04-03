@@ -165,9 +165,16 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
           (e) => e.chatId == chat.chatId,
         );
 
-        /// No found
+        /// No found . New chat
         if (index == -1) {
-          return state;
+          chats.add(
+            chat,
+          );
+          return state.copyWith(
+            chatsState: state.chatsState.copyWith(
+              chats: chats,
+            ),
+          );
         }
 
         final uid = state.uid;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/resources/colors/app_colors.dart';
 import '../../../../core/resources/text/app_text_theme.dart';
@@ -20,10 +21,15 @@ class HomeDrawer extends StatelessWidget {
     required this.onTapLogOut,
   });
 
+  Future<String> getAppVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    return '${info.version}  +${info.buildNumber}';
+  }
+
   @override
   Widget build(BuildContext context) {
-     // final colorScheme = AppColorScheme.of(context);
-      final textTheme  = AppTextTheme.of(context);
+    // final colorScheme = AppColorScheme.of(context);
+    final textTheme = AppTextTheme.of(context);
     return Drawer(
       backgroundColor: AppColors.white.value,
       child: SafeArea(
@@ -33,9 +39,7 @@ class HomeDrawer extends StatelessWidget {
               Center(
                 child: Text(
                   'Sinergy Hub',
-                  style: textTheme.bold32.copyWith(
-
-                  ),
+                  style: textTheme.bold32.copyWith(),
                 ),
               ),
               BuildMenuItem(
@@ -58,6 +62,13 @@ class HomeDrawer extends StatelessWidget {
                 text: 'Log Out',
                 onTap: onTapLogOut,
                 color: AppColors.tartOrange.value,
+              ),
+
+              FutureBuilder(
+                future: getAppVersion(),
+                builder: (context, asyncSnapshot) {
+                  return Text('Version ${asyncSnapshot.data ?? 1}');
+                },
               ),
             ],
           ),

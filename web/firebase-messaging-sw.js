@@ -1,9 +1,5 @@
-importScripts("https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/7.15.5/firebase-messaging.js");
-
-//Using singleton breaks instantiating messaging()
-// App firebase = FirebaseWeb.instance.app;
-
+importScripts("https://www.gstatic.com/firebasejs/12.11.0/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/12.11.0/firebase-messaging-compat.js");
 
 firebase.initializeApp({
     apiKey: "AIzaSyA3KKZzkv7TFFca15OX6qwW402RW-HJDf0",
@@ -17,57 +13,41 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
-messaging.setBackgroundMessageHandler(function (payload) {
-    const promiseChain = clients
-        .matchAll({
-            type: "window",
-            includeUncontrolled: true
-        })
-        .then(windowClients => {
-            for (let i = 0; i < windowClients.length; i++) {
-                const windowClient = windowClients[i];
-                windowClient.postMessage(payload);
-            }
-        })
-        .then(() => {
-            return registration.showNotification("New Message");
-        });
-    return promiseChain;
+
+async function _processPayload(payload) {
+    const title = payload.notification?.title || payload.data?.title;
+    const body = payload.notification?.body || payload.data?.body;
+
+    await self.registration.showNotification(title, {
+        body: body,
+        icon: 'https://synergyhub-a3e1b.web.app/icons/icon-192.png',
+        // badge: 'https://synergyhub-a3e1b.web.app/icons/badge.png',
+        data: payload.data,
+    });
+}
+
+/// On Macos Chrome and Firefox disabled notifications and it won't shows by default
+/// Trigger when tab closed or in background
+messaging.onBackgroundMessage(async (payload) => {
+    console.log('Received background message:', payload);
+    await _processPayload(payload);
 });
-self.addEventListener('notificationclick', function (event) {
-    console.log('notification received: ', event)
+/// Foreground message . Comes from flutter when called  _flutterLocalNotificationsPlugin.show()
+messaging.onMessage(async (payload) => {
+    console.log('onMessage: Received message from Native Web:', payload);
+    await _processPayload(payload);
 });
 
-// const messaging = firebase.messaging();
-//
-// messaging.onBackgroundMessage(function (payload) {
-//     console.log("[firebase-messaging-sw.js] Received background message ", payload);
-//
-//     self.registration.showNotification(payload.notification.title, {
-//         body: payload.notification.body,
-//     });
-// })
+/// Occur If Popup message from foreground after user decide click on it .
+self.addEventListener(
+    'notificationclick',
+    function(event) {
+        event.notification.close();
 
-// messaging.onBackgroundMessage(function (payload) {
-//     console.log("SW PUSH:", payload);
-//
-//     self.registration.showNotification(payload.notification.title, {
-//         body: payload.notification.body,
-//         payload: payload.data,
-//     });
-//
-//     /// onClickMessage
-//     self.addEventListener(
-//         "notificationclick",
-//         function (event) {
-//             console.log("SW Notification Click:", payload);
-//
-//             const data = event.notification.data;
-//             event.waitUntil(
-//                 clients.openWindow(
-//                     '/#/chat?userId=' + data.userId
-//                 )
-//             )
-//         },
-//     );
-// });
+        event.waitUntil(
+            clients.openWindow(
+                'https://synergyhub-a3e1b.web.app/icons/icon-192.png'
+            )
+        );
+    }
+);

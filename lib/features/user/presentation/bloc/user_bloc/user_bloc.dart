@@ -32,20 +32,22 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Future<void> _init(
     _Init event,
     Emitter<UserState> emit,
-  ) async => await emit.forEach<UserData?>(
-    _userRepository.userDataStream(
-      event.uid,
-    ),
-    onData: (UserData? user) {
-      return state.copyWith(
-        userData: user,
-        status: user != null ? UserStatus.loaded : UserStatus.noData,
-      );
-    },
-    onError: (e, _) => state.copyWith(
-      status: UserStatus.failed,
-    ),
-  );
+  ) async {
+    await emit.forEach<UserData?>(
+      _userRepository.userDataStream(
+        event.uid,
+      ),
+      onData: (UserData? user) {
+        return state.copyWith(
+          userData: user,
+          status: user != null ? UserStatus.loaded : UserStatus.noData,
+        );
+      },
+      onError: (e, _) => state.copyWith(
+        status: UserStatus.failed,
+      ),
+    );
+  }
 
   void _reset(
     _Reset event,
