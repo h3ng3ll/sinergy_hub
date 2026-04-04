@@ -12,7 +12,7 @@ firebase.initializeApp({
 
 });
 
-const baseUrl= "https://synergyhub-a3e1b.web.app/#/"
+const baseUrl= "https://synergyhub-a3e1b.web.app/#"
 const messaging = firebase.messaging();
 
 async function _processPayload(payload) {
