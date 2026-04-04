@@ -27,6 +27,9 @@ final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter initRouter = GoRouter(
   routes: $appRoutes,
+  redirect: (context , state) {
+
+  }
 );
 
 @TypedShellRoute<RootPageRoute>(
