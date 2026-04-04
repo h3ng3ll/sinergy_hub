@@ -3,18 +3,16 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../di/injection.dart';
-import '../models/chat_payload/chat_payload.dart';
+import '../../features/notifications/domain/models/notification_data/notification_data.dart';
 import '../routes/init_router/init_router.dart';
 
 @pragma('vm:entry-point')
 void notificationTopBackground(NotificationResponse notificationResponse) {
-  getIt<LocalNotificationService>().receiveNotificationResponse(
+  LocalNotificationService().receiveNotificationResponse(
     notificationResponse,
   );
 }
@@ -100,20 +98,21 @@ class LocalNotificationService {
     if (context == null || !context.mounted) {
       return;
     }
-    final payloadData = jsonDecode(
-      payload,
+    final NotificationData notificationData = NotificationData.fromJson(
+      jsonDecode(
+        payload,
+      ),
     );
-
-    if (payloadData['type'] == 'chat') {
-      final chat = ChatPayload.fromJson(
-        payloadData,
-      );
-      ChatPageRoute(
-        chatId: chat.chatId,
-      ).push(
-        context,
-      );
-    }
+    notificationData.map(
+      match: (e) {},
+      chat: (chatData) {
+        ChatPageRoute(
+          chatId: chatData.chatId,
+        ).push(
+          context,
+        );
+      },
+    );
   }
 
   Future<void> sendNotification({
@@ -133,16 +132,19 @@ class LocalNotificationService {
     final context = RootPageRoute.rootKey.currentContext;
 
     if (context != null && context.mounted) {
-      if (payload['type'] == 'chat') {
-        final chat = ChatPayload.fromJson(
-          payload,
-        );
-        final isOnCurrentChat =
-            GoRouter.of(context).state.uri.toString() ==
-            ChatPageRoute(
-              chatId: chat.chatId,
-            ).location;
-        if (isOnCurrentChat) return;
+      final notificationData = NotificationData.fromJson(
+        payload,
+      );
+      switch (notificationData) {
+        case ChatNotificationData(chatId: final chatId):
+          final isOnCurrentChat =
+              GoRouter.of(context).state.uri.toString() ==
+              ChatPageRoute(chatId: chatId).location;
+
+          if (isOnCurrentChat) return;
+
+        case MatchNotificationData():
+          break;
       }
     }
 
