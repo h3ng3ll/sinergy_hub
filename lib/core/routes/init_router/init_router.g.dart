@@ -73,7 +73,7 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
               factory: $MatchResultPageRoute._fromState,
             ),
             GoRouteData.$route(
-              path: '/chat',
+              path: '/matches/:chatId',
               factory: $ChatPageRoute._fromState,
             ),
             GoRouteData.$route(
@@ -292,13 +292,13 @@ mixin $MatchResultPageRoute on GoRouteData {
 
 mixin $ChatPageRoute on GoRouteData {
   static ChatPageRoute _fromState(GoRouterState state) =>
-      ChatPageRoute(chatId: state.uri.queryParameters['chat-id']!);
+      ChatPageRoute(chatId: state.pathParameters['chatId']!);
 
   ChatPageRoute get _self => this as ChatPageRoute;
 
   @override
   String get location =>
-      GoRouteData.$location('/chat', queryParams: {'chat-id': _self.chatId});
+      GoRouteData.$location('/matches/${Uri.encodeComponent(_self.chatId)}');
 
   @override
   void go(BuildContext context) => context.go(location);

@@ -27,7 +27,6 @@ final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter initRouter = GoRouter(
   routes: $appRoutes,
-
 );
 
 @TypedShellRoute<RootPageRoute>(
@@ -38,7 +37,7 @@ final GoRouter initRouter = GoRouter(
         TypedGoRoute<RegisterPageRoute>(
           path: '/sign-up',
         ),
-      TypedGoRoute<LoginPageRoute>(
+        TypedGoRoute<LoginPageRoute>(
           path: '/sign-in',
         ),
       ],
@@ -83,7 +82,7 @@ final GoRouter initRouter = GoRouter(
               path: '/match-result',
             ),
             TypedGoRoute<ChatPageRoute>(
-              path: '/chat',
+              path: '/matches/:chatId',
             ),
             TypedGoRoute<EditProfilePageRoute>(
               path: '/edit-profile-page',

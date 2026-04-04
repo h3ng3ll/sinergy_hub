@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../utils/extensions/go_router_x.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
@@ -10,6 +13,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
   final Color? backgroundColor;
   final ShapeBorder? shape;
+  final bool? forceMaterialTransparency;
+  final Color? shadowColor;
 
   const CustomAppBar({
     super.key,
@@ -24,6 +29,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.backgroundColor,
     this.shape,
+    this.forceMaterialTransparency,
+    this.shadowColor,
   });
 
   @override
@@ -32,14 +39,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: leadingWidth,
       title: title,
       centerTitle: centerTitle,
-      leading: leading == null
+      forceMaterialTransparency: forceMaterialTransparency ?? false,
+      shadowColor: shadowColor,
+
+      leading: leading != null
           ? null
           : Padding(
               padding: const EdgeInsets.only(
                 left: 8.0,
               ),
               child: Center(
-                child: leading,
+                child: leading ?? InkWell(
+                  onTap: context.goBack,
+                  child: Icon(
+                    Icons.arrow_back,
+                  ),
+                ),
               ),
             ),
       actionsPadding: actionsPadding,

@@ -23,10 +23,12 @@ import 'widgets/build_chat_canvas/build_chat_canvas.dart';
 
 class ChatPage extends StatefulWidget {
   final String chatId;
+  // final VoidCallback onPop;
 
   const ChatPage({
     super.key,
     required this.chatId,
+    // required this.onPop,
   });
 
   @override
@@ -61,7 +63,6 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
-
     _chatPageBloc.close();
     _textEditingController.dispose();
     super.dispose();
@@ -91,7 +92,6 @@ class _ChatPageState extends State<ChatPage> {
 
   void onTapUser() {}
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -110,7 +110,6 @@ class _ChatPageState extends State<ChatPage> {
 
             return Scaffold(
               appBar: ChatAppBar(
-
                 onTapUser: onTapUser,
                 user: chatterUser,
               ),

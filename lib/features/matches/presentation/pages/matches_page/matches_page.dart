@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -51,11 +52,17 @@ class _MatchesPageState extends State<MatchesPage> {
   void onReachChatsToEnd() {}
 
   void onTapChat(Chat chat) {
-    ChatPageRoute(
+    final route = ChatPageRoute(
       chatId: chat.chatId,
-    ).push(
-      context,
     );
+
+    kIsWeb
+        ? route.go(
+            context,
+          )
+        : route.push(
+            context,
+          );
   }
 
   void onTapChatFilter(EChatFilter filter) {

@@ -31,6 +31,7 @@ class HomeAppBarWeb extends CustomAppBar {
     final textTheme = AppTextTheme.of(context);
 
     return CustomAppBar(
+      leading: Container(),
       actions: [
         Expanded(
           child: Row(
