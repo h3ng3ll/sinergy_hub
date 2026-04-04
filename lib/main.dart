@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'core/bloc/app_observer.dart';
 import 'core/di/injection.dart';
 import 'core/resources/app_locale.dart';
 import 'core/resources/app_theme.dart';
+import 'core/resources/translations/app_localizations.dart';
 import 'core/routes/init_router/init_router.dart';
 import 'core/services/firebase/firebase_auth_service.dart';
 import 'core/services/firebase/firebase_firestore_service.dart';
@@ -204,6 +206,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   supportedLocales: AppLocale.supportedLocales,
                   locale: AppLocale.startLocale,
                   routerConfig: initRouter,
+                  localizationsDelegates: [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                    AppLocalizations.delegate,
+                  ],
                 ),
               ),
             ),

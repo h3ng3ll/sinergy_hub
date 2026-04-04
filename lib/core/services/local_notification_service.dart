@@ -2,17 +2,22 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../features/notifications/domain/models/notification_data/notification_data.dart';
+import '../../features/notifications/presentation/widgets/web_notification_widget.dart';
 import '../routes/init_router/init_router.dart';
+import 'notification_tap_processor.dart';
 
 @pragma('vm:entry-point')
 void notificationTopBackground(NotificationResponse notificationResponse) {
-  LocalNotificationService().receiveNotificationResponse(
+  LocalNotificationService(
+    notificationTapProcessor: NotificationTapProcessor(),
+  ).receiveNotificationResponse(
     notificationResponse,
   );
 }
@@ -20,6 +25,11 @@ void notificationTopBackground(NotificationResponse notificationResponse) {
 class LocalNotificationService {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+  final NotificationTapProcessor _notificationTapProcessor;
+
+  LocalNotificationService({
+    required NotificationTapProcessor notificationTapProcessor,
+  }) : _notificationTapProcessor = notificationTapProcessor;
 
   Future<void> init() async {
     await _checkPermissions();
@@ -98,20 +108,14 @@ class LocalNotificationService {
     if (context == null || !context.mounted) {
       return;
     }
-    final NotificationData notificationData = NotificationData.fromJson(
+    final notificationData = NotificationData.fromJson(
       jsonDecode(
         payload,
       ),
     );
-    notificationData.map(
-      match: (e) {},
-      chat: (chatData) {
-        ChatPageRoute(
-          chatId: chatData.chatId,
-        ).push(
-          context,
-        );
-      },
+    await _notificationTapProcessor.processTap(
+      notificationData,
+      context,
     );
   }
 
@@ -149,25 +153,10 @@ class LocalNotificationService {
     }
 
     if (kIsWeb) {
-      final androidNotificationDetails = AndroidNotificationDetails(
-        'game-notification',
-        'game-notification',
-        actions: [],
-        priority: Priority.high,
-      );
-
-      final darwinNotificationDetails = DarwinNotificationDetails(
-        attachments: [],
-      );
-      await _flutterLocalNotificationsPlugin.show(
-        id: 2,
+      await _showWebNotification(
         title: title,
         body: body,
-        notificationDetails: NotificationDetails(
-          android: androidNotificationDetails,
-          iOS: darwinNotificationDetails,
-          // no iOS attachments, no File
-        ),
+        payload: payload,
       );
     } else {
       String? largeIconPath =
@@ -205,6 +194,60 @@ class LocalNotificationService {
         ),
         payload: payloadData,
       );
+    }
+  }
+
+  Future<void> _showWebNotification({
+    required String title,
+    required String body,
+    dynamic payload,
+  }) async {
+    final rootContext = RootPageRoute.rootKey.currentContext;
+    if (rootContext == null) return;
+
+    final notificationData = payload != null
+        ? NotificationData.fromJson(payload)
+        : null;
+
+    final imageUrl = switch (notificationData) {
+      ChatNotificationData(senderAvatar: final avatar) => avatar,
+      MatchNotificationData() => null,
+      null => null,
+    };
+
+    OverlayEntry? overlayEntry;
+
+    void dismissNotification() {
+      overlayEntry?.remove();
+      overlayEntry?.dispose();
+      overlayEntry = null;
+    }
+
+    overlayEntry = OverlayEntry(
+      builder: (_) => Positioned(
+        top: 16,
+        right: 16,
+        child: WebNotificationWidget(
+          title: title,
+          body: body,
+          imageUrl: imageUrl,
+          onTap: () {
+            dismissNotification();
+            if (notificationData != null) {
+              _notificationTapProcessor.processTap(
+                notificationData,
+                rootContext,
+              );
+            }
+          },
+          onDismiss: dismissNotification,
+        ),
+      ),
+    );
+
+    final entry = overlayEntry;
+    if (entry != null) {
+      Overlay.of(rootContext).insert(entry);
     }
   }
 }

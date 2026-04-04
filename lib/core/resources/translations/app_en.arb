@@ -9,6 +9,7 @@
   "next": "next",
   "select_your_goals": "Select your goals",
   "how_old_are_you": "How old are you ?",
-  "clear" : "Clear",
-  "finish" : "Finish"
+  "clear": "Clear",
+  "finish": "Finish",
+  "notificationNow": "now"
 }

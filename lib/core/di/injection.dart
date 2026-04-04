@@ -22,6 +22,7 @@ import '../services/firebase/firebase_realtime_db_service.dart';
 import '../services/firebase/firebase_storage_service.dart';
 import '../services/google_sign_in_service/google_sign_in_service.dart';
 import '../services/local_notification_service.dart';
+import '../services/notification_tap_processor.dart';
 import '../services/permission_requester_service.dart';
 
 final getIt = GetIt.instance;
@@ -36,9 +37,9 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => FirebaseAuthService());
   getIt.registerLazySingleton(() => PermissionRequester());
   getIt.registerLazySingleton(() => FirebaseStorageService());
-  getIt.registerLazySingleton(() => LocalNotificationService());
   getIt.registerLazySingleton(() => AudioService());
   getIt.registerLazySingleton(() => GoogleSignIn.instance);
+  getIt.registerLazySingleton(() => NotificationTapProcessor());
   getIt.registerLazySingleton(
     () => GoogleSignInService.instance,
   );
@@ -47,7 +48,11 @@ Future<void> initDependencies() async {
       database: FirebaseDatabase.instance,
     ),
   );
-
+  getIt.registerLazySingleton(
+    () => LocalNotificationService(
+      notificationTapProcessor: getIt<NotificationTapProcessor>(),
+    ),
+  );
   getIt.registerLazySingleton(
     () => FirebaseMessagingService(
       localNotificationService: getIt<LocalNotificationService>(),
