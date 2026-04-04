@@ -12,6 +12,7 @@ firebase.initializeApp({
 
 });
 
+const baseUrl= "https://synergyhub-a3e1b.web.app"
 const messaging = firebase.messaging();
 
 async function _processPayload(payload) {
@@ -41,14 +42,27 @@ messaging.onMessage(async (payload) => {
 /// Occur If Popup message from foreground after user decide click on it .
 self.addEventListener(
     'notificationclick',
-    function(event) {
+    function (event) {
         event.notification.close();
 
-        /// Todo: process deeplinks behavior
+        const data = event.notification.data || {};
+
         event.waitUntil(
-            clients.openWindow(
-                'https://synergyhub-a3e1b.web.app/icons/icon-192.png'
-            )
+            (async () => {
+                const url = getUrlByType(data);
+                await clients.openWindow(
+                    url,
+                );
+            })()
         );
     }
 );
+
+const routes = {
+    chat: (d) => `${baseUrl}/matches/${d.chatId}`,
+    match: (d) => `${baseUrl}/discovery`,
+};
+
+function getUrlByType(data) {
+    return routes[data.type]?.(data) || '/';
+}

@@ -13,7 +13,7 @@ class NotificationTapProcessor {
       chat: (chatData) {
         ChatPageRoute(
           chatId: chatData.chatId,
-        ).push(
+        ).go(
           context,
         );
       },
