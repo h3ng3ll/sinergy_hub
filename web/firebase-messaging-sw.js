@@ -44,6 +44,7 @@ self.addEventListener(
     function(event) {
         event.notification.close();
 
+        /// Todo: process deeplinks behavior
         event.waitUntil(
             clients.openWindow(
                 'https://synergyhub-a3e1b.web.app/icons/icon-192.png'
