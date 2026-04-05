@@ -48,11 +48,11 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
             user: user,
           ),
           Spacer(),
-          InkWell(
-            child: Icon(
-              Icons.more_vert,
-            ),
-          ),
+          // InkWell(
+          //   child: Icon(
+          //     Icons.more_vert,
+          //   ),
+          // ),
         ],
       ),
     );
