@@ -181,13 +181,13 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       );
       final userData = await _getCurrentUserDataUseCase.call();
 
-
-
       add(
         ChatPageEvent.subscribe(
-          uid: users.firstWhere(
-            (e) => e.uid != userData.uid,
-          ).uid,
+          uid: users
+              .firstWhere(
+                (e) => e.uid != userData.uid,
+              )
+              .uid,
         ),
       );
 
@@ -209,33 +209,40 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     }
   }
 
-  void _sendMessage(_SendMessage event, emit) async {
-    try {
-      emit(
-        state.copyWith(
-          status: ChatPageStatus.sending,
-        ),
-      );
-      await _sendMessageUseCase.call(
-        chatId: state.chatId,
-        message: event.message,
-      );
-      emit(
-        state.copyWith(
-          status: ChatPageStatus.sent,
-        ),
-      );
-      add(
-        ChatPageEvent.endTyping(),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          errorMessage: e.toString(),
-          status: ChatPageStatus.failed,
-        ),
-      );
-    }
+  void _sendMessage(
+    _SendMessage event,
+    Emitter<ChatPageState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: ChatPageStatus.sending,
+      ),
+    );
+    final res = await _sendMessageUseCase.call(
+      chatId: state.chatId,
+      message: event.message,
+    );
+
+    res.fold(
+      (_) {
+        emit(
+          state.copyWith(
+            status: ChatPageStatus.sent,
+          ),
+        );
+      },
+      (e) {
+        emit(
+          state.copyWith(
+            errorMessage: e.message,
+            status: ChatPageStatus.failed,
+          ),
+        );
+      },
+    );
+    add(
+      ChatPageEvent.endTyping(),
+    );
   }
 
   void _startTyping(_StartTyping event, emit) async {

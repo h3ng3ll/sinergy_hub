@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatMessageDto {
 
- String get id; String get message; String get sentUid; List<String> get readStatus; DateTime get createdAt;
+ String get id; String get message; String get sentUid; List<String> get readStatus;@TimestampConverter() DateTime get createdAt;
 /// Create a copy of ChatMessageDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ChatMessageDtoCopyWith<$Res>  {
   factory $ChatMessageDtoCopyWith(ChatMessageDto value, $Res Function(ChatMessageDto) _then) = _$ChatMessageDtoCopyWithImpl;
 @useResult
 $Res call({
- String id, String message, String sentUid, List<String> readStatus, DateTime createdAt
+ String id, String message, String sentUid, List<String> readStatus,@TimestampConverter() DateTime createdAt
 });
 
 
@@ -157,7 +157,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String message,  String sentUid,  List<String> readStatus,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String message,  String sentUid,  List<String> readStatus, @TimestampConverter()  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatMessageDto() when $default != null:
 return $default(_that.id,_that.message,_that.sentUid,_that.readStatus,_that.createdAt);case _:
@@ -178,7 +178,7 @@ return $default(_that.id,_that.message,_that.sentUid,_that.readStatus,_that.crea
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String message,  String sentUid,  List<String> readStatus,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String message,  String sentUid,  List<String> readStatus, @TimestampConverter()  DateTime createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _ChatMessageDto():
 return $default(_that.id,_that.message,_that.sentUid,_that.readStatus,_that.createdAt);case _:
@@ -198,7 +198,7 @@ return $default(_that.id,_that.message,_that.sentUid,_that.readStatus,_that.crea
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String message,  String sentUid,  List<String> readStatus,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String message,  String sentUid,  List<String> readStatus, @TimestampConverter()  DateTime createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatMessageDto() when $default != null:
 return $default(_that.id,_that.message,_that.sentUid,_that.readStatus,_that.createdAt);case _:
@@ -213,7 +213,7 @@ return $default(_that.id,_that.message,_that.sentUid,_that.readStatus,_that.crea
 @JsonSerializable()
 
 class _ChatMessageDto extends ChatMessageDto {
-  const _ChatMessageDto({this.id = '', this.message = '', this.sentUid = '', final  List<String> readStatus = const [], required this.createdAt}): _readStatus = readStatus,super._();
+  const _ChatMessageDto({this.id = '', this.message = '', this.sentUid = '', final  List<String> readStatus = const [], @TimestampConverter() required this.createdAt}): _readStatus = readStatus,super._();
   factory _ChatMessageDto.fromJson(Map<String, dynamic> json) => _$ChatMessageDtoFromJson(json);
 
 @override@JsonKey() final  String id;
@@ -226,7 +226,7 @@ class _ChatMessageDto extends ChatMessageDto {
   return EqualUnmodifiableListView(_readStatus);
 }
 
-@override final  DateTime createdAt;
+@override@TimestampConverter() final  DateTime createdAt;
 
 /// Create a copy of ChatMessageDto
 /// with the given fields replaced by the non-null parameter values.
@@ -261,7 +261,7 @@ abstract mixin class _$ChatMessageDtoCopyWith<$Res> implements $ChatMessageDtoCo
   factory _$ChatMessageDtoCopyWith(_ChatMessageDto value, $Res Function(_ChatMessageDto) _then) = __$ChatMessageDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String message, String sentUid, List<String> readStatus, DateTime createdAt
+ String id, String message, String sentUid, List<String> readStatus,@TimestampConverter() DateTime createdAt
 });
 
 

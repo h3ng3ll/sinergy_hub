@@ -1,4 +1,8 @@
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/models/failures.dart';
 import '../../../auth/domain/repostories/i_auth_repository.dart';
+import '../failures/message_not_sent_failure.dart';
 import '../models/chat/chat.dart';
 import '../models/chat_message/chat_message.dart';
 import '../repositories/i_chat_message_repository.dart';
@@ -21,31 +25,40 @@ class SendMessageUseCase {
        _getChatByIdUseCase = getChatByIdUseCase,
        _updateChatInfoUseCase = updateChatInfoUseCase;
 
-  Future<void> call({
+  Future<Either<void, Failure>> call({
     required String message,
     required String chatId,
   }) async {
-    final uid = await _authRepository.requireUserId();
-    final chatMessage = ChatMessage(
-      createdAt: DateTime.now(),
-      sentUid: uid,
-      message: message,
-      // hasRead: false,
-    );
-    await _chatMessageRepository.create(
-      message: chatMessage,
-      chatId: chatId,
-    );
-    final Chat chat = await _getChatByIdUseCase.call(
-      chatId: chatId,
-    );
-    final updatedChat = chat.copyWith(
-      lastMessage: message,
-      lastMessageSentBy: uid,
-    );
-    await _updateChatInfoUseCase(
-      chatId: chat.chatId,
-      chat: updatedChat,
-    );
+    try {
+      final uid = await _authRepository.requireUserId();
+      final chatMessage = ChatMessage(
+        createdAt: DateTime.now(),
+        sentUid: uid,
+        message: message,
+        // hasRead: false,
+      );
+      await _chatMessageRepository.create(
+        message: chatMessage,
+        chatId: chatId,
+      );
+      final Chat chat = await _getChatByIdUseCase.call(
+        chatId: chatId,
+      );
+      final updatedChat = chat.copyWith(
+        lastMessage: message,
+        lastMessageSentBy: uid,
+      );
+      await _updateChatInfoUseCase(
+        chatId: chat.chatId,
+        chat: updatedChat,
+      );
+      return Left(
+        null,
+      );
+    } catch (_) {
+      return Right(
+        MessageNotSentFailure(),
+      );
+    }
   }
 }

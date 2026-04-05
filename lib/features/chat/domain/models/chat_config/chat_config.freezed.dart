@@ -15,7 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatConfig {
 
- List<String> get archived; List<String> get favorite;
+/// Fix to check if web don't broke and
+/// it properly accept List<bool> data
+@JsonKey(fromJson: _listFromJson) List<String> get archived;@JsonKey(fromJson: _listFromJson) List<String> get favorite;
 /// Create a copy of ChatConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +50,7 @@ abstract mixin class $ChatConfigCopyWith<$Res>  {
   factory $ChatConfigCopyWith(ChatConfig value, $Res Function(ChatConfig) _then) = _$ChatConfigCopyWithImpl;
 @useResult
 $Res call({
- List<String> archived, List<String> favorite
+@JsonKey(fromJson: _listFromJson) List<String> archived,@JsonKey(fromJson: _listFromJson) List<String> favorite
 });
 
 
@@ -154,7 +156,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> archived,  List<String> favorite)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _listFromJson)  List<String> archived, @JsonKey(fromJson: _listFromJson)  List<String> favorite)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatConfig() when $default != null:
 return $default(_that.archived,_that.favorite);case _:
@@ -175,7 +177,7 @@ return $default(_that.archived,_that.favorite);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> archived,  List<String> favorite)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _listFromJson)  List<String> archived, @JsonKey(fromJson: _listFromJson)  List<String> favorite)  $default,) {final _that = this;
 switch (_that) {
 case _ChatConfig():
 return $default(_that.archived,_that.favorite);case _:
@@ -195,7 +197,7 @@ return $default(_that.archived,_that.favorite);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> archived,  List<String> favorite)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _listFromJson)  List<String> archived, @JsonKey(fromJson: _listFromJson)  List<String> favorite)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatConfig() when $default != null:
 return $default(_that.archived,_that.favorite);case _:
@@ -210,18 +212,22 @@ return $default(_that.archived,_that.favorite);case _:
 @JsonSerializable()
 
 class _ChatConfig implements ChatConfig {
-  const _ChatConfig({final  List<String> archived = const [], final  List<String> favorite = const []}): _archived = archived,_favorite = favorite;
+  const _ChatConfig({@JsonKey(fromJson: _listFromJson) final  List<String> archived = const [], @JsonKey(fromJson: _listFromJson) final  List<String> favorite = const []}): _archived = archived,_favorite = favorite;
   factory _ChatConfig.fromJson(Map<String, dynamic> json) => _$ChatConfigFromJson(json);
 
+/// Fix to check if web don't broke and
+/// it properly accept List<bool> data
  final  List<String> _archived;
-@override@JsonKey() List<String> get archived {
+/// Fix to check if web don't broke and
+/// it properly accept List<bool> data
+@override@JsonKey(fromJson: _listFromJson) List<String> get archived {
   if (_archived is EqualUnmodifiableListView) return _archived;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_archived);
 }
 
  final  List<String> _favorite;
-@override@JsonKey() List<String> get favorite {
+@override@JsonKey(fromJson: _listFromJson) List<String> get favorite {
   if (_favorite is EqualUnmodifiableListView) return _favorite;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_favorite);
@@ -261,7 +267,7 @@ abstract mixin class _$ChatConfigCopyWith<$Res> implements $ChatConfigCopyWith<$
   factory _$ChatConfigCopyWith(_ChatConfig value, $Res Function(_ChatConfig) _then) = __$ChatConfigCopyWithImpl;
 @override @useResult
 $Res call({
- List<String> archived, List<String> favorite
+@JsonKey(fromJson: _listFromJson) List<String> archived,@JsonKey(fromJson: _listFromJson) List<String> favorite
 });
 
 

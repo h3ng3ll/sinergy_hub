@@ -16,7 +16,9 @@ _ChatMessageDto _$ChatMessageDtoFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const [],
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: const TimestampConverter().fromJson(
+        json['createdAt'] as Timestamp?,
+      ),
     );
 
 Map<String, dynamic> _$ChatMessageDtoToJson(_ChatMessageDto instance) =>
@@ -25,5 +27,5 @@ Map<String, dynamic> _$ChatMessageDtoToJson(_ChatMessageDto instance) =>
       'message': instance.message,
       'sentUid': instance.sentUid,
       'readStatus': instance.readStatus,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'createdAt': const TimestampConverter().toJson(instance.createdAt),
     };

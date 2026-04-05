@@ -49,39 +49,43 @@ class ChatTileItem extends StatelessWidget {
       onLongPress: onLongPress,
       child: Row(
         children: [
-          cover == null
-              ? SizedBox(
-                  width: 80.0,
-                  height: 80.0,
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: SvgPicture.asset(
-                          Assets.icons.user,
-                          width: 40.0,
-                          height: 40.0,
-                          colorFilter: ColorFilter.mode(
-                            colorScheme.onPrimary.withValues(
-                              alpha: 0.6,
+          SizedBox(
+            width: 80.0,
+            height: 80.0,
+            child: Stack(
+              children: [
+                cover == null
+                    ? Stack(
+                        children: [
+                          Center(
+                            child: SvgPicture.asset(
+                              Assets.icons.user,
+                              width: 40.0,
+                              height: 40.0,
+                              colorFilter: ColorFilter.mode(
+                                colorScheme.onPrimary.withValues(
+                                  alpha: 0.6,
+                                ),
+                                BlendMode.srcIn,
+                              ),
                             ),
-                            BlendMode.srcIn,
                           ),
-                        ),
+                        ],
+                      )
+                    : BuildUserAvatar(
+                        width: 80.0,
+                        height: 80.0,
+                        url: cover,
                       ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: BuildOnlineIndicator(
-                          isOnline: isOnlineUser,
-                        ),
-                      ),
-                    ],
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: BuildOnlineIndicator(
+                    isOnline: isOnlineUser,
                   ),
-                )
-              : BuildUserAvatar(
-                  width: 80.0,
-                  height: 80.0,
-                  url: cover,
                 ),
+              ],
+            ),
+          ),
           Gap(10.0),
           Column(
             spacing: 10.0,

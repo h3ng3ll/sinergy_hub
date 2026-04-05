@@ -40,9 +40,10 @@ class ChatMessageFirebaseRepository extends IChatMessageRepository {
         .doc(
           messageId,
         )
-        .set(
-          message.toJson(),
-        );
+        .set({
+          ...message.toJson(),
+          'createdAt': FieldValue.serverTimestamp(),
+        });
     return message;
   }
 
@@ -66,12 +67,13 @@ class ChatMessageFirebaseRepository extends IChatMessageRepository {
             (snapshot) {
               return snapshot.docChanges
                   .where(
-                    (change) => change.type == DocumentChangeType.added,
+                    (change) => change.doc['createdAt'] != null,
                   )
                   .map(
                     (change) {
+                      final data = change.doc.data()!;
                       final message = ChatMessageDto.fromJson(
-                        change.doc.data()!,
+                        data,
                       );
                       return message.toDomain(
                         uid: uid,

@@ -26,6 +26,7 @@ class BuildLookingFor extends StatelessWidget {
 
     return ShadowContainer(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           BuildUserTitleWidget(
             onTapEdit: onTapEdit,
@@ -34,6 +35,7 @@ class BuildLookingFor extends StatelessWidget {
           Gap(20.0),
           Wrap(
             alignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.start,
             spacing: 10.0,
             runSpacing: 10.0,
             children: userData.profiler.searchingSpecializations

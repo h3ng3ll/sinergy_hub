@@ -1,15 +1,16 @@
-import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../../di/injection.dart';
 import '../local_notification_service.dart';
+import '../notification_tap_processor.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
   // Нужно инициализировать сервис, если он есть в background
-  final localService = getIt<LocalNotificationService>();
+  final localService = LocalNotificationService(
+    notificationTapProcessor: NotificationTapProcessor(),
+  );
   final notification = message.notification;
   if (notification != null) {
     debugPrint('Background Message notification details: ');
@@ -100,7 +101,6 @@ class FirebaseMessagingService {
       debugPrint('Title: ${message.notification?.title}');
       debugPrint('Body: ${message.notification?.body}');
       debugPrint('Data: ${message.data}');
-
 
       _localNotificationService.sendNotification(
         title: notification.title ?? 'New Notification',

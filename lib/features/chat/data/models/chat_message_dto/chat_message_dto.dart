@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../../core/utils/converters/timestamp_convertor.dart';
 import '../../../domain/models/chat_message/chat_message.dart';
 
 part 'chat_message_dto.g.dart';
@@ -8,7 +10,6 @@ part 'chat_message_dto.freezed.dart';
 
 @freezed
 abstract class ChatMessageDto with _$ChatMessageDto {
-
   const ChatMessageDto._();
 
   const factory ChatMessageDto({
@@ -16,7 +17,7 @@ abstract class ChatMessageDto with _$ChatMessageDto {
     @Default('') String message,
     @Default('') String sentUid,
     @Default([]) List<String> readStatus,
-    required DateTime createdAt,
+    @TimestampConverter() required DateTime createdAt,
   }) = _ChatMessageDto;
 
   factory ChatMessageDto.fromJson(
