@@ -11,12 +11,15 @@ import '../../../../../../../../../../core/widgets/build_user_avatar.dart';
 import '../../../../../../../../../../gen/assets.gen.dart';
 import '../../../../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../../../../domain/models/chat_message/chat_message.dart';
+import 'build_message_content/build_message_content.dart';
 
 class BuildMessage extends StatelessWidget {
   final ChatMessage? message;
   final UserData user;
   final bool isSentByCurUser;
   final bool isLoadingStub;
+  final Function(String) onTapUrl;
+  final Function(String) onTapEmail;
 
   const BuildMessage({
     super.key,
@@ -24,6 +27,8 @@ class BuildMessage extends StatelessWidget {
     required this.isSentByCurUser,
     required this.user,
     this.isLoadingStub = false,
+    required this.onTapUrl,
+    required this.onTapEmail,
   });
 
   factory BuildMessage.loading({
@@ -32,6 +37,8 @@ class BuildMessage extends StatelessWidget {
     isSentByCurUser: false,
     user: user,
     isLoadingStub: true,
+    onTapUrl: (_) {},
+    onTapEmail: (_) {},
   );
 
   @override
@@ -73,58 +80,49 @@ class BuildMessage extends StatelessWidget {
                         ),
                         Gap(10.0),
                       ],
-                      Container(
-                        padding: EdgeInsets.all(
-                          15.0,
+                      Flexible(
+                        child: Container(
+                          padding: EdgeInsets.all(
+                            15.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isSentByCurUser ? null : AppColors.white.value,
+                            gradient: isSentByCurUser
+                                ? AppGradients.bluePurple
+                                : null,
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.black.value.withValues(
+                                  alpha: 0.3,
+                                ),
+                                offset: Offset(
+                                  -1,
+                                  1,
+                                ),
+                                blurRadius: 3,
+                                // spreadRadius: 1,
+                              ),
+                            ],
+                            borderRadius: isSentByCurUser
+                                ? BorderRadius.only(
+                                    bottomLeft: radius,
+                                    topLeft: radius,
+                                    topRight: radius,
+                                  )
+                                : BorderRadius.only(
+                                    bottomRight: radius,
+                                    topLeft: radius,
+                                    topRight: radius,
+                                  ),
+                          ),
+                          child: BuildMessageContent(
+                            message: message,
+                            isSentByCurUser: isSentByCurUser,
+                            isLoadingStub: isLoadingStub,
+                            onTapUrl: onTapUrl,
+                            onTapEmail: onTapEmail,
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: isSentByCurUser ? null : AppColors.white.value,
-                          gradient: isSentByCurUser
-                              ? AppGradients.bluePurple
-                              : null,
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.black.value.withValues(
-                                alpha: 0.3,
-                              ),
-                              offset: Offset(
-                                -1,
-                                1,
-                              ),
-                              blurRadius: 3,
-                              // spreadRadius: 1,
-                            ),
-                          ],
-                          borderRadius: isSentByCurUser
-                              ? BorderRadius.only(
-                                  bottomLeft: radius,
-                                  topLeft: radius,
-                                  topRight: radius,
-                                )
-                              : BorderRadius.only(
-                                  bottomRight: radius,
-                                  topLeft: radius,
-                                  topRight: radius,
-                                ),
-                        ),
-                        child: isLoadingStub
-                            ? SizedBox(
-                          // width: 80.0,
-                          height: 20.0,
-                              child: Lottie.asset(
-                                  fit: BoxFit.cover,
-                                  Assets.lottie.loadingDots,
-
-                                ),
-                            )
-                            : Text(
-                                message!.message,
-                                style: textTheme.regular16.copyWith(
-                                  color: isSentByCurUser
-                                      ? colorScheme.onPrimary
-                                      : AppColors.black.value,
-                                ),
-                              ),
                       ),
                     ],
                   ),

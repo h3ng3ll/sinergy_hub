@@ -10,12 +10,16 @@ class BuildChatCanvas extends StatelessWidget {
   final VoidCallback onReachToEnd;
   final Chat chat;
   final List<UserData> users;
+  final Function(String) onTapUrl;
+  final Function(String) onTapEmail;
 
   const BuildChatCanvas({
     super.key,
     required this.onReachToEnd,
     required this.chat,
     required this.users,
+    required this.onTapUrl,
+    required this.onTapEmail,
   });
 
   @override
@@ -25,14 +29,16 @@ class BuildChatCanvas extends StatelessWidget {
         Expanded(
           child: MessageBuilder(
             onReachToEnd: onReachToEnd,
+            onTapUrl: onTapUrl,
+            onTapEmail: onTapEmail,
           ),
         ),
         ...chat.typingUsers.map(
           (e) {
             final user = users.firstWhereOrNull(
-                  (u) => e == u.uid,
+              (u) => e == u.uid,
             );
-            if(user == null) return Container();
+            if (user == null) return Container();
             return Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: BuildMessage.loading(

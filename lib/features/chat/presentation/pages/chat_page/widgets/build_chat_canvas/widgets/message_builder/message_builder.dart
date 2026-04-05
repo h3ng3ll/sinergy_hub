@@ -15,10 +15,14 @@ import 'widgets/build_message.dart';
 
 class MessageBuilder extends StatefulWidget {
   final VoidCallback onReachToEnd;
+  final Function(String) onTapUrl;
+  final Function(String) onTapEmail;
 
   const MessageBuilder({
     super.key,
     required this.onReachToEnd,
+    required this.onTapUrl,
+    required this.onTapEmail,
   });
 
   @override
@@ -90,6 +94,8 @@ class _MessageBuilderState extends State<MessageBuilder> {
                           (e) => e.uid == message.sentUid,
                         ),
                   isSentByCurUser: isSentByCurUser,
+                  onTapUrl: widget.onTapUrl,
+                  onTapEmail: widget.onTapEmail,
                 );
               },
             );

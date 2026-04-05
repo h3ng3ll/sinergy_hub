@@ -83,6 +83,7 @@ dependencies:
   package_info_plus: ^9.0.1
   flutter_localizations:
     sdk: flutter
+  url_launcher: ^6.3.2
 
 
 dev_dependencies:

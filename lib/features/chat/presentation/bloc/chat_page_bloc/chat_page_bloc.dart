@@ -12,7 +12,6 @@ import '../../../domain/models/chat_message/chat_message.dart';
 import '../../../domain/usecases/get_chat_by_id_use_case.dart';
 import '../../../domain/usecases/get_last_messages_use_case.dart';
 import '../../../domain/usecases/listen_chat_by_id_use_case.dart';
-import '../../../domain/usecases/listen_chat_messages_use_case.dart';
 import '../../../domain/usecases/send_message_use_case.dart';
 import '../../../domain/usecases/update_typing_info_use_case.dart';
 
@@ -79,10 +78,13 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     Emitter<ChatPageState> emit,
   ) => emit(
     state.copyWith(
-      messages: [
-        ...state.messages,
-        ...event.messages,
-      ],
+      messages:
+          [
+            ...state.messages,
+            ...event.messages,
+          ]..sort(
+            (a, b) => a.createdAt.compareTo(b.createdAt),
+          ),
     ),
   );
 

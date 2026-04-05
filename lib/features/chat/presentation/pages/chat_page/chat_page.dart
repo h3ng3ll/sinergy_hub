@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/di/injection.dart';
 
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
+import '../../../../../core/services/ui_message_service.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
 import '../../../../user/domain/usecases/get_users_use_case.dart';
@@ -23,12 +25,10 @@ import 'widgets/build_chat_canvas/build_chat_canvas.dart';
 
 class ChatPage extends StatefulWidget {
   final String chatId;
-  // final VoidCallback onPop;
 
   const ChatPage({
     super.key,
     required this.chatId,
-    // required this.onPop,
   });
 
   @override
@@ -92,6 +92,30 @@ class _ChatPageState extends State<ChatPage> {
 
   void onTapUser() {}
 
+  void onTapUrl(String url) {
+    launchUrl(
+      Uri.parse(url),
+    );
+  }
+
+  Future<void> onTapEmail(String email) async {
+    final uri = Uri(
+      scheme: 'mailto',
+      path: email,
+    );
+    print(email);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      UiMessageService.showError(
+        'Could not launch email client',
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -120,6 +144,8 @@ class _ChatPageState extends State<ChatPage> {
                       onReachToEnd: onReachToEndMessages,
                       chat: chat,
                       users: [chatterUser],
+                      onTapUrl: onTapUrl,
+                      onTapEmail: onTapEmail,
                     ),
                   ),
                   BuildChatBottom(
