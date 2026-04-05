@@ -44,4 +44,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationNow => 'now';
+
+  @override
+  String get online => 'Online';
+
+  @override
+  String get offline => 'Offline';
+
+  @override
+  String get looking_for => 'Looking For';
+
+  @override
+  String get about_me => 'About';
 }

@@ -165,6 +165,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'now'**
   String get notificationNow;
+
+  /// No description provided for @online.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get online;
+
+  /// No description provided for @offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get offline;
+
+  /// No description provided for @looking_for.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking For'**
+  String get looking_for;
+
+  /// No description provided for @about_me.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about_me;
 }
 
 class _AppLocalizationsDelegate

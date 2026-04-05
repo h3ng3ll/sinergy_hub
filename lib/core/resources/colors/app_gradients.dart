@@ -13,4 +13,13 @@ abstract class AppGradients {
       AppColors.darkOrchid.value,
     ],
   );
+
+  static LinearGradient blackToTransparent = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      AppColors.transparent.value,
+      AppColors.black.value.withValues(alpha: 0.7),
+    ],
+  );
 }

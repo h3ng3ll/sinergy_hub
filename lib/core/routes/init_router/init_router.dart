@@ -7,6 +7,7 @@ import '../../../features/auth/presentation/pages/authorization_page/authorizati
 import '../../../features/auth/presentation/pages/login_page/login_page.dart';
 import '../../../features/auth/presentation/pages/register_page/register_page.dart';
 import '../../../features/chat/presentation/pages/chat_page/chat_page.dart';
+import '../../../features/chat/presentation/pages/chat_shell/chat_shell.dart';
 import '../../../features/home/presentation/home_bottom_bar/home_bottom_bar.dart';
 import '../../../features/home/presentation/home_root/home_root.dart';
 import '../../../features/matches/presentation/pages/discovery_page/discovery_page.dart';
@@ -19,6 +20,7 @@ import '../../../features/onboard_survey/presentation/pages/onboard_about_you_pa
 import '../../../features/onboard_survey/presentation/pages/onboard_shell_page/onboard_shell_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
 import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
+import '../../../features/user/presentation/pages/user_profile_page/user_profile_page.dart';
 import '../root_page/root_page.dart';
 
 part 'init_router.g.dart';
@@ -27,9 +29,7 @@ final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter initRouter = GoRouter(
   routes: $appRoutes,
-  redirect: (context , state) {
-
-  }
+  redirect: (context, state) {},
 );
 
 @TypedShellRoute<RootPageRoute>(
@@ -84,8 +84,17 @@ final GoRouter initRouter = GoRouter(
             TypedGoRoute<MatchResultPageRoute>(
               path: '/match-result',
             ),
-            TypedGoRoute<ChatPageRoute>(
-              path: '/matches/:chatId',
+            TypedShellRoute<ChatShellRoute>(
+              routes: [
+                TypedGoRoute<ChatPageRoute>(
+                  path: '/matches/:chatId',
+                  routes: [
+                    TypedGoRoute<UserProfilePageRoute>(
+                      path: ':userId',
+                    ),
+                  ],
+                ),
+              ],
             ),
             TypedGoRoute<EditProfilePageRoute>(
               path: '/edit-profile-page',
@@ -296,6 +305,40 @@ class ChatPageRoute extends GoRouteData with $ChatPageRoute {
     return GoRouterPageBuilder.pageBuilder(
       ChatPage(
         chatId: chatId,
+      ),
+    );
+  }
+}
+
+class ChatShellRoute extends ShellRouteData {
+  // static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+
+  @override
+  Widget builder(
+    BuildContext context,
+    GoRouterState state,
+    Widget navigationShell,
+  ) {
+    return ChatShell(
+      navigationShell: navigationShell,
+    );
+  }
+}
+
+class UserProfilePageRoute extends GoRouteData with $UserProfilePageRoute {
+  final String userId;
+  final String chatId;
+
+  const UserProfilePageRoute({
+    required this.userId,
+    required this.chatId,
+  });
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      UserProfilePage(
+        userId: userId,
       ),
     );
   }

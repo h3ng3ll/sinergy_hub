@@ -137,11 +137,11 @@ return updateUserData(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String uid)?  subscribe,TResult Function()?  init,TResult Function( String message)?  sendMessage,TResult Function( List<ChatMessage> messages)?  updateMessages,TResult Function( Chat chat)?  updateChat,TResult Function()?  startTyping,TResult Function()?  endTyping,TResult Function( UserData user)?  updateUserData,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String uid)?  subscribe,TResult Function( String chatId)?  init,TResult Function( String message)?  sendMessage,TResult Function( List<ChatMessage> messages)?  updateMessages,TResult Function( Chat chat)?  updateChat,TResult Function()?  startTyping,TResult Function()?  endTyping,TResult Function( UserData user)?  updateUserData,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
 return subscribe(_that.uid);case _Init() when init != null:
-return init();case _SendMessage() when sendMessage != null:
+return init(_that.chatId);case _SendMessage() when sendMessage != null:
 return sendMessage(_that.message);case _UpdateMessages() when updateMessages != null:
 return updateMessages(_that.messages);case _UpdateChat() when updateChat != null:
 return updateChat(_that.chat);case _StartTyping() when startTyping != null:
@@ -165,11 +165,11 @@ return updateUserData(_that.user);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String uid)  subscribe,required TResult Function()  init,required TResult Function( String message)  sendMessage,required TResult Function( List<ChatMessage> messages)  updateMessages,required TResult Function( Chat chat)  updateChat,required TResult Function()  startTyping,required TResult Function()  endTyping,required TResult Function( UserData user)  updateUserData,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String uid)  subscribe,required TResult Function( String chatId)  init,required TResult Function( String message)  sendMessage,required TResult Function( List<ChatMessage> messages)  updateMessages,required TResult Function( Chat chat)  updateChat,required TResult Function()  startTyping,required TResult Function()  endTyping,required TResult Function( UserData user)  updateUserData,}) {final _that = this;
 switch (_that) {
 case _Subscribe():
 return subscribe(_that.uid);case _Init():
-return init();case _SendMessage():
+return init(_that.chatId);case _SendMessage():
 return sendMessage(_that.message);case _UpdateMessages():
 return updateMessages(_that.messages);case _UpdateChat():
 return updateChat(_that.chat);case _StartTyping():
@@ -189,11 +189,11 @@ return updateUserData(_that.user);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String uid)?  subscribe,TResult? Function()?  init,TResult? Function( String message)?  sendMessage,TResult? Function( List<ChatMessage> messages)?  updateMessages,TResult? Function( Chat chat)?  updateChat,TResult? Function()?  startTyping,TResult? Function()?  endTyping,TResult? Function( UserData user)?  updateUserData,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String uid)?  subscribe,TResult? Function( String chatId)?  init,TResult? Function( String message)?  sendMessage,TResult? Function( List<ChatMessage> messages)?  updateMessages,TResult? Function( Chat chat)?  updateChat,TResult? Function()?  startTyping,TResult? Function()?  endTyping,TResult? Function( UserData user)?  updateUserData,}) {final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
 return subscribe(_that.uid);case _Init() when init != null:
-return init();case _SendMessage() when sendMessage != null:
+return init(_that.chatId);case _SendMessage() when sendMessage != null:
 return sendMessage(_that.message);case _UpdateMessages() when updateMessages != null:
 return updateMessages(_that.messages);case _UpdateChat() when updateChat != null:
 return updateChat(_that.chat);case _StartTyping() when startTyping != null:
@@ -277,33 +277,67 @@ as String,
 
 
 class _Init implements ChatPageEvent {
-  const _Init();
+  const _Init({required this.chatId});
   
 
+ final  String chatId;
 
-
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$InitCopyWith<_Init> get copyWith => __$InitCopyWithImpl<_Init>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Init);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Init&&(identical(other.chatId, chatId) || other.chatId == chatId));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,chatId);
 
 @override
 String toString() {
-  return 'ChatPageEvent.init()';
+  return 'ChatPageEvent.init(chatId: $chatId)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$InitCopyWith<$Res> implements $ChatPageEventCopyWith<$Res> {
+  factory _$InitCopyWith(_Init value, $Res Function(_Init) _then) = __$InitCopyWithImpl;
+@useResult
+$Res call({
+ String chatId
+});
 
 
+
+
+}
+/// @nodoc
+class __$InitCopyWithImpl<$Res>
+    implements _$InitCopyWith<$Res> {
+  __$InitCopyWithImpl(this._self, this._then);
+
+  final _Init _self;
+  final $Res Function(_Init) _then;
+
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? chatId = null,}) {
+  return _then(_Init(
+chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
@@ -864,10 +898,10 @@ return $default(_that.chatId,_that.messages,_that.users,_that.chat,_that.status,
 
 
 class _ChatPageState implements ChatPageState {
-   _ChatPageState({required this.chatId, final  List<ChatMessage> messages = const [], final  List<UserData> users = const [], this.chat, this.status = ChatPageStatus.loading, this.errorMessage = ''}): _messages = messages,_users = users;
+   _ChatPageState({this.chatId = '', final  List<ChatMessage> messages = const [], final  List<UserData> users = const [], this.chat, this.status = ChatPageStatus.loading, this.errorMessage = ''}): _messages = messages,_users = users;
   
 
-@override final  String chatId;
+@override@JsonKey() final  String chatId;
  final  List<ChatMessage> _messages;
 @override@JsonKey() List<ChatMessage> get messages {
   if (_messages is EqualUnmodifiableListView) return _messages;

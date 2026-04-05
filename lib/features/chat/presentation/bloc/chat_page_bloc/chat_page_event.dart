@@ -6,7 +6,9 @@ sealed class ChatPageEvent with _$ChatPageEvent {
     required String uid,
   }) = _Subscribe;
 
-  const factory ChatPageEvent.init() = _Init;
+  const factory ChatPageEvent.init({
+    required String chatId,
+  }) = _Init;
 
   const factory ChatPageEvent.sendMessage({
     required String message,
@@ -23,6 +25,7 @@ sealed class ChatPageEvent with _$ChatPageEvent {
   const factory ChatPageEvent.startTyping() = _StartTyping;
 
   const factory ChatPageEvent.endTyping() = _EndTyping;
+
   const factory ChatPageEvent.updateUserData({
     required UserData user,
   }) = _UpdateUserData;

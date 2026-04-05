@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -43,7 +44,6 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     _chatPageBloc =
         ChatPageBloc(
-          chatId: widget.chatId,
           sendMessageUseCase: getIt<SendMessageUseCase>(),
           getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
           listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
@@ -53,12 +53,28 @@ class _ChatPageState extends State<ChatPage> {
           listenChatByIdUseCase: getIt<ListenChatByIdUseCase>(),
           getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
         )..add(
-          ChatPageEvent.init(),
+          ChatPageEvent.init(
+            chatId: widget.chatId,
+          ),
         );
     _textEditingController.addListener(
       onTextUpdate,
     );
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant ChatPage oldWidget) {
+    if (oldWidget.chatId != widget.chatId) {
+      /// on web widget still active and change if provided
+      /// a new one
+      _chatPageBloc.add(
+        ChatPageEvent.init(
+          chatId: widget.chatId,
+        ),
+      );
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -90,7 +106,19 @@ class _ChatPageState extends State<ChatPage> {
 
   void onReachToEndMessages() {}
 
-  void onTapUser() {}
+  void onTapUser(String userId) {
+    final route = UserProfilePageRoute(
+      userId: userId,
+      chatId: widget.chatId,
+    );
+    kIsWeb
+        ? route.go(
+            context,
+          )
+        : route.push(
+            context,
+          );
+  }
 
   void onTapUrl(String url) {
     launchUrl(
@@ -134,7 +162,9 @@ class _ChatPageState extends State<ChatPage> {
 
             return Scaffold(
               appBar: ChatAppBar(
-                onTapUser: onTapUser,
+                onTapUser: () => onTapUser(
+                  chatterUser.uid,
+                ),
                 user: chatterUser,
               ),
               body: Column(

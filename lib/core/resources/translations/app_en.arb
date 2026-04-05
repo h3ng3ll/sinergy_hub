@@ -11,5 +11,9 @@
   "how_old_are_you": "How old are you ?",
   "clear": "Clear",
   "finish": "Finish",
-  "notificationNow": "now"
+  "notificationNow": "now",
+  "online": "Online",
+  "offline": "Offline",
+  "looking_for": "Looking For",
+  "about_me": "About"
 }

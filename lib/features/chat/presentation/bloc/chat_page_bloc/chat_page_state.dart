@@ -22,7 +22,7 @@ extension ChatPageStateX on ChatPageState {
 @freezed
 sealed class ChatPageState with _$ChatPageState {
   factory ChatPageState({
-    required String chatId,
+    @Default('') String chatId,
     @Default([]) List<ChatMessage> messages,
     @Default([]) List<UserData> users,
     Chat? chat,

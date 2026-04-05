@@ -42,46 +42,51 @@ class BuildMessageContent extends StatelessWidget {
     if (message == null) {
       return SizedBox.shrink();
     }
-    return RichText(
-      softWrap: true,
-      text: TextSpan(
-        children: message!.message.parseChatMessage().map((part) {
-          return part.when(
-            text: (value) => TextSpan(
-              text: value,
-              style: textTheme.regular16.copyWith(
-                color: isSentByCurUser
-                    ? colorScheme.onPrimary
-                    : AppColors.black.value,
-              ),
-            ),
-
-            url: (url) => WidgetSpan(
-              child: GestureDetector(
-                onTap: () => onTapUrl(url),
+    return SelectionArea(
+      child: RichText(
+        softWrap: true,
+        text: TextSpan(
+          children: message!.message.parseChatMessage().map((part) {
+            return part.when(
+              text: (value) => WidgetSpan(
                 child: Text(
-                  url,
-                  style: TextStyle(
-                    color: AppColors.white.value,
-                    decoration: TextDecoration.underline,
+                  value,
+                  style: textTheme.regular16.copyWith(
+                    color: isSentByCurUser
+                        ? colorScheme.onPrimary
+                        : AppColors.black.value,
                   ),
                 ),
               ),
-            ),
 
-            email: (email) => WidgetSpan(
-              child: GestureDetector(
-                onTap: () => onTapEmail(
-                  email,
-                ),
-                child: Text(
-                  email,
-                  style: TextStyle(color: Colors.green),
+              url: (url) => WidgetSpan(
+                child: GestureDetector(
+                  onTap: () => onTapUrl(url),
+                  child: Text(
+                    url,
+                    style: TextStyle(
+                      color:  isSentByCurUser
+                          ? AppColors.white.value : AppColors.blueMediumSlate.value,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          );
-        }).toList(),
+
+              email: (email) => WidgetSpan(
+                child: GestureDetector(
+                  onTap: () => onTapEmail(
+                    email,
+                  ),
+                  child: Text(
+                    email,
+                    style: TextStyle(color: Colors.green),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

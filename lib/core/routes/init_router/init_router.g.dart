@@ -72,9 +72,20 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
               path: '/match-result',
               factory: $MatchResultPageRoute._fromState,
             ),
-            GoRouteData.$route(
-              path: '/matches/:chatId',
-              factory: $ChatPageRoute._fromState,
+            ShellRouteData.$route(
+              factory: $ChatShellRouteExtension._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: '/matches/:chatId/',
+                  factory: $ChatPageRoute._fromState,
+                  routes: [
+                    GoRouteData.$route(
+                      path: ':userId',
+                      factory: $UserProfilePageRoute._fromState,
+                    ),
+                  ],
+                ),
+              ],
             ),
             GoRouteData.$route(
               path: '/edit-profile-page',
@@ -290,6 +301,10 @@ mixin $MatchResultPageRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
+extension $ChatShellRouteExtension on ChatShellRoute {
+  static ChatShellRoute _fromState(GoRouterState state) => ChatShellRoute();
+}
+
 mixin $ChatPageRoute on GoRouteData {
   static ChatPageRoute _fromState(GoRouterState state) =>
       ChatPageRoute(chatId: state.pathParameters['chatId']!);
@@ -298,7 +313,35 @@ mixin $ChatPageRoute on GoRouteData {
 
   @override
   String get location =>
-      GoRouteData.$location('/matches/${Uri.encodeComponent(_self.chatId)}');
+      GoRouteData.$location('/matches/${Uri.encodeComponent(_self.chatId)}/');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $UserProfilePageRoute on GoRouteData {
+  static UserProfilePageRoute _fromState(GoRouterState state) =>
+      UserProfilePageRoute(
+        userId: state.pathParameters['userId']!,
+        chatId: state.pathParameters['chatId']!,
+      );
+
+  UserProfilePageRoute get _self => this as UserProfilePageRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/matches/${Uri.encodeComponent(_self.chatId)}/${Uri.encodeComponent(_self.userId)}',
+  );
 
   @override
   void go(BuildContext context) => context.go(location);

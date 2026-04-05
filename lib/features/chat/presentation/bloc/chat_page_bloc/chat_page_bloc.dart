@@ -38,7 +38,6 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   StreamSubscription? _userDataSubscription;
 
   ChatPageBloc({
-    required String chatId,
     required SendMessageUseCase sendMessageUseCase,
     required ListenLastMessagesUseCase getLastMessageUseCase,
     required ListenChatByIdUseCase listenChatByIdUseCase,
@@ -57,9 +56,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
        _getCurrentUserDataUseCase = getCurrentUserDataUseCase,
 
        super(
-         ChatPageState(
-           chatId: chatId,
-         ),
+         ChatPageState(),
        ) {
     on<_Subscribe>(_subscribe);
     on<_Init>(_init);
@@ -170,13 +167,15 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     Emitter<ChatPageState> emit,
   ) async {
     try {
+      final chatId = event.chatId;
       emit(
         state.copyWith(
+          chatId: chatId,
           status: ChatPageStatus.loading,
         ),
       );
       final Chat chat = await _getChatByIdUseCase.call(
-        chatId: state.chatId,
+        chatId: chatId,
       );
       final List<UserData> users = await _getUsersUseCase.call(
         ids: chat.participants,
@@ -197,6 +196,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         state.copyWith(
           users: users,
           chat: chat,
+          chatId: chatId,
           status: ChatPageStatus.initial,
         ),
       );
