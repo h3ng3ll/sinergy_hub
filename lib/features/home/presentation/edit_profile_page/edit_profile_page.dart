@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/di/injection.dart';
 import '../../../../core/resources/colors/app_color_scheme.dart';
@@ -48,13 +49,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     final userCubit = context.read<UserBloc>();
-    _editProfilePageBloc =
-        EditProfilePageBloc(
-          listenCurrentUserDataUseCase: getIt<ListenCurrentUserDataUseCase>(),
-          updateUserUseCase: getIt<UpdateUserUseCase>(),
-        )..add(
-          EditProfilePageEvent.initialize(),
-        );
+    _editProfilePageBloc = getIt<EditProfilePageBloc>()
+      ..add(
+        EditProfilePageEvent.initialize(),
+      );
 
     _firstNameController.text =
         userCubit.state.userData?.firstName ?? _firstNameController.text;
@@ -106,11 +104,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> onTapAvatar() async {
-    final File? image = await getIt<PermissionRequester>().onPickCamera(
+    final Uint8List? image = await getIt<PermissionRequester>().onPickCamera(
       context,
     );
     if (image == null) return;
-    this.image = image.readAsBytesSync();
+    this.image = image;
     setState(() {});
   }
 

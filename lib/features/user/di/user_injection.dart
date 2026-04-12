@@ -4,6 +4,7 @@ import '../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../core/services/firebase/firebase_storage_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
+import '../../home/presentation/edit_profile_page/bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import '../../onboard_survey/domain/use_cases/get_skills_use_case.dart';
 import '../data/repositories/user_firebase_repository.dart';
 import '../domain/repositories/i_user_repository.dart';
@@ -68,6 +69,12 @@ void initUserFeature(GetIt getIt) {
   getIt.registerFactory<ListenUserDataUseCase>(
     () => ListenUserDataUseCase(
       userRepository: getIt<IUserRepository>(),
+    ),
+  );
+  getIt.registerFactory<EditProfilePageBloc>(
+    () => EditProfilePageBloc(
+      listenCurrentUserDataUseCase: getIt<ListenCurrentUserDataUseCase>(),
+      updateUserUseCase: getIt<UpdateUserUseCase>(),
     ),
   );
 }

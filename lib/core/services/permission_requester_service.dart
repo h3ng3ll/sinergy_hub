@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -8,8 +9,6 @@ import 'ui_message_service.dart';
 
 class PermissionRequester {
   bool isPicking = false;
-
-
 
   Future<File?> onPickGallery(BuildContext context) async {
     if (isPicking) return null;
@@ -49,7 +48,7 @@ class PermissionRequester {
     return null;
   }
 
-  Future<File?> onPickCamera(BuildContext context) async {
+  Future<Uint8List?> onPickCamera(BuildContext context) async {
     if (isPicking) return null;
     isPicking = true;
 
@@ -63,12 +62,10 @@ class PermissionRequester {
         );
         if (res == null) return null;
         isPicking = false;
-        return File(
-          res.path,
-        );
+        return res.readAsBytes();
       } else {
         UiMessageService.showSuccess(
-         'Please grant camera access',
+          'Please grant camera access',
         );
         await Future.delayed(
           Duration(seconds: 2),
@@ -79,7 +76,7 @@ class PermissionRequester {
       UiMessageService.showError(
         'Failed to pick image from camera',
       );
-    }finally {
+    } finally {
       isPicking = false;
     }
 
