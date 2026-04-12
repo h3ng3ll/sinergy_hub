@@ -431,7 +431,7 @@ as Uint8List?,
 /// @nodoc
 mixin _$EditProfilePageState {
 
- EditProfilePageStatus get status; List<Skill> get skills; UserData? get userData; dynamic get errorMessage;
+ EditProfilePageStatus get status; List<Skill> get skills; UserData? get userData; String get errorMessage;
 /// Create a copy of EditProfilePageState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -442,12 +442,12 @@ $EditProfilePageStateCopyWith<EditProfilePageState> get copyWith => _$EditProfil
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditProfilePageState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.skills, skills)&&(identical(other.userData, userData) || other.userData == userData)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditProfilePageState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.skills, skills)&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(skills),userData,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(skills),userData,errorMessage);
 
 @override
 String toString() {
@@ -462,7 +462,7 @@ abstract mixin class $EditProfilePageStateCopyWith<$Res>  {
   factory $EditProfilePageStateCopyWith(EditProfilePageState value, $Res Function(EditProfilePageState) _then) = _$EditProfilePageStateCopyWithImpl;
 @useResult
 $Res call({
- EditProfilePageStatus status, List<Skill> skills, UserData? userData, dynamic errorMessage
+ EditProfilePageStatus status, List<Skill> skills, UserData? userData, String errorMessage
 });
 
 
@@ -479,13 +479,13 @@ class _$EditProfilePageStateCopyWithImpl<$Res>
 
 /// Create a copy of EditProfilePageState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? skills = null,Object? userData = freezed,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? skills = null,Object? userData = freezed,Object? errorMessage = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EditProfilePageStatus,skills: null == skills ? _self.skills : skills // ignore: cast_nullable_to_non_nullable
 as List<Skill>,userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
-as UserData?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as dynamic,
+as UserData?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 /// Create a copy of EditProfilePageState
@@ -579,7 +579,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( EditProfilePageStatus status,  List<Skill> skills,  UserData? userData,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( EditProfilePageStatus status,  List<Skill> skills,  UserData? userData,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EditProfilePageState() when $default != null:
 return $default(_that.status,_that.skills,_that.userData,_that.errorMessage);case _:
@@ -600,7 +600,7 @@ return $default(_that.status,_that.skills,_that.userData,_that.errorMessage);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( EditProfilePageStatus status,  List<Skill> skills,  UserData? userData,  dynamic errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( EditProfilePageStatus status,  List<Skill> skills,  UserData? userData,  String errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _EditProfilePageState():
 return $default(_that.status,_that.skills,_that.userData,_that.errorMessage);}
@@ -617,7 +617,7 @@ return $default(_that.status,_that.skills,_that.userData,_that.errorMessage);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( EditProfilePageStatus status,  List<Skill> skills,  UserData? userData,  dynamic errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( EditProfilePageStatus status,  List<Skill> skills,  UserData? userData,  String errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _EditProfilePageState() when $default != null:
 return $default(_that.status,_that.skills,_that.userData,_that.errorMessage);case _:
@@ -644,7 +644,7 @@ class _EditProfilePageState implements EditProfilePageState {
 }
 
 @override final  UserData? userData;
-@override@JsonKey() final  dynamic errorMessage;
+@override@JsonKey() final  String errorMessage;
 
 /// Create a copy of EditProfilePageState
 /// with the given fields replaced by the non-null parameter values.
@@ -656,12 +656,12 @@ _$EditProfilePageStateCopyWith<_EditProfilePageState> get copyWith => __$EditPro
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditProfilePageState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._skills, _skills)&&(identical(other.userData, userData) || other.userData == userData)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditProfilePageState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._skills, _skills)&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_skills),userData,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_skills),userData,errorMessage);
 
 @override
 String toString() {
@@ -676,7 +676,7 @@ abstract mixin class _$EditProfilePageStateCopyWith<$Res> implements $EditProfil
   factory _$EditProfilePageStateCopyWith(_EditProfilePageState value, $Res Function(_EditProfilePageState) _then) = __$EditProfilePageStateCopyWithImpl;
 @override @useResult
 $Res call({
- EditProfilePageStatus status, List<Skill> skills, UserData? userData, dynamic errorMessage
+ EditProfilePageStatus status, List<Skill> skills, UserData? userData, String errorMessage
 });
 
 
@@ -693,13 +693,13 @@ class __$EditProfilePageStateCopyWithImpl<$Res>
 
 /// Create a copy of EditProfilePageState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? skills = null,Object? userData = freezed,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? skills = null,Object? userData = freezed,Object? errorMessage = null,}) {
   return _then(_EditProfilePageState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EditProfilePageStatus,skills: null == skills ? _self._skills : skills // ignore: cast_nullable_to_non_nullable
 as List<Skill>,userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
-as UserData?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as dynamic,
+as UserData?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

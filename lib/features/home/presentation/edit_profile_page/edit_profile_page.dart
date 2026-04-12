@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../core/resources/text/app_text_theme.dart';
+import '../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../core/services/permission_requester_service.dart';
 import '../../../../core/services/ui_message_service.dart';
 import '../../../../core/widgets/btn/custom_text_btn.dart';
@@ -136,7 +137,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
           BlocListener<EditProfilePageBloc, EditProfilePageState>(
             listenWhen: (p, n) =>
-                !p.errorMessage != n.errorMessage && n.isFailed,
+                (p.errorMessage != n.errorMessage) && n.isFailed,
             listener: (context, state) {
               UiMessageService.showError(
                 state.errorMessage,
@@ -149,94 +150,99 @@ class _EditProfilePageState extends State<EditProfilePage> {
             final userData = state.userData;
             final availableSkills = context.watch<SkillsBloc>().state.skills;
 
-            return BuildAnimatedBackground(
-              child: SafeArea(
-                child: Scaffold(
-                  backgroundColor: Colors.transparent,
-                  appBar: CustomAppBar(
-                    actions: [
-                      Spacer(),
-                      Center(
-                        child: Text(
-                          'Edit Profile',
-                          style: textTheme.bold20.copyWith(
-                            color: colorScheme.onPrimary,
+            return Stack(
+              children: [
+                BuildAnimatedBackground(
+                  child: SafeArea(
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                      appBar: CustomAppBar(
+                        actions: [
+                          Spacer(),
+                          Center(
+                            child: Text(
+                              'Edit Profile',
+                              style: textTheme.bold20.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
                           ),
+                          Spacer(),
+                        ],
+                      ),
+                      body: HorizontalPadding(
+                        child: ListView(
+                          children: [
+                            Column(
+                              spacing: 20,
+
+                              children: [
+                                BuildUserAvatar(
+                                  width: 100.0,
+                                  height: 100.0,
+                                  onTap: onTapAvatar,
+                                  url: userData?.avatarUrl,
+                                  cacheImg: image,
+                                ),
+                                BuildGroupedInput(
+                                  title: 'FirstName',
+                                  child: FirstNameInput(
+                                    controller: _firstNameController,
+                                  ),
+                                ),
+                                BuildGroupedInput(
+                                  title: 'LastName',
+                                  child: LastNameInput(
+                                    controller: _lastNameController,
+                                  ),
+                                ),
+                                BuildGroupedInput(
+                                  title: 'Bio',
+                                  child: BioInput(
+                                    controller: _bioController,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Gap(15.0),
+                            Text(
+                              'Skills',
+                              style: textTheme.regular14.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                            Gap(15.0),
+                            BuildSkillsSection(
+                              onRemoveExistingSkill: onRemoveExistingSkill,
+                              onSubmitSkill: onSubmitSkill,
+                              skills: availableSkills,
+                              activeSkills: state.skills,
+                            ),
+                            Gap(15.0),
+                            Row(
+                              spacing: 20.0,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CustomTextBtn(
+                                  onPressed: onCancel,
+                                  text: 'Cancel',
+                                ),
+                                TranslucentBtn(
+                                  onPressed: onSaveChanges,
+                                  child: Text(
+                                    'Save Changes',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      Spacer(),
-                    ],
-                  ),
-                  body: HorizontalPadding(
-                    child: ListView(
-                      children: [
-                        Column(
-                          spacing: 20,
-
-                          children: [
-                            BuildUserAvatar(
-                              width: 100.0,
-                              height: 100.0,
-                              onTap: onTapAvatar,
-                              url: userData?.avatarUrl,
-                              cacheImg: image,
-                            ),
-                            BuildGroupedInput(
-                              title: 'FirstName',
-                              child: FirstNameInput(
-                                controller: _firstNameController,
-                              ),
-                            ),
-                            BuildGroupedInput(
-                              title: 'LastName',
-                              child: LastNameInput(
-                                controller: _lastNameController,
-                              ),
-                            ),
-                            BuildGroupedInput(
-                              title: 'Bio',
-                              child: BioInput(
-                                controller: _bioController,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Gap(15.0),
-                        Text(
-                          'Skills',
-                          style: textTheme.regular14.copyWith(
-                            color: colorScheme.onPrimary,
-                          ),
-                        ),
-                        Gap(15.0),
-                        BuildSkillsSection(
-                          onRemoveExistingSkill: onRemoveExistingSkill,
-                          onSubmitSkill: onSubmitSkill,
-                          skills: availableSkills,
-                          activeSkills: state.skills,
-                        ),
-                        Gap(15.0),
-                        Row(
-                          spacing: 20.0,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomTextBtn(
-                              onPressed: onCancel,
-                              text: 'Cancel',
-                            ),
-                            TranslucentBtn(
-                              onPressed: onSaveChanges,
-                              child: Text(
-                                'Save Changes',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
                     ),
                   ),
                 ),
-              ),
+                if(state.isUpdating) LoadingDataWidget(),
+              ],
             );
           },
         ),

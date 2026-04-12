@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/models/exceptions.dart';
+import '../../../user/domain/models/user_data/user_data.dart';
 import '../failures/auth_failures.dart';
 
 abstract class IAuthRepository {
@@ -30,4 +31,6 @@ abstract class IAuthRepository {
   });
 
   Future<String> requireUserId();
+
+
 }

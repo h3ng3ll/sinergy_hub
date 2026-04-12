@@ -204,7 +204,7 @@ class UserFirebaseRepository extends IUserRepository {
   }) async {
     final path = _avatarStoragePath(
       uid,
-      'avatar_${DateTime.now().millisecondsSinceEpoch}.png',
+      'avatar_${DateTime.now().millisecondsSinceEpoch}.jpeg',
     );
 
     await _firebaseStorageService.uploadBytes(
@@ -225,7 +225,7 @@ class UserFirebaseRepository extends IUserRepository {
       await _firebaseStorageService.delete(
         path,
       );
-    } catch (e , st) {
+    } catch (e , _) {
       rethrow;
     }
   }
@@ -252,6 +252,12 @@ class UserFirebaseRepository extends IUserRepository {
     if (uid == null) return null;
     return await getUserById(
       id: uid,
+    );
+  }
+  @override
+  Future<String> getAvatarUrl(UserData user) {
+    return _firebaseStorageService.getDownloadUrl(
+      user.avatarPath!,
     );
   }
 }

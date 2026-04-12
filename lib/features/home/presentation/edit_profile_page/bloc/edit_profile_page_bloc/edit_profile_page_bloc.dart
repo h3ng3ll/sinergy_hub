@@ -112,7 +112,7 @@ class EditProfilePageBloc
     try {
       emit(
         state.copyWith(
-          status: EditProfilePageStatus.loading,
+          status: EditProfilePageStatus.updating,
         ),
       );
 

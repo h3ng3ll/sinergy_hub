@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import '../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../core/services/firebase/firebase_storage_service.dart';
+import '../../../core/services/image_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../home/presentation/edit_profile_page/bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import '../../onboard_survey/domain/use_cases/get_skills_use_case.dart';
@@ -30,6 +31,7 @@ void initUserFeature(GetIt getIt) {
     () => UpdateUserUseCase(
       userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),
+      imageService: getIt<ImageService>(),
     ),
   );
   getIt.registerLazySingleton<GetUserDataUseCase>(

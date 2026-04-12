@@ -21,6 +21,7 @@ import '../services/firebase/firebase_messaging_service.dart';
 import '../services/firebase/firebase_realtime_db_service.dart';
 import '../services/firebase/firebase_storage_service.dart';
 import '../services/google_sign_in_service/google_sign_in_service.dart';
+import '../services/image_service.dart';
 import '../services/local_notification_service.dart';
 import '../services/notification_tap_processor.dart';
 import '../services/permission_requester_service.dart';
@@ -40,6 +41,7 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => AudioService());
   getIt.registerLazySingleton(() => GoogleSignIn.instance);
   getIt.registerLazySingleton(() => NotificationTapProcessor());
+  getIt.registerLazySingleton(() => ImageService());
   getIt.registerLazySingleton(
     () => GoogleSignInService.instance,
   );

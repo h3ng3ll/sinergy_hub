@@ -5,6 +5,7 @@ enum EditProfilePageStatus {
   loading,
   failed,
   updated,
+  updating,
 }
 
 extension EditProfilePageStateX on EditProfilePageState {
@@ -13,6 +14,7 @@ extension EditProfilePageStateX on EditProfilePageState {
   bool get isLoading => status == EditProfilePageStatus.loading;
 
   bool get isUpdated => status == EditProfilePageStatus.updated;
+  bool get isUpdating => status == EditProfilePageStatus.updating;
 
 }
 
@@ -22,6 +24,6 @@ sealed class EditProfilePageState with _$EditProfilePageState {
     @Default(EditProfilePageStatus.initial) EditProfilePageStatus status,
     @Default([]) List<Skill> skills,
     UserData? userData,
-    @Default('') errorMessage,
+    @Default('') String errorMessage,
   }) = _EditProfilePageState;
 }
