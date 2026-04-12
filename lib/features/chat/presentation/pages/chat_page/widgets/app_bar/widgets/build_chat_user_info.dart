@@ -26,13 +26,16 @@ class BuildChatUserInfo extends StatelessWidget {
     return Row(
       children: [
         user.avatarUrl == null
-            ? SvgPicture.asset(
-                Assets.icons.user,
-                width: 30,
-                height: 30,
-                colorFilter: ColorFilter.mode(
-                  AppColors.black.value,
-                  BlendMode.srcIn,
+            ? GestureDetector(
+                onTap: onTapUser,
+                child: SvgPicture.asset(
+                  Assets.icons.user,
+                  width: 30,
+                  height: 30,
+                  colorFilter: ColorFilter.mode(
+                    AppColors.black.value,
+                    BlendMode.srcIn,
+                  ),
                 ),
               )
             : BuildUserAvatar(

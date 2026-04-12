@@ -25,6 +25,7 @@ sealed class ChatPageState with _$ChatPageState {
     @Default('') String chatId,
     @Default([]) List<ChatMessage> messages,
     @Default([]) List<UserData> users,
+    UserData? userData,
     Chat? chat,
     @Default(ChatPageStatus.loading) ChatPageStatus status,
     // @Default(true) bool isOnlineUser,

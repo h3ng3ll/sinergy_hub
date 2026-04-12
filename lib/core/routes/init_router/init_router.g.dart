@@ -76,12 +76,16 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
               factory: $ChatShellRouteExtension._fromState,
               routes: [
                 GoRouteData.$route(
-                  path: '/matches/:chatId/',
+                  path: '/matches/:chatId',
                   factory: $ChatPageRoute._fromState,
                   routes: [
                     GoRouteData.$route(
                       path: ':userId',
                       factory: $UserProfilePageRoute._fromState,
+                    ),
+                    GoRouteData.$route(
+                      path: '/',
+                      factory: $ChatPageViewRoute._fromState,
                     ),
                   ],
                 ),
@@ -313,7 +317,7 @@ mixin $ChatPageRoute on GoRouteData {
 
   @override
   String get location =>
-      GoRouteData.$location('/matches/${Uri.encodeComponent(_self.chatId)}/');
+      GoRouteData.$location('/matches/${Uri.encodeComponent(_self.chatId)}');
 
   @override
   void go(BuildContext context) => context.go(location);
@@ -342,6 +346,30 @@ mixin $UserProfilePageRoute on GoRouteData {
   String get location => GoRouteData.$location(
     '/matches/${Uri.encodeComponent(_self.chatId)}/${Uri.encodeComponent(_self.userId)}',
   );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $ChatPageViewRoute on GoRouteData {
+  static ChatPageViewRoute _fromState(GoRouterState state) =>
+      ChatPageViewRoute(chatId: state.uri.queryParameters['chat-id']!);
+
+  ChatPageViewRoute get _self => this as ChatPageViewRoute;
+
+  @override
+  String get location =>
+      GoRouteData.$location('/', queryParams: {'chat-id': _self.chatId});
 
   @override
   void go(BuildContext context) => context.go(location);

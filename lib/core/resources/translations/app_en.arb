@@ -15,5 +15,9 @@
   "online": "Online",
   "offline": "Offline",
   "looking_for": "Looking For",
-  "about_me": "About"
+  "about_me": "About",
+  "could_not_launch_email": "Could not launch email client",
+  "@could_not_launch_email": {
+    "description": "Error message when email client cannot be launched"
+  }
 }

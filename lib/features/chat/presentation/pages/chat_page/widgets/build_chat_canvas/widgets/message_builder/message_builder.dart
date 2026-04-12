@@ -6,6 +6,7 @@ import '../../../../../../../../../core/routes/presentation/loading_data_widget.
 import '../../../../../../../../../core/utils/extensions/scroll_controller_ext.dart';
 
 import '../../../../../../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import '../../../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../../../../../domain/models/chat_message/chat_message.dart';
 import '../../../../../../bloc/chat_page_bloc/chat_page_bloc.dart';
@@ -17,12 +18,14 @@ class MessageBuilder extends StatefulWidget {
   final VoidCallback onReachToEnd;
   final Function(String) onTapUrl;
   final Function(String) onTapEmail;
+  final UserData currentUser;
 
   const MessageBuilder({
     super.key,
     required this.onReachToEnd,
     required this.onTapUrl,
     required this.onTapEmail,
+    required this.currentUser,
   });
 
   @override

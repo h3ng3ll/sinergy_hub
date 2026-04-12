@@ -56,4 +56,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get about_me => 'About';
+
+  @override
+  String get could_not_launch_email => 'Could not launch email client';
 }

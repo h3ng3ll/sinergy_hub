@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/di/injection.dart';
@@ -8,8 +9,8 @@ import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/utils/responsive_helper.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
-import '../../../../user/domain/usecases/get_user_data_use_case.dart';
 import '../../bloc/user_profile_bloc/user_profile_bloc.dart';
+import '../../../domain/usecases/get_user_data_use_case.dart';
 import 'widgets/about_section.dart';
 import 'widgets/hero_section.dart';
 import 'widgets/looking_for_section.dart';
@@ -35,9 +36,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _userProfileBloc =
         UserProfileBloc(
           getUserDataUseCase: getIt<GetUserDataUseCase>(),
-        )..add(
-          UserProfileEvent.initialize(userId: widget.userId),
-        );
+        )
+          ..add(
+            UserProfileEvent.initialize(userId: widget.userId),
+          );
   }
 
   @override
@@ -141,6 +143,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     colorScheme: colorScheme,
                                     textTheme: textTheme,
                                   ),
+                                Gap(30.0),
                               ],
                             ),
                           ),

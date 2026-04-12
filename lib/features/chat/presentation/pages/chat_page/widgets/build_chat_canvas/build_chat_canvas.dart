@@ -12,6 +12,7 @@ class BuildChatCanvas extends StatelessWidget {
   final List<UserData> users;
   final Function(String) onTapUrl;
   final Function(String) onTapEmail;
+  final UserData currentUser;
 
   const BuildChatCanvas({
     super.key,
@@ -20,6 +21,7 @@ class BuildChatCanvas extends StatelessWidget {
     required this.users,
     required this.onTapUrl,
     required this.onTapEmail,
+    required this.currentUser,
   });
 
   @override
@@ -31,6 +33,7 @@ class BuildChatCanvas extends StatelessWidget {
             onReachToEnd: onReachToEnd,
             onTapUrl: onTapUrl,
             onTapEmail: onTapEmail,
+              currentUser: currentUser,
           ),
         ),
         ...chat.typingUsers.map(

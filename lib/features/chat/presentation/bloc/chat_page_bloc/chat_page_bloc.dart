@@ -133,6 +133,14 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
               messages: messages,
             ),
           ),
+          onError: (e) {
+            emit(
+              state.copyWith(
+                errorMessage: e.toString(),
+                status: ChatPageStatus.failed,
+              ),
+            );
+          },
         );
     _updateChatSubscription = _listenChatByIdUseCase
         .call(
@@ -195,6 +203,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       emit(
         state.copyWith(
           users: users,
+          userData: userData,
           chat: chat,
           chatId: chatId,
           status: ChatPageStatus.initial,

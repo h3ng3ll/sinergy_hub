@@ -92,6 +92,9 @@ final GoRouter initRouter = GoRouter(
                     TypedGoRoute<UserProfilePageRoute>(
                       path: ':userId',
                     ),
+                    TypedGoRoute<ChatPageViewRoute>(
+                      path: '/',
+                    ),
                   ],
                 ),
               ],
@@ -310,6 +313,21 @@ class ChatPageRoute extends GoRouteData with $ChatPageRoute {
   }
 }
 
+class ChatPageViewRoute extends GoRouteData with $ChatPageViewRoute {
+  final String chatId;
+
+  ChatPageViewRoute({
+    required this.chatId,
+  });
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      Container(),
+    );
+  }
+}
+
 class ChatShellRoute extends ShellRouteData {
   // static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
 
@@ -317,10 +335,10 @@ class ChatShellRoute extends ShellRouteData {
   Widget builder(
     BuildContext context,
     GoRouterState state,
-    Widget navigationShell,
+    Widget navigator,
   ) {
     return ChatShell(
-      navigationShell: navigationShell,
+      navigationShell: navigator,
     );
   }
 }

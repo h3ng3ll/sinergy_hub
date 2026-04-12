@@ -189,6 +189,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About'**
   String get about_me;
+
+  /// Error message when email client cannot be launched
+  ///
+  /// In en, this message translates to:
+  /// **'Could not launch email client'**
+  String get could_not_launch_email;
 }
 
 class _AppLocalizationsDelegate

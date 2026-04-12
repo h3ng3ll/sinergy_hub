@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/di/injection.dart';
-
+import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/services/ui_message_service.dart';
@@ -16,7 +16,6 @@ import '../../../domain/models/chat/chat.dart';
 import '../../../domain/usecases/get_chat_by_id_use_case.dart';
 import '../../../domain/usecases/get_last_messages_use_case.dart';
 import '../../../domain/usecases/listen_chat_by_id_use_case.dart';
-import '../../../domain/usecases/listen_chat_messages_use_case.dart';
 import '../../../domain/usecases/send_message_use_case.dart';
 import '../../../domain/usecases/update_typing_info_use_case.dart';
 import '../../bloc/chat_page_bloc/chat_page_bloc.dart';
@@ -42,21 +41,12 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void initState() {
-    _chatPageBloc =
-        ChatPageBloc(
-          sendMessageUseCase: getIt<SendMessageUseCase>(),
-          getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
-          listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
-          getUsersUseCase: getIt<GetUsersUseCase>(),
-          getLastMessageUseCase: getIt<ListenLastMessagesUseCase>(),
-          updateTypingInfoUseCase: getIt<UpdateTypingInfoUseCase>(),
-          listenChatByIdUseCase: getIt<ListenChatByIdUseCase>(),
-          getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
-        )..add(
-          ChatPageEvent.init(
-            chatId: widget.chatId,
-          ),
-        );
+    _chatPageBloc = getIt<ChatPageBloc>()
+      ..add(
+        ChatPageEvent.init(
+          chatId: widget.chatId,
+        ),
+      );
     _textEditingController.addListener(
       onTextUpdate,
     );
@@ -79,7 +69,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
-    _chatPageBloc.close();
+    // _chatPageBloc.close();
     _textEditingController.dispose();
     super.dispose();
   }
@@ -90,11 +80,11 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  void onSendMessage(BuildContext context) {
+  void _onSendMessage() {
     if (_textEditingController.text.isEmpty) {
       return;
     }
-    context.read<ChatPageBloc>().add(
+    _chatPageBloc.add(
       ChatPageEvent.sendMessage(
         message: _textEditingController.text,
       ),
@@ -131,15 +121,14 @@ class _ChatPageState extends State<ChatPage> {
       scheme: 'mailto',
       path: email,
     );
-    print(email);
     if (await canLaunchUrl(uri)) {
       await launchUrl(
         uri,
         mode: LaunchMode.externalApplication,
       );
-    } else {
+    } else if (mounted) {
       UiMessageService.showError(
-        'Could not launch email client',
+        AppLocalizations.of(context)!.could_not_launch_email,
       );
     }
   }
@@ -159,6 +148,7 @@ class _ChatPageState extends State<ChatPage> {
 
             /// Todo: refactor for grouped chats
             final UserData chatterUser = chatPageState.users.first;
+            final UserData currentUser = chatPageState.userData!;
 
             return Scaffold(
               appBar: ChatAppBar(
@@ -171,6 +161,7 @@ class _ChatPageState extends State<ChatPage> {
                 children: [
                   Expanded(
                     child: BuildChatCanvas(
+                      currentUser: currentUser,
                       onReachToEnd: onReachToEndMessages,
                       chat: chat,
                       users: [chatterUser],
@@ -179,9 +170,7 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                   ),
                   BuildChatBottom(
-                    onSendMessage: () => onSendMessage(
-                      context,
-                    ),
+                    onSendMessage: _onSendMessage,
                     onAttachMedia: onAttachMedia,
                     chatController: _textEditingController,
                   ),
