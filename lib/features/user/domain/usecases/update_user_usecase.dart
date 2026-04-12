@@ -1,6 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/models/failures.dart';
 import '../../../auth/domain/repostories/i_auth_repository.dart';
+import '../failures/user_update_failure.dart';
 import '../models/user_data/user_data.dart';
 import '../repositories/i_user_repository.dart';
 
@@ -12,35 +16,47 @@ class UpdateUserUseCase {
     required IUserRepository userRepository,
     required IAuthRepository authRepository,
   }) : _userRepository = userRepository,
-        _authRepository = authRepository;
+       _authRepository = authRepository;
 
-  Future<void> call(
-      UserData userData,
-      Uint8List? img,
-      ) async {
-    final uid = await _authRepository.requireUserId();
+  Future<Either<void, Failure>> call(
+    UserData userData,
+    Uint8List? img,
+  ) async {
+    try {
+      final uid = await _authRepository.requireUserId();
 
-    userData = userData.copyWith(
-      uid: uid,
-    );
+      userData = userData.copyWith(uid: uid);
 
-    if (img != null) {
-      final avatarUrl = await _userRepository.updateAvatar(
-        uid: userData.uid,
-        avatar: img,
-      );
-      if (userData.avatarUrl != null) {
-        await _userRepository.deleteAvatar(
+      String? oldAvatarPath = userData.avatarPath;
+      String? newAvatarPath;
+
+      /// 1. Upload first
+      if (img != null) {
+        newAvatarPath = await _userRepository.updateAvatar(
           uid: userData.uid,
-          name: userData.avatarUrl!,
+          avatar: img,
+        );
+
+        userData = userData.copyWith(
+          avatarPath: newAvatarPath,
         );
       }
-      userData = userData.copyWith(
-        avatarUrl: avatarUrl,
+
+      /// 2. Update DB
+      await _userRepository.update(
+        userData: userData,
       );
+
+      /// 3. Delete old avatar AFTER success
+      if (oldAvatarPath != null && newAvatarPath != null) {
+        await _userRepository.deleteAvatar(
+          path: oldAvatarPath,
+        );
+      }
+
+      return Left(null);
+    } catch (_) {
+      return Right(UserUpdateFailure());
     }
-    await _userRepository.update(
-      userData: userData,
-    );
   }
 }

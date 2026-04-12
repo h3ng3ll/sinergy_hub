@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/models/user_data/user_data.dart';
@@ -26,29 +28,31 @@ class UserUpdateCubit extends Cubit<UserUpdateState> {
     UserData user,
     Uint8List? img,
   ) async {
-    try {
-      emit(
-        state.copyWith(
-          status: UserUpdateStatus.loading,
-        ),
-      );
-      await _updateUserUseCase.call(
-        user,
-        img,
-      );
-      emit(
-        state.copyWith(
-          status: UserUpdateStatus.initial,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          errorMessage: e.toString(),
-          status: UserUpdateStatus.failed,
-        ),
-      );
-      rethrow;
-    }
+    if (state.status == UserUpdateStatus.loading) return;
+    emit(
+      state.copyWith(
+        status: UserUpdateStatus.loading,
+      ),
+    );
+
+    final result = await _updateUserUseCase.call(user, img);
+
+    result.fold(
+      (_) {
+        emit(
+          state.copyWith(
+            status: UserUpdateStatus.initial,
+          ),
+        );
+      },
+      (failure) {
+        emit(
+          state.copyWith(
+            errorMessage: failure.message,
+            status: UserUpdateStatus.failed,
+          ),
+        );
+      },
+    );
   }
 }

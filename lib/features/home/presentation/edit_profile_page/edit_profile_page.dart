@@ -122,19 +122,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final textTheme = AppTextTheme.of(context);
     return BlocProvider<EditProfilePageBloc>.value(
       value: _editProfilePageBloc,
-      child: BlocListener<EditProfilePageBloc, EditProfilePageState>(
-        listener: (context, state) {
-          if (state.isFailed) {
-            UiMessageService.showError(
-              state.errorMessage,
-            );
-          } else if (state.isUpdated) {
-            UiMessageService.showSuccess(
-              'Profile updated successfully',
-            );
-            context.pop();
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<EditProfilePageBloc, EditProfilePageState>(
+            listener: (context, state) {
+              if (state.isUpdated) {
+                UiMessageService.showSuccess(
+                  'Profile updated successfully',
+                );
+                context.pop();
+              }
+            },
+          ),
+          BlocListener<EditProfilePageBloc, EditProfilePageState>(
+            listenWhen: (p, n) =>
+                !p.errorMessage != n.errorMessage && n.isFailed,
+            listener: (context, state) {
+              UiMessageService.showError(
+                state.errorMessage,
+              );
+            },
+          ),
+        ],
         child: BlocBuilder<EditProfilePageBloc, EditProfilePageState>(
           builder: (context, state) {
             final userData = state.userData;

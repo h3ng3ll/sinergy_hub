@@ -17,6 +17,7 @@ sealed class UserData with _$UserData {
   const factory UserData({
     required String uid,
     String? avatarUrl,
+    String? avatarPath,
     String? firstName,
     String? lastName,
     int? age,

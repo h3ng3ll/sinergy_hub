@@ -207,33 +207,27 @@ class UserFirebaseRepository extends IUserRepository {
       'avatar_${DateTime.now().millisecondsSinceEpoch}.png',
     );
 
-    final UploadTask uploadTask = _firebaseStorageService.uploadBytes(
+    await _firebaseStorageService.uploadBytes(
       path: path,
       bytes: avatar,
-      metadata: SettableMetadata(
-        contentType: 'image/png',
-      ),
     );
-    final TaskSnapshot snapshot = await uploadTask;
 
-    final String downloadUrl = await snapshot.ref.getDownloadURL();
-
-    return downloadUrl;
+    return path;
   }
+
 
   @override
   Future<void> deleteAvatar({
-    required String uid,
-    required String name,
+    required String path,
   }) async {
-    final path = _avatarStoragePath(
-      uid,
-      name,
-    );
+    try {
 
-    await _firebaseStorageService.delete(
-      path,
-    );
+      await _firebaseStorageService.delete(
+        path,
+      );
+    } catch (e , st) {
+      rethrow;
+    }
   }
 
   @override

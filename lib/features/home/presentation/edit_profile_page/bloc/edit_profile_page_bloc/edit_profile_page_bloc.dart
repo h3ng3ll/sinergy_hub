@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../onboard_survey/domain/models/skill/skill.dart';
@@ -29,73 +30,47 @@ class EditProfilePageBloc
     on<_AddSkill>(_addSkill);
     on<_Initialize>(_initialize);
     on<_RemoveSkill>(_removeSkill);
-    on<_ApplyChanges>(_applyChanges);
+    on<_ApplyChanges>(
+      _applyChanges,
+      transformer: droppable(),
+    );
   }
 
   void _addSkill(_AddSkill event, emit) {
-    try {
-      final String skillName = event.name;
-      final Skill skill = Skill(
-        name: skillName,
-      );
+    final String skillName = event.name;
+    final Skill skill = Skill(
+      name: skillName,
+    );
 
-      final List<Skill> skills = {
-        ...state.skills,
-        skill,
-      }.toList();
+    final List<Skill> skills = {
+      ...state.skills,
+      skill,
+    }.toList();
 
-      if (skills.length > 30) {
-        emit(
-          state.copyWith(
-            errorMessage: 'Exceeded skills limits',
-            status: EditProfilePageStatus.failed,
-          ),
-        );
-        return;
-      }
+    if (skills.length > 30) {
       emit(
         state.copyWith(
-          skills: skills,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          errorMessage: e.toString(),
+          errorMessage: 'Exceeded skills limits',
           status: EditProfilePageStatus.failed,
         ),
       );
+      return;
     }
+    emit(
+      state.copyWith(
+        skills: skills,
+      ),
+    );
   }
 
-  void _removeSkill(event, emit) {
-    try {
-      emit(
-        state.copyWith(
-          status: EditProfilePageStatus.loading,
-        ),
-      );
-      final Skill skill = event.skill;
+  void _removeSkill(_RemoveSkill event, emit) {
+    final Skill skill = event.skill;
 
-      emit(
-        state.copyWith(
-          skills:
-              List.from(
-                state.skills,
-              )..remove(
-                skill,
-              ),
-          status: EditProfilePageStatus.initial,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          errorMessage: e.toString(),
-          status: EditProfilePageStatus.failed,
-        ),
-      );
-    }
+    emit(
+      state.copyWith(
+        skills: List.from(state.skills)..remove(skill),
+      ),
+    );
   }
 
   Future<void> _initialize(
@@ -115,6 +90,10 @@ class EditProfilePageBloc
               userData: userData,
               skills: userData?.profiler.skills ?? state.skills,
             ),
+        onError: (e, _) => state.copyWith(
+          errorMessage: e.toString(),
+          status: EditProfilePageStatus.failed,
+        ),
       );
     } catch (e) {
       emit(
@@ -128,7 +107,7 @@ class EditProfilePageBloc
 
   Future<void> _applyChanges(
     _ApplyChanges event,
-    emit,
+    Emitter<EditProfilePageState> emit,
   ) async {
     try {
       emit(
@@ -137,22 +116,45 @@ class EditProfilePageBloc
         ),
       );
 
-      await _updateUserUseCase.call(
-        state.userData!.copyWith(
+      final userData = state.userData;
+      if (userData == null) {
+        emit(
+          state.copyWith(
+            errorMessage: 'User data not loaded',
+            status: EditProfilePageStatus.failed,
+          ),
+        );
+        return;
+      }
+
+      final result = await _updateUserUseCase.call(
+        userData.copyWith(
           firstName: event.firstName,
           lastName: event.lastName,
           aboutMe: event.aboutMe,
-          profiler: state.userData!.profiler.copyWith(
+          profiler: userData.profiler.copyWith(
             skills: state.skills,
           ),
         ),
         event.img,
       );
 
-      emit(
-        state.copyWith(
-          status: EditProfilePageStatus.updated,
-        ),
+      result.fold(
+        (_) {
+          emit(
+            state.copyWith(
+              status: EditProfilePageStatus.updated,
+            ),
+          );
+        },
+        (failure) {
+          emit(
+            state.copyWith(
+              errorMessage: failure.message,
+              status: EditProfilePageStatus.failed,
+            ),
+          );
+        },
       );
     } catch (e) {
       emit(

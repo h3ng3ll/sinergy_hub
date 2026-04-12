@@ -49,7 +49,7 @@ class PermissionRequester {
   }
 
   Future<Uint8List?> onPickCamera(BuildContext context) async {
-    if (isPicking) return null;
+    // if (isPicking) return null;
     isPicking = true;
 
     try {

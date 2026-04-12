@@ -47,7 +47,6 @@ abstract class IUserRepository {
   });
 
   Future<void> deleteAvatar({
-    required String uid,
-    required String name,
+    required String path,
   });
 }
