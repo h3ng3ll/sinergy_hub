@@ -6,6 +6,7 @@ import '../../../../../../../core/utils/extensions/scroll_controller_ext.dart';
 
 import '../../../../../../chat/domain/models/chat/chat.dart';
 
+import '../../../../../../chat/domain/models/participant_info/participant_info.dart';
 import '../../../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'widgets/chat_tile_item.dart';
 
@@ -15,6 +16,7 @@ class ChatsBuilder extends StatefulWidget {
   final Function(Chat chat) onTapChat;
   final Function(Chat chat) showChatActions;
   final List<String> onlineUsers;
+  final String uid;
 
   const ChatsBuilder({
     super.key,
@@ -23,6 +25,7 @@ class ChatsBuilder extends StatefulWidget {
     required this.chats,
     required this.showChatActions,
     required this.onlineUsers,
+    required this.uid,
   });
 
   @override
@@ -48,7 +51,6 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    final uid = context.watch<UserBloc>().state.userData!.uid;
 
     return ListView.separated(
       controller: _scrollController,
@@ -57,8 +59,10 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
         vertical: 15.0,
       ),
       itemBuilder: (context, index) {
-        final chat = widget.chats[index];
-        final otherUser = chat.otherUser(uid);
+        final Chat chat = widget.chats[index];
+        final ParticipantInfo? otherUser = chat.otherUser(
+          widget.uid,
+        );
 
         return ChatTileItem(
           chat: chat,

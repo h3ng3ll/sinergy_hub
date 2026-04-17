@@ -10,13 +10,13 @@ enum ChatPageStatus {
 }
 
 extension ChatPageStateX on ChatPageState {
-  get isLoading => status == ChatPageStatus.loading;
+  bool get isLoading => status == ChatPageStatus.loading;
 
-  get isFailed => status == ChatPageStatus.failed;
+  bool get isFailed => status == ChatPageStatus.failed;
 
-  get isSending => status == ChatPageStatus.sending;
+  bool get isSending => status == ChatPageStatus.sending;
 
-  get isSent => status == ChatPageStatus.sent;
+  bool get isSent => status == ChatPageStatus.sent;
 }
 
 @freezed

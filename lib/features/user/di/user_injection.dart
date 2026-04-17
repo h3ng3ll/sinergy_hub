@@ -17,6 +17,7 @@ import '../domain/usecases/listen_user_data_use_case.dart';
 import '../domain/usecases/update_user_profiler_use_case.dart';
 import '../domain/usecases/update_user_usecase.dart';
 import '../presentation/bloc/skills_bloc/skills_bloc.dart';
+import '../presentation/bloc/user_bloc/user_bloc.dart';
 import '../presentation/pages/edit_looking_for_page/bloc/edit_looking_for_bloc.dart';
 
 void initUserFeature(GetIt getIt) {
@@ -73,10 +74,17 @@ void initUserFeature(GetIt getIt) {
       userRepository: getIt<IUserRepository>(),
     ),
   );
-  getIt.registerFactory<EditProfilePageBloc>(
+
+  /// Bloc
+  getIt.registerLazySingleton<EditProfilePageBloc>(
     () => EditProfilePageBloc(
       listenCurrentUserDataUseCase: getIt<ListenCurrentUserDataUseCase>(),
       updateUserUseCase: getIt<UpdateUserUseCase>(),
+    ),
+  );
+  getIt.registerLazySingleton<UserBloc>(
+    () => UserBloc(
+      userRepository: getIt<IUserRepository>(),
     ),
   );
 }

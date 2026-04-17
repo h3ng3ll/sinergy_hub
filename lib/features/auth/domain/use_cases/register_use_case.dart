@@ -5,18 +5,22 @@ import '../../../chat/domain/services/i_presence_service.dart';
 import '../../../user/domain/models/user_data/user_data.dart';
 import '../../../user/domain/repositories/i_user_repository.dart';
 import '../repostories/i_auth_repository.dart';
+import 'send_email_verification_use_case.dart';
 
 class RegisterUseCase {
   final IAuthRepository _authRepository;
   final IUserRepository _userRepository;
+  final SendEmailVerificationUseCase _sendEmailVerificationUseCase;
   final IPresenceService _presenceService;
 
   RegisterUseCase({
     required IAuthRepository authRepository,
     required IUserRepository userRepository,
+    required SendEmailVerificationUseCase sendEmailVerificationUseCase,
     required IPresenceService presenceService,
   }) : _authRepository = authRepository,
        _userRepository = userRepository,
+       _sendEmailVerificationUseCase = sendEmailVerificationUseCase,
        _presenceService = presenceService;
 
   /// register if success Update UID of user .
@@ -29,6 +33,11 @@ class RegisterUseCase {
       password: password,
     );
     if (res.isRight()) {
+      return res;
+    }
+    final sendRes = await _sendEmailVerificationUseCase.call();
+
+    if (sendRes.isRight()) {
       return res;
     }
 

@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rxdart/rxdart.dart';
 
+import '../../../features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../../../features/auth/presentation/pages/authorization_page/authorization_page.dart';
 import '../../../features/auth/presentation/pages/login_page/login_page.dart';
 import '../../../features/auth/presentation/pages/register_page/register_page.dart';
@@ -19,17 +21,76 @@ import '../../../features/notifications/presentation/pages/notification_page/not
 import '../../../features/onboard_survey/presentation/pages/onboard_about_you_page/onboard_about_you_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_shell_page/onboard_shell_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
+import '../../../features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
 import '../../../features/user/presentation/pages/user_profile_page/user_profile_page.dart';
+import '../../di/injection.dart';
+import '../../utils/extensions/go_router_x.dart';
 import '../root_page/root_page.dart';
 
 part 'init_router.g.dart';
 
 final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>();
 
-final GoRouter initRouter = GoRouter(
+class GoRouterRefreshStream extends ChangeNotifier {
+  late final StreamSubscription _subscription;
+
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    _subscription = stream.listen((_) => notifyListeners());
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}
+
+GoRouter initRouter({
+  required AuthBloc authBloc,
+  required UserBloc userBloc,
+}) => GoRouter(
   routes: $appRoutes,
-  redirect: (context, state) {},
+  refreshListenable: GoRouterRefreshStream(
+    Rx.merge([
+      authBloc.stream.map((_) => null),
+      userBloc.stream.map((_) => null),
+    ]),
+  ),
+  redirect: (context, state) {
+    final auth = authBloc.state;
+    final user = userBloc.state;
+    final location = state.matchedLocation;
+
+    final isAuth = auth.isAuthorized;
+    final isLogout = auth.isLogout;
+
+    final isOnAuthPage = location == AuthorizationPageRoute().location;
+
+    final isAuthRoute = context.isAuthRoute(
+      location,
+    );
+    final isOnOnboard =
+        location == OnboardAboutYouPageRoute().location ||
+        location == OnboardSurveyPageRoute().location;
+
+    // 🔴 1. not logged in → only allow auth routes
+    if (isLogout && !isAuthRoute) {
+      return AuthorizationPageRoute().location;
+    }
+
+    // 🔵 2. logged in but no profile → onboarding
+    if (isAuth && user.isNoData && !isOnOnboard) {
+      return OnboardAboutYouPageRoute().location;
+    }
+
+    // 🟢 3. logged in → app
+    if (isAuth && isOnAuthPage) {
+      return DiscoveryPageRoute().location;
+    }
+
+    return null;
+  },
 );
 
 @TypedShellRoute<RootPageRoute>(

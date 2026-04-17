@@ -37,6 +37,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return state.copyWith(
           status: user == null ? AuthStatus.logout : AuthStatus.authorized,
           user: user,
+          isEmailVerified: user?.emailVerified ?? false,
         );
       },
     );

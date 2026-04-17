@@ -50,69 +50,60 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
     return BuildAnimatedBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state.status == AuthStatus.authorized) {
-              OnboardAboutYouPageRoute().go(
-                context,
-              );
-            }
-          },
-          child: BlocBuilder<AuthBloc, AuthState>(
-            builder: (context, state) {
-              return Stack(
-                children: [
-                  HorizontalPadding(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (state.status == AuthStatus.failed)
-                            ErrorMessageWidget(message: state.errorMessage),
-                          Gap(24.0),
-                          TextButton(
-                            onPressed: onRegister,
+        body: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            return Stack(
+              children: [
+                HorizontalPadding(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (state.status == AuthStatus.failed)
+                          ErrorMessageWidget(message: state.errorMessage),
+                        Gap(24.0),
+                        TextButton(
+                          onPressed: onRegister,
+                          child: Text(
+                            'Register',
+                            style: textTheme.medium16.copyWith(
+                              color: AppColors.white.value,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: onLogin,
+                          child: Text(
+                            'Login',
+                            style: textTheme.medium16.copyWith(
+                              color: AppColors.white.value,
+                            ),
+                          ),
+                        ),
+                        if (kIsWeb)
+                          getIt<GoogleSignInService>().renderButton()
+                        else
+                          ActionBtn(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 15.0,
+                              horizontal: 20.0,
+                            ),
+                            onPressed: onAuthWithGoogle,
                             child: Text(
-                              'Register',
+                              'SIGN IN WITH GOOGLE',
                               style: textTheme.medium16.copyWith(
-                                color: AppColors.white.value,
+                                color: colorScheme.onSecondary,
                               ),
                             ),
                           ),
-                          TextButton(
-                            onPressed: onLogin,
-                            child: Text(
-                              'Login',
-                              style: textTheme.medium16.copyWith(
-                                color: AppColors.white.value,
-                              ),
-                            ),
-                          ),
-                          if (kIsWeb)
-                            getIt<GoogleSignInService>().renderButton()
-                          else
-                            ActionBtn(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 15.0,
-                                horizontal: 20.0,
-                              ),
-                              onPressed: onAuthWithGoogle,
-                              child: Text(
-                                'SIGN IN WITH GOOGLE',
-                                style: textTheme.medium16.copyWith(
-                                  color: colorScheme.onSecondary,
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
-                  if (state.status == AuthStatus.loading) LoadingDataWidget(),
-                ],
-              );
-            },
-          ),
+                ),
+                if (state.status == AuthStatus.loading) LoadingDataWidget(),
+              ],
+            );
+          },
         ),
       ),
     );

@@ -7,6 +7,7 @@ import '../../../../../core/di/injection.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
+import '../../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../../../../chat/data/utils/extensions/chats_filter_state_ext.dart';
 import '../../../../chat/domain/models/chat/chat.dart';
 import '../../../../chat/domain/models/e_chat_filter.dart';
@@ -162,6 +163,7 @@ class _MatchesPageState extends State<MatchesPage> {
                     if (state.isInitial && state.isEmpty) {
                       return BuildChatsEmpty();
                     }
+                    final uid = context.watch<AuthBloc>().state.uid!;
 
                     return HorizontalPadding(
                       child: ChatsBuilder(
@@ -170,6 +172,7 @@ class _MatchesPageState extends State<MatchesPage> {
                         chats: chats,
                         showChatActions: _showChatActions,
                         onlineUsers: state.onlineUsers,
+                        uid: uid,
                       ),
                     );
                   },

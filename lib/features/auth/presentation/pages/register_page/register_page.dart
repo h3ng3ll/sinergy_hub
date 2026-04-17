@@ -13,6 +13,7 @@ import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import '../../../domain/use_cases/register_use_case.dart';
+import '../../../domain/use_cases/reload_use_case.dart';
 import 'bloc/register_bloc/register_bloc.dart';
 import 'widgets/inputs/email_input.dart';
 import 'widgets/inputs/password_input.dart';
@@ -27,6 +28,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final RegisterBloc _registerBloc = RegisterBloc(
     registerUseCase: getIt<RegisterUseCase>(),
+    reloadUseCase: getIt<ReloadUseCase>(),
   );
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
@@ -50,9 +52,21 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
+  void onVerifiedEmail() {
+    _registerBloc.add(
+      RegisterEvent.startVerification(),
+    );
+  }
+
   void register() {
     /// if validation not meet requirements return
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    if (_passwordController.text != _repeatPasswordController.text) {
+      UiMessageService.showError(
+        'Password are differs.',
+      );
+      return;
+    }
     FocusManager.instance.primaryFocus?.unfocus();
     _registerBloc.add(
       RegisterEvent.register(
@@ -74,9 +88,14 @@ class _RegisterPageState extends State<RegisterPage> {
         body: BlocListener<RegisterBloc, RegisterState>(
           bloc: _registerBloc,
           listener: (context, state) {
-            if (state.status == RegisterStatus.failed) {
+            if (state.isFailed) {
               UiMessageService.showError(
                 state.errorMessage,
+              );
+            } else if (state.isRegistered) {
+              UiMessageService.showInfo(
+                'Mail verification has been sent to provided email address',
+                timeInSecondsDuration: 10,
               );
             }
           },
@@ -119,6 +138,19 @@ class _RegisterPageState extends State<RegisterPage> {
                         onPressed: register,
                         child: Text(
                           'Register',
+                          style: textTheme.medium16.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                        ),
+                      ),
+                      ActionBtn(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 15.0,
+                          horizontal: 20.0,
+                        ),
+                        onPressed: onVerifiedEmail,
+                        child: Text(
+                          'I verified email',
                           style: textTheme.medium16.copyWith(
                             color: colorScheme.onSecondary,
                           ),

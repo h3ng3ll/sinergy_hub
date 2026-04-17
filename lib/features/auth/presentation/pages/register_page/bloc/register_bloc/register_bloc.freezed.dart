@@ -14,62 +14,30 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RegisterEvent {
 
- String get email; String get password;
-/// Create a copy of RegisterEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$RegisterEventCopyWith<RegisterEvent> get copyWith => _$RegisterEventCopyWithImpl<RegisterEvent>(this as RegisterEvent, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RegisterEvent&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RegisterEvent);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,password);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'RegisterEvent(email: $email, password: $password)';
+  return 'RegisterEvent()';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $RegisterEventCopyWith<$Res>  {
-  factory $RegisterEventCopyWith(RegisterEvent value, $Res Function(RegisterEvent) _then) = _$RegisterEventCopyWithImpl;
-@useResult
-$Res call({
- String email, String password
-});
-
-
-
-
-}
-/// @nodoc
-class _$RegisterEventCopyWithImpl<$Res>
-    implements $RegisterEventCopyWith<$Res> {
-  _$RegisterEventCopyWithImpl(this._self, this._then);
-
-  final RegisterEvent _self;
-  final $Res Function(RegisterEvent) _then;
-
-/// Create a copy of RegisterEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,}) {
-  return _then(_self.copyWith(
-email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
+class $RegisterEventCopyWith<$Res>  {
+$RegisterEventCopyWith(RegisterEvent _, $Res Function(RegisterEvent) __);
 }
 
 
@@ -87,11 +55,12 @@ extension RegisterEventPatterns on RegisterEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Register value)?  register,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Register value)?  register,TResult Function( _StartVerification value)?  startVerification,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Register() when register != null:
-return register(_that);case _:
+return register(_that);case _StartVerification() when startVerification != null:
+return startVerification(_that);case _:
   return orElse();
 
 }
@@ -109,11 +78,12 @@ return register(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Register value)  register,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Register value)  register,required TResult Function( _StartVerification value)  startVerification,}){
 final _that = this;
 switch (_that) {
 case _Register():
-return register(_that);}
+return register(_that);case _StartVerification():
+return startVerification(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -127,11 +97,12 @@ return register(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Register value)?  register,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Register value)?  register,TResult? Function( _StartVerification value)?  startVerification,}){
 final _that = this;
 switch (_that) {
 case _Register() when register != null:
-return register(_that);case _:
+return register(_that);case _StartVerification() when startVerification != null:
+return startVerification(_that);case _:
   return null;
 
 }
@@ -148,10 +119,11 @@ return register(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String email,  String password)?  register,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String email,  String password)?  register,TResult Function()?  startVerification,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Register() when register != null:
-return register(_that.email,_that.password);case _:
+return register(_that.email,_that.password);case _StartVerification() when startVerification != null:
+return startVerification();case _:
   return orElse();
 
 }
@@ -169,10 +141,11 @@ return register(_that.email,_that.password);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String email,  String password)  register,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String email,  String password)  register,required TResult Function()  startVerification,}) {final _that = this;
 switch (_that) {
 case _Register():
-return register(_that.email,_that.password);}
+return register(_that.email,_that.password);case _StartVerification():
+return startVerification();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -186,10 +159,11 @@ return register(_that.email,_that.password);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String email,  String password)?  register,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String email,  String password)?  register,TResult? Function()?  startVerification,}) {final _that = this;
 switch (_that) {
 case _Register() when register != null:
-return register(_that.email,_that.password);case _:
+return register(_that.email,_that.password);case _StartVerification() when startVerification != null:
+return startVerification();case _:
   return null;
 
 }
@@ -204,12 +178,12 @@ class _Register implements RegisterEvent {
   const _Register({required this.email, required this.password});
   
 
-@override final  String email;
-@override final  String password;
+ final  String email;
+ final  String password;
 
 /// Create a copy of RegisterEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 _$RegisterCopyWith<_Register> get copyWith => __$RegisterCopyWithImpl<_Register>(this, _$identity);
 
@@ -235,7 +209,7 @@ String toString() {
 /// @nodoc
 abstract mixin class _$RegisterCopyWith<$Res> implements $RegisterEventCopyWith<$Res> {
   factory _$RegisterCopyWith(_Register value, $Res Function(_Register) _then) = __$RegisterCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String email, String password
 });
@@ -254,7 +228,7 @@ class __$RegisterCopyWithImpl<$Res>
 
 /// Create a copy of RegisterEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,}) {
   return _then(_Register(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
@@ -264,6 +238,38 @@ as String,
 
 
 }
+
+/// @nodoc
+
+
+class _StartVerification implements RegisterEvent {
+  const _StartVerification();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StartVerification);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'RegisterEvent.startVerification()';
+}
+
+
+}
+
+
+
 
 /// @nodoc
 mixin _$RegisterState {

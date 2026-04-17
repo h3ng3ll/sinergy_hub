@@ -127,6 +127,8 @@ void initChatFeature(GetIt getIt) {
       chatRepository: getIt<IChatRepository>(),
     ),
   );
+
+  /// Bloc
   getIt.registerLazySingleton<ChatPageBloc>(
     () => ChatPageBloc(
       sendMessageUseCase: getIt<SendMessageUseCase>(),

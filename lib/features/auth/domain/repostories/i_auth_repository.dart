@@ -32,5 +32,9 @@ abstract class IAuthRepository {
 
   Future<String> requireUserId();
 
+  Future<Either<void, AuthFailure>> sendEmailVerification();
+
+  Future<Either<void, AuthFailure>> reload();
+
 
 }

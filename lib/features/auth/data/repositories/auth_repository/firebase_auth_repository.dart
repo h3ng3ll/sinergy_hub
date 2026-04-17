@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../../../core/models/exceptions.dart';
 import '../../../../../core/models/failures.dart';
@@ -41,7 +42,11 @@ class FirebaseAuthRepository extends IAuthRepository {
   }
 
   @override
-  Stream<User?> watchUser() => _auth.userChanges();
+  Stream<User?> watchUser() => Rx.merge([
+    _auth.userChanges(),
+    _auth.authStateChanges(),
+    _auth.idTokenChanges(),
+  ]);
 
   @override
   Future<bool> isAuthorized() => Future.value(
@@ -155,12 +160,11 @@ class FirebaseAuthRepository extends IAuthRepository {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'unknown') {
         return Right(AuthUnreachableFailure());
+      } else if (e.code == 'email-already-in-use') {
+        return Right(UserExistsWithSuchEmailFailure());
       }
       rethrow;
     } on FirebaseException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        return Right(UserExistsWithSuchEmailFailure());
-      }
       rethrow;
     }
   }
@@ -206,5 +210,40 @@ class FirebaseAuthRepository extends IAuthRepository {
     }
 
     return uid;
+  }
+
+  @override
+  Future<Either<void, AuthFailure>> sendEmailVerification() async {
+    try {
+      final user = await getCurrentUser();
+      final uid = user?.uid;
+
+      if (uid == null) {
+        throw UnauthorizedFailure();
+      }
+
+      await user!.sendEmailVerification();
+      return Left(
+        null,
+      );
+    } catch (e) {
+      return Right(
+        AuthUnreachableFailure(),
+      );
+    }
+  }
+
+  @override
+  Future<Either<void, AuthFailure>> reload() async {
+    try {
+      await _auth.currentUser?.reload();
+      return Left(
+        null,
+      );
+    } catch (e) {
+      return Right(
+        AuthUnreachableFailure(),
+      );
+    }
   }
 }
