@@ -14,10 +14,12 @@ import '../domain/repostories/i_auth_repository.dart';
 import '../domain/use_cases/login_use_case.dart';
 import '../domain/use_cases/register_use_case.dart';
 import '../domain/use_cases/reload_use_case.dart';
+import '../domain/use_cases/reset_password_by_email_use_case.dart';
 import '../domain/use_cases/send_email_verification_use_case.dart';
 import '../domain/use_cases/sign_in_with_google_use_case.dart';
 import '../presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../presentation/pages/login_page/bloc/login_bloc/login_bloc.dart';
+import '../presentation/pages/reset_password_page/bloc/reset_password_page/reset_password_page_bloc.dart';
 
 void initAuthFeature(GetIt getIt) {
   getIt.registerLazySingleton<IPresenceService>(
@@ -51,6 +53,11 @@ void initAuthFeature(GetIt getIt) {
     ),
   );
   getIt.registerFactory(
+    () => ResetPasswordByEmailUseCase(
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerFactory(
     () => SignInWithGoogleUseCase(
       authRepository: getIt<IAuthRepository>(),
       presenceService: getIt<IPresenceService>(),
@@ -76,10 +83,16 @@ void initAuthFeature(GetIt getIt) {
       signInWithGoogleUseCase: getIt<SignInWithGoogleUseCase>(),
     ),
   );
-  getIt.registerLazySingleton<LoginBloc>(
+  getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       loginUseCase: getIt<LoginUseCase>(),
       reloadUseCase: getIt<ReloadUseCase>(),
+    ),
+  );
+
+  getIt.registerFactory<ResetPasswordPageBloc>(
+    () => ResetPasswordPageBloc(
+      resetPasswordByEmailUseCase: getIt<ResetPasswordByEmailUseCase>(),
     ),
   );
 }

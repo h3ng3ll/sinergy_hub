@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/services/ui_message_service.dart';
+import '../../../../../core/utils/extensions/go_router_x.dart';
 import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
@@ -51,6 +54,12 @@ class _LoginPageState extends State<LoginPage> {
   void onVerifiedEmail() {
     _loginBloc.add(
       LoginEvent.refresh(),
+    );
+  }
+
+  void onForgetPassword() {
+    ResetPasswordPageRoute().navigate(
+      context,
     );
   }
 
@@ -161,6 +170,19 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ],
+                              Gap(30.0),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: TextButton(
+                                  onPressed: onForgetPassword,
+                                  child: Text(
+                                    'Forget password ?',
+                                    style: textTheme.medium16.copyWith(
+                                      color: colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),

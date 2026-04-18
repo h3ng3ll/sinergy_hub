@@ -192,6 +192,9 @@ class FirebaseAuthRepository extends IAuthRepository {
           SuchUserNotExistsFailure(),
         );
       }
+      return  Right(
+        SomethingWentWrongSignInFailure(),
+      );
       rethrow;
     } catch (_) {
       return Right(
@@ -243,6 +246,35 @@ class FirebaseAuthRepository extends IAuthRepository {
     } catch (e) {
       return Right(
         AuthUnreachableFailure(),
+      );
+    }
+  }
+
+  @override
+  Future<Either<void, AuthFailure>> sendPasswordResetEmail({
+    required String email,
+  }) async {
+    try {
+      await _auth.sendPasswordResetEmail(
+        email: email,
+      );
+      return Left(
+        null,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-credential') {
+        return Right(
+          LoginOrPasswordIncorrectFailure(),
+        );
+      } else if (e.code == 'user-not-found') {
+        return Right(
+          SuchUserNotExistsFailure(),
+        );
+      }
+      rethrow;
+    } catch (_) {
+      return Right(
+        SomethingWentWrongSignInFailure(),
       );
     }
   }

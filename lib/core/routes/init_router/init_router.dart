@@ -8,6 +8,7 @@ import '../../../features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../../../features/auth/presentation/pages/authorization_page/authorization_page.dart';
 import '../../../features/auth/presentation/pages/login_page/login_page.dart';
 import '../../../features/auth/presentation/pages/register_page/register_page.dart';
+import '../../../features/auth/presentation/pages/reset_password_page/reset_password_page.dart';
 import '../../../features/chat/presentation/pages/chat_page/chat_page.dart';
 import '../../../features/chat/presentation/pages/chat_shell/chat_shell.dart';
 import '../../../features/home/presentation/home_bottom_bar/home_bottom_bar.dart';
@@ -103,6 +104,9 @@ GoRouter initRouter({
         ),
         TypedGoRoute<LoginPageRoute>(
           path: '/sign-in',
+        ),
+        TypedGoRoute<ResetPasswordPageRoute>(
+          path: '/reset-password',
         ),
       ],
     ),
@@ -231,6 +235,15 @@ class LoginPageRoute extends GoRouteData with $LoginPageRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       LoginPage(),
+    );
+  }
+}
+
+class ResetPasswordPageRoute extends GoRouteData with $ResetPasswordPageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      ResetPasswordPage(),
     );
   }
 }

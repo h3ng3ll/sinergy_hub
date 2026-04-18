@@ -36,5 +36,7 @@ abstract class IAuthRepository {
 
   Future<Either<void, AuthFailure>> reload();
 
-
+  Future<Either<void, AuthFailure>> sendPasswordResetEmail({
+    required String email,
+  });
 }

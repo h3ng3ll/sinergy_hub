@@ -1,8 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../routes/init_router/init_router.dart';
+
+extension GoRouteDataX on GoRouteData {
+  FutureOr<void> navigate(BuildContext context) async {
+    if (kIsWeb) {
+      return go(
+        context,
+      );
+    } else {
+      return await push(
+        context,
+      );
+    }
+  }
+}
 
 extension GoRouterX on BuildContext {
   bool isAuthRoute(String location) {
@@ -12,6 +28,7 @@ extension GoRouterX on BuildContext {
       AuthorizationPageRoute().location,
       RegisterPageRoute().location,
       LoginPageRoute().location,
+      ResetPasswordPageRoute().location,
     ];
     return routes.contains(
       location,
