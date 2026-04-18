@@ -25,9 +25,10 @@ class BuildChatBottom extends StatelessWidget {
         child: Row(
           spacing: 20.0,
           children: [
-            BuildAttachBtn(
-              onTap: onAttachMedia,
-            ),
+            /// Todo: In future plans
+            // BuildAttachBtn(
+            //   onTap: onAttachMedia,
+            // ),
             Expanded(
               child: ChatInput(
                 textEditingController: chatController,
