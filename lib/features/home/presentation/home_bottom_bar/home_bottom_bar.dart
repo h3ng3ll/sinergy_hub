@@ -6,6 +6,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import '../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../core/resources/text/app_text_theme.dart';
 import '../../../../core/routes/init_router/init_router.dart';
+import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../home_drawer/home_drawer.dart';
 import 'widgets/build_animated_background/build_animated_background.dart';
@@ -75,7 +76,8 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
                   onTapPrivacyPolicy: onTapPrivacyPolicy,
                   onTapLogOut: onTapLogOut,
                 )
-              : AppBar(
+              : CustomAppBar(
+                  leading: Container(),
                   actions: [
                     InkWell(
                       onTap: onTapNotifications,
@@ -83,9 +85,6 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
                         Icons.notifications,
                         color: colorScheme.secondary,
                       ),
-                    ),
-                    Icon(
-                      Icons.more_vert,
                     ),
                   ],
                 ),

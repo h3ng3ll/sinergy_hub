@@ -745,7 +745,7 @@ return $default(_that.status,_that.chatsState,_that.onlineStatuses,_that.filter,
 
 
 class _ChatsFilterState implements ChatsFilterState {
-  const _ChatsFilterState({this.status = ChatsFilterStatus.initial, this.chatsState = const ChatPgState(), final  Map<String, bool> onlineStatuses = const {}, this.filter = EChatFilter.all, this.query = '', this.uid = '', this.errorMessage = ''}): _onlineStatuses = onlineStatuses;
+  const _ChatsFilterState({this.status = ChatsFilterStatus.loading, this.chatsState = const ChatPgState(), final  Map<String, bool> onlineStatuses = const {}, this.filter = EChatFilter.all, this.query = '', this.uid = '', this.errorMessage = ''}): _onlineStatuses = onlineStatuses;
   
 
 @override@JsonKey() final  ChatsFilterStatus status;

@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
+import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
@@ -32,17 +33,10 @@ class MatchesPage extends StatefulWidget {
 }
 
 class _MatchesPageState extends State<MatchesPage> {
-  final ChatsFilterBloc _chatsFilterBloc =
-      ChatsFilterBloc(
-        searchChatsUseCase: getIt<SearchChatsUseCase>(),
-        toggleArchiveChatUseCase: getIt<ToggleArchiveChatUseCase>(),
-        toggleFavoriteChatUseCase: getIt<ToggleFavoriteChatUseCase>(),
-        listenChatUpdatesUseCase: getIt<ListenChatUpdatesUseCase>(),
-        getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
-        getUserDataUseCase: getIt<GetUserDataUseCase>(),
-      )..add(
-        ChatsFilterEvent.init(),
-      );
+  final ChatsFilterBloc _chatsFilterBloc = getIt<ChatsFilterBloc>()
+    ..add(
+      ChatsFilterEvent.init(),
+    );
 
   @override
   void dispose() {
@@ -155,6 +149,9 @@ class _MatchesPageState extends State<MatchesPage> {
                   builder: (context, state) {
                     final chats = state.chatsState.chats;
 
+                    if(state.isLoading){
+                      return LoadingDataWidget();
+                    }
                     if (state.status == ChatsFilterStatus.failed) {
                       return Text(
                         'Failed load data: ${state.errorMessage}',

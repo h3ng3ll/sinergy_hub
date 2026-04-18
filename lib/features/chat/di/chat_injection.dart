@@ -4,6 +4,7 @@ import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../user/domain/repositories/i_user_repository.dart';
 import '../../user/domain/usecases/get_current_user_data_use_case.dart';
+import '../../user/domain/usecases/get_user_data_use_case.dart';
 import '../../user/domain/usecases/get_users_use_case.dart';
 import '../../user/domain/usecases/listen_user_data_use_case.dart';
 import '../data/repositories/chat_firebase_repository.dart';
@@ -25,6 +26,7 @@ import '../domain/usecases/toggle_favorite_chat_use_case.dart';
 import '../domain/usecases/update_chat_info_use_case.dart';
 import '../domain/usecases/update_typing_info_use_case.dart';
 import '../presentation/bloc/chat_page_bloc/chat_page_bloc.dart';
+import '../presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 
 void initChatFeature(GetIt getIt) {
   getIt.registerLazySingleton<IChatRepository>(
@@ -139,6 +141,16 @@ void initChatFeature(GetIt getIt) {
       updateTypingInfoUseCase: getIt<UpdateTypingInfoUseCase>(),
       listenChatByIdUseCase: getIt<ListenChatByIdUseCase>(),
       getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
+    ),
+  );
+  getIt.registerLazySingleton<ChatsFilterBloc>(
+    () => ChatsFilterBloc(
+      searchChatsUseCase: getIt<SearchChatsUseCase>(),
+      toggleArchiveChatUseCase: getIt<ToggleArchiveChatUseCase>(),
+      toggleFavoriteChatUseCase: getIt<ToggleFavoriteChatUseCase>(),
+      listenChatUpdatesUseCase: getIt<ListenChatUpdatesUseCase>(),
+      getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
+      getUserDataUseCase: getIt<GetUserDataUseCase>(),
     ),
   );
 }

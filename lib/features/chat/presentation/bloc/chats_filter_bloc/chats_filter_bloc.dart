@@ -82,7 +82,10 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     return onlineStatuses;
   }
 
-  void _applyFilter(_ApplyFilter event, emit) async {
+  void _applyFilter(
+    _ApplyFilter event,
+    Emitter<ChatsFilterState> emit,
+  ) async {
     try {
       emit(
         state.copyWith(
@@ -117,7 +120,10 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     }
   }
 
-  void _init(_Init event, emit) async {
+  void _init(
+    _Init event,
+    Emitter<ChatsFilterState> emit,
+  ) async {
     try {
       emit(
         state.copyWith(
@@ -126,20 +132,26 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
       );
       final user = await _getCurrentUserDataUseCase.call();
 
-      add(
-        ChatsFilterEvent.search(
-          query: '',
-        ),
+      final ChatPgState chatsState = await _searchChatsUseCase.call(
+        chatState: ChatPgState(),
+        query: state.query,
       );
-      add(
-        ChatsFilterEvent.listenChatsChanges(),
+
+      final online = await _fillOnline(
+        chatsState.chats,
+        state.onlineStatuses,
       );
 
       emit(
         state.copyWith(
           uid: user.uid,
+          onlineStatuses: online,
+          chatsState: chatsState,
           status: ChatsFilterStatus.initial,
         ),
+      );
+      add(
+        ChatsFilterEvent.listenChatsChanges(),
       );
     } catch (e) {
       emit(
@@ -155,7 +167,7 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     _ListenChatsChanges event,
     Emitter<ChatsFilterState> emit,
   ) async {
-    emit.forEach(
+    await emit.forEach(
       _listenChatUpdatesUseCase.call(),
       onData: (Chat chat) {
         final chats = [
@@ -202,7 +214,10 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     );
   }
 
-  void _search(_Search event, emit) async {
+  void _search(
+    _Search event,
+    Emitter<ChatsFilterState> emit,
+  ) async {
     try {
       emit(
         state.copyWith(

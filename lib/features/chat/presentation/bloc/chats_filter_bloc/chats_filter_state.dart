@@ -47,7 +47,7 @@ extension ChatsFilterStateX on ChatsFilterState {
 @freezed
 sealed class ChatsFilterState with _$ChatsFilterState {
   const factory ChatsFilterState({
-    @Default(ChatsFilterStatus.initial) ChatsFilterStatus status,
+    @Default(ChatsFilterStatus.loading) ChatsFilterStatus status,
     @Default(ChatPgState()) ChatPgState chatsState,
     @Default({}) Map<String, bool> onlineStatuses,
     @Default(EChatFilter.all) EChatFilter filter,
