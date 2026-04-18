@@ -35,7 +35,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
     _tinderCardCubit = TinderCardCubit(
       size: Size(
         300.0,
-        600.0,
+        590.0,
       ),
     );
     _peopleDataBloc =

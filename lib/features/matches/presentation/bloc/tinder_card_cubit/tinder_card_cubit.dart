@@ -110,7 +110,7 @@ class TinderCardCubit extends Cubit<TinderCardState> {
 
   void onPanStart(DragStartDetails details) {
     final position = state.position;
-   _getStatus(
+    _getStatus(
       position,
     );
 

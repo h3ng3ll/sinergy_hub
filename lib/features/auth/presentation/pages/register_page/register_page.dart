@@ -99,68 +99,76 @@ class _RegisterPageState extends State<RegisterPage> {
               );
             }
           },
-          child: SingleChildScrollView(
-            child: HorizontalPadding(
-              child: Center(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Register',
-                          style: textTheme.medium32.copyWith(
-                            color: AppColors.white.value,
+          child: BlocBuilder<RegisterBloc, RegisterState>(
+            bloc: _registerBloc,
+            builder: (context, state) {
+              return SingleChildScrollView(
+                child: HorizontalPadding(
+                  child: Center(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Text(
+                              'Register',
+                              style: textTheme.medium32.copyWith(
+                                color: AppColors.white.value,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      Gap(32.0),
-                      EmailInput(
-                        controller: _emailController,
-                      ),
-                      Gap(24.0),
-                      PasswordInput(
-                        controller: _passwordController,
-                        hintText: 'Password',
-                      ),
-                      Gap(24.0),
-                      PasswordInput(
-                        controller: _repeatPasswordController,
-                        hintText: 'Repeat password',
-                      ),
-                      Gap(24.0),
-                      ActionBtn(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                          horizontal: 20.0,
-                        ),
-                        onPressed: register,
-                        child: Text(
-                          'Register',
-                          style: textTheme.medium16.copyWith(
-                            color: colorScheme.onSecondary,
+                          Gap(32.0),
+                          EmailInput(
+                            controller: _emailController,
                           ),
-                        ),
-                      ),
-                      ActionBtn(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                          horizontal: 20.0,
-                        ),
-                        onPressed: onVerifiedEmail,
-                        child: Text(
-                          'I verified email',
-                          style: textTheme.medium16.copyWith(
-                            color: colorScheme.onSecondary,
+                          Gap(24.0),
+                          PasswordInput(
+                            controller: _passwordController,
+                            hintText: 'Password',
                           ),
-                        ),
+                          Gap(24.0),
+                          PasswordInput(
+                            controller: _repeatPasswordController,
+                            hintText: 'Repeat password',
+                          ),
+                          Gap(24.0),
+                          ActionBtn(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 15.0,
+                              horizontal: 20.0,
+                            ),
+                            onPressed: register,
+                            child: Text(
+                              'Register',
+                              style: textTheme.medium16.copyWith(
+                                color: colorScheme.onSecondary,
+                              ),
+                            ),
+                          ),
+                          if (state.isRegistered) ...[
+                            Gap(10.0),
+                            ActionBtn(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 15.0,
+                                horizontal: 20.0,
+                              ),
+                              onPressed: onVerifiedEmail,
+                              child: Text(
+                                'I verified email',
+                                style: textTheme.medium16.copyWith(
+                                  color: colorScheme.onSecondary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ),

@@ -17,6 +17,7 @@ import '../domain/use_cases/reload_use_case.dart';
 import '../domain/use_cases/send_email_verification_use_case.dart';
 import '../domain/use_cases/sign_in_with_google_use_case.dart';
 import '../presentation/bloc/auth_bloc/auth_bloc.dart';
+import '../presentation/pages/login_page/bloc/login_bloc/login_bloc.dart';
 
 void initAuthFeature(GetIt getIt) {
   getIt.registerLazySingleton<IPresenceService>(
@@ -73,6 +74,12 @@ void initAuthFeature(GetIt getIt) {
     () => AuthBloc(
       authRepository: getIt<IAuthRepository>(),
       signInWithGoogleUseCase: getIt<SignInWithGoogleUseCase>(),
+    ),
+  );
+  getIt.registerLazySingleton<LoginBloc>(
+    () => LoginBloc(
+      loginUseCase: getIt<LoginUseCase>(),
+      reloadUseCase: getIt<ReloadUseCase>(),
     ),
   );
 }

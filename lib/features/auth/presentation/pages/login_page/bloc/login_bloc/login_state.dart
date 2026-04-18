@@ -6,6 +6,12 @@ enum LoginStatus {
   initial,
   loading,
   failed,
+  authorized,
+}
+
+extension LoginStatusX on LoginState {
+  bool get isAuthorized => status == LoginStatus.authorized;
+  bool get isLoading=> status == LoginStatus.loading;
 }
 @freezed
 sealed class LoginState with _$LoginState {
