@@ -4,7 +4,7 @@ import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../core/services/firebase/firebase_functions_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../chat/domain/repositories/i_chat_repository.dart';
-import '../../user/domain/repositories/i_user_repository.dart';
+import '../../user/domain/repositories/i_user_read_repository.dart';
 import '../data/repositories/user_matches_firebase_repository.dart';
 import '../domain/repositories/i_matches_repository.dart';
 import '../domain/usecases/create_user_matches_use_case.dart';
@@ -30,7 +30,6 @@ void initMatchingFeature(GetIt getIt) {
 
   getIt.registerLazySingleton<GetExcludedMatchesUseCase>(
     () => GetExcludedMatchesUseCase(
-      userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),
       matchesRepository: getIt<IMatchesRepository>(),
     ),
@@ -38,29 +37,29 @@ void initMatchingFeature(GetIt getIt) {
 
   getIt.registerLazySingleton<LookForMatchesUseCase>(
     () => LookForMatchesUseCase(
-      userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),
       getExcludedMatchesUseCase: getIt<GetExcludedMatchesUseCase>(),
+      userReadRepository: getIt<IUserReadRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetAUserMatchIncomeUseCase>(
     () => GetAUserMatchIncomeUseCase(
-      userRepository: getIt<IUserRepository>(),
       userMatchingInRepository: getIt<IMatchesRepository>(),
+      userReadRepository: getIt<IUserReadRepository>(),
     ),
   );
   getIt.registerLazySingleton<ListenTwoWayMatchUseCase>(
     () => ListenTwoWayMatchUseCase(
       userMatchingInRepository: getIt<IMatchesRepository>(),
-      userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),
+      userReadRepository: getIt<IUserReadRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetMatchByIdUseCase>(
     () => GetMatchByIdUseCase(
-      userRepository: getIt<IUserRepository>(),
       matchesRepository: getIt<IMatchesRepository>(),
       authRepository: getIt<IAuthRepository>(),
+      userReadRepository: getIt<IUserReadRepository>(),
     ),
   );
   getIt.registerLazySingleton<MarkAsNotifiedMatchUseCase>(

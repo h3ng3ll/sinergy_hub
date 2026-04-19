@@ -1,20 +1,20 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
-import '../../../user/domain/repositories/i_user_repository.dart';
+import '../../../user/domain/repositories/i_user_read_repository.dart';
 import '../models/user_match/matches.dart';
 import '../repositories/i_matches_repository.dart';
 
 class GetMatchByIdUseCase {
-  final IUserRepository _userRepository;
+  final IUserReadRepository _userReadRepository;
   final IMatchesRepository _matchesRepository;
   final IAuthRepository _authRepository;
 
   GetMatchByIdUseCase({
-    required IUserRepository userRepository,
-    required IAuthRepository authRepository,
+    required IUserReadRepository userReadRepository,
     required IMatchesRepository matchesRepository,
-  }) : _userRepository = userRepository,
-        _authRepository = authRepository,
-       _matchesRepository = matchesRepository;
+    required IAuthRepository authRepository,
+  }) : _userReadRepository = userReadRepository,
+       _matchesRepository = matchesRepository,
+       _authRepository = authRepository;
 
   Future<Matches> call({
     required String matchId,
@@ -29,9 +29,9 @@ class GetMatchByIdUseCase {
     final uid = await _authRepository.requireUserId();
 
     final userId = matchDto.users.firstWhere(
-          (e) => e != uid,
+      (e) => e != uid,
     );
-    final matchedUser = await _userRepository.getUserById(
+    final matchedUser = await _userReadRepository.getUserById(
       id: userId,
     );
 

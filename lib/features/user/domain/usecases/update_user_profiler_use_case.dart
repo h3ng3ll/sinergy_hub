@@ -1,25 +1,22 @@
-import 'dart:typed_data';
-
 import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../../../onboard_survey/domain/models/user_profiler/user_profiler.dart';
-import '../models/user_data/user_data.dart';
-import '../repositories/i_user_repository.dart';
+import '../repositories/i_user_write_repository.dart';
 
 class UpdateUserProfilerUseCase {
-  final IUserRepository _userRepository;
+  final IUserWriteRepository _userWriteRepository;
   final IAuthRepository _authRepository;
 
   UpdateUserProfilerUseCase({
-    required IUserRepository userRepository,
+    required IUserWriteRepository userWriteRepository,
     required IAuthRepository authRepository,
-  }) : _userRepository = userRepository,
+  }) : _userWriteRepository = userWriteRepository,
        _authRepository = authRepository;
 
   Future<void> call(
     UserProfiler userProfiler,
   ) async {
     final uid = await _authRepository.requireUserId();
-    await _userRepository.setUserProfiler(
+    await _userWriteRepository.setUserProfiler(
       uid: uid,
       userProfiler: userProfiler,
     );

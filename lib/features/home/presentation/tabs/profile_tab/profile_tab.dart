@@ -81,10 +81,10 @@ class _ProfileTabState extends State<ProfileTab> {
                             userData: userData,
                           ),
                           Gap(20.0),
-                          BuildSkillsNExpertise(
-                            onTapEdit: onTapEditSkills,
-                          ),
-                          Gap(20.0),
+                          // BuildSkillsNExpertise(
+                          //   onTapEdit: onTapEditSkills,
+                          // ),
+                          // Gap(20.0),
                         ],
                       ),
                     ),

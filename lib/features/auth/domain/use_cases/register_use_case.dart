@@ -3,23 +3,23 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/models/failures.dart';
 import '../../../chat/domain/services/i_presence_service.dart';
 import '../../../user/domain/models/user_data/user_data.dart';
-import '../../../user/domain/repositories/i_user_repository.dart';
+import '../../../user/domain/repositories/i_user_write_repository.dart';
 import '../repostories/i_auth_repository.dart';
 import 'send_email_verification_use_case.dart';
 
 class RegisterUseCase {
   final IAuthRepository _authRepository;
-  final IUserRepository _userRepository;
+  final IUserWriteRepository _userWriteRepository;
   final SendEmailVerificationUseCase _sendEmailVerificationUseCase;
   final IPresenceService _presenceService;
 
   RegisterUseCase({
     required IAuthRepository authRepository,
-    required IUserRepository userRepository,
+    required IUserWriteRepository userWriteRepository,
     required SendEmailVerificationUseCase sendEmailVerificationUseCase,
     required IPresenceService presenceService,
   }) : _authRepository = authRepository,
-       _userRepository = userRepository,
+       _userWriteRepository = userWriteRepository,
        _sendEmailVerificationUseCase = sendEmailVerificationUseCase,
        _presenceService = presenceService;
 
@@ -41,9 +41,8 @@ class RegisterUseCase {
       return res;
     }
 
-    final user = await _userRepository.currentUserFuture();
-    final uid = user!.uid;
-    await _userRepository.update(
+    final uid = await _authRepository.requireUserId();
+    await _userWriteRepository.update(
       userData: UserData.none().copyWith(
         uid: uid,
         createdAt: DateTime.now(),

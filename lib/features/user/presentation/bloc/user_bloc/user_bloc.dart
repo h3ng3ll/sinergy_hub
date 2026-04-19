@@ -6,7 +6,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/models/user_data/user_data.dart';
-import '../../../domain/repositories/i_user_repository.dart';
+import '../../../domain/usecases/listen_user_data_use_case.dart';
 
 part 'user_event.dart';
 
@@ -15,12 +15,12 @@ part 'user_state.dart';
 part 'user_bloc.freezed.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
-  final IUserRepository _userRepository;
+  final ListenUserDataUseCase _listenUserDataUseCase;
   StreamSubscription? _userSub;
 
   UserBloc({
-    required IUserRepository userRepository,
-  }) : _userRepository = userRepository,
+    required ListenUserDataUseCase listenUserDataUseCase,
+  }) : _listenUserDataUseCase = listenUserDataUseCase,
        super(const UserState()) {
     on<_Init>(
       _init,
@@ -34,7 +34,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     Emitter<UserState> emit,
   ) async {
     await emit.forEach<UserData?>(
-      _userRepository.userDataStream(
+      _listenUserDataUseCase.call(
         event.uid,
       ),
       onData: (UserData? user) {

@@ -8,7 +8,7 @@ import '../../../core/services/firebase/firebase_realtime_db_service.dart';
 import '../../../core/services/google_sign_in_service/google_sign_in_service.dart';
 import '../../chat/data/services/presence_service.dart';
 import '../../chat/domain/services/i_presence_service.dart';
-import '../../user/domain/repositories/i_user_repository.dart';
+import '../../user/domain/repositories/i_user_write_repository.dart';
 import '../data/repositories/auth_repository/firebase_auth_repository.dart';
 import '../domain/repostories/i_auth_repository.dart';
 import '../domain/use_cases/login_use_case.dart';
@@ -41,9 +41,9 @@ void initAuthFeature(GetIt getIt) {
   getIt.registerFactory(
     () => RegisterUseCase(
       authRepository: getIt<IAuthRepository>(),
-      userRepository: getIt<IUserRepository>(),
       presenceService: getIt<IPresenceService>(),
       sendEmailVerificationUseCase: getIt<SendEmailVerificationUseCase>(),
+      userWriteRepository: getIt<IUserWriteRepository>(),
     ),
   );
   getIt.registerFactory(

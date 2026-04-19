@@ -14,6 +14,8 @@ sealed class OnboardStatus with _$OnboardStatus {
   const factory OnboardStatus({
     @Default(false) bool toldAboutYourself,
     @Default(false) bool completeSpecialization,
+    @Default(false) bool completedMatchTutorial,
+    @Default(false) bool completedChatTutorial,
   }) = _OnboardStatus;
 
   factory OnboardStatus.fromJson(Map<String, Object?> json) =>

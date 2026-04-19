@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OnboardStatus {
 
- bool get toldAboutYourself; bool get completeSpecialization;
+ bool get toldAboutYourself; bool get completeSpecialization; bool get completedMatchTutorial; bool get completedChatTutorial;
 /// Create a copy of OnboardStatus
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $OnboardStatusCopyWith<OnboardStatus> get copyWith => _$OnboardStatusCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnboardStatus&&(identical(other.toldAboutYourself, toldAboutYourself) || other.toldAboutYourself == toldAboutYourself)&&(identical(other.completeSpecialization, completeSpecialization) || other.completeSpecialization == completeSpecialization));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnboardStatus&&(identical(other.toldAboutYourself, toldAboutYourself) || other.toldAboutYourself == toldAboutYourself)&&(identical(other.completeSpecialization, completeSpecialization) || other.completeSpecialization == completeSpecialization)&&(identical(other.completedMatchTutorial, completedMatchTutorial) || other.completedMatchTutorial == completedMatchTutorial)&&(identical(other.completedChatTutorial, completedChatTutorial) || other.completedChatTutorial == completedChatTutorial));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,toldAboutYourself,completeSpecialization);
+int get hashCode => Object.hash(runtimeType,toldAboutYourself,completeSpecialization,completedMatchTutorial,completedChatTutorial);
 
 @override
 String toString() {
-  return 'OnboardStatus(toldAboutYourself: $toldAboutYourself, completeSpecialization: $completeSpecialization)';
+  return 'OnboardStatus(toldAboutYourself: $toldAboutYourself, completeSpecialization: $completeSpecialization, completedMatchTutorial: $completedMatchTutorial, completedChatTutorial: $completedChatTutorial)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $OnboardStatusCopyWith<$Res>  {
   factory $OnboardStatusCopyWith(OnboardStatus value, $Res Function(OnboardStatus) _then) = _$OnboardStatusCopyWithImpl;
 @useResult
 $Res call({
- bool toldAboutYourself, bool completeSpecialization
+ bool toldAboutYourself, bool completeSpecialization, bool completedMatchTutorial, bool completedChatTutorial
 });
 
 
@@ -65,10 +65,12 @@ class _$OnboardStatusCopyWithImpl<$Res>
 
 /// Create a copy of OnboardStatus
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? toldAboutYourself = null,Object? completeSpecialization = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? toldAboutYourself = null,Object? completeSpecialization = null,Object? completedMatchTutorial = null,Object? completedChatTutorial = null,}) {
   return _then(_self.copyWith(
 toldAboutYourself: null == toldAboutYourself ? _self.toldAboutYourself : toldAboutYourself // ignore: cast_nullable_to_non_nullable
 as bool,completeSpecialization: null == completeSpecialization ? _self.completeSpecialization : completeSpecialization // ignore: cast_nullable_to_non_nullable
+as bool,completedMatchTutorial: null == completedMatchTutorial ? _self.completedMatchTutorial : completedMatchTutorial // ignore: cast_nullable_to_non_nullable
+as bool,completedChatTutorial: null == completedChatTutorial ? _self.completedChatTutorial : completedChatTutorial // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -151,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool toldAboutYourself,  bool completeSpecialization)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool toldAboutYourself,  bool completeSpecialization,  bool completedMatchTutorial,  bool completedChatTutorial)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OnboardStatus() when $default != null:
-return $default(_that.toldAboutYourself,_that.completeSpecialization);case _:
+return $default(_that.toldAboutYourself,_that.completeSpecialization,_that.completedMatchTutorial,_that.completedChatTutorial);case _:
   return orElse();
 
 }
@@ -172,10 +174,10 @@ return $default(_that.toldAboutYourself,_that.completeSpecialization);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool toldAboutYourself,  bool completeSpecialization)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool toldAboutYourself,  bool completeSpecialization,  bool completedMatchTutorial,  bool completedChatTutorial)  $default,) {final _that = this;
 switch (_that) {
 case _OnboardStatus():
-return $default(_that.toldAboutYourself,_that.completeSpecialization);}
+return $default(_that.toldAboutYourself,_that.completeSpecialization,_that.completedMatchTutorial,_that.completedChatTutorial);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -189,10 +191,10 @@ return $default(_that.toldAboutYourself,_that.completeSpecialization);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool toldAboutYourself,  bool completeSpecialization)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool toldAboutYourself,  bool completeSpecialization,  bool completedMatchTutorial,  bool completedChatTutorial)?  $default,) {final _that = this;
 switch (_that) {
 case _OnboardStatus() when $default != null:
-return $default(_that.toldAboutYourself,_that.completeSpecialization);case _:
+return $default(_that.toldAboutYourself,_that.completeSpecialization,_that.completedMatchTutorial,_that.completedChatTutorial);case _:
   return null;
 
 }
@@ -204,11 +206,13 @@ return $default(_that.toldAboutYourself,_that.completeSpecialization);case _:
 @JsonSerializable()
 
 class _OnboardStatus implements OnboardStatus {
-  const _OnboardStatus({this.toldAboutYourself = false, this.completeSpecialization = false});
+  const _OnboardStatus({this.toldAboutYourself = false, this.completeSpecialization = false, this.completedMatchTutorial = false, this.completedChatTutorial = false});
   factory _OnboardStatus.fromJson(Map<String, dynamic> json) => _$OnboardStatusFromJson(json);
 
 @override@JsonKey() final  bool toldAboutYourself;
 @override@JsonKey() final  bool completeSpecialization;
+@override@JsonKey() final  bool completedMatchTutorial;
+@override@JsonKey() final  bool completedChatTutorial;
 
 /// Create a copy of OnboardStatus
 /// with the given fields replaced by the non-null parameter values.
@@ -223,16 +227,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OnboardStatus&&(identical(other.toldAboutYourself, toldAboutYourself) || other.toldAboutYourself == toldAboutYourself)&&(identical(other.completeSpecialization, completeSpecialization) || other.completeSpecialization == completeSpecialization));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OnboardStatus&&(identical(other.toldAboutYourself, toldAboutYourself) || other.toldAboutYourself == toldAboutYourself)&&(identical(other.completeSpecialization, completeSpecialization) || other.completeSpecialization == completeSpecialization)&&(identical(other.completedMatchTutorial, completedMatchTutorial) || other.completedMatchTutorial == completedMatchTutorial)&&(identical(other.completedChatTutorial, completedChatTutorial) || other.completedChatTutorial == completedChatTutorial));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,toldAboutYourself,completeSpecialization);
+int get hashCode => Object.hash(runtimeType,toldAboutYourself,completeSpecialization,completedMatchTutorial,completedChatTutorial);
 
 @override
 String toString() {
-  return 'OnboardStatus(toldAboutYourself: $toldAboutYourself, completeSpecialization: $completeSpecialization)';
+  return 'OnboardStatus(toldAboutYourself: $toldAboutYourself, completeSpecialization: $completeSpecialization, completedMatchTutorial: $completedMatchTutorial, completedChatTutorial: $completedChatTutorial)';
 }
 
 
@@ -243,7 +247,7 @@ abstract mixin class _$OnboardStatusCopyWith<$Res> implements $OnboardStatusCopy
   factory _$OnboardStatusCopyWith(_OnboardStatus value, $Res Function(_OnboardStatus) _then) = __$OnboardStatusCopyWithImpl;
 @override @useResult
 $Res call({
- bool toldAboutYourself, bool completeSpecialization
+ bool toldAboutYourself, bool completeSpecialization, bool completedMatchTutorial, bool completedChatTutorial
 });
 
 
@@ -260,10 +264,12 @@ class __$OnboardStatusCopyWithImpl<$Res>
 
 /// Create a copy of OnboardStatus
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? toldAboutYourself = null,Object? completeSpecialization = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? toldAboutYourself = null,Object? completeSpecialization = null,Object? completedMatchTutorial = null,Object? completedChatTutorial = null,}) {
   return _then(_OnboardStatus(
 toldAboutYourself: null == toldAboutYourself ? _self.toldAboutYourself : toldAboutYourself // ignore: cast_nullable_to_non_nullable
 as bool,completeSpecialization: null == completeSpecialization ? _self.completeSpecialization : completeSpecialization // ignore: cast_nullable_to_non_nullable
+as bool,completedMatchTutorial: null == completedMatchTutorial ? _self.completedMatchTutorial : completedMatchTutorial // ignore: cast_nullable_to_non_nullable
+as bool,completedChatTutorial: null == completedChatTutorial ? _self.completedChatTutorial : completedChatTutorial // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

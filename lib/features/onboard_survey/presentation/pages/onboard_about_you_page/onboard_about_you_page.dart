@@ -53,10 +53,7 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
   @override
   void initState() {
     final userCubit = context.read<UserBloc>();
-    _editProfilePageBloc = EditProfilePageBloc(
-      listenCurrentUserDataUseCase: getIt<ListenCurrentUserDataUseCase>(),
-      updateUserUseCase: getIt<UpdateUserUseCase>(),
-    );
+    _editProfilePageBloc = getIt<EditProfilePageBloc>();
     _userUpdateCubit = UserUpdateCubit(
       updateUserUseCase: getIt<UpdateUserUseCase>(),
     );
@@ -164,6 +161,7 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
           }
         },
         child: BlocBuilder<EditProfilePageBloc, EditProfilePageState>(
+          bloc: _editProfilePageBloc,
           builder: (context, state) {
             final availableSkills = context.watch<SkillsBloc>().state.skills;
 
@@ -172,6 +170,7 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
                 child: Scaffold(
                   backgroundColor: Colors.transparent,
                   appBar: CustomAppBar(
+                    leading: Container(),
                     actions: [
                       Spacer(),
                       Center(
@@ -228,7 +227,6 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
                               onSubmitSkill: onSubmitSkill,
                               skills: availableSkills,
                               activeSkills: state.skills,
-
                             ),
                             // Spacer(),
                             Row(

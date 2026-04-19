@@ -2,8 +2,6 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/models/failures.dart';
 import '../../../chat/domain/services/i_presence_service.dart';
-import '../../../user/domain/models/user_data/user_data.dart';
-import '../../../user/domain/repositories/i_user_repository.dart';
 import '../repostories/i_auth_repository.dart';
 
 class LoginUseCase {

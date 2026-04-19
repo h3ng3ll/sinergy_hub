@@ -1,5 +1,4 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
-import '../../../user/domain/repositories/i_user_repository.dart';
 import '../repositories/i_matches_repository.dart';
 
 class GetExcludedMatchesUseCase {
@@ -7,8 +6,6 @@ class GetExcludedMatchesUseCase {
   final IAuthRepository _authRepository;
 
   GetExcludedMatchesUseCase({
-    required IUserRepository userRepository,
-
     required IMatchesRepository matchesRepository,
     required IAuthRepository authRepository,
   }) : _matchesRepository = matchesRepository,

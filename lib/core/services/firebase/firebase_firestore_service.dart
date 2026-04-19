@@ -26,6 +26,10 @@ class FirebaseFirestoreService {
     'users',
   );
 
+  ColRef get fakeUsersDocument => _firebaseFirestore.collection(
+    'fakeUsers',
+  );
+
   DocRef userDocument(
     String uid,
   ) => usersDocument.doc(

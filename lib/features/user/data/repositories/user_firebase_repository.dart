@@ -2,18 +2,27 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../../core/services/firebase/firebase_storage_service.dart';
 import '../../../matches/domain/models/matches_filter/matches_filter.dart';
 import '../../../onboard_survey/domain/models/user_profiler/user_profiler.dart';
+import '../mapper/user_data_mapper.dart';
 import '../../domain/models/user_data/user_data.dart';
 import '../../domain/models/users_data_pg_state/users_data_pg_state.dart';
-import '../../domain/repositories/i_user_repository.dart';
+import '../../domain/repositories/i_user_auth_repository.dart';
+import '../../domain/repositories/i_user_read_repository.dart';
+import '../../domain/repositories/i_user_storage_repository.dart';
+import '../../domain/repositories/i_user_write_repository.dart';
+import '../queries/user_query_builder.dart';
 
-class UserFirebaseRepository extends IUserRepository {
+class UserFirebaseRepository
+    implements
+        IUserReadRepository,
+        IUserWriteRepository,
+        IUserStorageRepository,
+        IUserAuthRepository {
   final FirebaseAuthService _firebaseAuthService;
   final FirebaseFirestoreService _firebaseFirestoreService;
   final FirebaseStorageService _firebaseStorageService;
@@ -81,32 +90,7 @@ class UserFirebaseRepository extends IUserRepository {
   }) async {
     Query query = _firebaseFirestoreService.usersDocument;
 
-    if (filter != null && filter.isApplied) {
-      if (filter.experience != null) {
-        query = query.where(
-          'profiler.experience',
-          isEqualTo: filter.experience!.name,
-        );
-      }
-      if (filter.specialization != null) {
-        query = query.where(
-          'profiler.specialization',
-        );
-      }
-      if (filter.skills.isNotEmpty) {
-        /// till 10 skills: cause firebase limitation
-        query = query.where(
-          'profiler.skills',
-          arrayContainsAny: filter.skills.map(
-            (e) => e.name,
-          ),
-        );
-      }
-    }
-
-    /// pagination
-
-
+    query = UserQueryBuilder.applyFilters(query, filter);
 
     if (userDataState.lastDocument != null) {
       query = _firebaseFirestoreService.applyPagination(
@@ -115,18 +99,10 @@ class UserFirebaseRepository extends IUserRepository {
       );
     }
 
+    final res = await query.get();
 
-    final QuerySnapshot res = await query.get();
-
-    final userData = List<UserData>.from(
-      res.docs.map(
-        (e) {
-          final userData = e.data();
-          return UserData.fromJson(
-            userData as Map<String, dynamic>,
-          );
-        },
-      ).toList(),
+    final List<UserData> userData = UserDataMapper.fromSnapshotList(
+      res,
     );
     return userDataState.copyWith(
       items: [
@@ -134,7 +110,9 @@ class UserFirebaseRepository extends IUserRepository {
         ...userData,
       ],
       hasMore: res.docs.isNotEmpty,
-      lastDocument: res.docs.isNotEmpty ? res.docs.last : userDataState.lastDocument,
+      lastDocument: res.docs.isNotEmpty
+          ? res.docs.last
+          : userDataState.lastDocument,
     );
   }
 
@@ -147,17 +125,13 @@ class UserFirebaseRepository extends IUserRepository {
   Future<UserData?> getUserById({
     required String id,
   }) async {
-    final userRow = await _firebaseFirestoreService
+    final userSnapshot = await _firebaseFirestoreService
         .userDocument(
           id,
         )
         .get();
-    final userData = userRow.data();
-    if (userData == null) {
-      return null;
-    }
-    final user = UserData.fromJson(
-      userData,
+    final UserData? user = UserDataMapper.fromDocSnapshot(
+      userSnapshot,
     );
     return user;
   }
@@ -173,9 +147,8 @@ class UserFirebaseRepository extends IUserRepository {
         .snapshots()
         .map(
           (snapshot) {
-            if (!snapshot.exists || snapshot.data() == null) return null;
-            return UserData.fromJson(
-              snapshot.data()!,
+            return UserDataMapper.fromDocSnapshot(
+              snapshot,
             );
           },
         );
@@ -215,17 +188,15 @@ class UserFirebaseRepository extends IUserRepository {
     return path;
   }
 
-
   @override
   Future<void> deleteAvatar({
     required String path,
   }) async {
     try {
-
       await _firebaseStorageService.delete(
         path,
       );
-    } catch (e , _) {
+    } catch (e, _) {
       rethrow;
     }
   }
@@ -246,14 +217,6 @@ class UserFirebaseRepository extends IUserRepository {
         );
   }
 
-  @override
-  Future<UserData?> currentUserDataFuture() async {
-    final uid = _firebaseAuthService.currentUser?.uid;
-    if (uid == null) return null;
-    return await getUserById(
-      id: uid,
-    );
-  }
   @override
   Future<String> getAvatarUrl(UserData user) {
     return _firebaseStorageService.getDownloadUrl(

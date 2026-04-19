@@ -1,16 +1,15 @@
-import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../models/user_data/user_data.dart';
-import '../repositories/i_user_repository.dart';
+import '../repositories/i_user_read_repository.dart';
 
 class ListenUserDataUseCase {
-  final IUserRepository _userRepository;
+  final IUserReadRepository _userReadRepository;
 
   ListenUserDataUseCase({
-    required IUserRepository userRepository,
-  }) : _userRepository = userRepository;
+    required IUserReadRepository userReadRepository,
+  }) : _userReadRepository = userReadRepository;
 
   Stream<UserData?> call(String uid) async* {
-    yield* _userRepository.userDataStream(
+    yield* _userReadRepository.userDataStream(
       uid,
     );
   }

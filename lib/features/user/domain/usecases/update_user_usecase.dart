@@ -7,20 +7,24 @@ import '../../../../core/services/image_service.dart';
 import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../failures/user_update_failure.dart';
 import '../models/user_data/user_data.dart';
-import '../repositories/i_user_repository.dart';
+import '../repositories/i_user_storage_repository.dart';
+import '../repositories/i_user_write_repository.dart';
 
 class UpdateUserUseCase {
-  final IUserRepository _userRepository;
+  final IUserWriteRepository _userWriteRepository;
+  final IUserStorageRepository _userStorageRepository;
   final IAuthRepository _authRepository;
   final ImageService _imageService;
 
   UpdateUserUseCase({
-    required IUserRepository userRepository,
+    required IUserWriteRepository userWriteRepository,
+    required IUserStorageRepository userStorageRepository,
     required IAuthRepository authRepository,
     required ImageService imageService,
-  }) : _userRepository = userRepository,
+  }) : _userStorageRepository = userStorageRepository,
        _authRepository = authRepository,
-       _imageService = imageService;
+       _imageService = imageService,
+       _userWriteRepository = userWriteRepository;
 
   Future<Either<void, Failure>> call(
     UserData userData,
@@ -39,7 +43,7 @@ class UpdateUserUseCase {
         img = await _imageService.compressToTargetSize(
           img,
         );
-        newAvatarPath = await _userRepository.updateAvatar(
+        newAvatarPath = await _userStorageRepository.updateAvatar(
           uid: userData.uid,
           avatar: img,
         );
@@ -48,7 +52,7 @@ class UpdateUserUseCase {
           avatarPath: newAvatarPath,
         );
       }
-      final url = await _userRepository.getAvatarUrl(
+      final url = await _userStorageRepository.getAvatarUrl(
         userData,
       );
 
@@ -57,13 +61,13 @@ class UpdateUserUseCase {
       );
 
       /// 2. Update DB
-      await _userRepository.update(
+      await _userWriteRepository.update(
         userData: userData,
       );
 
       /// 3. Delete old avatar AFTER success
       if (oldAvatarPath != null && newAvatarPath != null) {
-        await _userRepository.deleteAvatar(
+        await _userStorageRepository.deleteAvatar(
           path: oldAvatarPath,
         );
       }

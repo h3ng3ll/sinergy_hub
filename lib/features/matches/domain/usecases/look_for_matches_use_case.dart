@@ -1,19 +1,19 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../../../user/domain/models/users_data_pg_state/users_data_pg_state.dart';
-import '../../../user/domain/repositories/i_user_repository.dart';
+import '../../../user/domain/repositories/i_user_read_repository.dart';
 import '../models/matches_filter/matches_filter.dart';
 import 'get_excluded_matches_use_case.dart';
 
 class LookForMatchesUseCase {
-  final IUserRepository _userRepository;
+  final IUserReadRepository _userReadRepository;
   final IAuthRepository _authRepository;
   final GetExcludedMatchesUseCase _getExcludedMatchesUseCase;
 
   LookForMatchesUseCase({
-    required IUserRepository userRepository,
+    required IUserReadRepository userReadRepository,
     required IAuthRepository authRepository,
     required GetExcludedMatchesUseCase getExcludedMatchesUseCase,
-  }) : _userRepository = userRepository,
+  }) : _userReadRepository = userReadRepository,
        _authRepository = authRepository,
        _getExcludedMatchesUseCase = getExcludedMatchesUseCase;
 
@@ -30,7 +30,7 @@ class LookForMatchesUseCase {
         uid,
       );
 
-    UserDataPgState userState = await _userRepository.get(
+    UserDataPgState userState = await _userReadRepository.get(
       userDataState: userDataState,
       filter: filter,
     );

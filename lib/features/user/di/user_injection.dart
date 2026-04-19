@@ -6,9 +6,17 @@ import '../../../core/services/firebase/firebase_storage_service.dart';
 import '../../../core/services/image_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../home/presentation/edit_profile_page/bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
+import '../../onboard_survey/domain/use_cases/get_completion_status_use_case.dart';
 import '../../onboard_survey/domain/use_cases/get_skills_use_case.dart';
+import '../data/repositories/fake_user_firebase_repository.dart';
+import '../data/repositories/user_composite_repository.dart';
 import '../data/repositories/user_firebase_repository.dart';
-import '../domain/repositories/i_user_repository.dart';
+import '../data/services/app_mode_service.dart';
+import '../domain/repositories/i_user_auth_repository.dart';
+import '../domain/repositories/i_user_read_repository.dart';
+import '../domain/repositories/i_user_storage_repository.dart';
+import '../domain/repositories/i_user_write_repository.dart';
+import '../domain/services/i_app_mode_service.dart';
 import '../domain/usecases/get_current_user_data_use_case.dart';
 import '../domain/usecases/get_user_data_use_case.dart';
 import '../domain/usecases/get_users_use_case.dart';
@@ -21,34 +29,72 @@ import '../presentation/bloc/user_bloc/user_bloc.dart';
 import '../presentation/pages/edit_looking_for_page/bloc/edit_looking_for_bloc.dart';
 
 void initUserFeature(GetIt getIt) {
-  getIt.registerLazySingleton<IUserRepository>(
+  getIt.registerLazySingleton<IAppModeService>(
+    () => AppModeService(
+      getCompletionStatusUseCase: getIt<GetCompletionStatusUseCase>(),
+    ),
+  );
+
+  /// Repositories
+
+  getIt.registerLazySingleton<UserFirebaseRepository>(
     () => UserFirebaseRepository(
       firebaseAuthService: getIt<FirebaseAuthService>(),
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
       firebaseStorageService: getIt<FirebaseStorageService>(),
     ),
   );
+
+  getIt.registerLazySingleton<FakeUserFirebaseRepository>(
+    () => FakeUserFirebaseRepository(
+      firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<IUserReadRepository>(
+    () => UserReadCompositeRepository(
+      real: getIt<UserFirebaseRepository>(),
+      fake: getIt<FakeUserFirebaseRepository>(),
+      modeService: getIt<IAppModeService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<IUserWriteRepository>(
+    () => getIt<UserFirebaseRepository>() ,
+  );
+
+  getIt.registerLazySingleton<IUserStorageRepository>(
+    () => getIt<UserFirebaseRepository>(),
+  );
+
+  getIt.registerLazySingleton<IUserAuthRepository>(
+    () => getIt<UserFirebaseRepository>(),
+  );
+
+  /// Use Cases
   getIt.registerLazySingleton<UpdateUserUseCase>(
     () => UpdateUserUseCase(
-      userRepository: getIt<IUserRepository>(),
+      userStorageRepository: getIt<IUserStorageRepository>(),
+      userWriteRepository: getIt<IUserWriteRepository>(),
       authRepository: getIt<IAuthRepository>(),
       imageService: getIt<ImageService>(),
     ),
   );
   getIt.registerLazySingleton<GetUserDataUseCase>(
     () => GetUserDataUseCase(
-      userRepository: getIt<IUserRepository>(),
+      userReadRepository: getIt<IUserReadRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetUsersUseCase>(
     () => GetUsersUseCase(
-      userRepository: getIt<IUserRepository>(),
+      userReadRepository: getIt<IUserReadRepository>(),
       authRepository: getIt<IAuthRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetCurrentUserDataUseCase>(
     () => GetCurrentUserDataUseCase(
-      userRepository: getIt<IUserRepository>(),
+      userReadRepository: getIt<IUserReadRepository>(),
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
   getIt.registerFactory<EditLookingForBloc>(
@@ -66,17 +112,17 @@ void initUserFeature(GetIt getIt) {
   getIt.registerFactory<ListenCurrentUserDataUseCase>(
     () => ListenCurrentUserDataUseCase(
       authRepository: getIt<IAuthRepository>(),
-      userRepository: getIt<IUserRepository>(),
+      userReadRepository: getIt<IUserReadRepository>(),
     ),
   );
   getIt.registerFactory<ListenUserDataUseCase>(
     () => ListenUserDataUseCase(
-      userRepository: getIt<IUserRepository>(),
+      userReadRepository: getIt<IUserReadRepository>(),
     ),
   );
 
   /// Bloc
-  getIt.registerLazySingleton<EditProfilePageBloc>(
+  getIt.registerFactory<EditProfilePageBloc>(
     () => EditProfilePageBloc(
       listenCurrentUserDataUseCase: getIt<ListenCurrentUserDataUseCase>(),
       updateUserUseCase: getIt<UpdateUserUseCase>(),
@@ -84,7 +130,7 @@ void initUserFeature(GetIt getIt) {
   );
   getIt.registerLazySingleton<UserBloc>(
     () => UserBloc(
-      userRepository: getIt<IUserRepository>(),
+      listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
     ),
   );
 }

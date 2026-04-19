@@ -126,6 +126,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       child: MultiBlocListener(
         listeners: [
           BlocListener<EditProfilePageBloc, EditProfilePageState>(
+            bloc: _editProfilePageBloc,
             listener: (context, state) {
               if (state.isUpdated) {
                 UiMessageService.showSuccess(
@@ -136,6 +137,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             },
           ),
           BlocListener<EditProfilePageBloc, EditProfilePageState>(
+            bloc: _editProfilePageBloc,
             listenWhen: (p, n) =>
                 (p.errorMessage != n.errorMessage) && n.isFailed,
             listener: (context, state) {
@@ -241,7 +243,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                   ),
                 ),
-                if(state.isUpdating) LoadingDataWidget(),
+                if (state.isUpdating) LoadingDataWidget(),
               ],
             );
           },

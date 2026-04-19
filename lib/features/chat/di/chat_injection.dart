@@ -2,7 +2,6 @@ import 'package:get_it/get_it.dart';
 
 import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
-import '../../user/domain/repositories/i_user_repository.dart';
 import '../../user/domain/usecases/get_current_user_data_use_case.dart';
 import '../../user/domain/usecases/get_user_data_use_case.dart';
 import '../../user/domain/usecases/get_users_use_case.dart';
@@ -43,7 +42,6 @@ void initChatFeature(GetIt getIt) {
   getIt.registerLazySingleton<ListenChatsUseCase>(
     () => ListenChatsUseCase(
       chatRepository: getIt<IChatRepository>(),
-      userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),
     ),
   );
@@ -81,7 +79,6 @@ void initChatFeature(GetIt getIt) {
   getIt.registerLazySingleton<ListenChatByIdUseCase>(
     () => ListenChatByIdUseCase(
       chatRepository: getIt<IChatRepository>(),
-      userRepository: getIt<IUserRepository>(),
       authRepository: getIt<IAuthRepository>(),
     ),
   );
@@ -120,7 +117,6 @@ void initChatFeature(GetIt getIt) {
     () => ListenChatUpdatesUseCase(
       authRepository: getIt<IAuthRepository>(),
       chatRepository: getIt<IChatRepository>(),
-      userRepository: getIt<IUserRepository>(),
     ),
   );
   getIt.registerLazySingleton<UpdateTypingInfoUseCase>(

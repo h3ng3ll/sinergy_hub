@@ -1,17 +1,17 @@
 import '../models/user_data/user_data.dart';
-import '../repositories/i_user_repository.dart';
+import '../repositories/i_user_read_repository.dart';
 
 class GetUserDataUseCase {
-  final IUserRepository _userRepository;
+  final IUserReadRepository _userReadRepository;
 
   GetUserDataUseCase({
-    required IUserRepository userRepository,
-  }) : _userRepository = userRepository;
+    required IUserReadRepository userReadRepository,
+  }) : _userReadRepository = userReadRepository;
 
   Future<UserData?> call({
     required String id,
   }) async {
-    return await _userRepository.getUserById(
+    return await _userReadRepository.getUserById(
       id: id,
     );
   }
