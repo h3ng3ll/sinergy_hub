@@ -60,13 +60,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDwZ2pGndA3SiExLUoXs95eznV7zRbXoaU',
-    appId: '1:758987089244:ios:b7a0c973774c57e0878d99',
+    appId: '1:758987089244:ios:3490525dd3bbaafa878d99',
     messagingSenderId: '758987089244',
     projectId: 'sinergyhub-prod',
     storageBucket: 'sinergyhub-prod.firebasestorage.app',
     androidClientId: '758987089244-2ecir44j2n0efhvsqmismaf3dva26op9.apps.googleusercontent.com',
-    iosClientId: '758987089244-vvgbne15353vk28s0jrkjcpr3qbiqkfm.apps.googleusercontent.com',
-    iosBundleId: 'com.hengell.sinergyHub',
+    iosClientId: '758987089244-btueguabu8lj2srk72amrilu46prfhgq.apps.googleusercontent.com',
+    iosBundleId: 'com.hengell.synergyhub',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(

@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>758987089244-vvgbne15353vk28s0jrkjcpr3qbiqkfm.apps.googleusercontent.com</string>
+	<string>758987089244-btueguabu8lj2srk72amrilu46prfhgq.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.758987089244-vvgbne15353vk28s0jrkjcpr3qbiqkfm</string>
+	<string>com.googleusercontent.apps.758987089244-btueguabu8lj2srk72amrilu46prfhgq</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>758987089244-2ecir44j2n0efhvsqmismaf3dva26op9.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.hengell.sinergyHub</string>
+	<string>com.hengell.synergyhub</string>
 	<key>PROJECT_ID</key>
 	<string>sinergyhub-prod</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:758987089244:ios:b7a0c973774c57e0878d99</string>
+	<string>1:758987089244:ios:3490525dd3bbaafa878d99</string>
 </dict>
 </plist>

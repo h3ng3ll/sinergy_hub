@@ -6,6 +6,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in_web/google_sign_in_web.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 
+import '../../../utils/env/env.dart';
+
 class GoogleSignInServiceWeb {
   GoogleSignInServiceWeb._();
 
@@ -13,12 +15,12 @@ class GoogleSignInServiceWeb {
 
   late final GoogleSignInPlugin _googleSignIn;
 
-  Future<void> init(ValueNotifier<String?> authToken) async {
+  Future<void> init(Env env , ValueNotifier<String?> authToken) async {
     if (kIsWeb) {
       _googleSignIn = GoogleSignInPlugin();
       await _googleSignIn.init(
         InitParameters(
-          clientId: dotenv.env['FIREBASE_WEB_API_KEY'],
+          clientId: env.webPushCertificate(),
         ),
       );
       _googleSignIn.renderButton();

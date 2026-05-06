@@ -81,8 +81,8 @@ class LocalNotificationService {
 
   void _registerNotifications() {
     AndroidNotificationDetails(
-      'game-notification',
-      'game-notification',
+      'notification',
+      'notification',
       actions: [],
     );
   }

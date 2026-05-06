@@ -78,7 +78,9 @@ void main() async {
   await getIt<LocalNotificationService>().init();
 
   await getIt<FirebaseMessagingService>().init();
-  await getIt<GoogleSignInService>().init();
+  await getIt<GoogleSignInService>().init(
+    getIt<Env>(),
+  );
   await getIt<IPresenceService>().init();
   Bloc.observer = AppObserver.instance();
 

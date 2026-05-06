@@ -58,7 +58,7 @@ class FirebaseMessagingService {
     );
 
     /// Do not have APN token yet skip...
-    if (!kIsWeb && Platform.isIOS) return;
+    // if (!kIsWeb && Platform.isIOS) return;
     if (!kIsWeb) {
       String? token = await _firebaseMessaging.getToken();
       if (kDebugMode) {
