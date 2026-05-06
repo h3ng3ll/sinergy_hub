@@ -1,7 +1,8 @@
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../../utils/env/env.dart';
 import '../local_notification_service.dart';
 import '../notification_tap_processor.dart';
 
@@ -29,7 +30,7 @@ class FirebaseMessagingService {
   final FirebaseMessaging _firebaseMessaging;
 
   final LocalNotificationService _localNotificationService;
-
+  final Env _env;
   late String fcmToken;
 
   static bool _isBackgroundHandlerInitialized = false;
@@ -37,15 +38,15 @@ class FirebaseMessagingService {
   FirebaseMessagingService({
     required LocalNotificationService localNotificationService,
     required FirebaseMessaging firebaseMessaging,
+    required Env env,
   }) : _localNotificationService = localNotificationService,
+       _env = env,
        _firebaseMessaging = firebaseMessaging;
 
   Future<void> init() async {
     // Запрос разрешений на iOS
     /// not blocking loading not await
 
-    /// Do not have APN token yet skip...
-    // if (!kIsWeb && Platform.isIOS) return;
     await _firebaseMessaging.requestPermission(
       alert: true,
       announcement: true,
@@ -56,6 +57,8 @@ class FirebaseMessagingService {
       sound: true,
     );
 
+    /// Do not have APN token yet skip...
+    if (!kIsWeb && Platform.isIOS) return;
     if (!kIsWeb) {
       String? token = await _firebaseMessaging.getToken();
       if (kDebugMode) {
@@ -75,7 +78,7 @@ class FirebaseMessagingService {
     } else {
       // Web тоже может получать токен!
       String? token = await _firebaseMessaging.getToken(
-        vapidKey: dotenv.env['FIREBASE_WEB_PUSH_CERTIFICATE'],
+        vapidKey: _env.webPushCertificate(),
       );
 
       if (kDebugMode) {

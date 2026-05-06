@@ -25,6 +25,9 @@ import '../services/image_service.dart';
 import '../services/local_notification_service.dart';
 import '../services/notification_tap_processor.dart';
 import '../services/permission_requester_service.dart';
+import '../utils/env/dev_env.dart';
+import '../utils/env/env.dart';
+import '../utils/env/prod_env.dart';
 
 final getIt = GetIt.instance;
 
@@ -42,6 +45,16 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => GoogleSignIn.instance);
   getIt.registerLazySingleton(() => NotificationTapProcessor());
   getIt.registerLazySingleton(() => ImageService());
+  getIt.registerLazySingleton<Env>(() {
+    const env = String.fromEnvironment('DARTENV');
+    switch (env) {
+      case 'prod':
+        return ProdEnv();
+      case 'development':
+      default:
+        return DevEnv();
+    }
+  });
   getIt.registerLazySingleton(
     () => GoogleSignInService.instance,
   );
@@ -59,6 +72,7 @@ Future<void> initDependencies() async {
     () => FirebaseMessagingService(
       localNotificationService: getIt<LocalNotificationService>(),
       firebaseMessaging: getIt<FirebaseMessaging>(),
+      env: getIt<Env>(),
     ),
   );
   getIt.registerLazySingleton<FirebaseFunctionsService>(

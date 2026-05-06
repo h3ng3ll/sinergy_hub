@@ -9,6 +9,7 @@ import '../../../../../core/models/exceptions.dart';
 import '../../../../../core/models/failures.dart';
 import '../../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../../../core/services/google_sign_in_service/google_sign_in_service.dart';
+import '../../../../../core/utils/env/env.dart';
 import '../../../domain/exception/failed_sign_with_google.dart';
 import '../../../domain/exception/max_tries_exceeded_exception.dart';
 import '../../../domain/exception/user_canceled_sign_in_exception.dart';
@@ -27,14 +28,17 @@ class FirebaseAuthRepository extends IAuthRepository {
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;
   final GoogleSignInService _googleSignInService;
+  final Env _env;
 
   FirebaseAuthRepository({
     required FirebaseAuth auth,
     required GoogleSignIn googleSignIn,
     required FirebaseFirestoreService firebaseFirestoreService,
     required GoogleSignInService googleSignInService,
+    required Env env,
   }) : _auth = auth,
        _googleSignInService = googleSignInService,
+       _env = env,
        _googleSignIn = googleSignIn {
     if (kIsWeb) {
       _initSignInEvents();
@@ -118,7 +122,7 @@ class FirebaseAuthRepository extends IAuthRepository {
   Future<Either<UserCredential, Exceptions>> signInWithGoogle() async {
     try {
       await _googleSignIn.initialize(
-        serverClientId: dotenv.get('FIREBASE_WEB_API_KEY'),
+        serverClientId: _env.serverClientId(),
       );
       final GoogleSignInAccount res = await _googleSignIn.authenticate();
 
@@ -192,7 +196,7 @@ class FirebaseAuthRepository extends IAuthRepository {
           SuchUserNotExistsFailure(),
         );
       }
-      return  Right(
+      return Right(
         SomethingWentWrongSignInFailure(),
       );
       rethrow;

@@ -1,4 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +20,7 @@ import 'core/services/firebase/firebase_firestore_service.dart';
 import 'core/services/firebase/firebase_messaging_service.dart';
 import 'core/services/google_sign_in_service/google_sign_in_service.dart';
 import 'core/services/local_notification_service.dart';
+import 'core/utils/env/env.dart';
 import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'features/chat/domain/services/i_presence_service.dart';
 import 'features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
@@ -40,11 +43,35 @@ void main() async {
       DeviceOrientation.portraitUp,
     ],
   );
-  //
-  // /// ios did not configured
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+
+  await getIt<Env>().init();
+
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+    true,
   );
+
+  FlutterError.onError =
+      (
+        FlutterErrorDetails details,
+      ) {
+        FirebaseCrashlytics.instance.recordFlutterFatalError(
+          details,
+        );
+      };
+
+  PlatformDispatcher.instance.onError =
+      (
+        error,
+        stack,
+      ) {
+        FirebaseCrashlytics.instance.recordError(
+          error,
+          stack,
+          fatal: true,
+        );
+        return true;
+      };
+
 
   await getIt<FirebaseAuthService>().init();
   await getIt<FirebaseFirestoreService>().init();

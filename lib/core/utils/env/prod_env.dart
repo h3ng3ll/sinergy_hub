@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../../firebase/firebase_options_prod.dart' as prod;
 import 'env.dart';
 
-class ProdConfig extends Env {
+class ProdEnv extends Env {
   @override
   FirebaseOptions get firebaseOptions =>
       prod.DefaultFirebaseOptions.currentPlatform;
@@ -15,7 +15,12 @@ class ProdConfig extends Env {
   ) => firebaseOptions = value;
 
   @override
-  String serverClientId() {
-    return dotenv.get('DEV_SERVER_CLIENT_ID');
-  }
+  String webPushCertificate() => dotenv.get(
+    'PROD_FIREBASE_WEB_PUSH_CERTIFICATE',
+  );
+
+  @override
+  String serverClientId() => dotenv.get(
+    'PROD_SERVER_CLIENT_ID',
+  );
 }

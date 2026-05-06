@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "758987089244",
+    "project_id": "sinergyhub-prod",
+    "storage_bucket": "sinergyhub-prod.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:758987089244:android:642251985425ad46878d99",
+        "android_client_info": {
+          "package_name": "com.hengell.sinergyHub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "758987089244-2ecir44j2n0efhvsqmismaf3dva26op9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hengell.sinergyHub",
+            "certificate_hash": "82450f0bdf633356dce0e0da7775e47b9b9b6fed"
+          }
+        },
+        {
+          "client_id": "758987089244-931inn0kjb87f5v6ulv5kl4qbfjm68bj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hengell.sinergyHub",
+            "certificate_hash": "ed7e9b1192cb587f625d58fe7a266f0d31ffda4a"
+          }
+        },
+        {
+          "client_id": "758987089244-c8hfegnblpc91n3hk1a8slrm05sb3alq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTJ0tbudPwM7bGm-4aTm3W5rDXzWg-cD8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "758987089244-c8hfegnblpc91n3hk1a8slrm05sb3alq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "758987089244-g465cr1h8aerk40d3ifpgr2klquqlbaa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sinergyHub"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
