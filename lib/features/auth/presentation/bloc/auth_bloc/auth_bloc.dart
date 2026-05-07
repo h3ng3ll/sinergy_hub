@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/repostories/i_auth_repository.dart';
+import '../../../domain/use_cases/apple_sign_in_usecase.dart';
 import '../../../domain/use_cases/sign_in_with_google_use_case.dart';
 
 part 'auth_event.dart';
@@ -14,17 +15,21 @@ part 'auth_bloc.freezed.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final IAuthRepository _authRepository;
   final SignInWithGoogleUseCase _signInWithGoogleUseCase;
+  final AppleSignInUseCase _appleSignInUseCase;
 
   AuthBloc({
     required IAuthRepository authRepository,
     required SignInWithGoogleUseCase signInWithGoogleUseCase,
+    required AppleSignInUseCase appleSignInUseCase,
   }) : _authRepository = authRepository,
        _signInWithGoogleUseCase = signInWithGoogleUseCase,
+        _appleSignInUseCase = appleSignInUseCase,
        super(const AuthState()) {
     on<_Init>(_init);
     on<_Listen>(_listen);
     on<_SignInViaGoogle>(_signInViaGoogle);
     on<_SignOut>(_signOut);
+    on<_SignInViaApple>(_signInViaApple);
   }
 
   Future<void> _listen(
@@ -80,6 +85,29 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ),
     );
     final res = await _signInWithGoogleUseCase.call();
+
+    res.fold(
+      (_) {},
+      (e) {
+        emit(
+          state.copyWith(
+            status: AuthStatus.failed,
+            errorMessage: e.message,
+          ),
+        );
+      },
+    );
+  }
+void _signInViaApple(
+    _SignInViaApple event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: AuthStatus.loading,
+      ),
+    );
+    final res = await _appleSignInUseCase.call();
 
     res.fold(
       (_) {},

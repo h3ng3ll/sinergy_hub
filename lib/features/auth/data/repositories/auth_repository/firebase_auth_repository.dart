@@ -1,20 +1,26 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../../../core/models/exceptions.dart';
 import '../../../../../core/models/failures.dart';
+import '../../../../../core/services/crypto_service.dart';
 import '../../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../../../core/services/google_sign_in_service/google_sign_in_service.dart';
 import '../../../../../core/utils/env/env.dart';
 import '../../../domain/exception/failed_sign_with_google.dart';
 import '../../../domain/exception/max_tries_exceeded_exception.dart';
 import '../../../domain/exception/user_canceled_sign_in_exception.dart';
+import '../../../domain/failures/apple_no_support_platform_failure.dart';
 import '../../../domain/failures/auth_failures.dart';
 import '../../../domain/failures/auth_unreachable_failure.dart';
+import '../../../domain/failures/failed_sign_in_with_apple.dart';
 import '../../../domain/failures/login_or_password_incorrect_failure.dart';
 import '../../../domain/failures/something_went_wrong_sign_in_failure.dart';
 import '../../../domain/failures/such_user_not_exists_failure.dart';
@@ -28,6 +34,8 @@ class FirebaseAuthRepository extends IAuthRepository {
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;
   final GoogleSignInService _googleSignInService;
+  final CryptoService _cryptoService;
+
   final Env _env;
 
   FirebaseAuthRepository({
@@ -36,10 +44,12 @@ class FirebaseAuthRepository extends IAuthRepository {
     required FirebaseFirestoreService firebaseFirestoreService,
     required GoogleSignInService googleSignInService,
     required Env env,
+    required CryptoService cryptoService,
   }) : _auth = auth,
        _googleSignInService = googleSignInService,
        _env = env,
-       _googleSignIn = googleSignIn {
+       _googleSignIn = googleSignIn,
+       _cryptoService = cryptoService {
     if (kIsWeb) {
       _initSignInEvents();
     }
@@ -279,6 +289,92 @@ class FirebaseAuthRepository extends IAuthRepository {
     } catch (_) {
       return Right(
         SomethingWentWrongSignInFailure(),
+      );
+    }
+  }
+
+  /// Entry point for Apple Sign-In.
+  /// Chooses flow based on platform.
+  @override
+  Future<Either<UserCredential?, Failure>> signInWithApple() async {
+    if (Platform.isAndroid) {
+      final res = await _androidCall();
+      return Left(
+        res,
+      );
+    } else if (Platform.isIOS) {
+      return await _iosCall();
+    } else {
+      return Right(
+        AppleNoSupportPlatformFailure(),
+      );
+    }
+  }
+
+  // =========================
+  // ANDROID (Firebase Web OAuth)
+  // =========================
+  Future<UserCredential?> _androidCall() async {
+    try {
+      final provider =
+          OAuthProvider(
+              'apple.com',
+            )
+            ..addScope('email')
+            ..addScope('name');
+
+      return await FirebaseAuth.instance.signInWithProvider(
+        provider,
+      );
+    } catch (e) {
+      throw Exception('Android Apple Sign-In failed: $e');
+    }
+  }
+
+  // =====================
+  // iOS (Native Apple API)
+  // =====================
+  Future<Either<UserCredential, Failure>> _iosCall() async {
+    try {
+      // Generate secure nonce
+      final rawNonce = _cryptoService.generateNonce();
+      final hashedNonce = _cryptoService.sha256ofString(
+        rawNonce,
+      );
+
+      // Request Apple credential
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        // nonce: hashedNonce,
+      );
+      final oauthCredentials =
+          OAuthProvider(
+            'apple.com',
+          ).credential(
+            idToken: credential.identityToken,
+            accessToken: credential.authorizationCode,
+          );
+      // Convert Apple credential to Firebase credential
+      // final oauthCredential =
+      //     OAuthProvider(
+      //       'apple.com',
+      //     ).credential(
+      //       idToken: credential.identityToken,
+      //       rawNonce: rawNonce,
+      //     );
+
+      final res = await FirebaseAuth.instance.signInWithCredential(
+        oauthCredentials,
+      );
+      return Left(
+        res,
+      );
+    } catch (e) {
+      return Right(
+        FailedSignInWithApple(),
       );
     }
   }

@@ -23,6 +23,6 @@ flutterfire config \
   --out=lib/firebase/firebase_options_dev.dart \
   --ios-bundle-id=com.hengell.sinergyhub.dev \
   --ios-out=ios/Runner/Firebase/development/GoogleService-Info.plist \
-  --android-package-name=com.hengell.sinergyHub.dev \
+  --android-package-name=com.hengell.synergyhub.dev \
   --android-out=android/app/src/development/google-services.json \
   --yes

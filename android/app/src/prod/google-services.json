@@ -47,10 +47,10 @@
               "client_type": 3
             },
             {
-              "client_id": "758987089244-g465cr1h8aerk40d3ifpgr2klquqlbaa.apps.googleusercontent.com",
+              "client_id": "758987089244-btueguabu8lj2srk72amrilu46prfhgq.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.sinergyHub"
+                "bundle_id": "com.hengell.synergyhub"
               }
             }
           ]

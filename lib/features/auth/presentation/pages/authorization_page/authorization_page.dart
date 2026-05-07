@@ -30,13 +30,19 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
     );
   }
 
+  void onAuthWithApple() {
+    context.read<AuthBloc>().add(
+      AuthEvent.signInViaApple(),
+    );
+  }
+
   void onRegister() {
     RegisterPageRoute().push(
       context,
     );
   }
 
- void onLogin() {
+  void onLogin() {
     LoginPageRoute().push(
       context,
     );
@@ -96,6 +102,19 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                               ),
                             ),
                           ),
+                        ActionBtn(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 20.0,
+                          ),
+                          onPressed: onAuthWithApple,
+                          child: Text(
+                            'SIGN IN APPLE',
+                            style: textTheme.medium16.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

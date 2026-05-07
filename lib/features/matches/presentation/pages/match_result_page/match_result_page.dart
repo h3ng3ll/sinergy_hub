@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -467,7 +468,7 @@ class _MatchResultPageState extends State<MatchResultPage> {
         color: AppColors.white.value.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(borderRadius),
       ),
-      child: Text(
+      child: AutoSizeText(
         role,
         style: textTheme.medium14.copyWith(
           color: AppColors.white.value,
@@ -479,7 +480,7 @@ class _MatchResultPageState extends State<MatchResultPage> {
         ),
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
-        maxLines: 2,
+        maxLines: 1,
       ),
     );
   }

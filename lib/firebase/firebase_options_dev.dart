@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBWLNHfoSRMZwG5yy87fFL6jSbYQfOA8Fo',
-    appId: '1:752696702645:android:a90a625e3f371fb24d30fc',
+    appId: '1:752696702645:android:c898a9234e96944c4d30fc',
     messagingSenderId: '752696702645',
     projectId: 'synergyhub-a3e1b',
     databaseURL: 'https://synergyhub-a3e1b-default-rtdb.europe-west1.firebasedatabase.app',

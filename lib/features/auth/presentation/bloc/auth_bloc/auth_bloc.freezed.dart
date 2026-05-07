@@ -55,13 +55,14 @@ extension AuthEventPatterns on AuthEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Init value)?  init,TResult Function( _Listen value)?  listen,TResult Function( _SignInViaGoogle value)?  signInViaGoogle,TResult Function( _SignOut value)?  signOut,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Init value)?  init,TResult Function( _Listen value)?  listen,TResult Function( _SignInViaGoogle value)?  signInViaGoogle,TResult Function( _SignInViaApple value)?  signInViaApple,TResult Function( _SignOut value)?  signOut,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Init() when init != null:
 return init(_that);case _Listen() when listen != null:
 return listen(_that);case _SignInViaGoogle() when signInViaGoogle != null:
-return signInViaGoogle(_that);case _SignOut() when signOut != null:
+return signInViaGoogle(_that);case _SignInViaApple() when signInViaApple != null:
+return signInViaApple(_that);case _SignOut() when signOut != null:
 return signOut(_that);case _:
   return orElse();
 
@@ -80,13 +81,14 @@ return signOut(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Init value)  init,required TResult Function( _Listen value)  listen,required TResult Function( _SignInViaGoogle value)  signInViaGoogle,required TResult Function( _SignOut value)  signOut,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Init value)  init,required TResult Function( _Listen value)  listen,required TResult Function( _SignInViaGoogle value)  signInViaGoogle,required TResult Function( _SignInViaApple value)  signInViaApple,required TResult Function( _SignOut value)  signOut,}){
 final _that = this;
 switch (_that) {
 case _Init():
 return init(_that);case _Listen():
 return listen(_that);case _SignInViaGoogle():
-return signInViaGoogle(_that);case _SignOut():
+return signInViaGoogle(_that);case _SignInViaApple():
+return signInViaApple(_that);case _SignOut():
 return signOut(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -104,13 +106,14 @@ return signOut(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Init value)?  init,TResult? Function( _Listen value)?  listen,TResult? Function( _SignInViaGoogle value)?  signInViaGoogle,TResult? Function( _SignOut value)?  signOut,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Init value)?  init,TResult? Function( _Listen value)?  listen,TResult? Function( _SignInViaGoogle value)?  signInViaGoogle,TResult? Function( _SignInViaApple value)?  signInViaApple,TResult? Function( _SignOut value)?  signOut,}){
 final _that = this;
 switch (_that) {
 case _Init() when init != null:
 return init(_that);case _Listen() when listen != null:
 return listen(_that);case _SignInViaGoogle() when signInViaGoogle != null:
-return signInViaGoogle(_that);case _SignOut() when signOut != null:
+return signInViaGoogle(_that);case _SignInViaApple() when signInViaApple != null:
+return signInViaApple(_that);case _SignOut() when signOut != null:
 return signOut(_that);case _:
   return null;
 
@@ -128,12 +131,13 @@ return signOut(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  init,TResult Function()?  listen,TResult Function()?  signInViaGoogle,TResult Function()?  signOut,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  init,TResult Function()?  listen,TResult Function()?  signInViaGoogle,TResult Function()?  signInViaApple,TResult Function()?  signOut,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Init() when init != null:
 return init();case _Listen() when listen != null:
 return listen();case _SignInViaGoogle() when signInViaGoogle != null:
-return signInViaGoogle();case _SignOut() when signOut != null:
+return signInViaGoogle();case _SignInViaApple() when signInViaApple != null:
+return signInViaApple();case _SignOut() when signOut != null:
 return signOut();case _:
   return orElse();
 
@@ -152,12 +156,13 @@ return signOut();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  init,required TResult Function()  listen,required TResult Function()  signInViaGoogle,required TResult Function()  signOut,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  init,required TResult Function()  listen,required TResult Function()  signInViaGoogle,required TResult Function()  signInViaApple,required TResult Function()  signOut,}) {final _that = this;
 switch (_that) {
 case _Init():
 return init();case _Listen():
 return listen();case _SignInViaGoogle():
-return signInViaGoogle();case _SignOut():
+return signInViaGoogle();case _SignInViaApple():
+return signInViaApple();case _SignOut():
 return signOut();case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +180,13 @@ return signOut();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  init,TResult? Function()?  listen,TResult? Function()?  signInViaGoogle,TResult? Function()?  signOut,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  init,TResult? Function()?  listen,TResult? Function()?  signInViaGoogle,TResult? Function()?  signInViaApple,TResult? Function()?  signOut,}) {final _that = this;
 switch (_that) {
 case _Init() when init != null:
 return init();case _Listen() when listen != null:
 return listen();case _SignInViaGoogle() when signInViaGoogle != null:
-return signInViaGoogle();case _SignOut() when signOut != null:
+return signInViaGoogle();case _SignInViaApple() when signInViaApple != null:
+return signInViaApple();case _SignOut() when signOut != null:
 return signOut();case _:
   return null;
 
@@ -277,6 +283,38 @@ int get hashCode => runtimeType.hashCode;
 @override
 String toString() {
   return 'AuthEvent.signInViaGoogle()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _SignInViaApple implements AuthEvent {
+  const _SignInViaApple();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SignInViaApple);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AuthEvent.signInViaApple()';
 }
 
 

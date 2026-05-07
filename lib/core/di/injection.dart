@@ -14,6 +14,7 @@ import '../../features/onboard_survey/di/onboard_survery_injection.dart';
 import '../../features/user/di/user_injection.dart';
 import '../../features/user_chat/di/user_chat_injection.dart';
 import '../services/audio_service.dart';
+import '../services/crypto_service.dart';
 import '../services/firebase/firebase_auth_service.dart';
 import '../services/firebase/firebase_firestore_service.dart';
 import '../services/firebase/firebase_functions_service.dart';
@@ -45,6 +46,7 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => GoogleSignIn.instance);
   getIt.registerLazySingleton(() => NotificationTapProcessor());
   getIt.registerLazySingleton(() => ImageService());
+  getIt.registerLazySingleton(() => CryptoService());
   getIt.registerLazySingleton<Env>(() {
     const env = String.fromEnvironment('DARTENV');
     switch (env) {

@@ -109,6 +109,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752696702645:android:c898a9234e96944c4d30fc",
+        "android_client_info": {
+          "package_name": "com.hengell.synergyhub.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752696702645-7bc646mgsn0vfe37qvquvf5fh4gjuehv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWLNHfoSRMZwG5yy87fFL6jSbYQfOA8Fo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752696702645-7bc646mgsn0vfe37qvquvf5fh4gjuehv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "752696702645-jm17qql1056vih1oqqrd95f9qcu5nsmr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sinergyHub"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
