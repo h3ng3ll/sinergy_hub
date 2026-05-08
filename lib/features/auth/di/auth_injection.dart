@@ -13,7 +13,7 @@ import '../../chat/domain/services/i_presence_service.dart';
 import '../../user/domain/repositories/i_user_write_repository.dart';
 import '../data/repositories/auth_repository/firebase_auth_repository.dart';
 import '../domain/repostories/i_auth_repository.dart';
-import '../domain/use_cases/apple_sign_in_usecase.dart';
+import '../domain/use_cases/apple_sign_in_use_case.dart';
 import '../domain/use_cases/login_use_case.dart';
 import '../domain/use_cases/register_use_case.dart';
 import '../domain/use_cases/reload_use_case.dart';

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/repostories/i_auth_repository.dart';
-import '../../../domain/use_cases/apple_sign_in_usecase.dart';
+import '../../../domain/use_cases/apple_sign_in_use_case.dart';
 import '../../../domain/use_cases/sign_in_with_google_use_case.dart';
 
 part 'auth_event.dart';

@@ -39,6 +39,8 @@ sealed class UserData with _$UserData {
     lastSeen: DateTime.now(),
   );
 
+
+
   @override
   String toString() {
     return 'UserData(uid: $uid, name: $firstName $lastName, age: $age)';
