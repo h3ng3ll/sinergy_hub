@@ -35,7 +35,7 @@ class SkillInput extends StatelessWidget {
       hintText: 'Add your skill and press Enter',
       maxLength: 50,
       onFieldSubmitted: onFieldSubmitted,
-      textInputAction: TextInputAction.none,
+      textInputAction: TextInputAction.done,
       controller: controller,
     );
   }
