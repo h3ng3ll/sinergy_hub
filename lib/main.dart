@@ -46,9 +46,13 @@ void main() async {
 
   await getIt<Env>().init();
 
-  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
-    true,
-  );
+  if(!kIsWeb){
+    /// Firebase doesn't support web
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+      true,
+    );
+  }
+
 
   FlutterError.onError =
       (

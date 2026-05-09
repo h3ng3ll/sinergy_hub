@@ -33,6 +33,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/analytic.svg
   String get analytic => 'assets/icons/analytic.svg';
 
+  /// File path: assets/icons/apple.svg
+  String get apple => 'assets/icons/apple.svg';
+
   /// File path: assets/icons/archive.svg
   String get archive => 'assets/icons/archive.svg';
 
@@ -180,6 +183,7 @@ class $AssetsIconsGen {
     alertOutlined,
     analiticOutlined,
     analytic,
+    apple,
     archive,
     arrowLeftOutlined,
     arrowRightOutlined,

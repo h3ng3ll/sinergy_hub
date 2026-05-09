@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -323,7 +322,7 @@ class FirebaseAuthRepository extends IAuthRepository {
             ..addScope('email')
             ..addScope('name');
 
-      return await FirebaseAuth.instance.signInWithProvider(
+      return await _auth.signInWithProvider(
         provider,
       );
     } catch (e) {
@@ -366,7 +365,7 @@ class FirebaseAuthRepository extends IAuthRepository {
       //       rawNonce: rawNonce,
       //     );
 
-      final res = await FirebaseAuth.instance.signInWithCredential(
+      final res = await _auth.signInWithCredential(
         oauthCredentials,
       );
       return Left(

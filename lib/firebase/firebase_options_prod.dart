@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCTJ0tbudPwM7bGm-4aTm3W5rDXzWg-cD8',
-    appId: '1:758987089244:android:642251985425ad46878d99',
+    appId: '1:758987089244:android:1a33878b54f6b2f4878d99',
     messagingSenderId: '758987089244',
     projectId: 'sinergyhub-prod',
     storageBucket: 'sinergyhub-prod.firebasestorage.app',

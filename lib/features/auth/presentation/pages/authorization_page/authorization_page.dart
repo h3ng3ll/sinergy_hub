@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../core/di/injection.dart';
@@ -13,6 +16,7 @@ import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/services/google_sign_in_service/google_sign_in_service.dart';
 import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
+import '../../../../../gen/assets.gen.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import '../../bloc/auth_bloc/auth_bloc.dart';
 
@@ -102,19 +106,35 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                               ),
                             ),
                           ),
-                        ActionBtn(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 15.0,
-                            horizontal: 20.0,
-                          ),
-                          onPressed: onAuthWithApple,
-                          child: Text(
-                            'SIGN IN APPLE',
-                            style: textTheme.medium16.copyWith(
-                              color: colorScheme.onSecondary,
+                        if (!kIsWeb && Platform.isIOS)
+                          ActionBtn(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 15.0,
+                              horizontal: 20.0,
+                            ),
+                            onPressed: onAuthWithApple,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SvgPicture.asset(
+                                  Assets.icons.apple,
+                                  width: 20.0,
+                                  height: 20.0,
+                                  colorFilter: ColorFilter.mode(
+                                    colorScheme.onSecondary,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                                Gap(10.0),
+                                Text(
+                                  'SIGN IN WITH APPLE',
+                                  style: textTheme.medium16.copyWith(
+                                    color: colorScheme.onSecondary,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ),

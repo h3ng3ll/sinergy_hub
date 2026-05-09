@@ -16,7 +16,7 @@ abstract class Env {
     final info = await PackageInfo.fromPlatform();
 
     if (kDebugMode) {
-      print('APP ID: ${info.packageName}');
+      print('APP ID: ${info.data}${info.packageName}');
       print('APP NAME: ${info.appName}');
       print('Flavor: $appFlavor');
     }

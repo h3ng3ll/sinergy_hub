@@ -189,14 +189,17 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
                       key: _formKey,
                       child: HorizontalPadding(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           spacing: 20,
                           children: [
-                            BuildUserAvatar(
-                              width: 100.0,
-                              height: 100.0,
-                              onTap: onTapAvatar,
-                              url: userData?.avatarUrl,
-                              cacheImg: image,
+                            Center(
+                              child: BuildUserAvatar(
+                                width: 100.0,
+                                height: 100.0,
+                                onTap: onTapAvatar,
+                                url: userData?.avatarUrl,
+                                cacheImg: image,
+                              ),
                             ),
                             BuildGroupedInput(
                               title: 'FirstName',
