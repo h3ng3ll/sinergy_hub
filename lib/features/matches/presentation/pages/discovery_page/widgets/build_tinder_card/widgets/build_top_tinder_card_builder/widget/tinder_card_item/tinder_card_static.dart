@@ -48,9 +48,11 @@ class TinderCardStatic extends StatelessWidget {
             imgUrl: user.avatarUrl,
             colorOfSpecialization: specialization.colors.first,
           ),
-          TinderCardPersonalInfo(
-            specialization: specialization,
-            user: user,
+          Expanded(
+            child: TinderCardPersonalInfo(
+              specialization: specialization,
+              user: user,
+            ),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../resources/colors/app_color_scheme.dart';
 import '../utils/extensions/go_router_x.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -34,28 +35,34 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = AppColorScheme.of(context);
+    final iconColor = colorScheme.onPrimary;
+
     return AppBar(
       leadingWidth: leadingWidth,
       title: title,
       centerTitle: centerTitle,
       forceMaterialTransparency: forceMaterialTransparency ?? false,
       shadowColor: shadowColor,
+      iconTheme: IconThemeData(color: iconColor),
+      actionsIconTheme: IconThemeData(color: iconColor),
+      foregroundColor: iconColor,
 
-      leading: leading != null
-          ? null
-          : Padding(
-              padding: const EdgeInsets.only(
-                left: 8.0,
-              ),
-              child: Center(
-                child: leading ?? InkWell(
-                  onTap: context.goBack,
-                  child: Icon(
-                    Icons.arrow_back,
-                  ),
+      leading: Padding(
+        padding: const EdgeInsets.only(
+          left: 8.0,
+        ),
+        child: Center(
+          child: leading ??
+              InkWell(
+                onTap: context.goBack,
+                child: Icon(
+                  Icons.arrow_back,
+                  color: iconColor,
                 ),
               ),
-            ),
+        ),
+      ),
       actionsPadding: actionsPadding,
       backgroundColor: backgroundColor ?? Colors.transparent,
       toolbarHeight: height ?? 120,

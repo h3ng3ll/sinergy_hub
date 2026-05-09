@@ -13,7 +13,7 @@ class SurveyCard extends StatelessWidget {
   final String title;
   final String description;
   final bool isSelected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final Function(RenderBox) onLongPress;
 
   const SurveyCard({
@@ -31,46 +31,50 @@ class SurveyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
-    return TranslucentCardContainer(
-      onLongPress: () => onLongPress(
-        context.findRenderObject() as RenderBox,
-      ),
-      height: 90.0,
-      onTap: () => onTap(),
-      child: Row(
-        children: [
-          BuildIcon(
-            colors: colors,
-            icon: icon,
-            width: 50,
-            height: 50,
-          ),
-          Gap(20.0),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: textTheme.medium14.copyWith(
-                    color: colorScheme.onPrimary,
-                  ),
-                ),
-                Flexible(
-                  child: Text(
-                    description,
-                    maxLines: 3,
-                    style: textTheme.regular12.copyWith(
-                      color: colorScheme.secondary,
+    final isDisabled = onTap == null;
+    return Opacity(
+      opacity: isDisabled ? 0.4 : 1.0,
+      child: TranslucentCardContainer(
+        onLongPress: () => onLongPress(
+          context.findRenderObject() as RenderBox,
+        ),
+        height: 90.0,
+        onTap: onTap?.call,
+        child: Row(
+          children: [
+            BuildIcon(
+              colors: colors,
+              icon: icon,
+              width: 50,
+              height: 50,
+            ),
+            Gap(20.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: textTheme.medium14.copyWith(
+                      color: colorScheme.onPrimary,
                     ),
                   ),
-                ),
-              ],
+                  Flexible(
+                    child: Text(
+                      description,
+                      maxLines: 3,
+                      style: textTheme.regular12.copyWith(
+                        color: colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          if (isSelected) BuildSelectedCheck(),
-          if (!isSelected) Gap(50.0),
-        ],
+            if (isSelected) BuildSelectedCheck(),
+            if (!isSelected) Gap(50.0),
+          ],
+        ),
       ),
     );
   }

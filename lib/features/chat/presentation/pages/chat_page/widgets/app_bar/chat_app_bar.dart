@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../core/resources/colors/app_colors.dart';
+import '../../../../../../../core/utils/extensions/go_router_x.dart';
 import '../../../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../../user/domain/models/user_data/user_data.dart';
 import 'widgets/build_chat_user_info.dart';
@@ -40,6 +41,13 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
         forceMaterialTransparency: true,
         shadowColor: AppColors.black.value,
         leadingWidth: 50,
+        leading: InkWell(
+          onTap: context.goBack,
+          child: Icon(
+            Icons.arrow_back,
+            color: AppColors.black.value,
+          ),
+        ),
         actions: [
           Gap(50.0),
           Spacer(),
@@ -48,11 +56,6 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
             user: user,
           ),
           Spacer(),
-          // InkWell(
-          //   child: Icon(
-          //     Icons.more_vert,
-          //   ),
-          // ),
         ],
       ),
     );

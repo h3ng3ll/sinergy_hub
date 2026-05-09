@@ -170,6 +170,8 @@ class EditLookingForPage extends StatelessWidget {
                 >(
                   builder: (context, searchState) {
                     final specializations = searchState.specializations;
+                    final reachLimit =
+                        editState.selectedSpecializations.length >= 5;
 
                     return HorizontalPadding(
                       child: Column(
@@ -178,8 +180,7 @@ class EditLookingForPage extends StatelessWidget {
                           Center(
                             child: OnboardSurveyHeader(
                               title: 'Who are you looking for?',
-                              description:
-                                  'Select specializations you want to find',
+                              description: 'Select 1-5 specializations',
                             ),
                           ),
                           Gap(20.0),
@@ -208,10 +209,12 @@ class EditLookingForPage extends StatelessWidget {
                                   description: specialization.particulars.join(
                                     ', ',
                                   ),
-                                  onTap: () => _onToggleSpecialization(
-                                    context,
-                                    specialization.specialization,
-                                  ),
+                                  onTap: isSelected || !reachLimit
+                                      ? () => _onToggleSpecialization(
+                                          context,
+                                          specialization.specialization,
+                                        )
+                                      : null,
                                   onLongPress: (renderBox) {},
                                 );
                               },

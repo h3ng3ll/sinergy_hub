@@ -9,11 +9,15 @@ import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/utils/responsive_helper.dart';
+import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
+import '../../../../onboard_survey/domain/models/specializations/specializations.dart';
+import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
 import '../../../domain/usecases/find_match_chat_id_use_case.dart';
 import '../../../domain/usecases/get_match_by_id_use_case.dart';
 import '../../../domain/usecases/mark_as_notified_match_use_case.dart';
 import '../../bloc/match_result_bloc/match_result_bloc.dart';
+import '../discovery_page/widgets/build_has_match/widgets/build_match_avatar.dart';
 import 'widgets/animated_gradient_background.dart';
 
 class MatchResultPage extends StatefulWidget {
@@ -155,8 +159,8 @@ class _MatchResultPageState extends State<MatchResultPage> {
                                   _buildAvatarsRow(
                                     context,
                                     screenWidth,
-                                    match.user.avatarUrl ?? '',
-                                    state.user?.avatarUrl ?? '',
+                                    matchedUser: match.user,
+                                    currentUser: state.user,
                                   ),
                                   Gap(
                                     ResponsiveHelper.responsiveSpacing(
@@ -201,14 +205,16 @@ class _MatchResultPageState extends State<MatchResultPage> {
                                       24.0,
                                     ),
                                   ),
-                                  // Role Badges
+                                  // Role Badges (matched user on left, current user on right)
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Flexible(
                                         child: _buildRoleBadge(
-                                          match.user.profiler.role.name,
+                                          Specializations.get(
+                                            match.user.profiler.specialization,
+                                          ).name,
                                           screenWidth,
                                           colorScheme,
                                           textTheme,
@@ -233,7 +239,11 @@ class _MatchResultPageState extends State<MatchResultPage> {
                                       ),
                                       Flexible(
                                         child: _buildRoleBadge(
-                                          match.user.profiler.role.name,
+                                          state.user != null
+                                              ? Specializations.get(
+                                                  state.user!.profiler.specialization,
+                                                ).name
+                                              : '',
                                           screenWidth,
                                           colorScheme,
                                           textTheme,
@@ -292,10 +302,10 @@ class _MatchResultPageState extends State<MatchResultPage> {
 
   Widget _buildAvatarsRow(
     BuildContext context,
-    double screenWidth,
-    String currentUserAvatar,
-    String matchedUserAvatar,
-  ) {
+    double screenWidth, {
+    required UserData matchedUser,
+    required UserData? currentUser,
+  }) {
     final avatarSize = ResponsiveHelper.responsiveAvatarSize(
       screenWidth,
       110.0,
@@ -311,21 +321,18 @@ class _MatchResultPageState extends State<MatchResultPage> {
       32.0,
       maxSize: 48,
     );
-    final statusBadgeSize = ResponsiveHelper.responsiveIconSize(
-      screenWidth,
-      36.0,
-      maxSize: 52,
-    );
-    final statusIconSize = ResponsiveHelper.responsiveIconSize(
-      screenWidth,
-      18.0,
-      maxSize: 26,
-    );
     final stackGap = ResponsiveHelper.responsiveSpacing(
       screenWidth,
       100.0,
       maxSpacing: 140,
     );
+
+    final Specialization matchedSpecialization = Specializations.get(
+      matchedUser.profiler.specialization,
+    );
+    final Specialization? currentSpecialization = currentUser != null
+        ? Specializations.get(currentUser.profiler.specialization)
+        : null;
 
     return Stack(
       alignment: Alignment.center,
@@ -335,21 +342,18 @@ class _MatchResultPageState extends State<MatchResultPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildAvatar(
-              currentUserAvatar,
-              true,
-              avatarSize,
-              statusBadgeSize,
-              statusIconSize,
+            BuildMatchAvatar(
+              avatarUrl: matchedUser.avatarUrl,
+              specialization: matchedSpecialization,
+              size: avatarSize,
             ),
             Gap(stackGap),
-            _buildAvatar(
-              matchedUserAvatar,
-              false,
-              avatarSize,
-              statusBadgeSize,
-              statusIconSize,
-            ),
+            if (currentSpecialization != null)
+              BuildMatchAvatar(
+                avatarUrl: currentUser?.avatarUrl,
+                specialization: currentSpecialization,
+                size: avatarSize,
+              ),
           ],
         ),
         // Heart Icon in the middle
@@ -365,68 +369,6 @@ class _MatchResultPageState extends State<MatchResultPage> {
               Icons.favorite,
               color: AppColors.white.value,
               size: heartIconSize,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAvatar(
-    String avatarUrl,
-    bool isCurrentUser,
-    double avatarSize,
-    double statusBadgeSize,
-    double statusIconSize,
-  ) {
-    final borderWidth = ResponsiveHelper.responsiveSpacing(
-      avatarSize,
-      4.0,
-    );
-    final badgeBorderWidth = ResponsiveHelper.responsiveSpacing(
-      avatarSize,
-      3.0,
-    );
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          width: avatarSize,
-          height: avatarSize,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: AppColors.white.value,
-              width: borderWidth,
-            ),
-            image: avatarUrl.isNotEmpty
-                ? DecorationImage(
-                    image: NetworkImage(avatarUrl),
-                    fit: BoxFit.cover,
-                  )
-                : null,
-            color: avatarUrl.isEmpty ? AppColors.greyLight.value : null,
-          ),
-        ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: Container(
-            width: statusBadgeSize,
-            height: statusBadgeSize,
-            decoration: BoxDecoration(
-              color: isCurrentUser ? AppColors.statusGreen.value : AppColors.statusBlue.value,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.white.value,
-                width: badgeBorderWidth,
-              ),
-            ),
-            child: Icon(
-              isCurrentUser ? Icons.check : Icons.code,
-              color: Colors.white,
-              size: statusIconSize,
             ),
           ),
         ),

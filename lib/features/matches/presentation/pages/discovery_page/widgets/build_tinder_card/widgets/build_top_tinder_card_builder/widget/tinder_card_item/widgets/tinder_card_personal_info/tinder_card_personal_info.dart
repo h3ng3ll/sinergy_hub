@@ -66,33 +66,42 @@ class TinderCardPersonalInfo extends StatelessWidget {
           ],
         ),
 
-        HorizontalPadding(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'LOOKING FOR:'.toUpperCase(),
-                style: textTheme.regular12,
-              ),
-              Padding(
-                padding: EdgeInsetsGeometry.all(
-                  5.0,
+        Expanded(
+          child: HorizontalPadding(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'LOOKING FOR:'.toUpperCase(),
+                  style: textTheme.regular12,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                child: BuildSpecializationNames(
-                  searchingSpecializations:
-                      user.profiler.searchingSpecializations,
+                Padding(
+                  padding: EdgeInsetsGeometry.all(
+                    5.0,
+                  ),
+                  child: BuildSpecializationNames(
+                    searchingSpecializations:
+                        user.profiler.searchingSpecializations,
+                  ),
                 ),
-              ),
-              Text(
-                'About Me:',
-                style: textTheme.regular12,
-              ),
-              Text(
-                user.aboutMe?.toString() ??
-                    'No info . Know about user more by matched it',
-                style: textTheme.regular16,
-              ),
-            ],
+                Text(
+                  'About Me:',
+                  style: textTheme.regular12,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Expanded(
+                  child: Text(
+                    user.aboutMe?.toString() ??
+                        'No info . Know about user more by matched it',
+                    style: textTheme.regular16,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
 

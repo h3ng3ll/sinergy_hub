@@ -139,19 +139,17 @@ class CustomTextField extends StatelessWidget {
             return CupertinoButton(
               borderRadius: null,
               color: colorScheme.secondary,
-              // disabledColor: colorScheme.secondary,
               onPressed: buttonItem.onPressed,
               padding: const EdgeInsets.all(10.0),
               pressedOpacity: 0.7,
               child: SizedBox(
-                // width: 200.0,
                 child: Text(
                   CupertinoTextSelectionToolbarButton.getButtonLabel(
                     context,
                     buttonItem,
                   ),
                   style: textTheme.regular14.copyWith(
-                    color: colorScheme.secondary,
+                    color: AppColors.black.value,
                     wordSpacing: 2.0,
                   ),
                 ),

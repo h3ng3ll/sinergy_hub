@@ -13,7 +13,7 @@ import '../../../../../../onboard_survey/domain/models/specializations/specializ
 import '../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../build_tinder_card/widgets/build_tinder_status/widgets/icon_status/status/liked_status.dart';
-import '../../../../../../../core/widgets/build_user_avatar.dart';
+import 'widgets/build_match_avatar.dart';
 import 'widgets/build_send_msg_btn.dart';
 import 'widgets/keep_swiping_btn.dart';
 import 'widgets/specialization_container.dart';
@@ -35,6 +35,12 @@ class BuildHasMatch extends StatelessWidget {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
     final currentUser = context.watch<UserBloc>().state.userData!;
+    final currentUserSpecialization = Specializations.get(
+      currentUser.profiler.specialization,
+    );
+    final matchedUserSpecialization = Specializations.get(
+      matchedUser.profiler.specialization,
+    );
 
     return Center(
       child: SizedBox(
@@ -47,20 +53,18 @@ class BuildHasMatch extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 10.0,
               children: [
-                BuildUserAvatar(
-                  height: 120.0,
-                  width: 120.0,
-                  url: currentUser.avatarUrl,
+                BuildMatchAvatar(
+                  avatarUrl: matchedUser.avatarUrl,
+                  specialization: matchedUserSpecialization,
                 ),
                 LikedStatus(
                   color: AppColors.tartOrange.value,
                   width: 55.0,
                   height: 55.0,
                 ),
-                BuildUserAvatar(
-                  height: 120.0,
-                  width: 120.0,
-                  url: matchedUser.avatarUrl,
+                BuildMatchAvatar(
+                  avatarUrl: currentUser.avatarUrl,
+                  specialization: currentUserSpecialization,
                 ),
               ],
             ),
@@ -78,9 +82,7 @@ class BuildHasMatch extends StatelessWidget {
               children: [
                 Flexible(
                   child: SpecializationContainer(
-                    specialization: Specializations.get(
-                      currentUser.profiler.specialization,
-                    ),
+                    specialization: currentUserSpecialization,
                   ),
                 ),
                 Text(
@@ -91,9 +93,7 @@ class BuildHasMatch extends StatelessWidget {
                 ),
                 Flexible(
                   child: SpecializationContainer(
-                    specialization: Specializations.get(
-                      matchedUser.profiler.specialization,
-                    ),
+                    specialization: matchedUserSpecialization,
                   ),
                 ),
               ],
