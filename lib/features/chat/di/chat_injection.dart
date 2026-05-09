@@ -139,7 +139,7 @@ void initChatFeature(GetIt getIt) {
       getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
     ),
   );
-  getIt.registerLazySingleton<ChatsFilterBloc>(
+  getIt.registerFactory<ChatsFilterBloc>(
     () => ChatsFilterBloc(
       searchChatsUseCase: getIt<SearchChatsUseCase>(),
       toggleArchiveChatUseCase: getIt<ToggleArchiveChatUseCase>(),
