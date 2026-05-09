@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/services/permission_requester_service.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/btn/custom_text_btn.dart';
@@ -23,14 +24,12 @@ import '../../../../home/presentation/edit_profile_page/bloc/edit_profile_page_b
 import '../../../../home/presentation/edit_profile_page/widgets/build_grouped_input.dart';
 import '../../../../home/presentation/edit_profile_page/widgets/build_skills_section/build_skills_section.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
-import '../../../../user/domain/usecases/listen_current_user_data_use_case.dart';
 import '../../../../user/domain/usecases/update_user_usecase.dart';
 import '../../../../user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import '../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../../user/presentation/bloc/user_update_cubit/user_update_cubit.dart';
 import '../../../domain/models/skill/skill.dart';
 import '../../../domain/models/user_profiler/user_profiler.dart';
-import '../../../domain/use_cases/get_skills_use_case.dart';
 import '../../bloc/onboard_bloc/onboard_bloc.dart';
 
 class OnboardAboutYouPage extends StatefulWidget {
@@ -96,12 +95,13 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
     );
   }
 
-  void onNext() {
+  Future<void> onNext() async {
     if (!_formKey.currentState!.validate()) return;
     final skills = _editProfilePageBloc.state.skills;
     final userData = context.read<UserBloc>().state.userData;
+    final onboardBloc = context.read<OnboardBloc>();
 
-    _userUpdateCubit.update(
+    await _userUpdateCubit.update(
       userData != null
           ? userData.copyWith(
               firstName: _firstNameController.text,
@@ -120,10 +120,15 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
       image,
     );
 
-    context.read<OnboardBloc>().add(
+    onboardBloc.add(
       OnboardEvent.update(
         toldAboutYourself: true,
       ),
+    );
+
+    if (!mounted) return;
+    OnboardSurveyPageRoute().go(
+      context,
     );
   }
 

@@ -7,11 +7,8 @@ class UserDataMapper {
     QuerySnapshot snap,
   ) {
     return snap.docs
-        .map(
-          (e) => UserData.fromJson(
-            e.data() as Map<String, dynamic>,
-          ),
-        )
+        .map(fromDocSnapshot)
+        .whereType<UserData>()
         .toList();
   }
 
@@ -20,7 +17,9 @@ class UserDataMapper {
   ) {
     if (!snapshot.exists || snapshot.data() == null) return null;
     return UserData.fromJson(
-      snapshot.data() as Map<String, dynamic>,
+      Map<String, dynamic>.from(
+        snapshot.data() as Map<String, dynamic>,
+      )..['uid'] = snapshot.id,
     );
   }
 }

@@ -210,10 +210,14 @@ class UserFirebaseRepository
         .userDocument(
           uid,
         )
-        .update(
+        .set(
           {
+            'uid': uid,
             'profiler': userProfiler.toJson(),
           },
+          SetOptions(
+            merge: true,
+          ),
         );
   }
 

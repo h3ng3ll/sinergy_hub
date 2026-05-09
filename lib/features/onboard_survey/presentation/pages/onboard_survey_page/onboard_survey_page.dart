@@ -189,7 +189,8 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
   ) {}
 
   Future<void> _onCompleteGoal() async {
-    _onboardSurveyPageCubit.saveResults(
+    final onboardBloc = context.read<OnboardBloc>();
+    await _onboardSurveyPageCubit.saveResults(
       userProfiler: UserProfiler(
         specialization: _selectedSpecialization!.specialization,
         role: _selectedRole!,
@@ -198,16 +199,15 @@ class _OnboardSurveyPageState extends State<OnboardSurveyPage>
         skills: [],
       ),
     );
-    context.read<OnboardBloc>().add(
+    onboardBloc.add(
       OnboardEvent.update(
         completeSpecialization: true,
       ),
     );
-    if (mounted) {
-      OnboardAboutYouPageRoute().go(
-        context,
-      );
-    }
+    if (!mounted) return;
+    DiscoveryPageRoute().go(
+      context,
+    );
   }
 
   void _skipForNow() {}

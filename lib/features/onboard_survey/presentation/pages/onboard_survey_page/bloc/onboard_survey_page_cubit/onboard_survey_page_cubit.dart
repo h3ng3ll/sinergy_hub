@@ -46,7 +46,7 @@ class OnboardSurveyPageCubit extends Cubit<OnboardSurveyPageState> {
     );
   }
 
-  void saveResults({
+  Future<void> saveResults({
     required UserProfiler userProfiler,
   }) async {
     try {
