@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../resources/colors/app_colors.dart';
@@ -8,12 +9,14 @@ class SkillInput extends StatelessWidget {
   final TextEditingController controller;
   final Function(String) onFieldSubmitted;
   final FocusNode focusNode;
+  final void Function(PointerDownEvent)? onTapOutside;
 
   const SkillInput({
     super.key,
     required this.controller,
     required this.onFieldSubmitted,
     required this.focusNode,
+    this.onTapOutside,
   });
 
   @override
@@ -21,7 +24,6 @@ class SkillInput extends StatelessWidget {
     final textTheme = AppTextTheme.of(context);
     return CustomTextField(
       focusNode: focusNode,
-      // fillColor: AppColors.white.value,
       style: textTheme.bold14.copyWith(
         color: AppColors.black.value.withValues(
           alpha: 0.8,
@@ -35,6 +37,7 @@ class SkillInput extends StatelessWidget {
       hintText: 'Add your skill and press Enter',
       maxLength: 50,
       onFieldSubmitted: onFieldSubmitted,
+      onTapOutside: onTapOutside,
       textInputAction: TextInputAction.done,
       controller: controller,
     );

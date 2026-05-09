@@ -23,7 +23,7 @@ class CustomBottomBarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
-    return InkWell(
+    return GestureDetector(
       onTap: onTapItem,
       child: Column(
         children: [

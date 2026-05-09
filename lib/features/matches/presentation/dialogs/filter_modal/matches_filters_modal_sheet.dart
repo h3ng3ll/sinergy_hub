@@ -104,70 +104,74 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final maxHeight = MediaQuery.of(context).size.height * 0.9;
+    final mediaQuery = MediaQuery.of(context);
+    final keyboardHeight = mediaQuery.viewInsets.bottom;
+    // Anchor the sheet's top edge at 10% of the screen height regardless
+    // of the keyboard. Bottom padding equals the keyboard inset so the
+    // content (incl. skill input) sits above it; the sheet's content area
+    // shrinks from the bottom only — the top doesn't move.
+    final sheetHeight = mediaQuery.size.height * 0.9;
     final skills = context.watch<SkillsBloc>().state.skills;
     final textTheme = AppTextTheme.of(context);
 
     return Container(
-      height: maxHeight,
+      height: sheetHeight,
       decoration: BoxDecoration(
         color: AppColors.pinkLace.value,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20.0),
         ),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FilterHeader(
-            onClose: _onClose,
-          ),
-          Flexible(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ExperienceLevelSection(
-                    selectedLevel: _options.experience,
-                    onLevelSelected: _onExperienceLevelSelected,
-                  ),
-                  const SizedBox(height: 24.0),
-                  SpecializationSection(
-                    selectedSpecialization: _options.specialization,
-                    onSpecializationSelected: _onSpecializationSelected,
-                  ),
-                  const SizedBox(height: 24.0),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: keyboardHeight),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FilterHeader(
+              onClose: _onClose,
+            ),
+            Flexible(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ExperienceLevelSection(
+                      selectedLevel: _options.experience,
+                      onLevelSelected: _onExperienceLevelSelected,
+                    ),
+                    const SizedBox(height: 24.0),
+                    SpecializationSection(
+                      selectedSpecialization: _options.specialization,
+                      onSpecializationSelected: _onSpecializationSelected,
+                    ),
+                    const SizedBox(height: 24.0),
 
-                  Text(
-                    'Skills',
-                    style: textTheme.medium18,
-                  ),
-                  const SizedBox(height: 12.0),
-                  BuildSkillsSection(
-                    onRemoveExistingSkill: _onDeleteSkill,
-                    onSubmitSkill: _onAddSkill,
-                    skills: skills,
-                    activeSkills: _options.skills,
-                    isVisibleInput: !_options.isExceeded,
-                  ),
-                  // SkillsSection(
-                  //   skills: _options.skills,
-                  //   onSkillToggled: _onSkillToggled,
-                  //   selectedSkills: _options.skills,
-                  // ),
-                  const SizedBox(height: 32.0),
-                  _ApplyButton(
-                    onPressed: _onApply,
-                    hasActiveFilters: _options.isApplied,
-                  ),
-                ],
+                    Text(
+                      'Skills',
+                      style: textTheme.medium18,
+                    ),
+                    const SizedBox(height: 12.0),
+                    BuildSkillsSection(
+                      onRemoveExistingSkill: _onDeleteSkill,
+                      onSubmitSkill: _onAddSkill,
+                      skills: skills,
+                      activeSkills: _options.skills,
+                      isVisibleInput: !_options.isExceeded,
+                    ),
+                    const SizedBox(height: 32.0),
+                    _ApplyButton(
+                      onPressed: _onApply,
+                      hasActiveFilters: _options.isApplied,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
 
-          const SizedBox(height: 32.0),
-        ],
+            const SizedBox(height: 32.0),
+          ],
+        ),
       ),
     );
   }
@@ -184,7 +188,6 @@ class _ApplyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Center(
       child: PrimaryBtn(
         onPressed: hasActiveFilters ? onPressed : null,

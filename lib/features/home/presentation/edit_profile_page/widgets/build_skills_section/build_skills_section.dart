@@ -222,6 +222,11 @@ class _BuildSkillsSectionState extends State<BuildSkillsSection>
               child: SkillInput(
                 controller: _controller,
                 focusNode: _focusNode,
+                // Suppress the default unfocus-on-tap-outside behavior.
+                // Without this, tapping a suggestion in the overlay would
+                // unfocus the field, which fires _onFocusChanged and
+                // removes the overlay before the InkWell.onTap runs.
+                onTapOutside: (_) {},
                 onFieldSubmitted: (_) {
                   final text = _controller.text.trim();
                   final isSuggestion = widget.skills.any(
