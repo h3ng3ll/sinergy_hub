@@ -1,4 +1,4 @@
-// dart format width=80
+git st// dart format width=80
 
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
@@ -77,6 +77,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/engine_outlined.svg
   String get engineOutlined => 'assets/icons/engine_outlined.svg';
+
+  /// File path: assets/icons/google.svg
+  String get google => 'assets/icons/google.svg';
 
   /// File path: assets/icons/group.svg
   String get group => 'assets/icons/group.svg';
@@ -198,6 +201,7 @@ class $AssetsIconsGen {
     dashboardOutlined,
     engine,
     engineOutlined,
+    google,
     group,
     handshakeOutlined,
     herb,

@@ -99,14 +99,30 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                               horizontal: 20.0,
                             ),
                             onPressed: onAuthWithGoogle,
-                            child: Text(
-                              'SIGN IN WITH GOOGLE',
-                              style: textTheme.medium16.copyWith(
-                                color: colorScheme.onSecondary,
-                              ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SvgPicture.asset(
+                                  Assets.icons.google,
+                                  width: 20.0,
+                                  height: 20.0,
+                                  colorFilter: ColorFilter.mode(
+                                    colorScheme.onSecondary,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                                Gap(10.0),
+                                Text(
+                                  'SIGN IN WITH GOOGLE',
+                                  style: textTheme.medium16.copyWith(
+                                    color: colorScheme.onSecondary,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        if (!kIsWeb && Platform.isIOS)
+                        if (!kIsWeb && Platform.isIOS) ...[
+                          Gap(20.0),
                           ActionBtn(
                             padding: EdgeInsets.symmetric(
                               vertical: 15.0,
@@ -135,6 +151,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                               ],
                             ),
                           ),
+                        ],
                       ],
                     ),
                   ),

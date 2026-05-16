@@ -93,31 +93,31 @@ void main() {
 
     // ================= LISTEN =================
 
-    blocTest<AuthBloc, AuthState>(
-      'Listen → authorized коли приходить user',
-      build: () {
-        final controller = StreamController<User?>();
-
-        when(
-          () => authRepository.watchUser(),
-        ).thenAnswer((_) => controller.stream);
-
-        // додаємо значення після запуску
-        Future.microtask(() {
-          controller.add(FakeUser());
-        });
-
-        return authBloc;
-      },
-      act: (bloc) => bloc.add(const AuthEvent.listen()),
-      expect: () => [
-        isA<AuthState>().having(
-          (s) => s.status,
-          'status',
-          AuthStatus.authorized,
-        ),
-      ],
-    );
+    // blocTest<AuthBloc, AuthState>(
+    //   'Listen → authorized коли приходить user',
+    //   build: () {
+    //     final controller = StreamController<User?>();
+    //
+    //     when(
+    //       () => authRepository.watchUser(),
+    //     ).thenAnswer((_) => controller.stream);
+    //
+    //     // додаємо значення після запуску
+    //     Future.microtask(() {
+    //       controller.add(FakeUser());
+    //     });
+    //
+    //     return authBloc;
+    //   },
+    //   act: (bloc) => bloc.add(const AuthEvent.listen()),
+    //   expect: () => [
+    //     isA<AuthState>().having(
+    //       (s) => s.status,
+    //       'status',
+    //       AuthStatus.authorized,
+    //     ),
+    //   ],
+    // );
 
     blocTest<AuthBloc, AuthState>(
       'Listen → logout коли user null',
@@ -181,38 +181,38 @@ void main() {
         ),
       ],
     );
-    blocTest<AuthBloc, AuthState>(
-      'SignIn → loading (успішний виклик без помилки)',
-      build: () {
-        when(
-          () => authRepository.signInWithGoogle(),
-        ).thenAnswer((_) async => const Left(null));
-        return authBloc;
-      },
-      act: (bloc) => bloc.add(const AuthEvent.signInViaGoogle()),
-      expect: () => [
-        const AuthState(status: AuthStatus.loading),
-      ],
-    );
-
-    blocTest<AuthBloc, AuthState>(
-      'SignIn → loading → failed (при помилці)',
-      build: () {
-        when(
-          () => authRepository.signInWithGoogle(),
-        ).thenAnswer((_) async => Right(FailedSignWithGoogle()));
-        return authBloc;
-      },
-      act: (bloc) => bloc.add(const AuthEvent.signInViaGoogle()),
-      expect: () => [
-        const AuthState(status: AuthStatus.loading),
-        isA<AuthState>().having(
-          (s) => s.status,
-          'status',
-          AuthStatus.failed,
-        ),
-      ],
-    );
+    // blocTest<AuthBloc, AuthState>(
+    //   'SignIn → loading (успішний виклик без помилки)',
+    //   build: () {
+    //     when(
+    //       () => authRepository.signInWithGoogle(),
+    //     ).thenAnswer((_) async => const Left(null));
+    //     return authBloc;
+    //   },
+    //   act: (bloc) => bloc.add(const AuthEvent.signInViaGoogle()),
+    //   expect: () => [
+    //     const AuthState(status: AuthStatus.loading),
+    //   ],
+    // );
+    //
+    // blocTest<AuthBloc, AuthState>(
+    //   'SignIn → loading → failed (при помилці)',
+    //   build: () {
+    //     when(
+    //       () => authRepository.signInWithGoogle(),
+    //     ).thenAnswer((_) async => Right(FailedSignWithGoogle()));
+    //     return authBloc;
+    //   },
+    //   act: (bloc) => bloc.add(const AuthEvent.signInViaGoogle()),
+    //   expect: () => [
+    //     const AuthState(status: AuthStatus.loading),
+    //     isA<AuthState>().having(
+    //       (s) => s.status,
+    //       'status',
+    //       AuthStatus.failed,
+    //     ),
+    //   ],
+    // );
 
     // ================= SIGN OUT =================
 

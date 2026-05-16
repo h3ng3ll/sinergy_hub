@@ -182,6 +182,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           supportedLocales: AppLocale.supportedLocales,
           locale: AppLocale.startLocale,
           routerConfig: _router,
+          debugShowCheckedModeBanner: false,
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
