@@ -12,7 +12,7 @@ Future<void> main() async {
           Map<String, Object?>? args,
         ]) async {
           final dir =
-              Platform.environment['SCREENSHOT_DIR'] ?? 'assets/screenshots';
+              Platform.environment['SCREENSHOT_DIR'] ?? 'outputs/screenshots';
           final outDir = Directory(dir);
           if (!outDir.existsSync()) {
             outDir.createSync(recursive: true);

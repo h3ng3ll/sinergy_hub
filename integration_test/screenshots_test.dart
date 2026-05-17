@@ -16,6 +16,8 @@ import 'package:sinergy_hub/core/resources/translations/app_localizations.dart';
 import 'package:sinergy_hub/core/routes/init_router/init_router.dart';
 import 'package:sinergy_hub/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chat_bloc/chat_bloc.dart';
+import 'package:sinergy_hub/features/matches/domain/models/matches_filter/matches_filter.dart';
+import 'package:sinergy_hub/features/matches/presentation/dialogs/filter_modal/matches_filters_modal_sheet.dart';
 import 'package:sinergy_hub/features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
 import 'package:sinergy_hub/features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import 'package:sinergy_hub/features/user/presentation/bloc/user_bloc/user_bloc.dart';
@@ -214,8 +216,35 @@ void main() {
     await _safeGo(tester, '/discovery', live: true);
     await _captureWithTimeout(binding, tester, '05_discovery_page', live: true);
 
+    // ---- DISCOVERY: filter modal sheet (overlay on top of discovery) ----
+    final BuildContext? rootCtx =
+        _router.routerDelegate.navigatorKey.currentContext;
+    if (rootCtx != null) {
+      unawaited(
+        MatchesFiltersModalSheet.show(
+          rootCtx,
+          initialOptions: const MatchesFilter(),
+        ),
+      );
+      await _settleLive(tester);
+      await _captureWithTimeout(
+        binding,
+        tester,
+        '06_discovery_filter_modal',
+        live: true,
+      );
+      // Dismiss the sheet so it does not block subsequent navigation.
+      if (rootCtx.mounted) {
+        Navigator.of(rootCtx, rootNavigator: true).pop();
+      }
+      await _settleLive(tester);
+    } else {
+      debugPrint('skipped 06_discovery_filter_modal: no root context');
+      _failedCaptures.add('06_discovery_filter_modal');
+    }
+
     await _safeGo(tester, '/matches', live: true);
-    await _captureWithTimeout(binding, tester, '06_matches_page', live: true);
+    await _captureWithTimeout(binding, tester, '07_matches_page', live: true);
 
     await _safeGo(
       tester,
@@ -225,12 +254,12 @@ void main() {
     await _captureWithTimeout(
       binding,
       tester,
-      '07_match_result_page',
+      '08_match_result_page',
       live: true,
     );
 
     await _safeGo(tester, '/matches/chat-hero-partner', live: true);
-    await _captureWithTimeout(binding, tester, '08_chat_page', live: true);
+    await _captureWithTimeout(binding, tester, '09_chat_page', live: true);
 
     await _safeGo(
       tester,
@@ -240,18 +269,18 @@ void main() {
     await _captureWithTimeout(
       binding,
       tester,
-      '09_user_profile_page',
+      '10_user_profile_page',
       live: true,
     );
 
     await _safeGo(tester, '/profile', live: true);
-    await _captureWithTimeout(binding, tester, '10_profile_tab', live: true);
+    await _captureWithTimeout(binding, tester, '11_profile_tab', live: true);
 
     await _safeGo(tester, '/edit-profile-page', live: true);
     await _captureWithTimeout(
       binding,
       tester,
-      '11_edit_profile_page',
+      '12_edit_profile_page',
       live: true,
     );
 
@@ -259,7 +288,7 @@ void main() {
     await _captureWithTimeout(
       binding,
       tester,
-      '12_edit_looking_for_page',
+      '13_edit_looking_for_page',
       live: true,
     );
 
@@ -267,7 +296,7 @@ void main() {
     await _captureWithTimeout(
       binding,
       tester,
-      '13_notification_page',
+      '14_notification_page',
       live: true,
     );
 
@@ -281,15 +310,15 @@ void main() {
     await _captureWithTimeout(
       binding,
       tester,
-      '14_onboard_about_you_page',
+      '15_onboard_about_you_page',
       live: true,
     );
 
-await _safeGo(tester, '/onboard', live: true);
+    await _safeGo(tester, '/onboard', live: true);
     await _captureWithTimeout(
       binding,
       tester,
-      '15_onboard_survey_page',
+      '16_onboard_survey_page',
       live: true,
     );
 
