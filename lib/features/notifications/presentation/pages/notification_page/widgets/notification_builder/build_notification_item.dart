@@ -31,17 +31,19 @@ class BuildNotificationItem extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                notification.title,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  notification.title,
                   style: textTheme.medium14,
-              ),
-              Text(
-                notification.description,
-              ),
-            ],
+                ),
+                Text(
+                  notification.description,
+                ),
+              ],
+            ),
           ),
         ],
       ),

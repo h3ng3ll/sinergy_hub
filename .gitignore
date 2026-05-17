@@ -54,3 +54,4 @@ lib/firebase_options.dart
 /ios/Runner/GoogleService-Info.plist
 /instructions/*
 .claude
+outputs

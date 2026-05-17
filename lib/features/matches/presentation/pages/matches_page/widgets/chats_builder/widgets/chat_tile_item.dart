@@ -87,28 +87,31 @@ class ChatTileItem extends StatelessWidget {
             ),
           ),
           Gap(10.0),
-          Column(
-            spacing: 10.0,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                otherUser?.name ?? 'Unknown',
-                style: textTheme.bold16.copyWith(
-                  color: colorScheme.onPrimary,
+          Expanded(
+            child: Column(
+              spacing: 10.0,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  otherUser?.name ?? 'Unknown',
+                  style: textTheme.bold16.copyWith(
+                    color: colorScheme.onPrimary,
+                  ),
                 ),
-              ),
-              Text(
-                chat.lastMessage,
-                maxLines: 1,
-                style: textTheme.regular12.copyWith(
-                  color: colorScheme.onPrimary,
+                Text(
+                  chat.lastMessage,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.regular12.copyWith(
+                    color: colorScheme.onPrimary,
+                  ),
                 ),
-              ),
-              if (specialization != null)
-                SpecializationInfoBar(
-                  specialization: specialization,
-                ),
-            ],
+                if (specialization != null)
+                  SpecializationInfoBar(
+                    specialization: specialization,
+                  ),
+              ],
+            ),
           ),
         ],
       ),

@@ -1,8 +1,8 @@
-# synergy_hub
+# Sinergy Hub
 
-A new Flutter project.
+A partner founder by matching application.
 
-## Getting Started
+## Configuration 
 
 0. generate files
    flutter pub get
@@ -15,9 +15,9 @@ CLIENT_ID  - can be extracted from firebase.json
 ```.dotenv
 DEV_SERVER_CLIENT_ID=752*****645-7bc646mg*************.apps.googleusercontent.com
 PROD_SERVER_CLIENT_ID=75*****244-931inn0kjb*************.apps.googleusercontent.com
-DEV_FIREBASE_WEB_PUSH_CERTIFICATE=BCKEAwpmH6SLxg7xEc
-PROD_FIREBASE_WEB_PUSH_CERTIFICATE=BKk1AF0K_36wf
-FIREBASE_PROJECT_WEB_URL=synergyh
+DEV_FIREBASE_WEB_PUSH_CERTIFICATE=BCKEAwpmH6SLxg7xEc****
+PROD_FIREBASE_WEB_PUSH_CERTIFICATE=BKk1AF0K_36wf****
+FIREBASE_PROJECT_WEB_URL=synergyh***
 ```
 
 3. setup firebase
@@ -52,3 +52,13 @@ android/app/src/production|development/
 flutter run --flavor=development --dart -define=DARTENV=development
 flutter run --flavor=prod --dart-define=DARTENV=prod
 
+
+# Screenshots
+```shell
+
+flutter test integration_test/screenshots_test.dart \
+    -d 3D771733-DEE8-48D1-BC37-1A0A409E0C0D \
+    --flavor=development \
+    --dart-define=DARTENV=development
+    
+```
