@@ -30,7 +30,7 @@ class ExperienceStage extends StatelessWidget {
         children: [
           Center(
             child: OnboardSurveyHeader(
-              title: 'What is your specific specialization? ',
+              title: 'What is your experience level?',
               description: 'Help us find your perfect co-founder match',
             ),
           ),

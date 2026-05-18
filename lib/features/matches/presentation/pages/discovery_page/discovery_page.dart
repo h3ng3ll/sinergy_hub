@@ -32,12 +32,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
 
   @override
   void initState() {
-    _tinderCardCubit = TinderCardCubit(
-      size: Size(
-        300.0,
-        590.0,
-      ),
-    );
+    _tinderCardCubit = getIt<TinderCardCubit>();
     _peopleDataBloc =
         PeopleDataBloc(
           lookForMatchesUseCase: getIt<LookForMatchesUseCase>(),

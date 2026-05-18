@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart' show Size;
 import 'package:get_it/get_it.dart';
 
 import '../../../core/services/firebase/firebase_firestore_service.dart';
@@ -15,6 +16,7 @@ import '../domain/usecases/get_match_by_id_use_case.dart';
 import '../domain/usecases/look_for_matches_use_case.dart';
 import '../domain/usecases/listen_two_way_match_use_case.dart';
 import '../domain/usecases/mark_as_notified_match_use_case.dart';
+import '../presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 
 void initMatchingFeature(GetIt getIt) {
   getIt.registerLazySingleton<IMatchesRepository>(
@@ -72,6 +74,11 @@ void initMatchingFeature(GetIt getIt) {
     () => FindMatchChatIdUseCase(
       authRepository: getIt<IAuthRepository>(),
       chatRepository: getIt<IChatRepository>(),
+    ),
+  );
+  getIt.registerFactory<TinderCardCubit>(
+    () => TinderCardCubit(
+      size: const Size(300.0, 590.0),
     ),
   );
 }

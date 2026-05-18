@@ -3,6 +3,7 @@
 // real credentials.
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/widgets.dart' show Size;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/core/di/injection.dart';
@@ -61,6 +62,7 @@ import 'package:sinergy_hub/features/matches/domain/usecases/get_excluded_matche
 import 'package:sinergy_hub/features/matches/domain/usecases/get_match_by_id_use_case.dart';
 import 'package:sinergy_hub/features/matches/domain/usecases/listen_two_way_match_use_case.dart';
 import 'package:sinergy_hub/features/matches/domain/usecases/look_for_matches_use_case.dart';
+import 'package:sinergy_hub/features/matches/presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import 'package:sinergy_hub/features/matches/domain/usecases/mark_as_notified_match_use_case.dart';
 import 'package:sinergy_hub/features/notifications/domain/repositories/i_notification_config_repository.dart';
 import 'package:sinergy_hub/features/notifications/domain/repositories/i_notification_repository.dart';
@@ -368,6 +370,14 @@ Future<void> setupTestDI() async {
       authRepository: getIt<IAuthRepository>(),
       chatRepository: getIt<IChatRepository>(),
     ),
+  );
+  // Cubits — registered as factory to match production. The discovery
+  // screen owns the lifecycle (initState → getIt<TinderCardCubit>(),
+  // dispose → close()), so a fresh instance per lookup is required.
+  // Tests grab the live instance from the rendered widget tree via
+  // context.read<TinderCardCubit>(), not from DI.
+  getIt.registerFactory<TinderCardCubit>(
+    () => TinderCardCubit(size: const Size(300.0, 590.0)),
   );
 
   // Chat use cases

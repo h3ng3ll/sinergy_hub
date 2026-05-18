@@ -17,7 +17,9 @@ import 'package:sinergy_hub/core/routes/init_router/init_router.dart';
 import 'package:sinergy_hub/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import 'package:sinergy_hub/features/matches/domain/models/matches_filter/matches_filter.dart';
+import 'package:sinergy_hub/features/matches/presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import 'package:sinergy_hub/features/matches/presentation/dialogs/filter_modal/matches_filters_modal_sheet.dart';
+import 'package:sinergy_hub/features/matches/presentation/pages/discovery_page/widgets/build_tinder_card/build_tinder_card.dart';
 import 'package:sinergy_hub/features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
 import 'package:sinergy_hub/features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import 'package:sinergy_hub/features/user/presentation/bloc/user_bloc/user_bloc.dart';
@@ -216,6 +218,68 @@ void main() {
     await _safeGo(tester, '/discovery', live: true);
     await _captureWithTimeout(binding, tester, '05_discovery_page', live: true);
 
+    // ---- DISCOVERY: like / dislike decision overlays ----
+    // No real gestures — we pull the live TinderCardCubit from the
+    // rendered discovery subtree and feed it synthetic drag deltas
+    // directly. The cubit's `_getStatus` treats `position.dx > +75`
+    // as liked and `position.dx < -75` as reject, so two `onPanUpdate`
+    // calls with the right delta are enough to flip its state and
+    // render the LikedStatus / RejectStatus overlay. `onPanEnd` at the
+    // end calls `_reset()` and clears position/rotation/status.
+    final Finder tinderHostFinder = find.byType(BuildTinderCard);
+    TinderCardCubit? liveTinderCubit;
+    if (tinderHostFinder.evaluate().isNotEmpty) {
+      final BuildContext tinderCtx = tester.element(tinderHostFinder.first);
+      try {
+        liveTinderCubit = tinderCtx.read<TinderCardCubit>();
+      } catch (e) {
+        debugPrint('failed to read TinderCardCubit from tree: $e');
+      }
+    }
+    if (liveTinderCubit != null && !liveTinderCubit.isClosed) {
+      // Liked: push position.dx well past +75.
+      liveTinderCubit.onPanUpdate(
+        DragUpdateDetails(
+          globalPosition: const Offset(150.0, 0.0),
+          delta: const Offset(150.0, 0.0),
+        ),
+      );
+      await _settleLive(tester);
+      await _captureWithTimeout(
+        binding,
+        tester,
+        '06_discovery_liked',
+        live: true,
+      );
+
+      // Reject: current position is (+150, 0); a delta of (-300, 0)
+      // lands at (-150, 0) which is comfortably past the -75 threshold.
+      liveTinderCubit.onPanUpdate(
+        DragUpdateDetails(
+          globalPosition: const Offset(-150.0, 0.0),
+          delta: const Offset(-300.0, 0.0),
+        ),
+      );
+      await _settleLive(tester);
+      await _captureWithTimeout(
+        binding,
+        tester,
+        '07_discovery_disliked',
+        live: true,
+      );
+
+      // Reset position/rotation/status before navigating away.
+      await liveTinderCubit.onPanEnd(
+        DragEndDetails(velocity: Velocity.zero),
+      );
+      await _settleLive(tester);
+    } else {
+      debugPrint(
+        'skipped 06/07 discovery decisions: cubit not found or closed',
+      );
+      _failedCaptures.addAll(['06_discovery_liked', '07_discovery_disliked']);
+    }
+
     // ---- DISCOVERY: filter modal sheet (overlay on top of discovery) ----
     final BuildContext? rootCtx =
         _router.routerDelegate.navigatorKey.currentContext;
@@ -230,7 +294,7 @@ void main() {
       await _captureWithTimeout(
         binding,
         tester,
-        '06_discovery_filter_modal',
+        '08_discovery_filter_modal',
         live: true,
       );
       // Dismiss the sheet so it does not block subsequent navigation.
@@ -239,12 +303,36 @@ void main() {
       }
       await _settleLive(tester);
     } else {
-      debugPrint('skipped 06_discovery_filter_modal: no root context');
-      _failedCaptures.add('06_discovery_filter_modal');
+      debugPrint('skipped 08_discovery_filter_modal: no root context');
+      _failedCaptures.add('08_discovery_filter_modal');
+    }
+
+    // ---- DISCOVERY: home drawer (slide-in from leading edge) ----
+    final Finder scaffoldFinder = find.byType(Scaffold).first;
+    if (scaffoldFinder.evaluate().isNotEmpty) {
+      final ScaffoldState scaffoldState = tester.state<ScaffoldState>(
+        scaffoldFinder,
+      );
+      scaffoldState.openDrawer();
+      await _settleLive(tester);
+      await _captureWithTimeout(
+        binding,
+        tester,
+        '09_home_drawer',
+        live: true,
+      );
+      // Close the drawer so it does not block subsequent navigation.
+      if (scaffoldState.isDrawerOpen) {
+        Navigator.of(scaffoldState.context).pop();
+      }
+      await _settleLive(tester);
+    } else {
+      debugPrint('skipped 09_home_drawer: no Scaffold found');
+      _failedCaptures.add('09_home_drawer');
     }
 
     await _safeGo(tester, '/matches', live: true);
-    await _captureWithTimeout(binding, tester, '07_matches_page', live: true);
+    await _captureWithTimeout(binding, tester, '10_matches_page', live: true);
 
     await _safeGo(
       tester,
@@ -254,12 +342,12 @@ void main() {
     await _captureWithTimeout(
       binding,
       tester,
-      '08_match_result_page',
+      '11_match_result_page',
       live: true,
     );
 
     await _safeGo(tester, '/matches/chat-hero-partner', live: true);
-    await _captureWithTimeout(binding, tester, '09_chat_page', live: true);
+    await _captureWithTimeout(binding, tester, '12_chat_page', live: true);
 
     await _safeGo(
       tester,
@@ -269,18 +357,18 @@ void main() {
     await _captureWithTimeout(
       binding,
       tester,
-      '10_user_profile_page',
+      '13_user_profile_page',
       live: true,
     );
 
     await _safeGo(tester, '/profile', live: true);
-    await _captureWithTimeout(binding, tester, '11_profile_tab', live: true);
+    await _captureWithTimeout(binding, tester, '14_profile_tab', live: true);
 
     await _safeGo(tester, '/edit-profile-page', live: true);
     await _captureWithTimeout(
       binding,
       tester,
-      '12_edit_profile_page',
+      '15_edit_profile_page',
       live: true,
     );
 
@@ -288,7 +376,7 @@ void main() {
     await _captureWithTimeout(
       binding,
       tester,
-      '13_edit_looking_for_page',
+      '16_edit_looking_for_page',
       live: true,
     );
 
@@ -296,7 +384,7 @@ void main() {
     await _captureWithTimeout(
       binding,
       tester,
-      '14_notification_page',
+      '17_notification_page',
       live: true,
     );
 
@@ -310,17 +398,78 @@ void main() {
     await _captureWithTimeout(
       binding,
       tester,
-      '15_onboard_about_you_page',
+      '18_onboard_about_you_page',
       live: true,
     );
 
     await _safeGo(tester, '/onboard', live: true);
+    // Stage 1/4 — RoleStage (PageView page 0)
     await _captureWithTimeout(
       binding,
       tester,
-      '16_onboard_survey_page',
+      '19_onboard_survey_role',
       live: true,
     );
+
+    // ---- ONBOARDING SURVEY: advance through the remaining 3 stages ----
+    // The survey is a 4-step PageView inside OnboardSurveyPage with
+    // NeverScrollableScrollPhysics, advanced normally via `onNextStep`
+    // (which also shows a 5s overlay). For screenshots we jump the
+    // PageController directly to each subsequent page; `onPageChanged`
+    // still fires and updates the stepper, so the captured UI matches
+    // what the user sees on each step.
+    final Finder pageViewFinder = find.byType(PageView);
+    if (pageViewFinder.evaluate().isNotEmpty) {
+      final PageView pageView = tester.widget<PageView>(pageViewFinder);
+      final PageController? pageController = pageView.controller;
+      if (pageController != null && pageController.hasClients) {
+        // Stage 2/4 — SpecializationStage
+        pageController.jumpToPage(1);
+        await _settleLive(tester);
+        await _captureWithTimeout(
+          binding,
+          tester,
+          '20_onboard_survey_specialization',
+          live: true,
+        );
+
+        // Stage 3/4 — ExperienceStage
+        pageController.jumpToPage(2);
+        await _settleLive(tester);
+        await _captureWithTimeout(
+          binding,
+          tester,
+          '21_onboard_survey_experience',
+          live: true,
+        );
+
+        // Stage 4/4 — GoalStage
+        pageController.jumpToPage(3);
+        await _settleLive(tester);
+        await _captureWithTimeout(
+          binding,
+          tester,
+          '22_onboard_survey_goal',
+          live: true,
+        );
+      } else {
+        debugPrint(
+          'skipped onboard survey extra stages: PageController has no clients',
+        );
+        _failedCaptures.addAll([
+          '20_onboard_survey_specialization',
+          '21_onboard_survey_experience',
+          '22_onboard_survey_goal',
+        ]);
+      }
+    } else {
+      debugPrint('skipped onboard survey extra stages: no PageView found');
+      _failedCaptures.addAll([
+        '20_onboard_survey_specialization',
+        '21_onboard_survey_experience',
+        '22_onboard_survey_goal',
+      ]);
+    }
 
     // Restore for any subsequent step.
     testUserBloc.setLoaded();
