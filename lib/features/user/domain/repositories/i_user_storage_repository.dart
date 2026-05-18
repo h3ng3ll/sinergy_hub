@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import '../models/user_data/user_data.dart';
-
 abstract class IUserStorageRepository {
   Future<String> updateAvatar({
     required String uid,
@@ -12,7 +10,7 @@ abstract class IUserStorageRepository {
     required String path,
   });
 
-  Future<String> getAvatarUrl(
-    UserData user,
-  );
+  Future<String> getAvatarUrl({
+    required String avatarPath,
+  });
 }

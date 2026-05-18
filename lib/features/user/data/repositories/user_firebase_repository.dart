@@ -222,9 +222,11 @@ class UserFirebaseRepository
   }
 
   @override
-  Future<String> getAvatarUrl(UserData user) {
+  Future<String> getAvatarUrl({
+    required String avatarPath,
+  }) {
     return _firebaseStorageService.getDownloadUrl(
-      user.avatarPath!,
+      avatarPath,
     );
   }
 }

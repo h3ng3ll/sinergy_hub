@@ -35,30 +35,27 @@ class UpdateUserUseCase {
 
       userData = userData.copyWith(uid: uid);
 
-      String? oldAvatarPath = userData.avatarPath;
-      String? newAvatarPath;
+      final String? oldAvatarPath = userData.avatarPath;
 
-      /// 1. Upload first
+      /// 1. If a new image was explicitly provided, upload it and refresh
+      /// avatarPath + avatarUrl. Otherwise, keep avatarPath/avatarUrl that
+      /// already live on the UserData model.
       if (img != null) {
         img = await _imageService.compressToTargetSize(
           img,
         );
-        newAvatarPath = await _userStorageRepository.updateAvatar(
+        final newAvatarPath = await _userStorageRepository.updateAvatar(
           uid: userData.uid,
           avatar: img,
         );
-
-        userData = userData.copyWith(
+        final newAvatarUrl = await _userStorageRepository.getAvatarUrl(
           avatarPath: newAvatarPath,
         );
+        userData = userData.copyWith(
+          avatarPath: newAvatarPath,
+          avatarUrl: newAvatarUrl,
+        );
       }
-      final url = await _userStorageRepository.getAvatarUrl(
-        userData,
-      );
-
-      userData = userData.copyWith(
-        avatarUrl: url,
-      );
 
       /// 2. Update DB
       await _userWriteRepository.update(
@@ -66,7 +63,7 @@ class UpdateUserUseCase {
       );
 
       /// 3. Delete old avatar AFTER success
-      if (oldAvatarPath != null && newAvatarPath != null) {
+      if (img != null && oldAvatarPath != null) {
         await _userStorageRepository.deleteAvatar(
           path: oldAvatarPath,
         );

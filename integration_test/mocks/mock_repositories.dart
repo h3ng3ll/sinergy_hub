@@ -164,7 +164,7 @@ class MockUserStorageRepository implements IUserStorageRepository {
   Future<void> deleteAvatar({required String path}) async {}
 
   @override
-  Future<String> getAvatarUrl(UserData user) async => '';
+  Future<String> getAvatarUrl({required String avatarPath}) async => '';
 }
 
 class MockUserAuthRepository implements IUserAuthRepository {
