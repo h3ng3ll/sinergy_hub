@@ -18,6 +18,7 @@ import '../domain/usecases/listen_chat_messages_use_case.dart';
 import '../domain/usecases/listen_chat_updates_use_case.dart';
 import '../domain/usecases/listen_chats_use_case.dart';
 import '../domain/usecases/get_last_messages_use_case.dart';
+import '../domain/usecases/open_chat_use_case.dart';
 import '../domain/usecases/search_chats_use_case.dart';
 import '../domain/usecases/send_message_use_case.dart';
 import '../domain/usecases/toggle_archive_chat_use_case.dart';
@@ -125,18 +126,23 @@ void initChatFeature(GetIt getIt) {
       chatRepository: getIt<IChatRepository>(),
     ),
   );
+  getIt.registerLazySingleton<OpenChatUseCase>(
+    () => OpenChatUseCase(
+      getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
+      getUsersUseCase: getIt<GetUsersUseCase>(),
+      getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
+    ),
+  );
 
   /// Bloc
   getIt.registerFactory<ChatPageBloc>(
     () => ChatPageBloc(
       sendMessageUseCase: getIt<SendMessageUseCase>(),
-      getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
+      openChatUseCase: getIt<OpenChatUseCase>(),
       listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
-      getUsersUseCase: getIt<GetUsersUseCase>(),
       getLastMessageUseCase: getIt<ListenLastMessagesUseCase>(),
       updateTypingInfoUseCase: getIt<UpdateTypingInfoUseCase>(),
       listenChatByIdUseCase: getIt<ListenChatByIdUseCase>(),
-      getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
     ),
   );
   getIt.registerFactory<ChatsFilterBloc>(

@@ -1,19 +1,20 @@
 import 'dart:async';
 
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:sinergy_hub/features/chat/domain/failures/chat_validation_failure.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_config/chat_config.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_message/chat_message.dart';
-import 'package:sinergy_hub/features/chat/domain/usecases/get_chat_by_id_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/models/chat_page_data/chat_page_data.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/get_last_messages_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/listen_chat_by_id_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/open_chat_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/update_typing_info_use_case.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chat_page_bloc/chat_page_bloc.dart';
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
-import 'package:sinergy_hub/features/user/domain/usecases/get_current_user_data_use_case.dart';
-import 'package:sinergy_hub/features/user/domain/usecases/get_users_use_case.dart';
 import 'package:sinergy_hub/features/user/domain/usecases/listen_user_data_use_case.dart';
 
 class MockSendMessageUseCase extends Mock implements SendMessageUseCase {}
@@ -23,27 +24,20 @@ class MockListenLastMessagesUseCase extends Mock
 
 class MockListenChatByIdUseCase extends Mock implements ListenChatByIdUseCase {}
 
-class MockGetUsersUseCase extends Mock implements GetUsersUseCase {}
-
 class MockUpdateTypingInfoUseCase extends Mock
     implements UpdateTypingInfoUseCase {}
 
-class MockGetChatByIdUseCase extends Mock implements GetChatByIdUseCase {}
+class MockOpenChatUseCase extends Mock implements OpenChatUseCase {}
 
 class MockListenUserDataUseCase extends Mock implements ListenUserDataUseCase {}
-
-class MockGetCurrentUserDataUseCase extends Mock
-    implements GetCurrentUserDataUseCase {}
 
 void main() {
   late MockSendMessageUseCase sendMessageUseCase;
   late MockListenLastMessagesUseCase listenLastMessagesUseCase;
   late MockListenChatByIdUseCase listenChatByIdUseCase;
-  late MockGetUsersUseCase getUsersUseCase;
   late MockUpdateTypingInfoUseCase updateTypingInfoUseCase;
-  late MockGetChatByIdUseCase getChatByIdUseCase;
+  late MockOpenChatUseCase openChatUseCase;
   late MockListenUserDataUseCase listenUserDataUseCase;
-  late MockGetCurrentUserDataUseCase getCurrentUserDataUseCase;
 
   late StreamController<List<ChatMessage>> messagesController;
   late StreamController<Chat> chatController;
@@ -64,40 +58,37 @@ void main() {
     config: ChatConfig(),
   );
 
+  final chatPageData = ChatPageData(
+    chat: chat,
+    users: [currentUser, otherUser],
+    currentUser: currentUser,
+    peerUid: otherUid,
+  );
+
   ChatPageBloc buildBloc() => ChatPageBloc(
     sendMessageUseCase: sendMessageUseCase,
     getLastMessageUseCase: listenLastMessagesUseCase,
     listenChatByIdUseCase: listenChatByIdUseCase,
-    getUsersUseCase: getUsersUseCase,
+    openChatUseCase: openChatUseCase,
     updateTypingInfoUseCase: updateTypingInfoUseCase,
-    getChatByIdUseCase: getChatByIdUseCase,
     listenUserDataUseCase: listenUserDataUseCase,
-    getCurrentUserDataUseCase: getCurrentUserDataUseCase,
   );
 
   setUp(() {
     sendMessageUseCase = MockSendMessageUseCase();
     listenLastMessagesUseCase = MockListenLastMessagesUseCase();
     listenChatByIdUseCase = MockListenChatByIdUseCase();
-    getUsersUseCase = MockGetUsersUseCase();
     updateTypingInfoUseCase = MockUpdateTypingInfoUseCase();
-    getChatByIdUseCase = MockGetChatByIdUseCase();
+    openChatUseCase = MockOpenChatUseCase();
     listenUserDataUseCase = MockListenUserDataUseCase();
-    getCurrentUserDataUseCase = MockGetCurrentUserDataUseCase();
 
     messagesController = StreamController<List<ChatMessage>>.broadcast();
     chatController = StreamController<Chat>.broadcast();
     userDataController = StreamController<UserData?>.broadcast();
 
     when(
-      () => getChatByIdUseCase.call(chatId: any(named: 'chatId')),
-    ).thenAnswer((_) async => chat);
-    when(
-      () => getUsersUseCase.call(ids: any(named: 'ids')),
-    ).thenAnswer((_) async => [currentUser, otherUser]);
-    when(
-      () => getCurrentUserDataUseCase.call(),
-    ).thenAnswer((_) async => currentUser);
+      () => openChatUseCase.call(chatId: any(named: 'chatId')),
+    ).thenAnswer((_) async => Left(chatPageData));
     when(
       () => listenLastMessagesUseCase.call(chatId: any(named: 'chatId')),
     ).thenAnswer((_) => messagesController.stream);
@@ -146,6 +137,39 @@ void main() {
         expect(messagesController.hasListener, isFalse);
         expect(chatController.hasListener, isFalse);
         expect(userDataController.hasListener, isFalse);
+      },
+    );
+
+    test(
+      'emits failed state and skips subscriptions when use case returns ChatValidationFailure',
+      () async {
+        when(
+          () => openChatUseCase.call(chatId: any(named: 'chatId')),
+        ).thenAnswer(
+          (_) async => Right(
+            const ChatValidationFailure('no peer'),
+          ),
+        );
+
+        final bloc = buildBloc();
+
+        bloc.add(const ChatPageEvent.init(chatId: chatId));
+
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return bloc.state.status != ChatPageStatus.failed;
+        }).timeout(const Duration(seconds: 2));
+
+        expect(bloc.state.status, ChatPageStatus.failed);
+        expect(bloc.state.errorMessage, 'no peer');
+        expect(bloc.state.chat, isNull);
+        expect(bloc.state.userData, isNull);
+        expect(bloc.state.users, isEmpty);
+        expect(messagesController.hasListener, isFalse);
+        expect(chatController.hasListener, isFalse);
+        expect(userDataController.hasListener, isFalse);
+
+        await bloc.close();
       },
     );
 

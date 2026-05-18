@@ -144,6 +144,16 @@ class _ChatPageState extends State<ChatPage> {
             if (chatPageState.isLoading) {
               return LoadingDataWidget();
             }
+            if (chatPageState.isFailed) {
+              return Scaffold(
+                appBar: AppBar(),
+                body: Center(
+                  child: Text(
+                    chatPageState.errorMessage,
+                  ),
+                ),
+              );
+            }
             final Chat chat = chatPageState.chat!;
 
             /// Todo: refactor for grouped chats

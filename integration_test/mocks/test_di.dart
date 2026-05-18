@@ -37,6 +37,7 @@ import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_message_rep
 import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_repository.dart';
 import 'package:sinergy_hub/features/chat/domain/services/i_presence_service.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/get_chat_by_id_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/open_chat_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/get_chat_by_participants_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/get_chat_config_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/get_last_messages_use_case.dart';
@@ -527,16 +528,21 @@ Future<void> setupTestDI() async {
       authRepository: getIt<IAuthRepository>(),
     ),
   );
+  getIt.registerLazySingleton<OpenChatUseCase>(
+    () => OpenChatUseCase(
+      getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
+      getUsersUseCase: getIt<GetUsersUseCase>(),
+      getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
+    ),
+  );
   getIt.registerLazySingleton<ChatPageBloc>(
     () => ChatPageBloc(
       sendMessageUseCase: getIt<SendMessageUseCase>(),
-      getChatByIdUseCase: getIt<GetChatByIdUseCase>(),
+      openChatUseCase: getIt<OpenChatUseCase>(),
       listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
-      getUsersUseCase: getIt<GetUsersUseCase>(),
       getLastMessageUseCase: getIt<ListenLastMessagesUseCase>(),
       updateTypingInfoUseCase: getIt<UpdateTypingInfoUseCase>(),
       listenChatByIdUseCase: getIt<ListenChatByIdUseCase>(),
-      getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
     ),
   );
   getIt.registerFactory<ChatsFilterBloc>(
