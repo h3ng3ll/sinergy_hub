@@ -123,6 +123,9 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     _Subscribe event,
     Emitter<ChatPageState> emit,
   ) async {
+    await _lastMessageSubscription?.cancel();
+    await _updateChatSubscription?.cancel();
+    await _userDataSubscription?.cancel();
     _lastMessageSubscription = _getLastMessagesUseCase
         .call(
           chatId: state.chatId,
@@ -176,8 +179,14 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   ) async {
     try {
       final chatId = event.chatId;
+      await _lastMessageSubscription?.cancel();
+      await _updateChatSubscription?.cancel();
+      await _userDataSubscription?.cancel();
+      _lastMessageSubscription = null;
+      _updateChatSubscription = null;
+      _userDataSubscription = null;
       emit(
-        state.copyWith(
+        ChatPageState(
           chatId: chatId,
           status: ChatPageStatus.loading,
         ),

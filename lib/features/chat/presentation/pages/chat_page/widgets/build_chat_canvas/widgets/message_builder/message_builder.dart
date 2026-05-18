@@ -89,13 +89,19 @@ class _MessageBuilderState extends State<MessageBuilder> {
               },
               indexedItemBuilder: (context, message, index) {
                 final isSentByCurUser = message.sentUid == uid;
+                final UserData? sender = isSentByCurUser
+                    ? curUser
+                    : state.users
+                          .where(
+                            (e) => e.uid == message.sentUid,
+                          )
+                          .firstOrNull;
+                if (sender == null) {
+                  return const SizedBox.shrink();
+                }
                 return BuildMessage(
                   message: message,
-                  user: isSentByCurUser
-                      ? curUser
-                      : state.users.firstWhere(
-                          (e) => e.uid == message.sentUid,
-                        ),
+                  user: sender,
                   isSentByCurUser: isSentByCurUser,
                   onTapUrl: widget.onTapUrl,
                   onTapEmail: widget.onTapEmail,

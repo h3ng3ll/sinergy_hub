@@ -69,7 +69,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
-    // _chatPageBloc.close();
+    _chatPageBloc.close();
     _textEditingController.dispose();
     super.dispose();
   }
