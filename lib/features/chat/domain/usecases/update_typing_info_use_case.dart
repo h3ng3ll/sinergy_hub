@@ -1,4 +1,8 @@
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/models/failures.dart';
 import '../../../auth/domain/repostories/i_auth_repository.dart';
+import '../failures/typing_status_failure.dart';
 import '../repositories/i_chat_repository.dart';
 
 class UpdateTypingInfoUseCase {
@@ -11,15 +15,22 @@ class UpdateTypingInfoUseCase {
   }) : _chatRepository = chatRepository,
        _authRepository = authRepository;
 
-  Future<void> call({
+  Future<Either<void, Failure>> call({
     required String chatId,
     required bool status,
   }) async {
-    final uid = await _authRepository.requireUserId();
-    await _chatRepository.updateTypeInfo(
-      isTyping: status,
-      uid: uid,
-      chatId: chatId,
-    );
+    try {
+      final uid = await _authRepository.requireUserId();
+      await _chatRepository.updateTypeInfo(
+        isTyping: status,
+        uid: uid,
+        chatId: chatId,
+      );
+      return Left(null);
+    } catch (_) {
+      return Right(
+        const TypingStatusFailure(),
+      );
+    }
   }
 }

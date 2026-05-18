@@ -248,67 +248,29 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     );
   }
 
-  void _startTyping(_StartTyping event, emit) async {
-    try {
-      emit(
-        state.copyWith(
-          status: ChatPageStatus.sending,
-        ),
-      );
+  Future<void> _setTypingStatus({required bool isTyping}) async {
+    final chat = state.chat;
+    if (chat == null) return;
+    await _updateTypingInfoUseCase.call(
+      chatId: chat.chatId,
+      status: isTyping,
+    );
+  }
 
-      await _updateTypingInfoUseCase.call(
-        chatId: state.chat!.chatId,
-        status: true,
-      );
-      emit(
-        state.copyWith(
-          status: ChatPageStatus.sent,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          errorMessage: e.toString(),
-          status: ChatPageStatus.failed,
-        ),
-      );
-    }
+  void _startTyping(_StartTyping event, emit) async {
+    await _setTypingStatus(isTyping: true);
   }
 
   void _endTyping(_EndTyping event, emit) async {
-    try {
-      emit(
-        state.copyWith(
-          status: ChatPageStatus.sending,
-        ),
-      );
-      await _updateTypingInfoUseCase.call(
-        chatId: state.chat!.chatId,
-        status: false,
-      );
-      emit(
-        state.copyWith(
-          status: ChatPageStatus.sent,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          errorMessage: e.toString(),
-          status: ChatPageStatus.failed,
-        ),
-      );
-    }
+    await _setTypingStatus(isTyping: false);
   }
 
   @override
-  Future<void> close() {
-    _updateChatSubscription?.cancel();
-    _lastMessageSubscription?.cancel();
-    _userDataSubscription?.cancel();
-    add(
-      ChatPageEvent.endTyping(),
-    );
+  Future<void> close() async {
+    await _updateChatSubscription?.cancel();
+    await _lastMessageSubscription?.cancel();
+    await _userDataSubscription?.cancel();
+    await _setTypingStatus(isTyping: false);
     return super.close();
   }
 }

@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/features/chat/domain/failures/chat_validation_failure.dart';
+import 'package:sinergy_hub/features/chat/domain/failures/typing_status_failure.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_config/chat_config.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_message/chat_message.dart';
@@ -103,7 +104,7 @@ void main() {
         chatId: any(named: 'chatId'),
         status: any(named: 'status'),
       ),
-    ).thenAnswer((_) async {});
+    ).thenAnswer((_) async => Left(null));
   });
 
   tearDown(() async {
@@ -231,6 +232,136 @@ void main() {
         expect(newMessagesController.hasListener, isFalse);
         expect(newChatController.hasListener, isFalse);
         expect(newUserDataController.hasListener, isFalse);
+      },
+    );
+  });
+
+  group('ChatPageBloc typing presence', () {
+    test(
+      'typing events do not flip status to sending/sent',
+      () async {
+        final bloc = buildBloc();
+
+        bloc.add(const ChatPageEvent.init(chatId: chatId));
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return bloc.state.status != ChatPageStatus.initial;
+        }).timeout(const Duration(seconds: 2));
+
+        final statusesSeen = <ChatPageStatus>[];
+        final sub = bloc.stream.listen((s) => statusesSeen.add(s.status));
+
+        bloc.add(const ChatPageEvent.startTyping());
+        bloc.add(const ChatPageEvent.endTyping());
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+
+        expect(
+          statusesSeen,
+          isNot(contains(ChatPageStatus.sending)),
+          reason: 'typing must not put chat into a loading/sending state',
+        );
+        expect(bloc.state.status, ChatPageStatus.initial);
+
+        verify(
+          () => updateTypingInfoUseCase.call(
+            chatId: chatId,
+            status: true,
+          ),
+        ).called(1);
+        verify(
+          () => updateTypingInfoUseCase.call(
+            chatId: chatId,
+            status: false,
+          ),
+        ).called(1);
+
+        await sub.cancel();
+        await bloc.close();
+      },
+    );
+
+    test(
+      'bloc.close() notifies firestore that the user stopped typing',
+      () async {
+        final bloc = buildBloc();
+
+        bloc.add(const ChatPageEvent.init(chatId: chatId));
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return bloc.state.status != ChatPageStatus.initial;
+        }).timeout(const Duration(seconds: 2));
+
+        clearInteractions(updateTypingInfoUseCase);
+
+        await bloc.close();
+
+        verify(
+          () => updateTypingInfoUseCase.call(
+            chatId: chatId,
+            status: false,
+          ),
+        ).called(1);
+      },
+    );
+
+    test(
+      'bloc.close() is safe when chat failed to load (no chat in state)',
+      () async {
+        when(
+          () => openChatUseCase.call(chatId: any(named: 'chatId')),
+        ).thenAnswer(
+          (_) async => Right(
+            const ChatValidationFailure('no peer'),
+          ),
+        );
+
+        final bloc = buildBloc();
+        bloc.add(const ChatPageEvent.init(chatId: chatId));
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return bloc.state.status != ChatPageStatus.failed;
+        }).timeout(const Duration(seconds: 2));
+
+        await bloc.close();
+
+        verifyNever(
+          () => updateTypingInfoUseCase.call(
+            chatId: any(named: 'chatId'),
+            status: any(named: 'status'),
+          ),
+        );
+      },
+    );
+
+    test(
+      'typing failure from use case does not change chat status',
+      () async {
+        final bloc = buildBloc();
+
+        bloc.add(const ChatPageEvent.init(chatId: chatId));
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return bloc.state.status != ChatPageStatus.initial;
+        }).timeout(const Duration(seconds: 2));
+
+        when(
+          () => updateTypingInfoUseCase.call(
+            chatId: any(named: 'chatId'),
+            status: any(named: 'status'),
+          ),
+        ).thenAnswer(
+          (_) async => Right(
+            const TypingStatusFailure(),
+          ),
+        );
+
+        bloc.add(const ChatPageEvent.startTyping());
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+
+        expect(bloc.state.status, ChatPageStatus.initial);
+        expect(bloc.state.errorMessage, isEmpty);
+
+        await bloc.close();
       },
     );
   });
