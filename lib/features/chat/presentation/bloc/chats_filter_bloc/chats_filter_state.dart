@@ -50,6 +50,8 @@ sealed class ChatsFilterState with _$ChatsFilterState {
     @Default(ChatsFilterStatus.loading) ChatsFilterStatus status,
     @Default(ChatPgState()) ChatPgState chatsState,
     @Default({}) Map<String, bool> onlineStatuses,
+    @Default(<String, StreamSubscription<UserData?>>{})
+    Map<String, StreamSubscription<UserData?>> peerSubs,
     @Default(EChatFilter.all) EChatFilter filter,
     @Default('') String query,
     @Default('') String uid,

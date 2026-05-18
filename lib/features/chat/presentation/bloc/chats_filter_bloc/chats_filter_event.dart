@@ -20,4 +20,10 @@ sealed class ChatsFilterEvent with _$ChatsFilterEvent {
 
   const factory ChatsFilterEvent.listenChatsChanges() = _ListenChatsChanges;
   const factory ChatsFilterEvent.init() = _Init;
+
+  const factory ChatsFilterEvent.updateUserOnline({
+    required UserData user,
+  }) = _UpdateUserOnline;
+
+  const factory ChatsFilterEvent.syncPeerSubs() = _SyncPeerSubs;
 }

@@ -24,7 +24,7 @@ sealed class UserData with _$UserData {
     String? aboutMe,
     required UserProfiler profiler,
     @TimestampConverter() required DateTime createdAt,
-    @Default(false) isOnline,
+    @Default(false) bool isOnline,
     @TimestampConverter() required DateTime lastSeen,
   }) = _UserData;
 

@@ -152,7 +152,7 @@ void initChatFeature(GetIt getIt) {
       toggleFavoriteChatUseCase: getIt<ToggleFavoriteChatUseCase>(),
       listenChatUpdatesUseCase: getIt<ListenChatUpdatesUseCase>(),
       getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
-      getUserDataUseCase: getIt<GetUserDataUseCase>(),
+      listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
     ),
   );
 }

@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../core/utils/extensions/bloc_ext.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
-import '../../../../user/domain/usecases/get_user_data_use_case.dart';
+import '../../../../user/domain/usecases/listen_user_data_use_case.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/chat_pg_state.dart/chat_pg_state.dart';
 import '../../../domain/models/e_chat_filter.dart';
@@ -25,7 +27,7 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
   final ToggleFavoriteChatUseCase _toggleFavoriteChatUseCase;
   final ListenChatUpdatesUseCase _listenChatUpdatesUseCase;
   final GetCurrentUserDataUseCase _getCurrentUserDataUseCase;
-  final GetUserDataUseCase _getUserDataUseCase;
+  final ListenUserDataUseCase _listenUserDataUseCase;
 
   ChatsFilterBloc({
     required SearchChatsUseCase searchChatsUseCase,
@@ -33,13 +35,13 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     required ToggleFavoriteChatUseCase toggleFavoriteChatUseCase,
     required ListenChatUpdatesUseCase listenChatUpdatesUseCase,
     required GetCurrentUserDataUseCase getCurrentUserDataUseCase,
-    required GetUserDataUseCase getUserDataUseCase,
+    required ListenUserDataUseCase listenUserDataUseCase,
   }) : _searchChatsUseCase = searchChatsUseCase,
        _toggleArchiveChatUseCase = toggleArchiveChatUseCase,
        _listenChatUpdatesUseCase = listenChatUpdatesUseCase,
        _toggleFavoriteChatUseCase = toggleFavoriteChatUseCase,
        _getCurrentUserDataUseCase = getCurrentUserDataUseCase,
-       _getUserDataUseCase = getUserDataUseCase,
+       _listenUserDataUseCase = listenUserDataUseCase,
        super(const ChatsFilterState()) {
     on<_ApplyFilter>(_applyFilter);
     on<_Search>(
@@ -54,32 +56,74 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     on<_ToggleFavorite>(_toggleFavorite);
     on<_ListenChatsChanges>(_listenChatsChanges);
     on<_Init>(_init);
+    on<_UpdateUserOnline>(_updateUserOnline);
+    on<_SyncPeerSubs>(_onSyncPeerSubs);
   }
 
-  Future<Map<String, bool>> _fillOnline(
-    List<Chat> chats,
-    Map<String, bool> online,
-  ) async {
-    final lastMessage = chats.map(
-      (Chat e) => e.lastMessageSentBy,
-    );
-    Map<String, bool> onlineStatuses = {...online};
+  void _onSyncPeerSubs(
+    _SyncPeerSubs event,
+    Emitter<ChatsFilterState> emit,
+  ) => _syncPeerSubs(emit);
 
-    for (final uid in lastMessage) {
-      if (online.containsKey(uid)) continue;
-      final UserData? user = await _getUserDataUseCase.call(
-        id: uid,
-      );
-      onlineStatuses.addEntries(
-        {
-          MapEntry(
-            uid,
-            user?.isOnline ?? false,
-          ),
-        },
+  Set<String> _peerUidsOf(List<Chat> chats) {
+    final currentUid = state.uid;
+    final result = <String>{};
+    for (final chat in chats) {
+      for (final p in chat.participants) {
+        if (p.isEmpty || p == currentUid) continue;
+        result.add(p);
+      }
+    }
+    return result;
+  }
+
+  void _syncPeerSubs(Emitter<ChatsFilterState> emit) {
+    final wanted = _peerUidsOf(state.chatsState.chats);
+    final current = state.peerSubs;
+
+    final next = <String, StreamSubscription<UserData?>>{};
+    for (final entry in current.entries) {
+      if (wanted.contains(entry.key)) {
+        next[entry.key] = entry.value;
+      } else {
+        entry.value.cancel();
+      }
+    }
+
+    var changed = next.length != current.length;
+    for (final uid in wanted) {
+      if (next.containsKey(uid)) continue;
+      next[uid] = _listenUserDataUseCase.call(uid).listen((user) {
+        if (user == null) return;
+        add(
+          ChatsFilterEvent.updateUserOnline(user: user),
+        );
+      });
+      changed = true;
+    }
+
+    if (changed) {
+      emit(
+        state.copyWith(peerSubs: next),
       );
     }
-    return onlineStatuses;
+  }
+
+  void _updateUserOnline(
+    _UpdateUserOnline event,
+    Emitter<ChatsFilterState> emit,
+  ) {
+    final uid = event.user.uid;
+    final bool isOnline = event.user.isOnline == true;
+    final current = state.onlineStatuses[uid];
+    if (current == isOnline) return;
+    final updated = <String, bool>{
+      ...state.onlineStatuses,
+      uid: isOnline,
+    };
+    emit(
+      state.copyWith(onlineStatuses: updated),
+    );
   }
 
   void _applyFilter(
@@ -98,18 +142,14 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
         query: state.query,
         filter: event.filter,
       );
-      final online = await _fillOnline(
-        chatsState.chats,
-        state.onlineStatuses,
-      );
       emit(
         state.copyWith(
           filter: event.filter,
-          onlineStatuses: online,
           chatsState: chatsState,
           status: ChatsFilterStatus.initial,
         ),
       );
+      add(const ChatsFilterEvent.syncPeerSubs());
     } catch (e) {
       emit(
         state.copyWith(
@@ -137,19 +177,14 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
         query: state.query,
       );
 
-      final online = await _fillOnline(
-        chatsState.chats,
-        state.onlineStatuses,
-      );
-
       emit(
         state.copyWith(
           uid: user.uid,
-          onlineStatuses: online,
           chatsState: chatsState,
           status: ChatsFilterStatus.initial,
         ),
       );
+      add(const ChatsFilterEvent.syncPeerSubs());
       add(
         ChatsFilterEvent.listenChatsChanges(),
       );
@@ -177,33 +212,37 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
           (e) => e.chatId == chat.chatId,
         );
 
+        final ChatsFilterState next;
+
         /// No found . New chat
         if (index == -1) {
           chats.add(
             chat,
           );
-          return state.copyWith(
+          next = state.copyWith(
+            chatsState: state.chatsState.copyWith(
+              chats: chats,
+            ),
+          );
+        } else {
+          final uid = state.uid;
+
+          final status = state.resolveStatus(
+            chats[index],
+            chat,
+            uid,
+          );
+
+          chats[index] = chat;
+          next = state.copyWith(
+            status: status ?? state.status,
             chatsState: state.chatsState.copyWith(
               chats: chats,
             ),
           );
         }
-
-        final uid = state.uid;
-
-        final status = state.resolveStatus(
-          chats[index],
-          chat,
-          uid,
-        );
-
-        chats[index] = chat;
-        return state.copyWith(
-          status: status ?? state.status,
-          chatsState: state.chatsState.copyWith(
-            chats: chats,
-          ),
-        );
+        add(const ChatsFilterEvent.syncPeerSubs());
+        return next;
       },
       onError: (e, _) {
         return state.copyWith(
@@ -231,19 +270,14 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
         filter: state.filter,
       );
 
-      final online = await _fillOnline(
-        chatState.chats,
-        state.onlineStatuses,
-      );
-
       emit(
         state.copyWith(
           query: event.query,
           chatsState: chatState,
-          onlineStatuses: online,
           status: ChatsFilterStatus.initial,
         ),
       );
+      add(const ChatsFilterEvent.syncPeerSubs());
     } catch (e) {
       emit(
         state.copyWith(
@@ -271,6 +305,7 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
           chatsState: chatState,
         ),
       );
+      add(const ChatsFilterEvent.syncPeerSubs());
     } catch (e) {
       emit(
         state.copyWith(
@@ -298,6 +333,7 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
           chatsState: chatsState,
         ),
       );
+      add(const ChatsFilterEvent.syncPeerSubs());
     } catch (e) {
       emit(
         state.copyWith(
@@ -306,5 +342,13 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
         ),
       );
     }
+  }
+
+  @override
+  Future<void> close() async {
+    for (final sub in state.peerSubs.values) {
+      await sub.cancel();
+    }
+    return super.close();
   }
 }

@@ -552,7 +552,7 @@ Future<void> setupTestDI() async {
       toggleFavoriteChatUseCase: getIt<ToggleFavoriteChatUseCase>(),
       listenChatUpdatesUseCase: getIt<ListenChatUpdatesUseCase>(),
       getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
-      getUserDataUseCase: getIt<GetUserDataUseCase>(),
+      listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
     ),
   );
   // SkillsBloc: provide a mock implementation so screens watching it

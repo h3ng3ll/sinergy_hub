@@ -51,6 +51,10 @@ abstract class Chat with _$Chat {
 }
 
 extension ChatX on Chat {
+  String? otherUserUid(String uid) => participants.firstWhereOrNull(
+    (p) => p != uid && p.isNotEmpty,
+  );
+
   ParticipantInfo? otherUser(String uid) {
     final oUid = participantInfo.keys.firstWhereOrNull(
       (p) => p != uid,

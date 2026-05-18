@@ -63,6 +63,7 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
         final ParticipantInfo? otherUser = chat.otherUser(
           widget.uid,
         );
+        final String? otherUid = chat.otherUserUid(widget.uid);
 
         return ChatTileItem(
           chat: chat,
@@ -72,9 +73,8 @@ class _ChatsBuilderState extends State<ChatsBuilder> {
           onLongPress: () => widget.showChatActions(
             chat,
           ),
-          isOnlineUser: widget.onlineUsers.contains(
-            otherUser?.id,
-          ),
+          isOnlineUser: otherUid != null &&
+              widget.onlineUsers.contains(otherUid),
           otherUser: otherUser,
         );
       },
