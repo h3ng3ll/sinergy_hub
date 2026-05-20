@@ -4,7 +4,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/services.dart';
 
 abstract class Env {
-  abstract FirebaseOptions firebaseOptions;
 
   Env() {
     if (kDebugMode) {
@@ -25,10 +24,4 @@ abstract class Env {
   String serverClientId();
 
   String webPushCertificate();
-
-  Future<void> init() async {
-    await Firebase.initializeApp(
-      options: firebaseOptions,
-    );
-  }
 }

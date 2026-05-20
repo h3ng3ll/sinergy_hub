@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -35,10 +36,15 @@ final getIt = GetIt.instance;
 Future<void> initDependencies() async {
   // Firebase services (core)
 
-  getIt.registerLazySingleton(() => FirebaseFirestoreService());
+  getIt.registerLazySingleton(() => FirebaseFirestore.instance);
   getIt.registerLazySingleton(() => FirebaseAuth.instance);
   getIt.registerLazySingleton(() => FirebaseMessaging.instance);
   getIt.registerLazySingleton(() => FirebaseFunctions.instance);
+  getIt.registerLazySingleton(
+    () => FirebaseFirestoreService(
+      firebaseFirestore: getIt<FirebaseFirestore>(),
+    ),
+  );
   getIt.registerLazySingleton(() => FirebaseAuthService());
   getIt.registerLazySingleton(() => PermissionRequester());
   getIt.registerLazySingleton(() => FirebaseStorageService());

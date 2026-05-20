@@ -8,110 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:752696702645:android:2241db9e16f525e54d30fc",
-        "android_client_info": {
-          "package_name": "com.example.sinergy_hub"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "752696702645-hatk6rf33rrbsssi0el0et0o313iovtv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.sinergy_hub",
-            "certificate_hash": "ed7e9b1192cb587f625d58fe7a266f0d31ffda4a"
-          }
-        },
-        {
-          "client_id": "752696702645-us8ahtnephhmat5306blaauu2a9lbl9g.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.sinergy_hub",
-            "certificate_hash": "82450f0bdf633356dce0e0da7775e47b9b9b6fed"
-          }
-        },
-        {
-          "client_id": "752696702645-7bc646mgsn0vfe37qvquvf5fh4gjuehv.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBWLNHfoSRMZwG5yy87fFL6jSbYQfOA8Fo"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "752696702645-7bc646mgsn0vfe37qvquvf5fh4gjuehv.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "752696702645-jm17qql1056vih1oqqrd95f9qcu5nsmr.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.sinergyHub"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:752696702645:android:a90a625e3f371fb24d30fc",
-        "android_client_info": {
-          "package_name": "com.hengell.sinergyHub.dev"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "752696702645-5ljos1r79047uduu3o8uqqp83ifs7cqm.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hengell.sinergyHub.dev",
-            "certificate_hash": "ed7e9b1192cb587f625d58fe7a266f0d31ffda4a"
-          }
-        },
-        {
-          "client_id": "752696702645-akuk80rcu07l9lr29ubv94jlvcu1q9s3.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hengell.sinergyHub.dev",
-            "certificate_hash": "82450f0bdf633356dce0e0da7775e47b9b9b6fed"
-          }
-        },
-        {
-          "client_id": "752696702645-7bc646mgsn0vfe37qvquvf5fh4gjuehv.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBWLNHfoSRMZwG5yy87fFL6jSbYQfOA8Fo"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "752696702645-7bc646mgsn0vfe37qvquvf5fh4gjuehv.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "752696702645-jm17qql1056vih1oqqrd95f9qcu5nsmr.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.sinergyHub"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:752696702645:android:c898a9234e96944c4d30fc",
         "android_client_info": {
           "package_name": "com.hengell.synergyhub.dev"
@@ -119,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "752696702645-c1lgoku5d7n83hjdgdbl71ij9klqnq21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hengell.synergyhub.dev",
+            "certificate_hash": "82450f0bdf633356dce0e0da7775e47b9b9b6fed"
+          }
+        },
+        {
+          "client_id": "752696702645-ho7q4ap30mgf2qri0t49g8o6tab4id17.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hengell.synergyhub.dev",
+            "certificate_hash": "ed7e9b1192cb587f625d58fe7a266f0d31ffda4a"
+          }
+        },
+        {
           "client_id": "752696702645-7bc646mgsn0vfe37qvquvf5fh4gjuehv.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -136,10 +48,10 @@
               "client_type": 3
             },
             {
-              "client_id": "752696702645-jm17qql1056vih1oqqrd95f9qcu5nsmr.apps.googleusercontent.com",
+              "client_id": "752696702645-jf2ak7ltkv0fd4ah6cmiririmaichkbv.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.sinergyHub"
+                "bundle_id": "com.hengell.synergyhub.dev"
               }
             }
           ]

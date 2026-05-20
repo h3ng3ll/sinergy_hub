@@ -6,15 +6,6 @@ import 'env.dart';
 
 class ProdEnv extends Env {
   @override
-  FirebaseOptions get firebaseOptions =>
-      prod.DefaultFirebaseOptions.currentPlatform;
-
-  @override
-  set firebaseOptions(
-    FirebaseOptions value,
-  ) => firebaseOptions = value;
-
-  @override
   String webPushCertificate() => dotenv.get(
     'PROD_FIREBASE_WEB_PUSH_CERTIFICATE',
   );

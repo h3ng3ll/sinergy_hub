@@ -143,6 +143,8 @@ class FirebaseAuthRepository extends IAuthRepository {
         return Right(UserCanceledSignInException());
       }
       return Right(FailedSignWithGoogle());
+    } catch (e) {
+      return Right(FailedSignWithGoogle());
     }
   }
 

@@ -10,15 +10,15 @@ import 'package:sinergy_hub/features/onboard_survey/domain/models/skill/skill.da
 import 'package:sinergy_hub/features/onboard_survey/domain/models/specialization/specialization.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/models/user_profiler/user_profiler.dart';
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
-import 'package:sinergy_hub/firebase_options.dart';
+import 'package:sinergy_hub/firebase.dart';
 
 //  flutter run -t   tool/seed_fake_users.dart
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
 
   final List<UserData> users = [
     UserData(

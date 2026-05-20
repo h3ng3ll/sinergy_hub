@@ -10,7 +10,11 @@ typedef ColRef = CollectionReference<Map<String, dynamic>>;
 
 class FirebaseFirestoreService {
   // final int _batchLimit = 500;
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firebaseFirestore;
+
+  FirebaseFirestoreService({
+    required FirebaseFirestore firebaseFirestore,
+  }) : _firebaseFirestore = firebaseFirestore;
 
   Future<void> init() async {
     if (AppConfig.isQA) {
@@ -117,10 +121,9 @@ class FirebaseFirestoreService {
           doc,
         )
         .limit(
-      pageSize,
+          pageSize,
         );
   }
 
   WriteBatch batch() => _firebaseFirestore.batch();
-
 }

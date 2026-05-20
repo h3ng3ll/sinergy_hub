@@ -26,10 +26,12 @@ import 'features/chat/domain/services/i_presence_service.dart';
 import 'features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
 import 'features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import 'features/user/presentation/bloc/user_bloc/user_bloc.dart';
-import 'firebase_options.dart';
+import 'firebase.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initFirebase();
 
   await dotenv.load(
     fileName: '.env',
@@ -44,7 +46,6 @@ void main() async {
     ],
   );
 
-  await getIt<Env>().init();
 
   if(!kIsWeb){
     /// Firebase doesn't support web

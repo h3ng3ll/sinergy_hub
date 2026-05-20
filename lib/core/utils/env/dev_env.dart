@@ -5,14 +5,6 @@ import '../../../firebase/firebase_options_dev.dart' as dev;
 import 'env.dart';
 
 class DevEnv extends Env {
-  @override
-  FirebaseOptions get firebaseOptions =>
-      dev.DefaultFirebaseOptions.currentPlatform;
-
-  @override
-  set firebaseOptions(
-    FirebaseOptions value,
-  ) => firebaseOptions = value;
 
   @override
   String serverClientId() {
