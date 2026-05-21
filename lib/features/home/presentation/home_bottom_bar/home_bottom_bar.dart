@@ -77,7 +77,18 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
                   onTapLogOut: onTapLogOut,
                 )
               : CustomAppBar(
-                  leading: Container(),
+                  leading: Builder(
+                    builder: (context) {
+                      return GestureDetector(
+                        onTap: (){
+                          Scaffold.of(context).openDrawer();
+                        },
+                        child: Icon(
+                          Icons.menu,
+                        ),
+                      );
+                    },
+                  ),
                   actions: [
                     InkWell(
                       onTap: onTapNotifications,

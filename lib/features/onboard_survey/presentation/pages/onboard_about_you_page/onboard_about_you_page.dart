@@ -241,10 +241,10 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
                               spacing: 20.0,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CustomTextBtn(
-                                  onPressed: onCancel,
-                                  text: 'Cancel',
-                                ),
+                                // CustomTextBtn(
+                                //   onPressed: onCancel,
+                                //   text: 'Cancel',
+                                // ),
                                 TranslucentBtn(
                                   onPressed: onNext,
                                   child: Text(
