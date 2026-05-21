@@ -130,8 +130,9 @@ class FirebaseAuthRepository extends IAuthRepository {
   @override
   Future<Either<UserCredential, Exceptions>> signInWithGoogle() async {
     try {
+      final clientId = _env.serverClientId();
       await _googleSignIn.initialize(
-        serverClientId: _env.serverClientId(),
+        serverClientId: clientId,
       );
       final GoogleSignInAccount res = await _googleSignIn.authenticate();
 
@@ -139,6 +140,7 @@ class FirebaseAuthRepository extends IAuthRepository {
         res.authentication.idToken!,
       );
     } on GoogleSignInException catch (e) {
+      /// Process carefully
       if (e.code == GoogleSignInExceptionCode.canceled) {
         return Right(UserCanceledSignInException());
       }
