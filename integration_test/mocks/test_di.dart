@@ -25,8 +25,8 @@ import 'package:sinergy_hub/core/utils/env/env.dart';
 import 'package:sinergy_hub/features/auth/domain/repostories/i_auth_repository.dart';
 import 'package:sinergy_hub/features/auth/domain/use_cases/apple_sign_in_use_case.dart';
 import 'package:sinergy_hub/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:sinergy_hub/features/auth/domain/use_cases/complete_registration_use_case.dart';
 import 'package:sinergy_hub/features/auth/domain/use_cases/register_use_case.dart';
-import 'package:sinergy_hub/features/auth/domain/use_cases/reload_use_case.dart';
 import 'package:sinergy_hub/features/auth/domain/use_cases/reset_password_by_email_use_case.dart';
 import 'package:sinergy_hub/features/auth/domain/use_cases/send_email_verification_use_case.dart';
 import 'package:sinergy_hub/features/auth/domain/use_cases/sign_in_with_google_use_case.dart';
@@ -227,9 +227,13 @@ Future<void> setupTestDI() async {
   getIt.registerFactory(
     () => RegisterUseCase(
       authRepository: getIt<IAuthRepository>(),
-      presenceService: getIt<IPresenceService>(),
       sendEmailVerificationUseCase: getIt<SendEmailVerificationUseCase>(),
-      userWriteRepository: getIt<IUserWriteRepository>(),
+    ),
+  );
+  getIt.registerFactory(
+    () => CompleteRegistrationUseCase(
+      authRepository: getIt<IAuthRepository>(),
+      presenceService: getIt<IPresenceService>(),
     ),
   );
   getIt.registerFactory(
@@ -255,9 +259,6 @@ Future<void> setupTestDI() async {
       presenceService: getIt<IPresenceService>(),
     ),
   );
-  getIt.registerFactory(() => ReloadUseCase(
-        authRepository: getIt<IAuthRepository>(),
-      ));
   getIt.registerLazySingleton(
     () => AppleSignInUseCase(authRepository: getIt<IAuthRepository>()),
   );
@@ -507,7 +508,6 @@ Future<void> setupTestDI() async {
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       loginUseCase: getIt<LoginUseCase>(),
-      reloadUseCase: getIt<ReloadUseCase>(),
     ),
   );
   getIt.registerFactory<ResetPasswordPageBloc>(

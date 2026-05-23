@@ -2,8 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../../domain/failures/email_not_verified_failure.dart';
+import '../../../../../domain/use_cases/complete_registration_use_case.dart';
 import '../../../../../domain/use_cases/register_use_case.dart';
-import '../../../../../domain/use_cases/reload_use_case.dart';
 
 part 'register_event.dart';
 
@@ -13,25 +14,25 @@ part 'register_bloc.freezed.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUseCase _registerUseCase;
-  final ReloadUseCase _reloadUseCase;
+  final CompleteRegistrationUseCase _completeRegistrationUseCase;
 
   RegisterBloc({
     required RegisterUseCase registerUseCase,
-    required ReloadUseCase reloadUseCase,
+    required CompleteRegistrationUseCase completeRegistrationUseCase,
   }) : _registerUseCase = registerUseCase,
-       _reloadUseCase = reloadUseCase,
+       _completeRegistrationUseCase = completeRegistrationUseCase,
        super(const RegisterState()) {
     on<_Register>(
       _register,
       transformer: droppable(),
     );
-    on<_StartVerification>(
-      _startVerification,
+    on<_CheckVerification>(
+      _checkVerification,
       transformer: droppable(),
     );
   }
 
-  void _register(_Register event, emit) async {
+  void _register(_Register event, Emitter<RegisterState> emit) async {
     emit(
       state.copyWith(
         status: RegisterStatus.loading,
@@ -45,7 +46,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       (_) {
         emit(
           state.copyWith(
-            status: RegisterStatus.registered,
+            status: RegisterStatus.pendingVerification,
           ),
         );
       },
@@ -60,22 +61,24 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     );
   }
 
-  void _startVerification(_StartVerification event, emit) async {
-    emit(
-      state.copyWith(
-        status: RegisterStatus.loading,
-      ),
-    );
-    final res = await _reloadUseCase.call();
+  void _checkVerification(
+    _CheckVerification event,
+    Emitter<RegisterState> emit,
+  ) async {
+    final res = await _completeRegistrationUseCase.call();
     res.fold(
       (_) {
         emit(
           state.copyWith(
-            status: RegisterStatus.reloaded,
+            status: RegisterStatus.registered,
           ),
         );
       },
       (e) {
+        if (e is EmailNotVerifiedFailure) {
+          /// Expected during polling — stay in pendingVerification.
+          return;
+        }
         emit(
           state.copyWith(
             status: RegisterStatus.failed,

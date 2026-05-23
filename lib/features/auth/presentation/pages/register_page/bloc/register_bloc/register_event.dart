@@ -7,5 +7,5 @@ sealed class RegisterEvent with _$RegisterEvent {
     required String password,
   }) = _Register;
 
-  const factory RegisterEvent.startVerification() = _StartVerification;
+  const factory RegisterEvent.checkVerification() = _CheckVerification;
 }

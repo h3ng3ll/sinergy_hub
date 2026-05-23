@@ -18,7 +18,7 @@ _UserData _$UserDataFromJson(Map<String, dynamic> json) => _UserData(
   createdAt: const TimestampConverter().fromJson(
     json['createdAt'] as Timestamp?,
   ),
-  isOnline: json['isOnline'] ?? false,
+  isOnline: json['isOnline'] as bool? ?? false,
   lastSeen: const TimestampConverter().fromJson(json['lastSeen'] as Timestamp?),
 );
 

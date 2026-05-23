@@ -6,6 +6,4 @@ sealed class LoginEvent with _$LoginEvent {
     required String email,
     required String password,
   }) = _Login;
-
-  const factory LoginEvent.refresh() = _Refresh;
 }

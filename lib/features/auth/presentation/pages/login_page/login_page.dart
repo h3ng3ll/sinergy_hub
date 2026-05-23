@@ -17,7 +17,6 @@ import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import '../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../domain/use_cases/login_use_case.dart';
-import '../../bloc/auth_bloc/auth_bloc.dart';
 import '../register_page/widgets/inputs/email_input.dart';
 import '../register_page/widgets/inputs/password_input.dart';
 import 'bloc/login_bloc/login_bloc.dart';
@@ -51,12 +50,6 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void onVerifiedEmail() {
-    _loginBloc.add(
-      LoginEvent.refresh(),
-    );
-  }
-
   void onForgetPassword() {
     ResetPasswordPageRoute().navigate(
       context,
@@ -84,32 +77,15 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         appBar: CustomAppBar(),
         backgroundColor: Colors.transparent,
-        body: MultiBlocListener(
-          listeners: [
-            BlocListener<LoginBloc, LoginState>(
-              bloc: _loginBloc,
-              listener: (context, state) {
-                if (state.status == LoginStatus.failed) {
-                  UiMessageService.showError(
-                    state.errorMessage,
-                  );
-                }
-              },
-            ),
-            BlocListener<LoginBloc, LoginState>(
-              bloc: _loginBloc,
-              listenWhen: (p, n) => p.isLoading && n.isAuthorized,
-              listener: (context, state) {
-                final verified = context.read<AuthBloc>().state.isEmailVerified;
-                if (!verified) {
-                  UiMessageService.showError(
-                    'Account has been created but email verification is required.',
-                    timeInSecondsDuration: 10,
-                  );
-                }
-              },
-            ),
-          ],
+        body: BlocListener<LoginBloc, LoginState>(
+          bloc: _loginBloc,
+          listener: (context, state) {
+            if (state.status == LoginStatus.failed) {
+              UiMessageService.showError(
+                state.errorMessage,
+              );
+            }
+          },
           child: BlocBuilder<LoginBloc, LoginState>(
             bloc: _loginBloc,
             builder: (context, state) {
@@ -154,22 +130,6 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
-                              if (state.isAuthorized) ...[
-                                Gap(10.0),
-                                ActionBtn(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 15.0,
-                                    horizontal: 20.0,
-                                  ),
-                                  onPressed: onVerifiedEmail,
-                                  child: Text(
-                                    'I verified email',
-                                    style: textTheme.medium16.copyWith(
-                                      color: colorScheme.onSecondary,
-                                    ),
-                                  ),
-                                ),
-                              ],
                               Gap(30.0),
                               Align(
                                 alignment: Alignment.topRight,

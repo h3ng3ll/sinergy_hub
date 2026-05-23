@@ -55,12 +55,12 @@ extension RegisterEventPatterns on RegisterEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Register value)?  register,TResult Function( _StartVerification value)?  startVerification,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Register value)?  register,TResult Function( _CheckVerification value)?  checkVerification,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Register() when register != null:
-return register(_that);case _StartVerification() when startVerification != null:
-return startVerification(_that);case _:
+return register(_that);case _CheckVerification() when checkVerification != null:
+return checkVerification(_that);case _:
   return orElse();
 
 }
@@ -78,12 +78,12 @@ return startVerification(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Register value)  register,required TResult Function( _StartVerification value)  startVerification,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Register value)  register,required TResult Function( _CheckVerification value)  checkVerification,}){
 final _that = this;
 switch (_that) {
 case _Register():
-return register(_that);case _StartVerification():
-return startVerification(_that);}
+return register(_that);case _CheckVerification():
+return checkVerification(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -97,12 +97,12 @@ return startVerification(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Register value)?  register,TResult? Function( _StartVerification value)?  startVerification,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Register value)?  register,TResult? Function( _CheckVerification value)?  checkVerification,}){
 final _that = this;
 switch (_that) {
 case _Register() when register != null:
-return register(_that);case _StartVerification() when startVerification != null:
-return startVerification(_that);case _:
+return register(_that);case _CheckVerification() when checkVerification != null:
+return checkVerification(_that);case _:
   return null;
 
 }
@@ -119,11 +119,11 @@ return startVerification(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String email,  String password)?  register,TResult Function()?  startVerification,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String email,  String password)?  register,TResult Function()?  checkVerification,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Register() when register != null:
-return register(_that.email,_that.password);case _StartVerification() when startVerification != null:
-return startVerification();case _:
+return register(_that.email,_that.password);case _CheckVerification() when checkVerification != null:
+return checkVerification();case _:
   return orElse();
 
 }
@@ -141,11 +141,11 @@ return startVerification();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String email,  String password)  register,required TResult Function()  startVerification,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String email,  String password)  register,required TResult Function()  checkVerification,}) {final _that = this;
 switch (_that) {
 case _Register():
-return register(_that.email,_that.password);case _StartVerification():
-return startVerification();}
+return register(_that.email,_that.password);case _CheckVerification():
+return checkVerification();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -159,11 +159,11 @@ return startVerification();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String email,  String password)?  register,TResult? Function()?  startVerification,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String email,  String password)?  register,TResult? Function()?  checkVerification,}) {final _that = this;
 switch (_that) {
 case _Register() when register != null:
-return register(_that.email,_that.password);case _StartVerification() when startVerification != null:
-return startVerification();case _:
+return register(_that.email,_that.password);case _CheckVerification() when checkVerification != null:
+return checkVerification();case _:
   return null;
 
 }
@@ -242,8 +242,8 @@ as String,
 /// @nodoc
 
 
-class _StartVerification implements RegisterEvent {
-  const _StartVerification();
+class _CheckVerification implements RegisterEvent {
+  const _CheckVerification();
   
 
 
@@ -253,7 +253,7 @@ class _StartVerification implements RegisterEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StartVerification);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CheckVerification);
 }
 
 
@@ -262,7 +262,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'RegisterEvent.startVerification()';
+  return 'RegisterEvent.checkVerification()';
 }
 
 

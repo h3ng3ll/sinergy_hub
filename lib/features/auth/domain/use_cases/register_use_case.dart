@@ -1,30 +1,23 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/models/failures.dart';
-import '../../../chat/domain/services/i_presence_service.dart';
-import '../../../user/domain/models/user_data/user_data.dart';
-import '../../../user/domain/repositories/i_user_write_repository.dart';
+import '../failures/auth_failures.dart';
 import '../repostories/i_auth_repository.dart';
 import 'send_email_verification_use_case.dart';
 
 class RegisterUseCase {
   final IAuthRepository _authRepository;
-  final IUserWriteRepository _userWriteRepository;
   final SendEmailVerificationUseCase _sendEmailVerificationUseCase;
-  final IPresenceService _presenceService;
 
   RegisterUseCase({
     required IAuthRepository authRepository,
-    required IUserWriteRepository userWriteRepository,
     required SendEmailVerificationUseCase sendEmailVerificationUseCase,
-    required IPresenceService presenceService,
   }) : _authRepository = authRepository,
-       _userWriteRepository = userWriteRepository,
-       _sendEmailVerificationUseCase = sendEmailVerificationUseCase,
-       _presenceService = presenceService;
+       _sendEmailVerificationUseCase = sendEmailVerificationUseCase;
 
-  /// register if success Update UID of user .
-  Future<Either<void, Failure>> call({
+  /// Creates the Firebase auth user and sends a verification email.
+  /// Firestore persistence + presence init happen later in
+  /// CompleteRegistrationUseCase, after the user verifies their email.
+  Future<Either<void, AuthFailure>> call({
     required String email,
     required String password,
   }) async {
@@ -35,24 +28,6 @@ class RegisterUseCase {
     if (res.isRight()) {
       return res;
     }
-    final sendRes = await _sendEmailVerificationUseCase.call();
-
-    if (sendRes.isRight()) {
-      return res;
-    }
-
-    final uid = await _authRepository.requireUserId();
-    await _userWriteRepository.update(
-      userData: UserData.none().copyWith(
-        uid: uid,
-        createdAt: DateTime.now(),
-      ),
-    );
-
-    await _presenceService.init();
-
-    return Left(
-      null,
-    );
+    return _sendEmailVerificationUseCase.call();
   }
 }

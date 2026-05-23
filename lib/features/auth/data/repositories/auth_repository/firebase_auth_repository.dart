@@ -254,6 +254,11 @@ class FirebaseAuthRepository extends IAuthRepository {
   }
 
   @override
+  Future<bool> isEmailVerified() async {
+    return _auth.currentUser?.emailVerified ?? false;
+  }
+
+  @override
   Future<Either<void, AuthFailure>> reload() async {
     try {
       await _auth.currentUser?.reload();

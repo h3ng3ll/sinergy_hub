@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -11,11 +13,15 @@ import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
+import '../../../domain/use_cases/complete_registration_use_case.dart';
 import '../../../domain/use_cases/register_use_case.dart';
-import '../../../domain/use_cases/reload_use_case.dart';
 import 'bloc/register_bloc/register_bloc.dart';
 import 'widgets/inputs/email_input.dart';
 import 'widgets/inputs/password_input.dart';
+
+/// Poll Firebase every [_kVerificationPollInterval] while the user is on
+/// the verification step. Only runs on this screen, so the cost is bounded.
+const Duration _kVerificationPollInterval = Duration(seconds: 3);
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -27,12 +33,13 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final RegisterBloc _registerBloc = RegisterBloc(
     registerUseCase: getIt<RegisterUseCase>(),
-    reloadUseCase: getIt<ReloadUseCase>(),
+    completeRegistrationUseCase: getIt<CompleteRegistrationUseCase>(),
   );
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final TextEditingController _repeatPasswordController;
   final GlobalKey<FormState> _formKey = GlobalKey();
+  Timer? _verificationPollTimer;
 
   @override
   void initState() {
@@ -44,17 +51,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void dispose() {
+    _verificationPollTimer?.cancel();
     _emailController.dispose();
     _passwordController.dispose();
     _repeatPasswordController.dispose();
     _registerBloc.close();
     super.dispose();
-  }
-
-  void onVerifiedEmail() {
-    _registerBloc.add(
-      RegisterEvent.startVerification(),
-    );
   }
 
   void register() {
@@ -75,6 +77,21 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  void _startPolling() {
+    _verificationPollTimer?.cancel();
+    _verificationPollTimer = Timer.periodic(
+      _kVerificationPollInterval,
+      (_) => _registerBloc.add(
+        const RegisterEvent.checkVerification(),
+      ),
+    );
+  }
+
+  void _stopPolling() {
+    _verificationPollTimer?.cancel();
+    _verificationPollTimer = null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
@@ -84,20 +101,43 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Scaffold(
         appBar: CustomAppBar(),
         backgroundColor: Colors.transparent,
-        body: BlocListener<RegisterBloc, RegisterState>(
-          bloc: _registerBloc,
-          listener: (context, state) {
-            if (state.isFailed) {
-              UiMessageService.showError(
-                state.errorMessage,
-              );
-            } else if (state.isRegistered) {
-              UiMessageService.showInfo(
-                'Mail verification has been sent to provided email address',
-                timeInSecondsDuration: 10,
-              );
-            }
-          },
+        body: MultiBlocListener(
+          listeners: [
+            BlocListener<RegisterBloc, RegisterState>(
+              bloc: _registerBloc,
+              listener: (context, state) {
+                if (state.isFailed) {
+                  UiMessageService.showError(
+                    state.errorMessage,
+                  );
+                }
+              },
+            ),
+            BlocListener<RegisterBloc, RegisterState>(
+              bloc: _registerBloc,
+              listenWhen: (p, n) =>
+                  !p.isPendingVerification && n.isPendingVerification,
+              listener: (context, state) {
+                UiMessageService.showInfo(
+                  'Mail verification has been sent to provided email address',
+                  timeInSecondsDuration: 10,
+                );
+                _startPolling();
+              },
+            ),
+            BlocListener<RegisterBloc, RegisterState>(
+              bloc: _registerBloc,
+              listenWhen: (p, n) =>
+                  p.isPendingVerification && (n.isRegistered || n.isFailed),
+              listener: (context, state) {
+                /// AuthBloc's _listen is subscribed to watchUser() which
+                /// fires after the reload() inside CompleteRegistrationUseCase,
+                /// so isEmailVerified flips and the router redirect engages
+                /// without any explicit AuthBloc event from here.
+                _stopPolling();
+              },
+            ),
+          ],
           child: BlocBuilder<RegisterBloc, RegisterState>(
             bloc: _registerBloc,
             builder: (context, state) {
@@ -145,20 +185,18 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                             ),
                           ),
-                          if (state.isRegistered) ...[
-                            Gap(10.0),
-                            ActionBtn(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 15.0,
-                                horizontal: 20.0,
+                          if (state.isPendingVerification) ...[
+                            Gap(16.0),
+                            Text(
+                              'Check your email for the verification link.',
+                              textAlign: TextAlign.center,
+                              style: textTheme.medium16.copyWith(
+                                color: AppColors.white.value,
                               ),
-                              onPressed: onVerifiedEmail,
-                              child: Text(
-                                'I verified email',
-                                style: textTheme.medium16.copyWith(
-                                  color: colorScheme.onSecondary,
-                                ),
-                              ),
+                            ),
+                            Gap(12.0),
+                            CircularProgressIndicator(
+                              color: AppColors.white.value,
                             ),
                           ],
                         ],

@@ -5,13 +5,14 @@ enum RegisterStatus {
   initial,
   loading,
   failed,
+  pendingVerification,
   registered,
-  reloaded,
 }
 
 extension RegisterStateX on RegisterState {
   bool get isRegistered => status == RegisterStatus.registered;
   bool get isFailed => status == RegisterStatus.failed;
+  bool get isPendingVerification => status == RegisterStatus.pendingVerification;
 }
 @freezed
 sealed class RegisterState with _$RegisterState {
