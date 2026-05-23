@@ -23,10 +23,10 @@ class BuildOnboardBottomActions extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        CustomTextBtn(
-          text: 'Skip for now',
-          onPressed: skipForNow,
-        ),
+        // CustomTextBtn(
+        //   text: 'Skip for now',
+        //   onPressed: skipForNow,
+        // ),
         ActionBtn(
           onPressed: onPressed,
           child: Row(
