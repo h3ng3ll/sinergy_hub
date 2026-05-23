@@ -9,6 +9,7 @@ import '../domain/repositories/i_notification_config_repository.dart';
 import '../domain/repositories/i_notification_repository.dart';
 import '../domain/usecases/get_notification_config_use_case.dart';
 import '../domain/usecases/get_notifications_use_case.dart';
+import '../domain/usecases/register_current_device_token_use_case.dart';
 import '../domain/usecases/save_notification_config_use_case.dart';
 import '../domain/usecases/save_notification_use_case.dart';
 import '../presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
@@ -48,13 +49,21 @@ void initNotificationFeature(GetIt getIt) {
       authRepository: getIt<IAuthRepository>(),
     ),
   );
+  getIt.registerLazySingleton<RegisterCurrentDeviceTokenUseCase>(
+    () => RegisterCurrentDeviceTokenUseCase(
+      notificationConfigRepository: getIt<INotificationConfigRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+      firebaseMessagingService: getIt<FirebaseMessagingService>(),
+    ),
+  );
  getIt.registerLazySingleton<NotificationConfigBloc>(
     () =>  NotificationConfigBloc(
       getNotificationsConfigUseCase:
       getIt<GetNotificationsConfigUseCase>(),
       saveNotificationsConfigUseCase:
       getIt<SaveNotificationsConfigUseCase>(),
-      firebaseMessagingService: getIt<FirebaseMessagingService>(),
+      registerCurrentDeviceTokenUseCase:
+      getIt<RegisterCurrentDeviceTokenUseCase>(),
     )
   );
 }

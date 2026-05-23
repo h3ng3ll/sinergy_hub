@@ -1,4 +1,8 @@
+import 'package:dartz/dartz.dart';
+
 import '../../../auth/domain/repostories/i_auth_repository.dart';
+import '../failures/load_notification_config_failure.dart';
+import '../failures/notification_config_failures.dart';
 import '../models/notification_config/notification_config.dart';
 import '../repositories/i_notification_config_repository.dart';
 
@@ -12,11 +16,13 @@ class GetNotificationsConfigUseCase {
   }) : _notificationConfigRepository = notificationConfigRepository,
        _authRepository = authRepository;
 
-  Future<NotificationConfig?> call() async {
-    final uid = await _authRepository.requireUserId();
-    final res = await _notificationConfigRepository.get(
-      uid: uid,
-    );
-    return res;
+  Future<Either<NotificationConfig?, NotificationConfigFailure>> call() async {
+    try {
+      final uid = await _authRepository.requireUserId();
+      final config = await _notificationConfigRepository.get(uid: uid);
+      return Left(config);
+    } catch (_) {
+      return Right(LoadNotificationConfigFailure());
+    }
   }
 }

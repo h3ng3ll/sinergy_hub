@@ -9,10 +9,10 @@ part of 'notification_config.dart';
 _NotificationConfig _$NotificationConfigFromJson(Map<String, dynamic> json) =>
     _NotificationConfig(
       fcmTokens:
-          (json['fcmTokens'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
+          (json['fcmTokens'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, e as String),
+          ) ??
+          const <String, String>{},
       enabledNotifications: json['enabledNotifications'] as bool? ?? true,
     );
 

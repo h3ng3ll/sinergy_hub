@@ -35,6 +35,13 @@ class FirebaseMessagingService {
 
   static bool _isBackgroundHandlerInitialized = false;
 
+  String? get platformKey {
+    if (kIsWeb) return null;
+    if (Platform.isAndroid) return 'android';
+    if (Platform.isIOS) return 'ios';
+    return null;
+  }
+
   FirebaseMessagingService({
     required LocalNotificationService localNotificationService,
     required FirebaseMessaging firebaseMessaging,

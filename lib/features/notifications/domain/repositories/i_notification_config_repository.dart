@@ -9,4 +9,10 @@ abstract class INotificationConfigRepository {
     required String uid,
     required NotificationConfig config,
   });
+
+  Future<void> upsertToken({
+    required String uid,
+    required String platform,
+    required String token,
+  });
 }

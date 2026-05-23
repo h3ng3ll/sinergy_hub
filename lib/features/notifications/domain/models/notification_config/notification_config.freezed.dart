@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NotificationConfig {
 
- List<String> get fcmTokens; bool get enabledNotifications;
+ Map<String, String> get fcmTokens; bool get enabledNotifications;
 /// Create a copy of NotificationConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $NotificationConfigCopyWith<$Res>  {
   factory $NotificationConfigCopyWith(NotificationConfig value, $Res Function(NotificationConfig) _then) = _$NotificationConfigCopyWithImpl;
 @useResult
 $Res call({
- List<String> fcmTokens, bool enabledNotifications
+ Map<String, String> fcmTokens, bool enabledNotifications
 });
 
 
@@ -68,7 +68,7 @@ class _$NotificationConfigCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? fcmTokens = null,Object? enabledNotifications = null,}) {
   return _then(_self.copyWith(
 fcmTokens: null == fcmTokens ? _self.fcmTokens : fcmTokens // ignore: cast_nullable_to_non_nullable
-as List<String>,enabledNotifications: null == enabledNotifications ? _self.enabledNotifications : enabledNotifications // ignore: cast_nullable_to_non_nullable
+as Map<String, String>,enabledNotifications: null == enabledNotifications ? _self.enabledNotifications : enabledNotifications // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -151,7 +151,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> fcmTokens,  bool enabledNotifications)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<String, String> fcmTokens,  bool enabledNotifications)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NotificationConfig() when $default != null:
 return $default(_that.fcmTokens,_that.enabledNotifications);case _:
@@ -172,7 +172,7 @@ return $default(_that.fcmTokens,_that.enabledNotifications);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> fcmTokens,  bool enabledNotifications)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<String, String> fcmTokens,  bool enabledNotifications)  $default,) {final _that = this;
 switch (_that) {
 case _NotificationConfig():
 return $default(_that.fcmTokens,_that.enabledNotifications);}
@@ -189,7 +189,7 @@ return $default(_that.fcmTokens,_that.enabledNotifications);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> fcmTokens,  bool enabledNotifications)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<String, String> fcmTokens,  bool enabledNotifications)?  $default,) {final _that = this;
 switch (_that) {
 case _NotificationConfig() when $default != null:
 return $default(_that.fcmTokens,_that.enabledNotifications);case _:
@@ -204,14 +204,14 @@ return $default(_that.fcmTokens,_that.enabledNotifications);case _:
 @JsonSerializable()
 
 class _NotificationConfig implements NotificationConfig {
-  const _NotificationConfig({final  List<String> fcmTokens = const [], this.enabledNotifications = true}): _fcmTokens = fcmTokens;
+  const _NotificationConfig({final  Map<String, String> fcmTokens = const <String, String>{}, this.enabledNotifications = true}): _fcmTokens = fcmTokens;
   factory _NotificationConfig.fromJson(Map<String, dynamic> json) => _$NotificationConfigFromJson(json);
 
- final  List<String> _fcmTokens;
-@override@JsonKey() List<String> get fcmTokens {
-  if (_fcmTokens is EqualUnmodifiableListView) return _fcmTokens;
+ final  Map<String, String> _fcmTokens;
+@override@JsonKey() Map<String, String> get fcmTokens {
+  if (_fcmTokens is EqualUnmodifiableMapView) return _fcmTokens;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_fcmTokens);
+  return EqualUnmodifiableMapView(_fcmTokens);
 }
 
 @override@JsonKey() final  bool enabledNotifications;
@@ -249,7 +249,7 @@ abstract mixin class _$NotificationConfigCopyWith<$Res> implements $Notification
   factory _$NotificationConfigCopyWith(_NotificationConfig value, $Res Function(_NotificationConfig) _then) = __$NotificationConfigCopyWithImpl;
 @override @useResult
 $Res call({
- List<String> fcmTokens, bool enabledNotifications
+ Map<String, String> fcmTokens, bool enabledNotifications
 });
 
 
@@ -269,7 +269,7 @@ class __$NotificationConfigCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? fcmTokens = null,Object? enabledNotifications = null,}) {
   return _then(_NotificationConfig(
 fcmTokens: null == fcmTokens ? _self._fcmTokens : fcmTokens // ignore: cast_nullable_to_non_nullable
-as List<String>,enabledNotifications: null == enabledNotifications ? _self.enabledNotifications : enabledNotifications // ignore: cast_nullable_to_non_nullable
+as Map<String, String>,enabledNotifications: null == enabledNotifications ? _self.enabledNotifications : enabledNotifications // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

@@ -10,7 +10,7 @@ part 'notification_config.freezed.dart';
 @freezed
 sealed class NotificationConfig with _$NotificationConfig {
   const factory NotificationConfig({
-    @Default([]) List<String> fcmTokens,
+    @Default(<String, String>{}) Map<String, String> fcmTokens,
     @Default(true) bool enabledNotifications,
   }) = _NotificationConfig;
 

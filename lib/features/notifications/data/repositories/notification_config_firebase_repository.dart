@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../domain/models/notification_config/notification_config.dart';
 import '../../domain/repositories/i_notification_config_repository.dart';
@@ -41,6 +43,20 @@ class NotificationConfigFirebaseRepository
         )
         .set(
           config.toJson(),
+        );
+  }
+
+  @override
+  Future<void> upsertToken({
+    required String uid,
+    required String platform,
+    required String token,
+  }) async {
+    await _firebaseFirestoreService.notificationConfig(uid: uid).set(
+          {
+            'fcmTokens': {platform: token},
+          },
+          SetOptions(merge: true),
         );
   }
 }
