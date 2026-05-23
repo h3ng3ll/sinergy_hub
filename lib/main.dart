@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -24,13 +25,15 @@ import 'core/utils/env/env.dart';
 import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'features/chat/domain/services/i_presence_service.dart';
 import 'features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
+import 'features/onboard_survey/presentation/bloc/onboard_bloc/onboard_bloc.dart';
 import 'features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import 'features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'firebase.dart';
 
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await initFirebase();
 
   await dotenv.load(
@@ -103,6 +106,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   late final GoRouter _router;
+  bool _splashRemoved = false;
 
   // late final
   @override
@@ -113,11 +117,24 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     _router = initRouter(
       authBloc: getIt<AuthBloc>(),
       userBloc: getIt<UserBloc>(),
+      onboardBloc: getIt<OnboardBloc>(),
     );
 
     getIt<AuthBloc>()
       ..add(AuthEvent.init())
       ..add(AuthEvent.listen());
+  }
+
+  void _maybeRemoveSplash() {
+    if (_splashRemoved) return;
+    final auth = getIt<AuthBloc>().state;
+    final onboard = getIt<OnboardBloc>().state;
+    final ready = auth.isLogout ||
+        (auth.isAuthorized && onboard.isLoaded);
+    if (ready) {
+      _splashRemoved = true;
+      FlutterNativeSplash.remove();
+    }
   }
 
   @override
@@ -150,6 +167,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         BlocProvider<AuthBloc>.value(
           value: getIt<AuthBloc>(),
+        ),
+        BlocProvider<OnboardBloc>.value(
+          value: getIt<OnboardBloc>(),
         ),
         BlocProvider(
           create: (_) => getIt<NotificationConfigBloc>(),
@@ -202,13 +222,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       context.read<NotificationConfigBloc>().add(
                         NotificationConfigEvent.init(),
                       );
+                      getIt<OnboardBloc>().add(
+                        OnboardEvent.load(),
+                      );
                     }
                     if (state.isLogout) {
                       getIt<UserBloc>().add(
                         UserEvent.reset(),
                       );
                     }
+                    _maybeRemoveSplash();
                   },
+                ),
+                BlocListener<OnboardBloc, OnboardState>(
+                  listenWhen: (p, c) => p.status != c.status,
+                  listener: (context, _) => _maybeRemoveSplash(),
                 ),
               ],
               child: child ?? SizedBox(),

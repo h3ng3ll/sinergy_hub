@@ -49,7 +49,7 @@ class OnboardBloc extends Bloc<OnboardEvent, OnboardState> {
       emit(
         state.copyWith(
           onboardStatus: onboardStatus,
-          status: EOnboardStatus.initial,
+          status: EOnboardStatus.loaded,
         ),
       );
     } catch (e) {
@@ -74,7 +74,7 @@ class OnboardBloc extends Bloc<OnboardEvent, OnboardState> {
       emit(
         state.copyWith(
           onboardStatus: onboardStatus ?? state.onboardStatus,
-          status: EOnboardStatus.initial,
+          status: EOnboardStatus.loaded,
         ),
       );
     } catch (e) {

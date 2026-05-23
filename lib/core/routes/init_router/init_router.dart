@@ -19,6 +19,7 @@ import '../../../features/matches/presentation/pages/matches_page/matches_page.d
 import '../../../features/home/presentation/edit_profile_page/edit_profile_page.dart';
 import '../../../features/home/presentation/tabs/profile_tab/profile_tab.dart';
 import '../../../features/notifications/presentation/pages/notification_page/notification_page.dart';
+import '../../../features/onboard_survey/presentation/bloc/onboard_bloc/onboard_bloc.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_about_you_page/onboard_about_you_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_shell_page/onboard_shell_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
@@ -26,7 +27,6 @@ import '../../../features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
 import '../../../features/user/presentation/pages/user_profile_page/user_profile_page.dart';
 import '../../di/injection.dart';
-import '../../utils/extensions/go_router_x.dart';
 import '../root_page/root_page.dart';
 
 part 'init_router.g.dart';
@@ -47,51 +47,87 @@ class GoRouterRefreshStream extends ChangeNotifier {
   }
 }
 
+/// Pure redirect function — kept here so it can be exercised directly
+/// in tests without mounting the full route tree.
+String? resolveRedirect({
+  required AuthState auth,
+  required OnboardState onboard,
+  required String location,
+}) {
+  final isAuth = auth.isAuthorized;
+  final isLogout = auth.isLogout;
+
+  final isOnAuthPage = location == AuthorizationPageRoute().location;
+
+  final authRoutes = <String>[
+    OnboardSurveyPageRoute().location,
+    OnboardAboutYouPageRoute().location,
+    AuthorizationPageRoute().location,
+    RegisterPageRoute().location,
+    LoginPageRoute().location,
+    ResetPasswordPageRoute().location,
+  ];
+  final isAuthRoute = authRoutes.contains(location);
+
+  final isOnOnboardAbout =
+      location == OnboardAboutYouPageRoute().location;
+  final isOnOnboardSurvey =
+      location == OnboardSurveyPageRoute().location;
+  final isOnOnboard = isOnOnboardAbout || isOnOnboardSurvey;
+
+  // 🔴 1. not logged in → only allow auth routes
+  if (isLogout && !isAuthRoute) {
+    return AuthorizationPageRoute().location;
+  }
+
+  if (isAuth) {
+    // Wait until OnboardBloc has fetched once before redirecting.
+    // The native splash is held by MyApp until this resolves.
+    if (!onboard.isLoaded) return null;
+
+    final status = onboard.onboardStatus;
+
+    if (status.completeSpecialization) {
+      if (isOnAuthPage || isOnOnboard) {
+        return DiscoveryPageRoute().location;
+      }
+      return null;
+    }
+
+    if (status.toldAboutYourself) {
+      if (!isOnOnboardSurvey) {
+        return OnboardSurveyPageRoute().location;
+      }
+      return null;
+    }
+
+    if (!isOnOnboardAbout) {
+      return OnboardAboutYouPageRoute().location;
+    }
+    return null;
+  }
+
+  return null;
+}
+
 GoRouter initRouter({
   required AuthBloc authBloc,
   required UserBloc userBloc,
+  required OnboardBloc onboardBloc,
 }) => GoRouter(
   routes: $appRoutes,
   refreshListenable: GoRouterRefreshStream(
     Rx.merge([
       authBloc.stream.map((_) => null),
       userBloc.stream.map((_) => null),
+      onboardBloc.stream.map((_) => null),
     ]),
   ),
-  redirect: (context, state) {
-    final auth = authBloc.state;
-    final user = userBloc.state;
-    final location = state.matchedLocation;
-
-    final isAuth = auth.isAuthorized;
-    final isLogout = auth.isLogout;
-
-    final isOnAuthPage = location == AuthorizationPageRoute().location;
-
-    final isAuthRoute = context.isAuthRoute(
-      location,
-    );
-    final isOnOnboard =
-        location == OnboardAboutYouPageRoute().location ||
-        location == OnboardSurveyPageRoute().location;
-
-    // 🔴 1. not logged in → only allow auth routes
-    if (isLogout && !isAuthRoute) {
-      return AuthorizationPageRoute().location;
-    }
-
-    // 🔵 2. logged in but no profile → onboarding
-    if (isAuth && user.isNoData && !isOnOnboard) {
-      return OnboardAboutYouPageRoute().location;
-    }
-
-    // 🟢 3. logged in → app
-    if (isAuth && isOnAuthPage) {
-      return DiscoveryPageRoute().location;
-    }
-
-    return null;
-  },
+  redirect: (context, state) => resolveRedirect(
+    auth: authBloc.state,
+    onboard: onboardBloc.state,
+    location: state.matchedLocation,
+  ),
 );
 
 @TypedShellRoute<RootPageRoute>(

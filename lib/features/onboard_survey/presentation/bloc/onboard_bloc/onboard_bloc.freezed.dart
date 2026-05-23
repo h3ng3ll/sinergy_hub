@@ -274,7 +274,7 @@ String toString() {
 /// @nodoc
 mixin _$OnboardState {
 
- OnboardStatus get onboardStatus; dynamic get status; String get errorMessage;
+ OnboardStatus get onboardStatus; EOnboardStatus get status; String get errorMessage;
 /// Create a copy of OnboardState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -285,12 +285,12 @@ $OnboardStateCopyWith<OnboardState> get copyWith => _$OnboardStateCopyWithImpl<O
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnboardState&&(identical(other.onboardStatus, onboardStatus) || other.onboardStatus == onboardStatus)&&const DeepCollectionEquality().equals(other.status, status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnboardState&&(identical(other.onboardStatus, onboardStatus) || other.onboardStatus == onboardStatus)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,onboardStatus,const DeepCollectionEquality().hash(status),errorMessage);
+int get hashCode => Object.hash(runtimeType,onboardStatus,status,errorMessage);
 
 @override
 String toString() {
@@ -305,7 +305,7 @@ abstract mixin class $OnboardStateCopyWith<$Res>  {
   factory $OnboardStateCopyWith(OnboardState value, $Res Function(OnboardState) _then) = _$OnboardStateCopyWithImpl;
 @useResult
 $Res call({
- OnboardStatus onboardStatus, dynamic status, String errorMessage
+ OnboardStatus onboardStatus, EOnboardStatus status, String errorMessage
 });
 
 
@@ -322,11 +322,11 @@ class _$OnboardStateCopyWithImpl<$Res>
 
 /// Create a copy of OnboardState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? onboardStatus = null,Object? status = freezed,Object? errorMessage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? onboardStatus = null,Object? status = null,Object? errorMessage = null,}) {
   return _then(_self.copyWith(
 onboardStatus: null == onboardStatus ? _self.onboardStatus : onboardStatus // ignore: cast_nullable_to_non_nullable
-as OnboardStatus,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as dynamic,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as OnboardStatus,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as EOnboardStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -418,7 +418,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( OnboardStatus onboardStatus,  dynamic status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( OnboardStatus onboardStatus,  EOnboardStatus status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OnboardState() when $default != null:
 return $default(_that.onboardStatus,_that.status,_that.errorMessage);case _:
@@ -439,7 +439,7 @@ return $default(_that.onboardStatus,_that.status,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( OnboardStatus onboardStatus,  dynamic status,  String errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( OnboardStatus onboardStatus,  EOnboardStatus status,  String errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _OnboardState():
 return $default(_that.onboardStatus,_that.status,_that.errorMessage);}
@@ -456,7 +456,7 @@ return $default(_that.onboardStatus,_that.status,_that.errorMessage);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( OnboardStatus onboardStatus,  dynamic status,  String errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( OnboardStatus onboardStatus,  EOnboardStatus status,  String errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _OnboardState() when $default != null:
 return $default(_that.onboardStatus,_that.status,_that.errorMessage);case _:
@@ -470,12 +470,12 @@ return $default(_that.onboardStatus,_that.status,_that.errorMessage);case _:
 /// @nodoc
 
 
-class _OnboardState implements OnboardState {
-  const _OnboardState({required this.onboardStatus, this.status = EOnboardStatus.initial, this.errorMessage = ''});
+class _OnboardState extends OnboardState {
+  const _OnboardState({required this.onboardStatus, this.status = EOnboardStatus.initial, this.errorMessage = ''}): super._();
   
 
 @override final  OnboardStatus onboardStatus;
-@override@JsonKey() final  dynamic status;
+@override@JsonKey() final  EOnboardStatus status;
 @override@JsonKey() final  String errorMessage;
 
 /// Create a copy of OnboardState
@@ -488,12 +488,12 @@ _$OnboardStateCopyWith<_OnboardState> get copyWith => __$OnboardStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OnboardState&&(identical(other.onboardStatus, onboardStatus) || other.onboardStatus == onboardStatus)&&const DeepCollectionEquality().equals(other.status, status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OnboardState&&(identical(other.onboardStatus, onboardStatus) || other.onboardStatus == onboardStatus)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,onboardStatus,const DeepCollectionEquality().hash(status),errorMessage);
+int get hashCode => Object.hash(runtimeType,onboardStatus,status,errorMessage);
 
 @override
 String toString() {
@@ -508,7 +508,7 @@ abstract mixin class _$OnboardStateCopyWith<$Res> implements $OnboardStateCopyWi
   factory _$OnboardStateCopyWith(_OnboardState value, $Res Function(_OnboardState) _then) = __$OnboardStateCopyWithImpl;
 @override @useResult
 $Res call({
- OnboardStatus onboardStatus, dynamic status, String errorMessage
+ OnboardStatus onboardStatus, EOnboardStatus status, String errorMessage
 });
 
 
@@ -525,11 +525,11 @@ class __$OnboardStateCopyWithImpl<$Res>
 
 /// Create a copy of OnboardState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? onboardStatus = null,Object? status = freezed,Object? errorMessage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? onboardStatus = null,Object? status = null,Object? errorMessage = null,}) {
   return _then(_OnboardState(
 onboardStatus: null == onboardStatus ? _self.onboardStatus : onboardStatus // ignore: cast_nullable_to_non_nullable
-as OnboardStatus,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as dynamic,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as OnboardStatus,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as EOnboardStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

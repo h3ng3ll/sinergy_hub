@@ -11,6 +11,7 @@ import '../domain/repositories/i_skill_repository.dart';
 import '../domain/use_cases/get_completion_status_use_case.dart';
 import '../domain/use_cases/get_skills_use_case.dart';
 import '../domain/use_cases/set_completion_status_use_case.dart';
+import '../presentation/bloc/onboard_bloc/onboard_bloc.dart';
 
 void initOnboardSurveyFeature(GetIt getIt) {
   getIt.registerLazySingleton<IOnboardSurveyRepository>(
@@ -44,6 +45,13 @@ void initOnboardSurveyFeature(GetIt getIt) {
   getIt.registerFactory<GetSkillsUseCase>(
     () => GetSkillsUseCase(
       skillRepository: getIt<ISkillRepository>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<OnboardBloc>(
+    () => OnboardBloc(
+      getUserCompletionStatusUseCase: getIt<GetCompletionStatusUseCase>(),
+      setUserCompletionStatusUseCase: getIt<SetCompletionStatusUseCase>(),
     ),
   );
 }
