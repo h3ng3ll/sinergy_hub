@@ -14,11 +14,14 @@ import 'package:flutter/widgets.dart';
 class $AssetsDataGen {
   const $AssetsDataGen();
 
+  /// File path: assets/data/privacy_policy.md
+  String get privacyPolicy => 'assets/data/privacy_policy.md';
+
   /// File path: assets/data/skills.json
   String get skills => 'assets/data/skills.json';
 
   /// List of all assets
-  List<String> get values => [skills];
+  List<String> get values => [privacyPolicy, skills];
 }
 
 class $AssetsIconsGen {

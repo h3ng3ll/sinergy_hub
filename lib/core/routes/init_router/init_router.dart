@@ -23,6 +23,7 @@ import '../../../features/onboard_survey/presentation/bloc/onboard_bloc/onboard_
 import '../../../features/onboard_survey/presentation/pages/onboard_about_you_page/onboard_about_you_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_shell_page/onboard_shell_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
+import '../../../features/privacy_policy/presentation/pages/privacy_policy_page/privacy_policy_page.dart';
 import '../../../features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
 import '../../../features/user/presentation/pages/user_profile_page/user_profile_page.dart';
@@ -66,6 +67,7 @@ String? resolveRedirect({
     RegisterPageRoute().location,
     LoginPageRoute().location,
     ResetPasswordPageRoute().location,
+    PrivacyPolicyPageRoute().location,
   ];
   final isAuthRoute = authRoutes.contains(location);
 
@@ -143,6 +145,9 @@ GoRouter initRouter({
         ),
         TypedGoRoute<ResetPasswordPageRoute>(
           path: '/reset-password',
+        ),
+        TypedGoRoute<PrivacyPolicyPageRoute>(
+          path: '/privacy-policy',
         ),
       ],
     ),
@@ -280,6 +285,15 @@ class ResetPasswordPageRoute extends GoRouteData with $ResetPasswordPageRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       ResetPasswordPage(),
+    );
+  }
+}
+
+class PrivacyPolicyPageRoute extends GoRouteData with $PrivacyPolicyPageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      PrivacyPolicyPage(),
     );
   }
 }

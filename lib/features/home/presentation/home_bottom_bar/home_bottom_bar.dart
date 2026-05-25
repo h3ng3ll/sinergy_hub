@@ -39,7 +39,11 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
     );
   }
 
-  void onTapPrivacyPolicy() {}
+  void onTapPrivacyPolicy() {
+    PrivacyPolicyPageRoute().push(
+      context,
+    );
+  }
 
   void onTapLogOut() => context.read<AuthBloc>().add(
     AuthEvent.signOut(),
