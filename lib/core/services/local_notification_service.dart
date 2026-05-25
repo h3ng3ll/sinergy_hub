@@ -134,11 +134,11 @@ class LocalNotificationService {
         : null;
 
     final context = RootPageRoute.rootKey.currentContext;
-
+    final notificationData = NotificationData.fromJson(
+      payload,
+    );
     if (context != null && context.mounted) {
-      final notificationData = NotificationData.fromJson(
-        payload,
-      );
+
       switch (notificationData) {
         case ChatNotificationData(chatId: final chatId):
           final isOnCurrentChat =
@@ -167,8 +167,8 @@ class LocalNotificationService {
           );
 
       final androidNotificationDetails = AndroidNotificationDetails(
-        'game-notification',
-        'game-notification',
+        'general',
+        'general',
         actions: [],
         priority: Priority.high,
         largeIcon: FilePathAndroidBitmap(

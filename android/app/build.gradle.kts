@@ -48,13 +48,21 @@ android {
     productFlavors {
         create("production") {
             dimension = "default"
+            resValue (
+                type = "string",
+                name = "app_name",
+                value = "SinergyHub"
+            )
             applicationIdSuffix = ""
-            manifestPlaceholders["appName"] = "SinergyHub"
         }
         create("development"){
             dimension =  "default"
+            resValue(
+                type = "string",
+                name = "app_name",
+                value = "[DEV] SinergyHub"
+            )
             applicationIdSuffix = ".dev"
-            manifestPlaceholders["appName"] = "[DEV] SinergyHub"
         }
     }
 }
