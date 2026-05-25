@@ -11,6 +11,7 @@ class HomeDrawer extends StatelessWidget {
   final VoidCallback onTapNotifications;
   final VoidCallback onTapAccount;
   final VoidCallback onTapPrivacyPolicy;
+  final VoidCallback onTapSupport;
   final VoidCallback onTapLogOut;
 
   const HomeDrawer({
@@ -18,6 +19,7 @@ class HomeDrawer extends StatelessWidget {
     required this.onTapNotifications,
     required this.onTapAccount,
     required this.onTapPrivacyPolicy,
+    required this.onTapSupport,
     required this.onTapLogOut,
   });
 
@@ -56,6 +58,11 @@ class HomeDrawer extends StatelessWidget {
                 icon: Assets.icons.privacy,
                 text: 'Privacy Policy',
                 onTap: onTapPrivacyPolicy,
+              ),
+              BuildMenuItem(
+                icon: Assets.icons.info,
+                text: 'Support',
+                onTap: onTapSupport,
               ),
               BuildMenuItem(
                 icon: Assets.icons.logOut,

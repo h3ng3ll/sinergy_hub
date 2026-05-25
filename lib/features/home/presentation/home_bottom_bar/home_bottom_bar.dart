@@ -45,6 +45,12 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
     );
   }
 
+  void onTapSupport() {
+    SupportPageRoute().push(
+      context,
+    );
+  }
+
   void onTapLogOut() => context.read<AuthBloc>().add(
     AuthEvent.signOut(),
   );
@@ -110,6 +116,7 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
                   onTapNotifications: onTapNotifications,
                   onTapAccount: onTapAccount,
                   onTapPrivacyPolicy: onTapPrivacyPolicy,
+                  onTapSupport: onTapSupport,
                   onTapLogOut: onTapLogOut,
                 ),
           backgroundColor: Colors.transparent,

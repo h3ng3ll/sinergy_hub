@@ -24,6 +24,7 @@ import '../../../features/onboard_survey/presentation/pages/onboard_about_you_pa
 import '../../../features/onboard_survey/presentation/pages/onboard_shell_page/onboard_shell_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
 import '../../../features/privacy_policy/presentation/pages/privacy_policy_page/privacy_policy_page.dart';
+import '../../../features/support/presentation/pages/support_page/support_page.dart';
 import '../../../features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
 import '../../../features/user/presentation/pages/user_profile_page/user_profile_page.dart';
@@ -68,6 +69,7 @@ String? resolveRedirect({
     LoginPageRoute().location,
     ResetPasswordPageRoute().location,
     PrivacyPolicyPageRoute().location,
+    SupportPageRoute().location,
   ];
   final isAuthRoute = authRoutes.contains(location);
 
@@ -148,6 +150,9 @@ GoRouter initRouter({
         ),
         TypedGoRoute<PrivacyPolicyPageRoute>(
           path: '/privacy-policy',
+        ),
+        TypedGoRoute<SupportPageRoute>(
+          path: '/support',
         ),
       ],
     ),
@@ -294,6 +299,15 @@ class PrivacyPolicyPageRoute extends GoRouteData with $PrivacyPolicyPageRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       PrivacyPolicyPage(),
+    );
+  }
+}
+
+class SupportPageRoute extends GoRouteData with $SupportPageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      SupportPage(),
     );
   }
 }

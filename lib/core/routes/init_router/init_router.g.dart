@@ -31,6 +31,10 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
           path: '/privacy-policy',
           factory: $PrivacyPolicyPageRoute._fromState,
         ),
+        GoRouteData.$route(
+          path: '/support',
+          factory: $SupportPageRoute._fromState,
+        ),
       ],
     ),
     ShellRouteData.$route(
@@ -217,6 +221,26 @@ mixin $PrivacyPolicyPageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/privacy-policy');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $SupportPageRoute on GoRouteData {
+  static SupportPageRoute _fromState(GoRouterState state) => SupportPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/support');
 
   @override
   void go(BuildContext context) => context.go(location);

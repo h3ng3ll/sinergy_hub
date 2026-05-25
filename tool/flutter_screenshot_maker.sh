@@ -48,6 +48,10 @@ export SCREENSHOT_DIR="$OUTPUT_DIR"
 flutter drive \
   --driver=test_driver/integration_driver.dart \
   --target=integration_test/screenshots_test.dart \
+  --web-port 5000 \
+  --web-hostname localhost \
+  --flavor=development \
+  --dart-define=DARTENV=development \
   -d "$DEVICE"
 
 echo "Creating archive..."
