@@ -41,7 +41,7 @@ workflows:
           echo "FIREBASE_WEB_PUSH_CERTIFICATE=$FIREBASE_WEB_PUSH_CERTIFICATE" >> .env
 
       - name: Build web
-        script: flutter build web --release
+        script: flutter build web --release --dart-define=DARTENV=development
 
       - name: Deploy to Firebase
         script: |
