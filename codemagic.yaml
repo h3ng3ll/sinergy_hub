@@ -29,8 +29,8 @@ workflows:
       - name: Code generation
         script: dart run build_runner build -d
 
-      - name: Create firebase options File
-        script:  echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
+#      - name: Create firebase options File
+#        script:  echo "$FIREBASE_OPTIONS" > lib/firebase/firebase_options_dev.dart
 
       - name: Create firebase.json file
         script:  echo "$FIREBASE_JSON" > firebase.json
@@ -167,7 +167,7 @@ workflows:
     max_build_duration: 120
     instance_type: mac_mini_m2
     integrations:
-      app_store_connect: firemountains # <-- Put the value
+      app_store_connect: sinergyhub
     environment:
       groups:
         - store_credentials
