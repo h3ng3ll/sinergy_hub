@@ -10,7 +10,7 @@ workflows:
           include: true
 
     environment:
-      flutter: 3.38.5
+      flutter: 3.41.7
       groups:
         - env
         - files
@@ -78,7 +78,7 @@ workflows:
       groups:
         - store_credentials
       vars:
-        IOS_BUNDLE_ID: com.hengell.synergyhub
+        IOS_BUNDLE_ID: $IOS_BUNDLE_ID
         APP_NAME: $APPSTORE_APP_NAME
 
     scripts:
