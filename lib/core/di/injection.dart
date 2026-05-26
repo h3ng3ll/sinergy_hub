@@ -30,6 +30,7 @@ import '../services/permission_requester_service.dart';
 import '../utils/env/dev_env.dart';
 import '../utils/env/env.dart';
 import '../utils/env/prod_env.dart';
+import '../utils/env_helper.dart';
 
 final getIt = GetIt.instance;
 
@@ -54,11 +55,10 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => ImageService());
   getIt.registerLazySingleton(() => CryptoService());
   getIt.registerLazySingleton<Env>(() {
-    const env = String.fromEnvironment('DARTENV');
-    switch (env) {
-      case 'prod':
+    switch (EnvHelper.dartEnv) {
+      case EnvHelper.production:
         return ProdEnv();
-      case 'development':
+      case EnvHelper.development:
       default:
         return DevEnv();
     }
