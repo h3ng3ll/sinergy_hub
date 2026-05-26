@@ -37,8 +37,7 @@ workflows:
 
       - name: Create .env file
         script: |
-          echo "FIREBASE_WEB_API_KEY=$FIREBASE_WEB_API_KEY" > .env
-          echo "FIREBASE_WEB_PUSH_CERTIFICATE=$FIREBASE_WEB_PUSH_CERTIFICATE" >> .env
+          echo "$env" > .env
 
       - name: Build web
         script: flutter build web --release --dart-define=DARTENV=development
