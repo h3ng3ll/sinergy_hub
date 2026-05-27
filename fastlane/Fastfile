@@ -50,7 +50,7 @@ platform :ios do
       app_identifier: ENV["IOS_BUNDLE_ID"],
       submit_for_review: false,
       force: true,
-      languages: ["en-GB"],   # only English
+      languages: ["en-US"],   # only English
       metadata_path: "fastlane/metadata",
       skip_app_version_update: true,
       skip_binary_upload: true,
@@ -105,7 +105,7 @@ platform :ios do
   version = app.get_edit_app_store_version(platform: Spaceship::ConnectAPI::Platform::IOS)
 
   screenshots_dir = File.expand_path("screenshots", Dir.pwd)
-  lang = "en-GB"
+  lang = "en-US"
 
   UI.message("🚀 Processing language: #{lang.upcase}")
 
