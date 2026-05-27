@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -9,7 +8,6 @@ import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
-import '../../../../../core/services/permission_requester_service.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/btn/custom_text_btn.dart';
 import '../../../../../core/widgets/btn/translucent_btn.dart';
@@ -28,6 +26,7 @@ import '../../../../user/domain/usecases/update_user_usecase.dart';
 import '../../../../user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import '../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../../user/presentation/bloc/user_update_cubit/user_update_cubit.dart';
+import '../../../../user/presentation/dialogs/image_source_modal_sheet/image_source_modal_sheet.dart';
 import '../../../domain/models/skill/skill.dart';
 import '../../../domain/models/user_profiler/user_profiler.dart';
 import '../../bloc/onboard_bloc/onboard_bloc.dart';
@@ -133,11 +132,9 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
   }
 
   Future<void> onTapAvatar() async {
-    final File? image = await getIt<PermissionRequester>().onPickCamera(
-      context,
-    );
-    if (image == null) return;
-    this.image = image.readAsBytesSync();
+    final picked = await ImageSourceModalSheet.show();
+    if (picked == null) return;
+    image = picked;
     setState(() {});
   }
 

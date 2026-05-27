@@ -26,13 +26,23 @@ class ImageSourceModalSheet extends StatelessWidget {
   }
 
   Future<void> _onPickCamera(BuildContext context) async {
-    final bytes = await getIt<PermissionRequester>().onPickCamera(context);
+    final file = await getIt<PermissionRequester>().onPickCamera(
+      context,
+    );
+    if (file == null) {
+      if (!context.mounted) return;
+      Navigator.pop(context);
+      return;
+    }
+    final bytes = await file.readAsBytes();
     if (!context.mounted) return;
     Navigator.pop(context, bytes);
   }
 
   Future<void> _onPickGallery(BuildContext context) async {
-    final file = await getIt<PermissionRequester>().onPickGallery(context);
+    final file = await getIt<PermissionRequester>().onPickGallery(
+      context,
+    );
     if (file == null) {
       if (!context.mounted) return;
       Navigator.pop(context);
