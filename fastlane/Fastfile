@@ -151,5 +151,5 @@ platform :ios do
 
   UI.success("✅ Finished language: #{lang}")
   UI.success("🎉 UPLOAD COMPLETED SUCCESSFULLY!")
-
+  end
 end
