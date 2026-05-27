@@ -14,7 +14,9 @@ import '../../features/notifications/di/notifications_injection.dart';
 import '../../features/onboard_survey/di/onboard_survery_injection.dart';
 import '../../features/user/di/user_injection.dart';
 import '../../features/user_chat/di/user_chat_injection.dart';
+import '../../features/connectivity/di/connectivity_injection.dart';
 import '../services/audio_service.dart';
+import '../services/connectivity_service.dart';
 import '../services/crypto_service.dart';
 import '../services/firebase/firebase_auth_service.dart';
 import '../services/firebase/firebase_firestore_service.dart';
@@ -54,6 +56,7 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => NotificationTapProcessor());
   getIt.registerLazySingleton(() => ImageService());
   getIt.registerLazySingleton(() => CryptoService());
+  getIt.registerLazySingleton(() => ConnectivityService());
   getIt.registerLazySingleton<Env>(() {
     switch (EnvHelper.dartEnv) {
       case EnvHelper.production:
@@ -91,6 +94,9 @@ Future<void> initDependencies() async {
 
   // Auth feature
 
+  initConnectivityFeature(
+    getIt,
+  );
   initHomeFeature(
     getIt,
   );

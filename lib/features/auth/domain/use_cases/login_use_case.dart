@@ -1,18 +1,18 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/models/failures.dart';
-import '../../../chat/domain/services/i_presence_service.dart';
 import '../repostories/i_auth_repository.dart';
+import 'authorization_use_case.dart';
 
 class LoginUseCase {
   final IAuthRepository _authRepository;
-  final IPresenceService _presenceService;
+  final AuthorizationUseCase _authorizationUseCase;
 
   LoginUseCase({
     required IAuthRepository authRepository,
-    required IPresenceService presenceService,
-  }) : _authRepository = authRepository,
-       _presenceService = presenceService;
+    required AuthorizationUseCase authorizationUseCase,
+  })  : _authRepository = authRepository,
+        _authorizationUseCase = authorizationUseCase;
 
   /// register if success Update UID of user .
   Future<Either<void, Failure>> call({
@@ -26,7 +26,7 @@ class LoginUseCase {
 
     return res.fold(
       (_) async {
-        await _presenceService.init();
+        await _authorizationUseCase();
         return Left(
           null,
         );

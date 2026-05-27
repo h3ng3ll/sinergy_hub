@@ -19,5 +19,8 @@
   "could_not_launch_email": "Could not launch email client",
   "@could_not_launch_email": {
     "description": "Error message when email client cannot be launched"
-  }
+  },
+  "no_connection_title": "No connection",
+  "no_connection_message": "Please check your internet connection. We'll bring you back as soon as you're online.",
+  "connection_restored": "Connection restored"
 }

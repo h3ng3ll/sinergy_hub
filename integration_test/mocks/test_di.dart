@@ -24,7 +24,9 @@ import 'package:sinergy_hub/core/utils/env/dev_env.dart';
 import 'package:sinergy_hub/core/utils/env/env.dart';
 import 'package:sinergy_hub/features/auth/domain/repostories/i_auth_repository.dart';
 import 'package:sinergy_hub/features/auth/domain/use_cases/apple_sign_in_use_case.dart';
+import 'package:sinergy_hub/features/auth/domain/use_cases/authorization_use_case.dart';
 import 'package:sinergy_hub/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:sinergy_hub/features/auth/domain/use_cases/logout_use_case.dart';
 import 'package:sinergy_hub/features/auth/domain/use_cases/complete_registration_use_case.dart';
 import 'package:sinergy_hub/features/auth/domain/use_cases/register_use_case.dart';
 import 'package:sinergy_hub/features/auth/domain/use_cases/reset_password_by_email_use_case.dart';
@@ -36,6 +38,8 @@ import 'package:sinergy_hub/features/auth/presentation/pages/reset_password_page
 import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_message_repository.dart';
 import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_repository.dart';
 import 'package:sinergy_hub/features/chat/domain/services/i_presence_service.dart';
+import 'package:sinergy_hub/core/services/connectivity_service.dart';
+import 'package:sinergy_hub/features/connectivity/presentation/bloc/connectivity_bloc/connectivity_bloc.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/get_chat_by_id_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/open_chat_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/get_chat_by_participants_case.dart';
@@ -224,8 +228,22 @@ Future<void> setupTestDI() async {
   );
   getIt.registerLazySingleton<IAppModeService>(() => MockAppModeService());
   getIt.registerLazySingleton<IPresenceService>(() => MockPresenceService());
+  getIt.registerLazySingleton<ConnectivityService>(() => ConnectivityService());
+  getIt.registerLazySingleton<ConnectivityBloc>(
+    () => ConnectivityBloc(connectivityService: getIt<ConnectivityService>()),
+  );
 
   // Auth use cases (production code reading mock interfaces)
+  getIt.registerFactory(
+    () => AuthorizationUseCase(
+      presenceService: getIt<IPresenceService>(),
+    ),
+  );
+  getIt.registerFactory(
+    () => LogoutUseCase(
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
   getIt.registerFactory(
     () => RegisterUseCase(
       authRepository: getIt<IAuthRepository>(),
@@ -235,13 +253,13 @@ Future<void> setupTestDI() async {
   getIt.registerFactory(
     () => CompleteRegistrationUseCase(
       authRepository: getIt<IAuthRepository>(),
-      presenceService: getIt<IPresenceService>(),
+      authorizationUseCase: getIt<AuthorizationUseCase>(),
     ),
   );
   getIt.registerFactory(
     () => LoginUseCase(
       authRepository: getIt<IAuthRepository>(),
-      presenceService: getIt<IPresenceService>(),
+      authorizationUseCase: getIt<AuthorizationUseCase>(),
     ),
   );
   getIt.registerFactory(
@@ -252,7 +270,7 @@ Future<void> setupTestDI() async {
   getIt.registerFactory(
     () => SignInWithGoogleUseCase(
       authRepository: getIt<IAuthRepository>(),
-      presenceService: getIt<IPresenceService>(),
+      authorizationUseCase: getIt<AuthorizationUseCase>(),
     ),
   );
   getIt.registerFactory(
@@ -262,7 +280,10 @@ Future<void> setupTestDI() async {
     ),
   );
   getIt.registerLazySingleton(
-    () => AppleSignInUseCase(authRepository: getIt<IAuthRepository>()),
+    () => AppleSignInUseCase(
+      authRepository: getIt<IAuthRepository>(),
+      authorizationUseCase: getIt<AuthorizationUseCase>(),
+    ),
   );
 
   // User use cases
@@ -569,6 +590,7 @@ Future<void> setupTestDI() async {
     authRepository: getIt<IAuthRepository>(),
     signInWithGoogleUseCase: getIt<SignInWithGoogleUseCase>(),
     appleSignInUseCase: getIt<AppleSignInUseCase>(),
+    logoutUseCase: getIt<LogoutUseCase>(),
   );
   testUserBloc = MockUserBloc(
     listenUserDataUseCase: getIt<ListenUserDataUseCase>(),

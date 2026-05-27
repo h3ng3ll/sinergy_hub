@@ -16,6 +16,7 @@ import 'package:sinergy_hub/core/resources/translations/app_localizations.dart';
 import 'package:sinergy_hub/core/routes/init_router/init_router.dart';
 import 'package:sinergy_hub/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chat_bloc/chat_bloc.dart';
+import 'package:sinergy_hub/features/connectivity/presentation/bloc/connectivity_bloc/connectivity_bloc.dart';
 import 'package:sinergy_hub/features/matches/domain/models/matches_filter/matches_filter.dart';
 import 'package:sinergy_hub/features/matches/presentation/bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import 'package:sinergy_hub/features/matches/presentation/dialogs/filter_modal/matches_filters_modal_sheet.dart';
@@ -180,6 +181,7 @@ void main() {
       authBloc: testAuthBloc,
       userBloc: testUserBloc,
       onboardBloc: testOnboardBloc,
+      connectivityBloc: getIt<ConnectivityBloc>(),
     );
   });
 

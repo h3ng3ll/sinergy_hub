@@ -14,8 +14,10 @@ import '../../user/domain/repositories/i_user_write_repository.dart';
 import '../data/repositories/auth_repository/firebase_auth_repository.dart';
 import '../domain/repostories/i_auth_repository.dart';
 import '../domain/use_cases/apple_sign_in_use_case.dart';
+import '../domain/use_cases/authorization_use_case.dart';
 import '../domain/use_cases/complete_registration_use_case.dart';
 import '../domain/use_cases/login_use_case.dart';
+import '../domain/use_cases/logout_use_case.dart';
 import '../domain/use_cases/register_use_case.dart';
 import '../domain/use_cases/reset_password_by_email_use_case.dart';
 import '../domain/use_cases/send_email_verification_use_case.dart';
@@ -44,6 +46,16 @@ void initAuthFeature(GetIt getIt) {
   );
 
   getIt.registerFactory(
+    () => AuthorizationUseCase(
+      presenceService: getIt<IPresenceService>(),
+    ),
+  );
+  getIt.registerFactory(
+    () => LogoutUseCase(
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerFactory(
     () => RegisterUseCase(
       authRepository: getIt<IAuthRepository>(),
       sendEmailVerificationUseCase: getIt<SendEmailVerificationUseCase>(),
@@ -52,13 +64,13 @@ void initAuthFeature(GetIt getIt) {
   getIt.registerFactory(
     () => CompleteRegistrationUseCase(
       authRepository: getIt<IAuthRepository>(),
-      presenceService: getIt<IPresenceService>(),
+      authorizationUseCase: getIt<AuthorizationUseCase>(),
     ),
   );
   getIt.registerFactory(
     () => LoginUseCase(
       authRepository: getIt<IAuthRepository>(),
-      presenceService: getIt<IPresenceService>(),
+      authorizationUseCase: getIt<AuthorizationUseCase>(),
     ),
   );
   getIt.registerFactory(
@@ -69,7 +81,7 @@ void initAuthFeature(GetIt getIt) {
   getIt.registerFactory(
     () => SignInWithGoogleUseCase(
       authRepository: getIt<IAuthRepository>(),
-      presenceService: getIt<IPresenceService>(),
+      authorizationUseCase: getIt<AuthorizationUseCase>(),
     ),
   );
   getIt.registerFactory(
@@ -81,6 +93,7 @@ void initAuthFeature(GetIt getIt) {
   getIt.registerLazySingleton(
     () => AppleSignInUseCase(
       authRepository: getIt<IAuthRepository>(),
+      authorizationUseCase: getIt<AuthorizationUseCase>(),
     ),
   );
 
@@ -91,6 +104,7 @@ void initAuthFeature(GetIt getIt) {
       authRepository: getIt<IAuthRepository>(),
       signInWithGoogleUseCase: getIt<SignInWithGoogleUseCase>(),
       appleSignInUseCase: getIt<AppleSignInUseCase>(),
+      logoutUseCase: getIt<LogoutUseCase>(),
     ),
   );
   getIt.registerFactory<LoginBloc>(

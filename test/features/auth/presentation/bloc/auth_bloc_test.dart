@@ -5,10 +5,9 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:sinergy_hub/features/auth/domain/exception/failed_sign_with_google.dart';
+import 'package:sinergy_hub/features/auth/domain/use_cases/logout_use_case.dart';
 import 'package:sinergy_hub/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 
-import '../../../chats/domain/usecases/send_message_use_case_test.dart';
 import '../../data/repositories/auth_repository_mock.dart';
 import '../../domain/models/user_mock.dart';
 import '../../domain/use_cases/apple_sign_in_use_case_mock.dart';
@@ -16,10 +15,13 @@ import '../../domain/use_cases/sign_in_with_google_use_case_mock.dart';
 
 class FakeUser extends Fake implements User {}
 
+class _LogoutUseCaseMock extends Mock implements LogoutUseCase {}
+
 void main() {
   late SignInWithGoogleUseCaseMock signInWithGoogleUseCaseMock;
   late AppleSignInUseCaseMock appleSignInUseCaseMock;
   late AuthRepositoryMock authRepository;
+  late _LogoutUseCaseMock logoutUseCase;
   late AuthBloc authBloc;
 
   setUpAll(() {
@@ -31,10 +33,12 @@ void main() {
       signInWithGoogleUseCaseMock = SignInWithGoogleUseCaseMock();
       authRepository = AuthRepositoryMock();
       appleSignInUseCaseMock = AppleSignInUseCaseMock();
+      logoutUseCase = _LogoutUseCaseMock();
       authBloc = AuthBloc(
         authRepository: authRepository,
         signInWithGoogleUseCase: signInWithGoogleUseCaseMock,
         appleSignInUseCase: appleSignInUseCaseMock,
+        logoutUseCase: logoutUseCase,
       );
     },
   );
@@ -217,21 +221,21 @@ void main() {
     // ================= SIGN OUT =================
 
     blocTest<AuthBloc, AuthState>(
-      'SignOut викликає repository.signOut',
+      'SignOut delegates to LogoutUseCase',
       build: () {
-        when(() => authRepository.signOut()).thenAnswer((_) async {});
+        when(() => logoutUseCase()).thenAnswer((_) async {});
         return authBloc;
       },
       act: (bloc) => bloc.add(const AuthEvent.signOut()),
       verify: (_) {
-        verify(() => authRepository.signOut()).called(1);
+        verify(() => logoutUseCase()).called(1);
       },
     );
 
     blocTest<AuthBloc, AuthState>(
       'SignOut → failed при помилці',
       build: () {
-        when(() => authRepository.signOut()).thenThrow(Exception('fail'));
+        when(() => logoutUseCase()).thenThrow(Exception('fail'));
         return authBloc;
       },
       act: (bloc) => bloc.add(const AuthEvent.signOut()),

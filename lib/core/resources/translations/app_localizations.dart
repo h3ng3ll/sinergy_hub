@@ -195,6 +195,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not launch email client'**
   String get could_not_launch_email;
+
+  /// No description provided for @no_connection_title.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection'**
+  String get no_connection_title;
+
+  /// No description provided for @no_connection_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection. We\'ll bring you back as soon as you\'re online.'**
+  String get no_connection_message;
+
+  /// No description provided for @connection_restored.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection restored'**
+  String get connection_restored;
 }
 
 class _AppLocalizationsDelegate

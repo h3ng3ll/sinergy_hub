@@ -6,7 +6,7 @@ part of 'init_router.dart';
 // GoRouterGenerator
 // **************************************************************************
 
-List<RouteBase> get $appRoutes => [$rootPageRoute];
+List<RouteBase> get $appRoutes => [$rootPageRoute, $noConnectionPageRoute];
 
 RouteBase get $rootPageRoute => ShellRouteData.$route(
   factory: $RootPageRouteExtension._fromState,
@@ -528,6 +528,32 @@ mixin $NotificationPageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/notification');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $noConnectionPageRoute => GoRouteData.$route(
+  path: '/no-connection',
+  factory: $NoConnectionPageRoute._fromState,
+);
+
+mixin $NoConnectionPageRoute on GoRouteData {
+  static NoConnectionPageRoute _fromState(GoRouterState state) =>
+      NoConnectionPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/no-connection');
 
   @override
   void go(BuildContext context) => context.go(location);

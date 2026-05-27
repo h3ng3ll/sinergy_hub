@@ -14,6 +14,8 @@ import 'core/resources/app_locale.dart';
 import 'core/resources/app_theme.dart';
 import 'core/resources/translations/app_localizations.dart';
 import 'core/routes/init_router/init_router.dart';
+import 'core/services/connectivity_service.dart';
+import 'core/services/ui_message_service.dart';
 import 'core/services/firebase/firebase_auth_service.dart';
 import 'core/services/firebase/firebase_firestore_service.dart';
 import 'core/services/firebase/firebase_messaging_service.dart';
@@ -22,6 +24,7 @@ import 'core/services/local_notification_service.dart';
 import 'core/utils/env/env.dart';
 import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'features/chat/domain/services/i_presence_service.dart';
+import 'features/connectivity/presentation/bloc/connectivity_bloc/connectivity_bloc.dart';
 import 'features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
 import 'features/onboard_survey/presentation/bloc/onboard_bloc/onboard_bloc.dart';
 import 'features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
@@ -77,6 +80,7 @@ void main() async {
 
 
 
+  await getIt<ConnectivityService>().init();
   await getIt<FirebaseAuthService>().init();
   await getIt<FirebaseFirestoreService>().init();
   await getIt<LocalNotificationService>().init();
@@ -114,6 +118,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       authBloc: getIt<AuthBloc>(),
       userBloc: getIt<UserBloc>(),
       onboardBloc: getIt<OnboardBloc>(),
+      connectivityBloc: getIt<ConnectivityBloc>(),
     );
 
     getIt<AuthBloc>()
@@ -145,6 +150,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(
       this,
     );
+    getIt<ConnectivityService>().dispose();
     super.dispose();
   }
 
@@ -166,6 +172,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         BlocProvider<OnboardBloc>.value(
           value: getIt<OnboardBloc>(),
+        ),
+        BlocProvider<ConnectivityBloc>.value(
+          value: getIt<ConnectivityBloc>(),
         ),
         BlocProvider(
           create: (_) => getIt<NotificationConfigBloc>(),
@@ -233,6 +242,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 BlocListener<OnboardBloc, OnboardState>(
                   listenWhen: (p, c) => p.status != c.status,
                   listener: (context, _) => _maybeRemoveSplash(),
+                ),
+                BlocListener<ConnectivityBloc, ConnectivityState>(
+                  listenWhen: (p, c) => p.isOffline && c.isOnline,
+                  listener: (context, _) {
+                    UiMessageService.showSuccess(
+                      AppLocalizations.of(context)!.connection_restored,
+                    );
+                  },
                 ),
               ],
               child: child ?? SizedBox(),

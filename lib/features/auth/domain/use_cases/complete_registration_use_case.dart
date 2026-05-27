@@ -1,19 +1,19 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../chat/domain/services/i_presence_service.dart';
 import '../failures/auth_failures.dart';
 import '../failures/email_not_verified_failure.dart';
 import '../repostories/i_auth_repository.dart';
+import 'authorization_use_case.dart';
 
 class CompleteRegistrationUseCase {
   final IAuthRepository _authRepository;
-  final IPresenceService _presenceService;
+  final AuthorizationUseCase _authorizationUseCase;
 
   CompleteRegistrationUseCase({
     required IAuthRepository authRepository,
-    required IPresenceService presenceService,
-  }) : _authRepository = authRepository,
-       _presenceService = presenceService;
+    required AuthorizationUseCase authorizationUseCase,
+  })  : _authRepository = authRepository,
+        _authorizationUseCase = authorizationUseCase;
 
   /// Polls Firebase for verification status. When verified, initialises
   /// presence so the router gate (which reads AuthState.isAuthorized,
@@ -34,7 +34,7 @@ class CompleteRegistrationUseCase {
       );
     }
 
-    await _presenceService.init();
+    await _authorizationUseCase();
 
     return Left(
       null,

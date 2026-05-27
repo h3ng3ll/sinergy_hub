@@ -6,6 +6,8 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../../../features/auth/presentation/pages/authorization_page/authorization_page.dart';
+import '../../../features/connectivity/presentation/bloc/connectivity_bloc/connectivity_bloc.dart';
+import '../../../features/connectivity/presentation/pages/no_connection_page/no_connection_page.dart';
 import '../../../features/auth/presentation/pages/login_page/login_page.dart';
 import '../../../features/auth/presentation/pages/register_page/register_page.dart';
 import '../../../features/auth/presentation/pages/reset_password_page/reset_password_page.dart';
@@ -54,12 +56,33 @@ class GoRouterRefreshStream extends ChangeNotifier {
 String? resolveRedirect({
   required AuthState auth,
   required OnboardState onboard,
+  required ConnectivityState connectivity,
   required String location,
 }) {
   final isAuth = auth.isAuthorized;
   final isLogout = auth.isLogout;
 
-  final isOnAuthPage = location == AuthorizationPageRoute().location;
+  final isOnNoConnection = location == NoConnectionPageRoute().location;
+
+  // Connectivity gate — only for authorized users, and only once a
+  // sample has arrived. Unauthorized flows are never sent to
+  // /no-connection so login/register/onboard can continue offline.
+  if (isAuth && connectivity.isResolved) {
+    if (connectivity.isOffline && !isOnNoConnection) {
+      return NoConnectionPageRoute().location;
+    }
+  }
+
+  // When connectivity is restored while the user is on /no-connection,
+  // treat the location as the auth landing so the auth/onboard chain
+  // below routes them to the correct destination (discovery, onboard
+  // survey, or onboard-about) instead of leaving them stranded.
+  final effectiveLocation =
+      (isAuth && connectivity.isOnline && isOnNoConnection)
+          ? AuthorizationPageRoute().location
+          : location;
+
+  final isOnAuthPage = effectiveLocation == AuthorizationPageRoute().location;
 
   final authRoutes = <String>[
     OnboardSurveyPageRoute().location,
@@ -71,12 +94,12 @@ String? resolveRedirect({
     PrivacyPolicyPageRoute().location,
     SupportPageRoute().location,
   ];
-  final isAuthRoute = authRoutes.contains(location);
+  final isAuthRoute = authRoutes.contains(effectiveLocation);
 
   final isOnOnboardAbout =
-      location == OnboardAboutYouPageRoute().location;
+      effectiveLocation == OnboardAboutYouPageRoute().location;
   final isOnOnboardSurvey =
-      location == OnboardSurveyPageRoute().location;
+      effectiveLocation == OnboardSurveyPageRoute().location;
   final isOnOnboard = isOnOnboardAbout || isOnOnboardSurvey;
 
   // 🔴 1. not logged in → only allow auth routes
@@ -118,6 +141,7 @@ GoRouter initRouter({
   required AuthBloc authBloc,
   required UserBloc userBloc,
   required OnboardBloc onboardBloc,
+  required ConnectivityBloc connectivityBloc,
 }) => GoRouter(
   routes: $appRoutes,
   refreshListenable: GoRouterRefreshStream(
@@ -125,11 +149,13 @@ GoRouter initRouter({
       authBloc.stream.map((_) => null),
       userBloc.stream.map((_) => null),
       onboardBloc.stream.map((_) => null),
+      connectivityBloc.stream.map((_) => null),
     ]),
   ),
   redirect: (context, state) => resolveRedirect(
     auth: authBloc.state,
     onboard: onboardBloc.state,
+    connectivity: connectivityBloc.state,
     location: state.matchedLocation,
   ),
 );
@@ -308,6 +334,16 @@ class SupportPageRoute extends GoRouteData with $SupportPageRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       SupportPage(),
+    );
+  }
+}
+
+@TypedGoRoute<NoConnectionPageRoute>(path: '/no-connection')
+class NoConnectionPageRoute extends GoRouteData with $NoConnectionPageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      NoConnectionPage(),
     );
   }
 }

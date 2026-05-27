@@ -59,4 +59,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get could_not_launch_email => 'Could not launch email client';
+
+  @override
+  String get no_connection_title => 'No connection';
+
+  @override
+  String get no_connection_message =>
+      'Please check your internet connection. We\'ll bring you back as soon as you\'re online.';
+
+  @override
+  String get connection_restored => 'Connection restored';
 }

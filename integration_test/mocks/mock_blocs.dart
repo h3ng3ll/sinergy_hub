@@ -46,6 +46,7 @@ class MockAuthBloc extends AuthBloc {
     required super.authRepository,
     required super.signInWithGoogleUseCase,
     required super.appleSignInUseCase,
+    required super.logoutUseCase,
   }) {
     // Push the authorized state right away so the router redirect
     // picks it up immediately.

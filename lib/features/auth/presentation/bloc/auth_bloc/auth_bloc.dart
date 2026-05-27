@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/repostories/i_auth_repository.dart';
 import '../../../domain/use_cases/apple_sign_in_use_case.dart';
+import '../../../domain/use_cases/logout_use_case.dart';
 import '../../../domain/use_cases/sign_in_with_google_use_case.dart';
 
 part 'auth_event.dart';
@@ -16,14 +17,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final IAuthRepository _authRepository;
   final SignInWithGoogleUseCase _signInWithGoogleUseCase;
   final AppleSignInUseCase _appleSignInUseCase;
+  final LogoutUseCase _logoutUseCase;
 
   AuthBloc({
     required IAuthRepository authRepository,
     required SignInWithGoogleUseCase signInWithGoogleUseCase,
     required AppleSignInUseCase appleSignInUseCase,
+    required LogoutUseCase logoutUseCase,
   }) : _authRepository = authRepository,
        _signInWithGoogleUseCase = signInWithGoogleUseCase,
         _appleSignInUseCase = appleSignInUseCase,
+        _logoutUseCase = logoutUseCase,
        super(const AuthState()) {
     on<_Init>(_init);
     on<_Listen>(_listen);
@@ -127,7 +131,7 @@ void _signInViaApple(
     Emitter<AuthState> emit,
   ) async {
     try {
-      await _authRepository.signOut();
+      await _logoutUseCase();
     } catch (e) {
       emit(
         state.copyWith(
