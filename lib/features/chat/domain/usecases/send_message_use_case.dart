@@ -30,11 +30,15 @@ class SendMessageUseCase {
     required String chatId,
   }) async {
     try {
+      final normalised = _normaliseMessage(message);
+      if (normalised.isEmpty) {
+        return Right(MessageNotSentFailure());
+      }
       final uid = await _authRepository.requireUserId();
       final chatMessage = ChatMessage(
         createdAt: DateTime.now(),
         sentUid: uid,
-        message: message,
+        message: normalised,
         // hasRead: false,
       );
       await _chatMessageRepository.create(
@@ -45,7 +49,7 @@ class SendMessageUseCase {
         chatId: chatId,
       );
       final updatedChat = chat.copyWith(
-        lastMessage: message,
+        lastMessage: normalised,
         lastMessageSentBy: uid,
       );
       await _updateChatInfoUseCase(
@@ -60,5 +64,16 @@ class SendMessageUseCase {
         MessageNotSentFailure(),
       );
     }
+  }
+
+  /// Strips leading/trailing whitespace and collapses runs of 2+
+  /// blank lines into a single line break, so a message typed with
+  /// stray empty lines doesn't render with tall vertical gaps.
+  String _normaliseMessage(String input) {
+    final collapsed = input.replaceAll(
+      RegExp(r'(\r?\n[ \t]*){2,}'),
+      '\n',
+    );
+    return collapsed.trim();
   }
 }

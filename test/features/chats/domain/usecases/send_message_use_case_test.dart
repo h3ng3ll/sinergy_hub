@@ -137,5 +137,105 @@ void main() {
         ),
       ).called(1);
     });
+
+    group('message normalisation', () {
+      setUp(() {
+        when(() => authRepo.requireUserId()).thenAnswer((_) async => uid);
+        when(
+          () => chatMessageRepo.create(
+            message: any(named: 'message'),
+            chatId: any(named: 'chatId'),
+          ),
+        ).thenAnswer((_) async => ChatMessage(
+              message: '',
+              sentUid: uid,
+              createdAt: DateTime.now(),
+            ));
+        when(() => getChatByIdUseCase.call(chatId: any(named: 'chatId')))
+            .thenAnswer((_) async => chat);
+        when(
+          () => updateChatInfoUseCase(
+            chatId: any(named: 'chatId'),
+            chat: any(named: 'chat', that: isA<Chat>()),
+          ),
+        ).thenAnswer((_) async {});
+      });
+
+      Future<ChatMessage> captureMessage(String input) async {
+        await useCase.call(message: input, chatId: chatId);
+        final captured = verify(
+          () => chatMessageRepo.create(
+            chatId: chatId,
+            message: captureAny(named: 'message'),
+          ),
+        ).captured.last as ChatMessage;
+        return captured;
+      }
+
+      Future<Chat> captureChat(String input) async {
+        await useCase.call(message: input, chatId: chatId);
+        final captured = verify(
+          () => updateChatInfoUseCase(
+            chatId: chatId,
+            chat: captureAny(named: 'chat'),
+          ),
+        ).captured.last as Chat;
+        return captured;
+      }
+
+      test('collapses 2+ consecutive blank lines into a single line break',
+          () async {
+        final captured = await captureMessage('a\n\n\nb\n\n\n\nc');
+        expect(captured.message, 'a\nb\nc');
+      });
+
+      test('preserves intentional single line breaks', () async {
+        final captured = await captureMessage('a\nb\nc');
+        expect(captured.message, 'a\nb\nc');
+      });
+
+      test('strips leading and trailing whitespace', () async {
+        final captured = await captureMessage('  \n hello \n  ');
+        expect(captured.message, 'hello');
+      });
+
+      test(
+        'handles whitespace-only lines between content (the screenshot bug)',
+        () async {
+          final captured = await captureMessage(
+            'test daklsdf f d\n\n\nafds\n\nd\naf\ndsf\nsf\nsd\nf\n\n\n\ndfads',
+          );
+          expect(
+            captured.message,
+            'test daklsdf f d\nafds\nd\naf\ndsf\nsf\nsd\nf\ndfads',
+          );
+        },
+      );
+
+      test('handles \\r\\n (Windows) line endings', () async {
+        final captured = await captureMessage('a\r\n\r\n\r\nb');
+        expect(captured.message, 'a\nb');
+      });
+
+      test('returns MessageNotSentFailure for whitespace-only input',
+          () async {
+        final res = await useCase.call(message: '   \n\n  \t  ', chatId: chatId);
+
+        expect(res.isRight(), isTrue);
+        verifyNever(() => chatMessageRepo.create(
+              message: any(named: 'message'),
+              chatId: any(named: 'chatId'),
+            ));
+        verifyNever(() => updateChatInfoUseCase(
+              chatId: any(named: 'chatId'),
+              chat: any(named: 'chat'),
+            ));
+      });
+
+      test('lastMessage on the Chat doc uses the normalised text', () async {
+        final captured = await captureChat('  a\n\n\nb  ');
+        expect(captured.lastMessage, 'a\nb');
+      });
+    });
   });
 }
