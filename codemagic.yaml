@@ -32,23 +32,24 @@ workflows:
       - name: Code generation
         script: dart run build_runner build -d
 
-#      - name: Create firebase options File
-#        script:  echo "$FIREBASE_OPTIONS" > lib/firebase/firebase_options_dev.dart
+      #      - name: Create firebase options File
+      #        script:  echo "$FIREBASE_OPTIONS" > lib/firebase/firebase_options_dev.dart
 
       - name: Create firebase.json file
-        script:  echo "$FIREBASE_JSON" > firebase.json
+        script: echo "$FIREBASE_JSON" > firebase.json
 
       - name: Create .env file
         script: |
           echo "$env" > .env
 
       - name: Build web
-        script: flutter build web \
-          --dart-define=DARTENV=development \
-          --dart-define=DEV_SERVER_CLIENT_ID="DEV_SERVER_CLIENT_ID" \
-          --dart-define=DEV_FIREBASE_WEB_PUSH_CERTIFICATE="$DEV_FIREBASE_WEB_PUSH_CERTIFICATE" \
-          --dart-define=FIREBASE_PROJECT_WEB_URL="FIREBASE_PROJECT_WEB_URL" \
-          --release
+        script: |
+          flutter build web \
+            --dart-define=DARTENV=development \
+            --dart-define=DEV_SERVER_CLIENT_ID="DEV_SERVER_CLIENT_ID" \
+            --dart-define=DEV_FIREBASE_WEB_PUSH_CERTIFICATE="$DEV_FIREBASE_WEB_PUSH_CERTIFICATE" \
+            --dart-define=FIREBASE_PROJECT_WEB_URL="FIREBASE_PROJECT_WEB_URL" \
+            --release
 
       - name: Deploy to Firebase
         script: |
@@ -68,12 +69,12 @@ workflows:
           DEPLOY_URL="https://$FIREBASE_PROJECT_ID.web.app"
           
           MESSAGE="$STATUS%0A🚀 Deploy: $DEPLOY_URL%0A📦 Build: $CM_BUILD_ID"
-                                   
+          
           curl -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
           -d chat_id=$TELEGRAM_CHAT_ID \
           -d text="$MESSAGE"
-         
-
+  
+  
 
   upload_ios_metadata:
     name: Upload iOS metadata
