@@ -94,28 +94,28 @@ class ChatActionsDialog extends StatelessWidget {
                   onFavorite?.call();
                 },
               ),
-
-            if (onMute != null)
-              _ChatActionTile(
-                icon: Icons.notifications_off_outlined,
-                title: 'Mute Notifications',
-                onTap: () {
-                  Navigator.of(context).pop();
-                  onMute?.call();
-                },
-              ),
-
-            if (onDelete != null)
-              _ChatActionTile(
-                icon: Icons.delete_outline,
-                title: 'Delete Chat',
-                iconColor: Colors.red,
-                titleColor: Colors.red,
-                onTap: () {
-                  Navigator.of(context).pop();
-                  onDelete?.call();
-                },
-              ),
+            ///Todo: Future realization not implemented yet
+            // if (onMute != null)
+            //   _ChatActionTile(
+            //     icon: Icons.notifications_off_outlined,
+            //     title: 'Mute Notifications',
+            //     onTap: () {
+            //       Navigator.of(context).pop();
+            //       onMute?.call();
+            //     },
+            //   ),
+            //
+            // if (onDelete != null)
+            //   _ChatActionTile(
+            //     icon: Icons.delete_outline,
+            //     title: 'Delete Chat',
+            //     iconColor: Colors.red,
+            //     titleColor: Colors.red,
+            //     onTap: () {
+            //       Navigator.of(context).pop();
+            //       onDelete?.call();
+            //     },
+            //   ),
 
             const SizedBox(height: 8.0),
 
