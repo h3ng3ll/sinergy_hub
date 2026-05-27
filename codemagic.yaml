@@ -23,6 +23,9 @@ workflows:
         - .flutter
         - build/
     scripts:
+      - name: Prepare
+        script: set -euo pipefail
+
       - name: Get packages
         script: flutter pub get
 
@@ -41,11 +44,11 @@ workflows:
 
       - name: Build web
         script: flutter build web \
-          --release \
           --dart-define=DARTENV=development \
           --dart-define=DEV_SERVER_CLIENT_ID="DEV_SERVER_CLIENT_ID" \
           --dart-define=DEV_FIREBASE_WEB_PUSH_CERTIFICATE="$DEV_FIREBASE_WEB_PUSH_CERTIFICATE" \
-          --dart-define=FIREBASE_PROJECT_WEB_URL="FIREBASE_PROJECT_WEB_URL"
+          --dart-define=FIREBASE_PROJECT_WEB_URL="FIREBASE_PROJECT_WEB_URL" \
+          --release
 
       - name: Deploy to Firebase
         script: |
