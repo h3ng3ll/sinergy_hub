@@ -133,11 +133,11 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
   }
 
   Future<void> onTapAvatar() async {
-    final Uint8List? image = await getIt<PermissionRequester>().onPickCamera(
+    final File? image = await getIt<PermissionRequester>().onPickCamera(
       context,
     );
     if (image == null) return;
-    this.image = image;
+    this.image = image.readAsBytesSync();
     setState(() {});
   }
 

@@ -1,17 +1,14 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/di/injection.dart';
 import '../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../core/resources/text/app_text_theme.dart';
 import '../../../../core/routes/presentation/loading_data_widget.dart';
-import '../../../../core/services/permission_requester_service.dart';
 import '../../../../core/services/ui_message_service.dart';
 import '../../../../core/widgets/btn/custom_text_btn.dart';
 import '../../../../core/widgets/btn/translucent_btn.dart';
@@ -23,6 +20,7 @@ import '../../../user/domain/usecases/listen_current_user_data_use_case.dart';
 import '../../../user/domain/usecases/update_user_usecase.dart';
 import '../../../user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import '../../../user/presentation/bloc/user_bloc/user_bloc.dart';
+import '../../../user/presentation/dialogs/image_source_modal_sheet/image_source_modal_sheet.dart';
 import '../home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import 'bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import 'widgets/build_grouped_input.dart';
@@ -105,11 +103,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> onTapAvatar() async {
-    final Uint8List? image = await getIt<PermissionRequester>().onPickCamera(
-      context,
-    );
-    if (image == null) return;
-    this.image = image;
+    final picked = await ImageSourceModalSheet.show();
+    if (picked == null) return;
+    image = picked;
     setState(() {});
   }
 

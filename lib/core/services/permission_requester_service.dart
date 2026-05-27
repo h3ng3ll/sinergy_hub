@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:device_info_plus/device_info_plus.dart';
 import 'ui_message_service.dart';
 
 class PermissionRequester {
@@ -15,29 +15,23 @@ class PermissionRequester {
     isPicking = true;
 
     try {
-      final photoStatus = await Permission.photos.request();
-
-      if (photoStatus.isLimited) {
-        UiMessageService.showSuccess(
-          'Please grant full access to photos',
-        );
-        await Future.delayed(
-          Duration(seconds: 2),
-        );
-        openAppSettings();
-      } else if (photoStatus.isGranted) {
-        if (!context.mounted) return null;
-        final res = await ImagePicker().pickImage(
-          source: ImageSource.gallery,
-        );
-        if (res == null) return null;
-        isPicking = false;
-        return File(
-          res.path,
-        );
-      } else {
-        openAppSettings();
+      if (Platform.isAndroid) {
+        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        if (androidInfo.version.sdkInt <= 32) {
+          await Permission.storage.request();
+        } else {
+          await Permission.photos.request();
+        }
       }
+
+      final res = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+      );
+      if (res == null) return null;
+      isPicking = false;
+      return File(
+        res.path,
+      );
     } catch (_) {
       UiMessageService.showError(
         'Failed to pick image from gallery',
@@ -48,8 +42,8 @@ class PermissionRequester {
     return null;
   }
 
-  Future<Uint8List?> onPickCamera(BuildContext context) async {
-    // if (isPicking) return null;
+  Future<File?> onPickCamera(BuildContext context) async {
+    if (isPicking) return null;
     isPicking = true;
 
     try {
@@ -62,7 +56,9 @@ class PermissionRequester {
         );
         if (res == null) return null;
         isPicking = false;
-        return res.readAsBytes();
+        return File(
+          res.path,
+        );
       } else {
         UiMessageService.showSuccess(
           'Please grant camera access',
@@ -70,7 +66,7 @@ class PermissionRequester {
         await Future.delayed(
           Duration(seconds: 2),
         );
-        openAppSettings();
+        // openAppSettings();
       }
     } catch (_) {
       UiMessageService.showError(
