@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'package:google_sign_in_web/google_sign_in_web.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 
@@ -20,7 +20,7 @@ class GoogleSignInServiceWeb {
       _googleSignIn = GoogleSignInPlugin();
       await _googleSignIn.init(
         InitParameters(
-          clientId: env.webPushCertificate(),
+          clientId: env.serverClientId(),
         ),
       );
       _googleSignIn.renderButton();

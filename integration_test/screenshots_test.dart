@@ -1,4 +1,4 @@
-           // ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
 
@@ -170,15 +170,17 @@ class _TestApp extends StatelessWidget {
 }
 
 void main() {
-
   final IntegrationTestWidgetsFlutterBinding binding =
       IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
 
-
   setUpAll(() async {
     await setupTestDI();
-    _router = initRouter(authBloc: testAuthBloc, userBloc: testUserBloc);
+    _router = initRouter(
+      authBloc: testAuthBloc,
+      userBloc: testUserBloc,
+      onboardBloc: testOnboardBloc,
+    );
   });
 
   testWidgets('sinergy_hub screenshots', (tester) async {
@@ -269,9 +271,7 @@ void main() {
       );
 
       // Reset position/rotation/status before navigating away.
-      await liveTinderCubit.onPanEnd(
-        DragEndDetails(velocity: Velocity.zero),
-      );
+      await liveTinderCubit.onPanEnd(DragEndDetails(velocity: Velocity.zero));
       await _settleLive(tester);
     } else {
       debugPrint(
@@ -315,12 +315,7 @@ void main() {
       );
       scaffoldState.openDrawer();
       await _settleLive(tester);
-      await _captureWithTimeout(
-        binding,
-        tester,
-        '09_home_drawer',
-        live: true,
-      );
+      await _captureWithTimeout(binding, tester, '09_home_drawer', live: true);
       // Close the drawer so it does not block subsequent navigation.
       if (scaffoldState.isDrawerOpen) {
         Navigator.of(scaffoldState.context).pop();

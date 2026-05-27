@@ -77,6 +77,7 @@ import 'package:sinergy_hub/features/onboard_survey/domain/repositories/i_skill_
 import 'package:sinergy_hub/features/onboard_survey/domain/use_cases/get_completion_status_use_case.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/use_cases/get_skills_use_case.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/use_cases/set_completion_status_use_case.dart';
+import 'package:sinergy_hub/features/onboard_survey/presentation/bloc/onboard_bloc/onboard_bloc.dart';
 import 'package:sinergy_hub/features/user/domain/repositories/i_user_auth_repository.dart';
 import 'package:sinergy_hub/features/user/domain/repositories/i_user_read_repository.dart';
 import 'package:sinergy_hub/features/user/domain/repositories/i_user_storage_repository.dart';
@@ -141,6 +142,7 @@ class _FakeGoogleSignInService extends Mock implements GoogleSignInService {}
 
 late MockAuthBloc testAuthBloc;
 late MockUserBloc testUserBloc;
+late OnboardBloc testOnboardBloc;
 
 /// Register every mock into getIt. Must run BEFORE building MyApp.
 Future<void> setupTestDI() async {
@@ -573,6 +575,7 @@ Future<void> setupTestDI() async {
   );
   getIt.registerSingleton<AuthBloc>(testAuthBloc);
   getIt.registerSingleton<UserBloc>(testUserBloc);
+  getIt.registerSingleton<OnboardBloc>(testOnboardBloc);
   getIt.registerSingleton<ChatBloc>(
     MockChatBloc(getChatsUseCase: getIt<ListenChatsUseCase>()),
   );

@@ -40,7 +40,12 @@ workflows:
           echo "$env" > .env
 
       - name: Build web
-        script: flutter build web --release --dart-define=DARTENV=development
+        script: flutter build web \
+          --release \
+          --dart-define=DARTENV=development \
+          --dart-define=DEV_SERVER_CLIENT_ID="DEV_SERVER_CLIENT_ID" \
+          --dart-define=DEV_FIREBASE_WEB_PUSH_CERTIFICATE="$DEV_FIREBASE_WEB_PUSH_CERTIFICATE" \
+          --dart-define=FIREBASE_PROJECT_WEB_URL="FIREBASE_PROJECT_WEB_URL" \
 
       - name: Deploy to Firebase
         script: |
