@@ -55,30 +55,31 @@ void main() async {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
       true,
     );
+    FlutterError.onError =
+        (
+        FlutterErrorDetails details,
+        ) {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(
+        details,
+      );
+    };
+
+    PlatformDispatcher.instance.onError =
+        (
+        error,
+        stack,
+        ) {
+      FirebaseCrashlytics.instance.recordError(
+        error,
+        stack,
+        fatal: true,
+      );
+      return true;
+    };
   }
 
 
-  FlutterError.onError =
-      (
-        FlutterErrorDetails details,
-      ) {
-        FirebaseCrashlytics.instance.recordFlutterFatalError(
-          details,
-        );
-      };
 
-  PlatformDispatcher.instance.onError =
-      (
-        error,
-        stack,
-      ) {
-        FirebaseCrashlytics.instance.recordError(
-          error,
-          stack,
-          fatal: true,
-        );
-        return true;
-      };
 
 
   await getIt<FirebaseAuthService>().init();

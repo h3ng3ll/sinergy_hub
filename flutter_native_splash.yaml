@@ -25,8 +25,8 @@ flutter_native_splash:
 
   # uncomment this if you want to disable this package for specific platform:
   android: true
-  ios: true
-  web: false
+  ios: false
+  web: true
 
   #======================================================================
 
@@ -44,8 +44,8 @@ flutter_native_splash:
   color_dark_android: "#121212"
   #color_ios: "#42a5f5"
   #color_dark_ios: "#042a49"
-  #color_web: "#42a5f5"
-  #color_dark_web: "#042a49"
+  color_web: "#42a5f5"
+  color_dark_web: "#042a49"
 
   # general background_image for all platform (except android 12+)
   # if you specify this [required] background_image, then you should comment the

@@ -14,7 +14,7 @@ class GoogleSignInService {
   final ValueNotifier<String?> authToken = ValueNotifier(null);
 
   Future<void> init(Env env) async {
-    instanceImpl.init(
+    await instanceImpl.init(
       env,
       authToken,
     );
