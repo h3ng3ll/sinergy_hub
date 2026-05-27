@@ -1,6 +1,17 @@
 platform :ios do
   desc "Upload metadata"
   lane :upload_metadata do
+    # --- Sanity-check env before anything else ---
+    %w[APPSTORE_KEY_ID APPSTORE_ISSUER_ID APPSTORE_P8 IOS_BUNDLE_ID].each do |k|
+      v = ENV[k]
+      if v.nil? || v.strip.empty?
+        UI.user_error!("Required env var '#{k}' is missing or empty.")
+      end
+    end
+    UI.message("Bundle id: #{ENV['IOS_BUNDLE_ID']}")
+    UI.message("Key id: #{ENV['APPSTORE_KEY_ID']}")
+    UI.message("Issuer id: #{ENV['APPSTORE_ISSUER_ID']}")
+
     app_store_connect_api_key(
       key_id: ENV["APPSTORE_KEY_ID"],
       issuer_id: ENV["APPSTORE_ISSUER_ID"],

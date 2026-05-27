@@ -86,7 +86,6 @@ workflows:
       groups:
         - store_credentials
       vars:
-        IOS_BUNDLE_ID: $IOS_BUNDLE_ID
         APP_NAME: $APPSTORE_APP_NAME
 
     scripts:
