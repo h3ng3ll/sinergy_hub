@@ -45,7 +45,7 @@ workflows:
           --dart-define=DARTENV=development \
           --dart-define=DEV_SERVER_CLIENT_ID="DEV_SERVER_CLIENT_ID" \
           --dart-define=DEV_FIREBASE_WEB_PUSH_CERTIFICATE="$DEV_FIREBASE_WEB_PUSH_CERTIFICATE" \
-          --dart-define=FIREBASE_PROJECT_WEB_URL="FIREBASE_PROJECT_WEB_URL" \
+          --dart-define=FIREBASE_PROJECT_WEB_URL="FIREBASE_PROJECT_WEB_URL"
 
       - name: Deploy to Firebase
         script: |
