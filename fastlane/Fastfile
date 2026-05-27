@@ -77,10 +77,10 @@ platform :ios do
         add_id_info_uses_idfa: true
       },
       app_review_information: {
-        first_name: "Selin",
-        last_name: "Aksoy",
-        phone_number: "+37256196040",
-        email_address: "wailammraslieeva876@gmail.com"
+        first_name: "Oleksandr",
+        last_name: "Naumenko",
+        phone_number: "+380978238820",
+        email_address: "alexandr132135@gmail.com"
       },
       reject_if_possible: false,
       run_precheck_before_submit: false,
