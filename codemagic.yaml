@@ -180,10 +180,10 @@ workflows:
         - store_credentials
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: $IOS_BUNDLE_ID # <--
+        bundle_identifier: $IOS_BUNDLE_ID
       vars:
         BUNDLE_ID: "$IOS_BUNDLE_ID"
-        APP_STORE_APPLE_ID: $APPSTORE_APP_ID # <--
+        APP_STORE_APPLE_ID: $APPSTORE_APP_ID
       flutter: 3.41.1
       xcode: latest
       cocoapods: default
@@ -202,9 +202,12 @@ workflows:
       - name: Flutter build ipa
         script: |
           flutter build ipa --release \
-            --build-name=1.0 \
-            --build-number=1 \
-            --export-options-plist=ios/export_options.plist
+            --export-options-plist=ios/export_options.plist \
+            --flavor=prod
+            --dart-define=DARTENV=prod
+            --dart-define=PROD_SERVER_CLIENT_ID="$PROD_SERVER_CLIENT_ID"
+            --dart-define=PROD_FIREBASE_WEB_PUSH_CERTIFICATE="$PROD_FIREBASE_WEB_PUSH_CERTIFICATE"
+
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log

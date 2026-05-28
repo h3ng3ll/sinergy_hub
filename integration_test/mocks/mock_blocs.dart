@@ -123,7 +123,7 @@ class MockNotificationConfigBloc extends NotificationConfigBloc {
   MockNotificationConfigBloc({
     required super.getNotificationsConfigUseCase,
     required super.saveNotificationsConfigUseCase,
-    required super.firebaseMessagingService,
+    required super.registerCurrentDeviceTokenUseCase,
   }) {
     emit(const NotificationConfigState(status: NotificationConfigStatus.initial));
   }

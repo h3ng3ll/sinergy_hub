@@ -73,6 +73,7 @@ import 'package:sinergy_hub/features/notifications/domain/repositories/i_notific
 import 'package:sinergy_hub/features/notifications/domain/repositories/i_notification_repository.dart';
 import 'package:sinergy_hub/features/notifications/domain/usecases/get_notification_config_use_case.dart';
 import 'package:sinergy_hub/features/notifications/domain/usecases/get_notifications_use_case.dart';
+import 'package:sinergy_hub/features/notifications/domain/usecases/register_current_device_token_use_case.dart';
 import 'package:sinergy_hub/features/notifications/domain/usecases/save_notification_config_use_case.dart';
 import 'package:sinergy_hub/features/notifications/domain/usecases/save_notification_use_case.dart';
 import 'package:sinergy_hub/features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
@@ -156,7 +157,9 @@ Future<void> setupTestDI() async {
 
   // Services & wrappers (Firebase-touching ones get mocktail stubs)
   getIt.registerLazySingleton<Env>(() => DevEnv());
-  getIt.registerLazySingleton<FirebaseMessaging>(() => _FakeFirebaseMessaging());
+  getIt.registerLazySingleton<FirebaseMessaging>(
+    () => _FakeFirebaseMessaging(),
+  );
   getIt.registerLazySingleton<GoogleSignIn>(() => _FakeGoogleSignIn());
   getIt.registerLazySingleton<FirebaseAuthService>(
     () => _FakeFirebaseAuthService(),
@@ -235,14 +238,10 @@ Future<void> setupTestDI() async {
 
   // Auth use cases (production code reading mock interfaces)
   getIt.registerFactory(
-    () => AuthorizationUseCase(
-      presenceService: getIt<IPresenceService>(),
-    ),
+    () => AuthorizationUseCase(presenceService: getIt<IPresenceService>()),
   );
   getIt.registerFactory(
-    () => LogoutUseCase(
-      authRepository: getIt<IAuthRepository>(),
-    ),
+    () => LogoutUseCase(authRepository: getIt<IAuthRepository>()),
   );
   getIt.registerFactory(
     () => RegisterUseCase(
@@ -263,9 +262,7 @@ Future<void> setupTestDI() async {
     ),
   );
   getIt.registerFactory(
-    () => ResetPasswordByEmailUseCase(
-      authRepository: getIt<IAuthRepository>(),
-    ),
+    () => ResetPasswordByEmailUseCase(authRepository: getIt<IAuthRepository>()),
   );
   getIt.registerFactory(
     () => SignInWithGoogleUseCase(
@@ -317,9 +314,8 @@ Future<void> setupTestDI() async {
     ),
   );
   getIt.registerFactory<ListenUserDataUseCase>(
-    () => ListenUserDataUseCase(
-      userReadRepository: getIt<IUserReadRepository>(),
-    ),
+    () =>
+        ListenUserDataUseCase(userReadRepository: getIt<IUserReadRepository>()),
   );
 
   // Onboard use cases
@@ -529,9 +525,7 @@ Future<void> setupTestDI() async {
 
   // Per-screen blocs constructed via getIt
   getIt.registerFactory<LoginBloc>(
-    () => LoginBloc(
-      loginUseCase: getIt<LoginUseCase>(),
-    ),
+    () => LoginBloc(loginUseCase: getIt<LoginUseCase>()),
   );
   getIt.registerFactory<ResetPasswordPageBloc>(
     () => ResetPasswordPageBloc(
@@ -605,7 +599,8 @@ Future<void> setupTestDI() async {
     MockNotificationConfigBloc(
       getNotificationsConfigUseCase: getIt<GetNotificationsConfigUseCase>(),
       saveNotificationsConfigUseCase: getIt<SaveNotificationsConfigUseCase>(),
-      firebaseMessagingService: getIt<FirebaseMessagingService>(),
+      registerCurrentDeviceTokenUseCase:
+          getIt<RegisterCurrentDeviceTokenUseCase>(),
     ),
   );
 }

@@ -94,6 +94,12 @@ class MockAuthRepository implements IAuthRepository {
   Future<Either<void, AuthFailure>> sendPasswordResetEmail({
     required String email,
   }) async => left(null);
+
+  @override
+  Future<bool> isEmailVerified() {
+    // TODO: implement isEmailVerified
+    throw UnimplementedError();
+  }
 }
 
 class MockUserReadRepository implements IUserReadRepository {
@@ -101,7 +107,9 @@ class MockUserReadRepository implements IUserReadRepository {
   Future<UserData?> getUserById({required String id}) async {
     if (id == ShowcaseData.heroUid) return ShowcaseData.hero();
     if (id == ShowcaseData.partnerUid) return ShowcaseData.partner();
-    return ShowcaseData.discoveryCandidates().where((u) => u.uid == id).firstOrNull;
+    return ShowcaseData.discoveryCandidates()
+        .where((u) => u.uid == id)
+        .firstOrNull;
   }
 
   @override
@@ -180,25 +188,26 @@ class MockChatRepository implements IChatRepository {
   Future<Chat> create(Chat chat, String uid) async => chat;
 
   @override
-  Stream<List<Chat>> getStream(String uid) => Stream.value(ShowcaseData.chats());
+  Stream<List<Chat>> getStream(String uid) =>
+      Stream.value(ShowcaseData.chats());
 
   @override
-  Stream<Chat> listenByIdStream({
-    required String uid,
-    required String chatId,
-  }) {
-    final chat = ShowcaseData.chats().where((c) => c.chatId == chatId).firstOrNull;
+  Stream<Chat> listenByIdStream({required String uid, required String chatId}) {
+    final chat = ShowcaseData.chats()
+        .where((c) => c.chatId == chatId)
+        .firstOrNull;
     if (chat == null) return const Stream<Chat>.empty();
     return Stream.value(chat);
   }
 
   @override
-  Stream<Chat> chatUpdates({required String uid}) =>
-      const Stream<Chat>.empty();
+  Stream<Chat> chatUpdates({required String uid}) => const Stream<Chat>.empty();
 
   @override
   Future<Chat> getById({required String uid, required String chatId}) async {
-    final chat = ShowcaseData.chats().where((c) => c.chatId == chatId).firstOrNull;
+    final chat = ShowcaseData.chats()
+        .where((c) => c.chatId == chatId)
+        .firstOrNull;
     if (chat != null) return chat;
     return ShowcaseData.chats().first;
   }
@@ -313,7 +322,8 @@ class MockNotificationRepository implements INotificationRepository {
   }) async => notification;
 }
 
-class MockNotificationConfigRepository implements INotificationConfigRepository {
+class MockNotificationConfigRepository
+    implements INotificationConfigRepository {
   @override
   Future<NotificationConfig?> get({required String uid}) async =>
       const NotificationConfig();
@@ -323,6 +333,16 @@ class MockNotificationConfigRepository implements INotificationConfigRepository 
     required String uid,
     required NotificationConfig config,
   }) async {}
+
+  @override
+  Future<void> upsertToken({
+    required String uid,
+    required String platform,
+    required String token,
+  }) {
+    // TODO: implement upsertToken
+    throw UnimplementedError();
+  }
 }
 
 class MockOnboardSurveyRepository implements IOnboardSurveyRepository {
