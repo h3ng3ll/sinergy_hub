@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,9 +14,17 @@ part 'register_state.dart';
 
 part 'register_bloc.freezed.dart';
 
+
+
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUseCase _registerUseCase;
   final CompleteRegistrationUseCase _completeRegistrationUseCase;
+
+  /// Seconds the register button stays disabled after a verification email
+  /// is sent, before the user may trigger it again.
+  final int _kCountdownSeconds = 60;
+
+  Timer? _countdownTimer;
 
   RegisterBloc({
     required RegisterUseCase registerUseCase,
@@ -30,6 +40,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       _checkVerification,
       transformer: droppable(),
     );
+    on<_TickCountdown>(_tickCountdown);
   }
 
   void _register(_Register event, Emitter<RegisterState> emit) async {
@@ -47,8 +58,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         emit(
           state.copyWith(
             status: RegisterStatus.pendingVerification,
+            resendCountdown: _kCountdownSeconds,
           ),
         );
+        _startCountdown();
       },
       (e) {
         emit(
@@ -58,6 +71,35 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           ),
         );
       },
+    );
+  }
+
+  void _startCountdown() {
+    _countdownTimer?.cancel();
+    _countdownTimer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) => add(
+        const RegisterEvent.tickCountdown(),
+      ),
+    );
+  }
+
+  void _tickCountdown(_TickCountdown event, Emitter<RegisterState> emit) {
+    final next = state.resendCountdown - 1;
+    if (next <= 0) {
+      _countdownTimer?.cancel();
+      _countdownTimer = null;
+      emit(
+        state.copyWith(
+          resendCountdown: 0,
+        ),
+      );
+      return;
+    }
+    emit(
+      state.copyWith(
+        resendCountdown: next,
+      ),
     );
   }
 
@@ -87,5 +129,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         );
       },
     );
+  }
+
+  @override
+  Future<void> close() {
+    _countdownTimer?.cancel();
+    return super.close();
   }
 }

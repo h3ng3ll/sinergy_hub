@@ -58,7 +58,6 @@ void initAuthFeature(GetIt getIt) {
   getIt.registerFactory(
     () => RegisterUseCase(
       authRepository: getIt<IAuthRepository>(),
-      sendEmailVerificationUseCase: getIt<SendEmailVerificationUseCase>(),
     ),
   );
   getIt.registerFactory(

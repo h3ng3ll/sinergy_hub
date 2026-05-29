@@ -8,4 +8,6 @@ sealed class RegisterEvent with _$RegisterEvent {
   }) = _Register;
 
   const factory RegisterEvent.checkVerification() = _CheckVerification;
+
+  const factory RegisterEvent.tickCountdown() = _TickCountdown;
 }

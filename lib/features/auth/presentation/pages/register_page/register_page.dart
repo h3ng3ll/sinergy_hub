@@ -177,9 +177,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               vertical: 15.0,
                               horizontal: 20.0,
                             ),
-                            onPressed: register,
+                            onPressed: state.canResend ? register : null,
                             child: Text(
-                              'Register',
+                              state.isCounting
+                                  ? 'Resend in ${state.resendCountdown}s'
+                                  : 'Register',
                               style: textTheme.medium16.copyWith(
                                 color: colorScheme.onSecondary,
                               ),

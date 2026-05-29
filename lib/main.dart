@@ -92,6 +92,7 @@ void main() async {
   await getIt<IPresenceService>().init();
   Bloc.observer = AppObserver.instance();
 
+  FlutterNativeSplash.remove();
   runApp(
     const MyApp(),
   );
@@ -134,7 +135,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         (auth.isAuthorized && onboard.isLoaded);
     if (ready) {
       _splashRemoved = true;
-      FlutterNativeSplash.remove();
+
     }
   }
 

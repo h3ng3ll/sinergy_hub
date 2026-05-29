@@ -49,7 +49,10 @@ void main() {
       ),
       expect: () => const [
         RegisterState(status: RegisterStatus.loading),
-        RegisterState(status: RegisterStatus.pendingVerification),
+        RegisterState(
+          status: RegisterStatus.pendingVerification,
+          resendCountdown: 60,
+        ),
       ],
       verify: (_) {
         verify(
@@ -168,8 +171,14 @@ void main() {
       },
       expect: () => const [
         RegisterState(status: RegisterStatus.loading),
-        RegisterState(status: RegisterStatus.pendingVerification),
-        RegisterState(status: RegisterStatus.registered),
+        RegisterState(
+          status: RegisterStatus.pendingVerification,
+          resendCountdown: 60,
+        ),
+        RegisterState(
+          status: RegisterStatus.registered,
+          resendCountdown: 60,
+        ),
       ],
       verify: (_) {
         verifyInOrder([

@@ -167,10 +167,11 @@ class FirebaseAuthRepository extends IAuthRepository {
     required String password,
   }) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      final credential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      await credential.user?.sendEmailVerification();
       return Left(
         null,
       );

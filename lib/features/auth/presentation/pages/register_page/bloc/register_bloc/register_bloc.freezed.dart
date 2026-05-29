@@ -55,12 +55,13 @@ extension RegisterEventPatterns on RegisterEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Register value)?  register,TResult Function( _CheckVerification value)?  checkVerification,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Register value)?  register,TResult Function( _CheckVerification value)?  checkVerification,TResult Function( _TickCountdown value)?  tickCountdown,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Register() when register != null:
 return register(_that);case _CheckVerification() when checkVerification != null:
-return checkVerification(_that);case _:
+return checkVerification(_that);case _TickCountdown() when tickCountdown != null:
+return tickCountdown(_that);case _:
   return orElse();
 
 }
@@ -78,12 +79,13 @@ return checkVerification(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Register value)  register,required TResult Function( _CheckVerification value)  checkVerification,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Register value)  register,required TResult Function( _CheckVerification value)  checkVerification,required TResult Function( _TickCountdown value)  tickCountdown,}){
 final _that = this;
 switch (_that) {
 case _Register():
 return register(_that);case _CheckVerification():
-return checkVerification(_that);}
+return checkVerification(_that);case _TickCountdown():
+return tickCountdown(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -97,12 +99,13 @@ return checkVerification(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Register value)?  register,TResult? Function( _CheckVerification value)?  checkVerification,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Register value)?  register,TResult? Function( _CheckVerification value)?  checkVerification,TResult? Function( _TickCountdown value)?  tickCountdown,}){
 final _that = this;
 switch (_that) {
 case _Register() when register != null:
 return register(_that);case _CheckVerification() when checkVerification != null:
-return checkVerification(_that);case _:
+return checkVerification(_that);case _TickCountdown() when tickCountdown != null:
+return tickCountdown(_that);case _:
   return null;
 
 }
@@ -119,11 +122,12 @@ return checkVerification(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String email,  String password)?  register,TResult Function()?  checkVerification,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String email,  String password)?  register,TResult Function()?  checkVerification,TResult Function()?  tickCountdown,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Register() when register != null:
 return register(_that.email,_that.password);case _CheckVerification() when checkVerification != null:
-return checkVerification();case _:
+return checkVerification();case _TickCountdown() when tickCountdown != null:
+return tickCountdown();case _:
   return orElse();
 
 }
@@ -141,11 +145,12 @@ return checkVerification();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String email,  String password)  register,required TResult Function()  checkVerification,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String email,  String password)  register,required TResult Function()  checkVerification,required TResult Function()  tickCountdown,}) {final _that = this;
 switch (_that) {
 case _Register():
 return register(_that.email,_that.password);case _CheckVerification():
-return checkVerification();}
+return checkVerification();case _TickCountdown():
+return tickCountdown();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -159,11 +164,12 @@ return checkVerification();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String email,  String password)?  register,TResult? Function()?  checkVerification,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String email,  String password)?  register,TResult? Function()?  checkVerification,TResult? Function()?  tickCountdown,}) {final _that = this;
 switch (_that) {
 case _Register() when register != null:
 return register(_that.email,_that.password);case _CheckVerification() when checkVerification != null:
-return checkVerification();case _:
+return checkVerification();case _TickCountdown() when tickCountdown != null:
+return tickCountdown();case _:
   return null;
 
 }
@@ -272,9 +278,41 @@ String toString() {
 
 
 /// @nodoc
+
+
+class _TickCountdown implements RegisterEvent {
+  const _TickCountdown();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TickCountdown);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'RegisterEvent.tickCountdown()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$RegisterState {
 
- RegisterStatus get status; String get errorMessage;
+ RegisterStatus get status; String get errorMessage; int get resendCountdown;
 /// Create a copy of RegisterState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -285,16 +323,16 @@ $RegisterStateCopyWith<RegisterState> get copyWith => _$RegisterStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RegisterState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RegisterState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.resendCountdown, resendCountdown) || other.resendCountdown == resendCountdown));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,errorMessage,resendCountdown);
 
 @override
 String toString() {
-  return 'RegisterState(status: $status, errorMessage: $errorMessage)';
+  return 'RegisterState(status: $status, errorMessage: $errorMessage, resendCountdown: $resendCountdown)';
 }
 
 
@@ -305,7 +343,7 @@ abstract mixin class $RegisterStateCopyWith<$Res>  {
   factory $RegisterStateCopyWith(RegisterState value, $Res Function(RegisterState) _then) = _$RegisterStateCopyWithImpl;
 @useResult
 $Res call({
- RegisterStatus status, String errorMessage
+ RegisterStatus status, String errorMessage, int resendCountdown
 });
 
 
@@ -322,11 +360,12 @@ class _$RegisterStateCopyWithImpl<$Res>
 
 /// Create a copy of RegisterState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? errorMessage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? errorMessage = null,Object? resendCountdown = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as RegisterStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,
+as String,resendCountdown: null == resendCountdown ? _self.resendCountdown : resendCountdown // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
@@ -408,10 +447,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( RegisterStatus status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( RegisterStatus status,  String errorMessage,  int resendCountdown)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RegisterState() when $default != null:
-return $default(_that.status,_that.errorMessage);case _:
+return $default(_that.status,_that.errorMessage,_that.resendCountdown);case _:
   return orElse();
 
 }
@@ -429,10 +468,10 @@ return $default(_that.status,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( RegisterStatus status,  String errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( RegisterStatus status,  String errorMessage,  int resendCountdown)  $default,) {final _that = this;
 switch (_that) {
 case _RegisterState():
-return $default(_that.status,_that.errorMessage);}
+return $default(_that.status,_that.errorMessage,_that.resendCountdown);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -446,10 +485,10 @@ return $default(_that.status,_that.errorMessage);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( RegisterStatus status,  String errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( RegisterStatus status,  String errorMessage,  int resendCountdown)?  $default,) {final _that = this;
 switch (_that) {
 case _RegisterState() when $default != null:
-return $default(_that.status,_that.errorMessage);case _:
+return $default(_that.status,_that.errorMessage,_that.resendCountdown);case _:
   return null;
 
 }
@@ -461,11 +500,12 @@ return $default(_that.status,_that.errorMessage);case _:
 
 
 class _RegisterState implements RegisterState {
-  const _RegisterState({this.status = RegisterStatus.initial, this.errorMessage = ''});
+  const _RegisterState({this.status = RegisterStatus.initial, this.errorMessage = '', this.resendCountdown = 0});
   
 
 @override@JsonKey() final  RegisterStatus status;
 @override@JsonKey() final  String errorMessage;
+@override@JsonKey() final  int resendCountdown;
 
 /// Create a copy of RegisterState
 /// with the given fields replaced by the non-null parameter values.
@@ -477,16 +517,16 @@ _$RegisterStateCopyWith<_RegisterState> get copyWith => __$RegisterStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.resendCountdown, resendCountdown) || other.resendCountdown == resendCountdown));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,errorMessage,resendCountdown);
 
 @override
 String toString() {
-  return 'RegisterState(status: $status, errorMessage: $errorMessage)';
+  return 'RegisterState(status: $status, errorMessage: $errorMessage, resendCountdown: $resendCountdown)';
 }
 
 
@@ -497,7 +537,7 @@ abstract mixin class _$RegisterStateCopyWith<$Res> implements $RegisterStateCopy
   factory _$RegisterStateCopyWith(_RegisterState value, $Res Function(_RegisterState) _then) = __$RegisterStateCopyWithImpl;
 @override @useResult
 $Res call({
- RegisterStatus status, String errorMessage
+ RegisterStatus status, String errorMessage, int resendCountdown
 });
 
 
@@ -514,11 +554,12 @@ class __$RegisterStateCopyWithImpl<$Res>
 
 /// Create a copy of RegisterState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? errorMessage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? errorMessage = null,Object? resendCountdown = null,}) {
   return _then(_RegisterState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as RegisterStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,
+as String,resendCountdown: null == resendCountdown ? _self.resendCountdown : resendCountdown // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
