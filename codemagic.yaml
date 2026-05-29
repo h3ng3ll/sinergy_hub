@@ -178,6 +178,7 @@ workflows:
     environment:
       groups:
         - store_credentials
+        - files
       ios_signing:
         distribution_type: app_store
         bundle_identifier: $IOS_BUNDLE_ID
@@ -196,6 +197,9 @@ workflows:
       - name: Get Flutter packages
         script: |
           flutter pub get
+      - name: Create firebase.json file
+        script: |
+          echo "$FIREBASE_JSON" > firebase.json
       - name: Activate FlutterFire CLI
         script: |
           dart pub global activate flutterfire_cli
