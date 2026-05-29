@@ -203,10 +203,10 @@ workflows:
         script: |
           flutter build ipa --release \
             --export-options-plist=ios/export_options.plist \
-            --flavor=prod
-            --dart-define=DARTENV=prod
-            --dart-define=PROD_SERVER_CLIENT_ID="$PROD_SERVER_CLIENT_ID"
-            --dart-define=PROD_FIREBASE_WEB_PUSH_CERTIFICATE="$PROD_FIREBASE_WEB_PUSH_CERTIFICATE"
+            --flavor=prod \
+            --dart-define=DARTENV=prod \
+            --dart-define=PROD_SERVER_CLIENT_ID="$PROD_SERVER_CLIENT_ID" \
+            --dart-define=PROD_FIREBASE_WEB_PUSH_CERTIFICATE="$PROD_FIREBASE_WEB_PUSH_CERTIFICATE" 
 
     artifacts:
       - build/ios/ipa/*.ipa
