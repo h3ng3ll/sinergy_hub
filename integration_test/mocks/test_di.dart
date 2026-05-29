@@ -237,46 +237,45 @@ Future<void> setupTestDI() async {
   );
 
   // Auth use cases (production code reading mock interfaces)
-  getIt.registerFactory(
+  getIt.registerFactory<AuthorizationUseCase>(
     () => AuthorizationUseCase(presenceService: getIt<IPresenceService>()),
   );
-  getIt.registerFactory(
+  getIt.registerFactory<LogoutUseCase>(
     () => LogoutUseCase(authRepository: getIt<IAuthRepository>()),
   );
-  getIt.registerFactory(
+  getIt.registerFactory<RegisterUseCase>(
     () => RegisterUseCase(
       authRepository: getIt<IAuthRepository>(),
-      sendEmailVerificationUseCase: getIt<SendEmailVerificationUseCase>(),
     ),
   );
-  getIt.registerFactory(
+  getIt.registerFactory<CompleteRegistrationUseCase>(
     () => CompleteRegistrationUseCase(
       authRepository: getIt<IAuthRepository>(),
       authorizationUseCase: getIt<AuthorizationUseCase>(),
     ),
   );
-  getIt.registerFactory(
+  getIt.registerFactory<LoginUseCase>(
     () => LoginUseCase(
       authRepository: getIt<IAuthRepository>(),
       authorizationUseCase: getIt<AuthorizationUseCase>(),
     ),
   );
-  getIt.registerFactory(
+  getIt.registerFactory<ResetPasswordByEmailUseCase>(
     () => ResetPasswordByEmailUseCase(authRepository: getIt<IAuthRepository>()),
   );
-  getIt.registerFactory(
+  getIt.registerFactory<SignInWithGoogleUseCase>(
     () => SignInWithGoogleUseCase(
       authRepository: getIt<IAuthRepository>(),
       authorizationUseCase: getIt<AuthorizationUseCase>(),
     ),
   );
-  getIt.registerFactory(
+  getIt.registerFactory<SendEmailVerificationUseCase>(
     () => SendEmailVerificationUseCase(
       authRepository: getIt<IAuthRepository>(),
       presenceService: getIt<IPresenceService>(),
     ),
   );
-  getIt.registerLazySingleton(
+  getIt.registerLazySingleton<AppleSignInUseCase>(
     () => AppleSignInUseCase(
       authRepository: getIt<IAuthRepository>(),
       authorizationUseCase: getIt<AuthorizationUseCase>(),
@@ -514,6 +513,13 @@ Future<void> setupTestDI() async {
       authRepository: getIt<IAuthRepository>(),
     ),
   );
+  getIt.registerLazySingleton<RegisterCurrentDeviceTokenUseCase>(
+    () => RegisterCurrentDeviceTokenUseCase(
+      notificationConfigRepository: getIt<INotificationConfigRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+      firebaseMessagingService: getIt<FirebaseMessagingService>(),
+    ),
+  );
 
   // User-chat use cases
   getIt.registerLazySingleton<CreateUserChatUseCase>(
@@ -588,6 +594,10 @@ Future<void> setupTestDI() async {
   );
   testUserBloc = MockUserBloc(
     listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
+  );
+  testOnboardBloc = OnboardBloc(
+    getUserCompletionStatusUseCase: getIt<GetCompletionStatusUseCase>(),
+    setUserCompletionStatusUseCase: getIt<SetCompletionStatusUseCase>(),
   );
   getIt.registerSingleton<AuthBloc>(testAuthBloc);
   getIt.registerSingleton<UserBloc>(testUserBloc);
