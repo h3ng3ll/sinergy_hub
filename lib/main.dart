@@ -236,6 +236,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       getIt<UserBloc>().add(
                         UserEvent.reset(),
                       );
+                      getIt<OnboardBloc>().add(
+                        OnboardEvent.reset(),
+                      );
                     }
                     _maybeRemoveSplash();
                   },

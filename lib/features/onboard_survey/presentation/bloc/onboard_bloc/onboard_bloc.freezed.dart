@@ -55,12 +55,13 @@ extension OnboardEventPatterns on OnboardEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Update value)?  update,TResult Function( _Load value)?  load,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Update value)?  update,TResult Function( _Load value)?  load,TResult Function( _Reset value)?  reset,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Update() when update != null:
 return update(_that);case _Load() when load != null:
-return load(_that);case _:
+return load(_that);case _Reset() when reset != null:
+return reset(_that);case _:
   return orElse();
 
 }
@@ -78,12 +79,13 @@ return load(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Update value)  update,required TResult Function( _Load value)  load,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Update value)  update,required TResult Function( _Load value)  load,required TResult Function( _Reset value)  reset,}){
 final _that = this;
 switch (_that) {
 case _Update():
 return update(_that);case _Load():
-return load(_that);}
+return load(_that);case _Reset():
+return reset(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -97,12 +99,13 @@ return load(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Update value)?  update,TResult? Function( _Load value)?  load,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Update value)?  update,TResult? Function( _Load value)?  load,TResult? Function( _Reset value)?  reset,}){
 final _that = this;
 switch (_that) {
 case _Update() when update != null:
 return update(_that);case _Load() when load != null:
-return load(_that);case _:
+return load(_that);case _Reset() when reset != null:
+return reset(_that);case _:
   return null;
 
 }
@@ -119,11 +122,12 @@ return load(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( bool? toldAboutYourself,  bool? completeSpecialization)?  update,TResult Function()?  load,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( bool? toldAboutYourself,  bool? completeSpecialization)?  update,TResult Function()?  load,TResult Function()?  reset,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Update() when update != null:
 return update(_that.toldAboutYourself,_that.completeSpecialization);case _Load() when load != null:
-return load();case _:
+return load();case _Reset() when reset != null:
+return reset();case _:
   return orElse();
 
 }
@@ -141,11 +145,12 @@ return load();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( bool? toldAboutYourself,  bool? completeSpecialization)  update,required TResult Function()  load,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( bool? toldAboutYourself,  bool? completeSpecialization)  update,required TResult Function()  load,required TResult Function()  reset,}) {final _that = this;
 switch (_that) {
 case _Update():
 return update(_that.toldAboutYourself,_that.completeSpecialization);case _Load():
-return load();}
+return load();case _Reset():
+return reset();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -159,11 +164,12 @@ return load();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( bool? toldAboutYourself,  bool? completeSpecialization)?  update,TResult? Function()?  load,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( bool? toldAboutYourself,  bool? completeSpecialization)?  update,TResult? Function()?  load,TResult? Function()?  reset,}) {final _that = this;
 switch (_that) {
 case _Update() when update != null:
 return update(_that.toldAboutYourself,_that.completeSpecialization);case _Load() when load != null:
-return load();case _:
+return load();case _Reset() when reset != null:
+return reset();case _:
   return null;
 
 }
@@ -263,6 +269,38 @@ int get hashCode => runtimeType.hashCode;
 @override
 String toString() {
   return 'OnboardEvent.load()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _Reset implements OnboardEvent {
+  const _Reset();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Reset);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'OnboardEvent.reset()';
 }
 
 

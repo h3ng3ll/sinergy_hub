@@ -7,4 +7,6 @@ sealed class OnboardEvent with _$OnboardEvent {
     bool? completeSpecialization,
   }) = _Update;
  const factory OnboardEvent.load() = _Load;
+
+  const factory OnboardEvent.reset() = _Reset;
 }

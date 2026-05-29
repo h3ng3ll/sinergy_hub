@@ -27,6 +27,15 @@ class OnboardBloc extends Bloc<OnboardEvent, OnboardState> {
        ) {
     on<_Load>(_load);
     on<_Update>(_update);
+    on<_Reset>(_reset);
+  }
+
+  void _reset(_Reset event, Emitter<OnboardState> emit) {
+    emit(
+      OnboardState(
+        onboardStatus: const OnboardStatus(),
+      ),
+    );
   }
 
   void _update(_Update event, emit) async {
@@ -73,7 +82,10 @@ class OnboardBloc extends Bloc<OnboardEvent, OnboardState> {
       final onboardStatus = await _getUserCompletionStatusUseCase.call();
       emit(
         state.copyWith(
-          onboardStatus: onboardStatus ?? state.onboardStatus,
+          /// Fall back to a fresh default (all-false) rather than the current
+          /// state: this bloc is a singleton, so a stale status from a
+          /// previous user would otherwise leak and wrongly skip onboarding.
+          onboardStatus: onboardStatus ?? const OnboardStatus(),
           status: EOnboardStatus.loaded,
         ),
       );
