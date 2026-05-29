@@ -58,12 +58,14 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => CryptoService());
   getIt.registerLazySingleton(() => ConnectivityService());
   getIt.registerLazySingleton<Env>(() {
+
     switch (EnvHelper.dartEnv) {
       case EnvHelper.production:
         return ProdEnv();
       case EnvHelper.development:
-      default:
         return DevEnv();
+      default:
+        throw Exception('Not specified environment');
     }
   });
   getIt.registerLazySingleton(

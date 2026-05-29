@@ -13,5 +13,6 @@ sealed class MatchesState with _$MatchesState {
     @Default(MatchesStatus.initial) MatchesStatus status,
     @Default('') String errorMessage,
     Matches? userMatch,
+    UserData? lastFailedUser,
   }) = _MatchesState;
 }

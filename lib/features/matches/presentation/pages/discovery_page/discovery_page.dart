@@ -125,7 +125,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
       _matchesBloc.add(
         MatchesEvent.create(
           status: status,
-          matchedID: lastUser.uid,
+          user: lastUser,
         ),
       );
     }
@@ -158,6 +158,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
         ),
       ],
       child: BlocListener<MatchesBloc, MatchesState>(
+        listenWhen: (prev, curr) => prev.status != curr.status,
         listener: (context, state) {
           if (state.status == MatchesStatus.foundMatch &&
               state.userMatch != null) {
@@ -171,6 +172,14 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
             UiMessageService.showError(
               state.errorMessage,
             );
+            final failed = state.lastFailedUser;
+            if (failed != null) {
+              _peopleDataBloc.add(
+                PeopleDataEvent.restoreVisible(
+                  user: failed,
+                ),
+              );
+            }
           }
         },
         child: Builder(

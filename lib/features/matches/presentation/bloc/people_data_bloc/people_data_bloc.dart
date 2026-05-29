@@ -33,6 +33,7 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
       _removeVisible,
       transformer: droppable(),
     );
+    on<_RestoreVisible>(_restoreVisible);
     on<_UpdateViewedPeoples>(_updateViewedPeoples);
     on<_RemoveFilter>(
       _removeFilter,
@@ -105,11 +106,24 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
         userDataState: state.usersState,
         filter: state.filter,
       );
+
+      /// Merge fetched items with whatever is currently visible
+      /// (a concurrent restoreVisible may have re-inserted a user
+      /// while this fetch was in flight). De-duplicate by uid.
+      final currentItems = state.usersState.items;
+      final fetchedItems = usersState.items;
+      final seenUids = <String>{};
+      final mergedItems = <UserData>[
+        for (final u in fetchedItems)
+          if (seenUids.add(u.uid)) u,
+        for (final u in currentItems)
+          if (seenUids.add(u.uid)) u,
+      ];
       emit(
         state.copyWith(
           initialized: true,
           status: EPeopleDataStatus.initial,
-          usersState: usersState,
+          usersState: usersState.copyWith(items: mergedItems),
         ),
       );
     } catch (e) {
@@ -193,6 +207,28 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
       );
       rethrow;
     }
+  }
+
+  Future<void> _restoreVisible(
+    _RestoreVisible event,
+    Emitter<PeopleDataState> emit,
+  ) async {
+    final items = [
+      ...state.usersState.items,
+    ];
+    final alreadyPresent = items.any(
+      (u) => u.uid == event.user.uid,
+    );
+    if (alreadyPresent) return;
+    items.add(event.user);
+    emit(
+      state.copyWith(
+        status: EPeopleDataStatus.initial,
+        usersState: state.usersState.copyWith(
+          items: items,
+        ),
+      ),
+    );
   }
 
   Future<void> _removeVisible(event, emit) async {

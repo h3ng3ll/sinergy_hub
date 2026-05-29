@@ -13,6 +13,10 @@ class PeopleDataEvent with _$PeopleDataEvent {
 
   const factory PeopleDataEvent.removeVisible() = _RemoveVisible;
 
+  const factory PeopleDataEvent.restoreVisible({
+    required UserData user,
+  }) = _RestoreVisible;
+
   const factory PeopleDataEvent.updateViewedPeoples({
     required List<String> uids,
   }) = _UpdateViewedPeoples;

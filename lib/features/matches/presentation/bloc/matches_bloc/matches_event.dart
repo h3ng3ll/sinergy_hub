@@ -6,6 +6,6 @@ class MatchesEvent with _$MatchesEvent {
 
   const factory MatchesEvent.create({
     required TinderCardStatus status,
-    required String matchedID,
+    required UserData user,
   }) = _Create;
 }

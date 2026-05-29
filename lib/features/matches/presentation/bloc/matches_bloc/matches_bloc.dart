@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../domain/models/user_match/matches.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
 import '../../../domain/usecases/listen_two_way_match_use_case.dart';
@@ -54,15 +55,22 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
     _Create event,
     Emitter<MatchesState> emit,
   ) async {
+    emit(
+      state.copyWith(
+        status: MatchesStatus.loading,
+        lastFailedUser: null,
+      ),
+    );
     final res = await _createUserMatchesUseCase.call(
       status: event.status,
-      matchedID: event.matchedID,
+      matchedID: event.user.uid,
     );
     res.fold(
       (_) {
         emit(
           state.copyWith(
             status: MatchesStatus.initial,
+            lastFailedUser: null,
           ),
         );
       },
@@ -71,6 +79,7 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
           state.copyWith(
             status: MatchesStatus.failed,
             errorMessage: e.message,
+            lastFailedUser: event.user,
           ),
         );
       },

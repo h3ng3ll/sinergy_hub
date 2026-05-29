@@ -55,7 +55,7 @@ extension PeopleDataEventPatterns on PeopleDataEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _LoadPeoples value)?  loadPeoples,TResult Function( _LoadMorePeoples value)?  loadMorePeoples,TResult Function( _ApplyFilter value)?  applyFilter,TResult Function( _RemoveFilter value)?  removeFilter,TResult Function( _RemoveVisible value)?  removeVisible,TResult Function( _UpdateViewedPeoples value)?  updateViewedPeoples,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _LoadPeoples value)?  loadPeoples,TResult Function( _LoadMorePeoples value)?  loadMorePeoples,TResult Function( _ApplyFilter value)?  applyFilter,TResult Function( _RemoveFilter value)?  removeFilter,TResult Function( _RemoveVisible value)?  removeVisible,TResult Function( _RestoreVisible value)?  restoreVisible,TResult Function( _UpdateViewedPeoples value)?  updateViewedPeoples,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _LoadPeoples() when loadPeoples != null:
@@ -63,7 +63,8 @@ return loadPeoples(_that);case _LoadMorePeoples() when loadMorePeoples != null:
 return loadMorePeoples(_that);case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that);case _RemoveFilter() when removeFilter != null:
 return removeFilter(_that);case _RemoveVisible() when removeVisible != null:
-return removeVisible(_that);case _UpdateViewedPeoples() when updateViewedPeoples != null:
+return removeVisible(_that);case _RestoreVisible() when restoreVisible != null:
+return restoreVisible(_that);case _UpdateViewedPeoples() when updateViewedPeoples != null:
 return updateViewedPeoples(_that);case _:
   return orElse();
 
@@ -82,7 +83,7 @@ return updateViewedPeoples(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _LoadPeoples value)  loadPeoples,required TResult Function( _LoadMorePeoples value)  loadMorePeoples,required TResult Function( _ApplyFilter value)  applyFilter,required TResult Function( _RemoveFilter value)  removeFilter,required TResult Function( _RemoveVisible value)  removeVisible,required TResult Function( _UpdateViewedPeoples value)  updateViewedPeoples,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _LoadPeoples value)  loadPeoples,required TResult Function( _LoadMorePeoples value)  loadMorePeoples,required TResult Function( _ApplyFilter value)  applyFilter,required TResult Function( _RemoveFilter value)  removeFilter,required TResult Function( _RemoveVisible value)  removeVisible,required TResult Function( _RestoreVisible value)  restoreVisible,required TResult Function( _UpdateViewedPeoples value)  updateViewedPeoples,}){
 final _that = this;
 switch (_that) {
 case _LoadPeoples():
@@ -90,7 +91,8 @@ return loadPeoples(_that);case _LoadMorePeoples():
 return loadMorePeoples(_that);case _ApplyFilter():
 return applyFilter(_that);case _RemoveFilter():
 return removeFilter(_that);case _RemoveVisible():
-return removeVisible(_that);case _UpdateViewedPeoples():
+return removeVisible(_that);case _RestoreVisible():
+return restoreVisible(_that);case _UpdateViewedPeoples():
 return updateViewedPeoples(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -108,7 +110,7 @@ return updateViewedPeoples(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _LoadPeoples value)?  loadPeoples,TResult? Function( _LoadMorePeoples value)?  loadMorePeoples,TResult? Function( _ApplyFilter value)?  applyFilter,TResult? Function( _RemoveFilter value)?  removeFilter,TResult? Function( _RemoveVisible value)?  removeVisible,TResult? Function( _UpdateViewedPeoples value)?  updateViewedPeoples,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _LoadPeoples value)?  loadPeoples,TResult? Function( _LoadMorePeoples value)?  loadMorePeoples,TResult? Function( _ApplyFilter value)?  applyFilter,TResult? Function( _RemoveFilter value)?  removeFilter,TResult? Function( _RemoveVisible value)?  removeVisible,TResult? Function( _RestoreVisible value)?  restoreVisible,TResult? Function( _UpdateViewedPeoples value)?  updateViewedPeoples,}){
 final _that = this;
 switch (_that) {
 case _LoadPeoples() when loadPeoples != null:
@@ -116,7 +118,8 @@ return loadPeoples(_that);case _LoadMorePeoples() when loadMorePeoples != null:
 return loadMorePeoples(_that);case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that);case _RemoveFilter() when removeFilter != null:
 return removeFilter(_that);case _RemoveVisible() when removeVisible != null:
-return removeVisible(_that);case _UpdateViewedPeoples() when updateViewedPeoples != null:
+return removeVisible(_that);case _RestoreVisible() when restoreVisible != null:
+return restoreVisible(_that);case _UpdateViewedPeoples() when updateViewedPeoples != null:
 return updateViewedPeoples(_that);case _:
   return null;
 
@@ -134,14 +137,15 @@ return updateViewedPeoples(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadPeoples,TResult Function()?  loadMorePeoples,TResult Function( MatchesFilter filter)?  applyFilter,TResult Function()?  removeFilter,TResult Function()?  removeVisible,TResult Function( List<String> uids)?  updateViewedPeoples,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadPeoples,TResult Function()?  loadMorePeoples,TResult Function( MatchesFilter filter)?  applyFilter,TResult Function()?  removeFilter,TResult Function()?  removeVisible,TResult Function( UserData user)?  restoreVisible,TResult Function( List<String> uids)?  updateViewedPeoples,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoadPeoples() when loadPeoples != null:
 return loadPeoples();case _LoadMorePeoples() when loadMorePeoples != null:
 return loadMorePeoples();case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that.filter);case _RemoveFilter() when removeFilter != null:
 return removeFilter();case _RemoveVisible() when removeVisible != null:
-return removeVisible();case _UpdateViewedPeoples() when updateViewedPeoples != null:
+return removeVisible();case _RestoreVisible() when restoreVisible != null:
+return restoreVisible(_that.user);case _UpdateViewedPeoples() when updateViewedPeoples != null:
 return updateViewedPeoples(_that.uids);case _:
   return orElse();
 
@@ -160,14 +164,15 @@ return updateViewedPeoples(_that.uids);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadPeoples,required TResult Function()  loadMorePeoples,required TResult Function( MatchesFilter filter)  applyFilter,required TResult Function()  removeFilter,required TResult Function()  removeVisible,required TResult Function( List<String> uids)  updateViewedPeoples,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadPeoples,required TResult Function()  loadMorePeoples,required TResult Function( MatchesFilter filter)  applyFilter,required TResult Function()  removeFilter,required TResult Function()  removeVisible,required TResult Function( UserData user)  restoreVisible,required TResult Function( List<String> uids)  updateViewedPeoples,}) {final _that = this;
 switch (_that) {
 case _LoadPeoples():
 return loadPeoples();case _LoadMorePeoples():
 return loadMorePeoples();case _ApplyFilter():
 return applyFilter(_that.filter);case _RemoveFilter():
 return removeFilter();case _RemoveVisible():
-return removeVisible();case _UpdateViewedPeoples():
+return removeVisible();case _RestoreVisible():
+return restoreVisible(_that.user);case _UpdateViewedPeoples():
 return updateViewedPeoples(_that.uids);case _:
   throw StateError('Unexpected subclass');
 
@@ -185,14 +190,15 @@ return updateViewedPeoples(_that.uids);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadPeoples,TResult? Function()?  loadMorePeoples,TResult? Function( MatchesFilter filter)?  applyFilter,TResult? Function()?  removeFilter,TResult? Function()?  removeVisible,TResult? Function( List<String> uids)?  updateViewedPeoples,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadPeoples,TResult? Function()?  loadMorePeoples,TResult? Function( MatchesFilter filter)?  applyFilter,TResult? Function()?  removeFilter,TResult? Function()?  removeVisible,TResult? Function( UserData user)?  restoreVisible,TResult? Function( List<String> uids)?  updateViewedPeoples,}) {final _that = this;
 switch (_that) {
 case _LoadPeoples() when loadPeoples != null:
 return loadPeoples();case _LoadMorePeoples() when loadMorePeoples != null:
 return loadMorePeoples();case _ApplyFilter() when applyFilter != null:
 return applyFilter(_that.filter);case _RemoveFilter() when removeFilter != null:
 return removeFilter();case _RemoveVisible() when removeVisible != null:
-return removeVisible();case _UpdateViewedPeoples() when updateViewedPeoples != null:
+return removeVisible();case _RestoreVisible() when restoreVisible != null:
+return restoreVisible(_that.user);case _UpdateViewedPeoples() when updateViewedPeoples != null:
 return updateViewedPeoples(_that.uids);case _:
   return null;
 
@@ -403,6 +409,81 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class _RestoreVisible implements PeopleDataEvent {
+  const _RestoreVisible({required this.user});
+  
+
+ final  UserData user;
+
+/// Create a copy of PeopleDataEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$RestoreVisibleCopyWith<_RestoreVisible> get copyWith => __$RestoreVisibleCopyWithImpl<_RestoreVisible>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RestoreVisible&&(identical(other.user, user) || other.user == user));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,user);
+
+@override
+String toString() {
+  return 'PeopleDataEvent.restoreVisible(user: $user)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$RestoreVisibleCopyWith<$Res> implements $PeopleDataEventCopyWith<$Res> {
+  factory _$RestoreVisibleCopyWith(_RestoreVisible value, $Res Function(_RestoreVisible) _then) = __$RestoreVisibleCopyWithImpl;
+@useResult
+$Res call({
+ UserData user
+});
+
+
+$UserDataCopyWith<$Res> get user;
+
+}
+/// @nodoc
+class __$RestoreVisibleCopyWithImpl<$Res>
+    implements _$RestoreVisibleCopyWith<$Res> {
+  __$RestoreVisibleCopyWithImpl(this._self, this._then);
+
+  final _RestoreVisible _self;
+  final $Res Function(_RestoreVisible) _then;
+
+/// Create a copy of PeopleDataEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
+  return _then(_RestoreVisible(
+user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as UserData,
+  ));
+}
+
+/// Create a copy of PeopleDataEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserDataCopyWith<$Res> get user {
+  
+  return $UserDataCopyWith<$Res>(_self.user, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}
+}
 
 /// @nodoc
 
