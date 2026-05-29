@@ -26,6 +26,7 @@ import '../../../features/onboard_survey/presentation/pages/onboard_about_you_pa
 import '../../../features/onboard_survey/presentation/pages/onboard_shell_page/onboard_shell_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
 import '../../../features/privacy_policy/presentation/pages/privacy_policy_page/privacy_policy_page.dart';
+import '../../../features/settings/presentation/pages/settings_page/settings_page.dart';
 import '../../../features/support/presentation/pages/support_page/support_page.dart';
 import '../../../features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
@@ -249,6 +250,9 @@ GoRouter initRouter({
             ),
             TypedGoRoute<NotificationPageRoute>(
               path: '/notification',
+            ),
+            TypedGoRoute<SettingsPageRoute>(
+              path: '/settings',
             ),
           ],
         ),
@@ -543,6 +547,17 @@ class NotificationPageRoute extends GoRouteData with $NotificationPageRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       NotificationPage(),
+    );
+  }
+}
+
+class SettingsPageRoute extends GoRouteData with $SettingsPageRoute {
+  SettingsPageRoute();
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      SettingsPage(),
     );
   }
 }

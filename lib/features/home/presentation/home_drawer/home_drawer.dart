@@ -10,6 +10,7 @@ import 'widgets/build_menu_item.dart';
 class HomeDrawer extends StatelessWidget {
   final VoidCallback onTapNotifications;
   final VoidCallback onTapAccount;
+  final VoidCallback onTapSettings;
   final VoidCallback onTapPrivacyPolicy;
   final VoidCallback onTapSupport;
   final VoidCallback onTapLogOut;
@@ -18,6 +19,7 @@ class HomeDrawer extends StatelessWidget {
     super.key,
     required this.onTapNotifications,
     required this.onTapAccount,
+    required this.onTapSettings,
     required this.onTapPrivacyPolicy,
     required this.onTapSupport,
     required this.onTapLogOut,
@@ -53,6 +55,11 @@ class HomeDrawer extends StatelessWidget {
                 icon: Assets.icons.personOutlined,
                 text: 'Account',
                 onTap: onTapAccount,
+              ),
+              BuildMenuItem(
+                icon: Assets.icons.engineOutlined,
+                text: 'Settings',
+                onTap: onTapSettings,
               ),
               BuildMenuItem(
                 icon: Assets.icons.privacy,

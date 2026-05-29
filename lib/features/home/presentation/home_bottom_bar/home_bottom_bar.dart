@@ -39,6 +39,12 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
     );
   }
 
+  void onTapSettings() {
+    SettingsPageRoute().push(
+      context,
+    );
+  }
+
   void onTapPrivacyPolicy() {
     PrivacyPolicyPageRoute().push(
       context,
@@ -115,6 +121,7 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
               : HomeDrawer(
                   onTapNotifications: onTapNotifications,
                   onTapAccount: onTapAccount,
+                  onTapSettings: onTapSettings,
                   onTapPrivacyPolicy: onTapPrivacyPolicy,
                   onTapSupport: onTapSupport,
                   onTapLogOut: onTapLogOut,

@@ -31,16 +31,21 @@ class BuildMenuItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            SvgPicture.asset(
-              icon,
-              width: 20.0,
-              height: 20.0,
-              colorFilter: color == null
-                  ? null
-                  : ColorFilter.mode(
-                      color!,
-                      BlendMode.srcIn,
-                    ),
+            SizedBox(
+              width: 24.0,
+              child: Center(
+                child: SvgPicture.asset(
+                  icon,
+                  width: 20.0,
+                  height: 20.0,
+                  colorFilter: color == null
+                      ? null
+                      : ColorFilter.mode(
+                          color!,
+                          BlendMode.srcIn,
+                        ),
+                ),
+              ),
             ),
             Gap(15.0),
             Text(

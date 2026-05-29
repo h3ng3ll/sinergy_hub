@@ -121,6 +121,10 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
               path: '/notification',
               factory: $NotificationPageRoute._fromState,
             ),
+            GoRouteData.$route(
+              path: '/settings',
+              factory: $SettingsPageRoute._fromState,
+            ),
           ],
         ),
       ],
@@ -528,6 +532,27 @@ mixin $NotificationPageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/notification');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $SettingsPageRoute on GoRouteData {
+  static SettingsPageRoute _fromState(GoRouterState state) =>
+      SettingsPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings');
 
   @override
   void go(BuildContext context) => context.go(location);
