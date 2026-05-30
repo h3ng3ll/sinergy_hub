@@ -217,7 +217,10 @@ workflows:
           flutter pub get
       - name: Create firebase.json file
         script: |
-          cp "$FIREBASE_JSON" "$CM_BUILD_DIR/firebase.json"
+          cat <<EOF > "$CM_BUILD_DIR/firebase.json"
+          $FIREBASE_JSON
+          EOF
+      
           echo "firebase.json contents:"
           cat "$CM_BUILD_DIR/firebase.json"
       - name: Activate FlutterFire CLI
