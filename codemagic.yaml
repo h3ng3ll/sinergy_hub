@@ -178,7 +178,11 @@ workflows:
       branch_patterns:
         - pattern: main
           include: true
-
+    cache:
+      cache_paths:
+        - ~/.pub-cache
+        - .flutter
+        - build/
     max_build_duration: 120
     instance_type: mac_mini_m2
     integrations:
@@ -207,10 +211,12 @@ workflows:
           flutter pub get
       - name: Create firebase.json file
         script: |
+          pwd
           echo "$FIREBASE_JSON" > firebase.json
-#      - name: Activate FlutterFire CLI
-#        script: |
-#          dart pub global activate flutterfire_cli
+          cat firebase.json
+      - name: Activate FlutterFire CLI
+        script: |
+          dart pub global activate flutterfire_cli
       - name: Install pods
         script: |
           find . -name "Podfile" -execdir pod install \;
