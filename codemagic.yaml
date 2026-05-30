@@ -2,12 +2,12 @@ workflows:
   web-deploy:
     name: Web Deploy
 
-    triggering:
-      events:
-        - push
-      branch_patterns:
-        - pattern: main
-          include: true
+#    triggering:
+#      events:
+#        - push
+#      branch_patterns:
+#        - pattern: main
+#          include: true
 
     environment:
       flutter: 3.41.7
@@ -171,6 +171,14 @@ workflows:
 
   ios-workflow:
     name: iOS Workflow
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+
     max_build_duration: 120
     instance_type: mac_mini_m2
     integrations:
@@ -200,9 +208,9 @@ workflows:
       - name: Create firebase.json file
         script: |
           echo "$FIREBASE_JSON" > firebase.json
-      - name: Activate FlutterFire CLI
-        script: |
-          dart pub global activate flutterfire_cli
+#      - name: Activate FlutterFire CLI
+#        script: |
+#          dart pub global activate flutterfire_cli
       - name: Install pods
         script: |
           find . -name "Podfile" -execdir pod install \;
