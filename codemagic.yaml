@@ -192,6 +192,7 @@ workflows:
       groups:
         - store_credentials
         - files
+        - env
       ios_signing:
         distribution_type: app_store
         bundle_identifier: $IOS_BUNDLE_ID
