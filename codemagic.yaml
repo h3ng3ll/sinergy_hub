@@ -36,7 +36,10 @@ workflows:
       #        script:  echo "$FIREBASE_OPTIONS" > lib/firebase/firebase_options_dev.dart
 
       - name: Create firebase.json file
-        script: echo "$FIREBASE_JSON" > firebase.json
+        script: |
+          cp "$FIREBASE_JSON_FILE" "$CM_BUILD_DIR/firebase.json"
+          echo "firebase.json contents:"
+          cat "$CM_BUILD_DIR/firebase.json"
 
       - name: Create .env file
         script: |
@@ -184,6 +187,7 @@ workflows:
         - .flutter
         - build/
         - ~/.cocoapods
+        - ios/Pods
     max_build_duration: 120
     instance_type: mac_mini_m2
     integrations:
