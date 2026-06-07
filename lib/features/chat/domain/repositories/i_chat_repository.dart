@@ -59,6 +59,14 @@ abstract class IChatRepository {
     required ChatConfig config,
   });
 
+  /// Sets the block flag for [uid] on the chat. Only ever writes the
+  /// caller's own key (`blocked.<uid>`).
+  Future<void> setBlocked({
+    required String uid,
+    required String chatId,
+    required bool blocked,
+  });
+
   Future<ChatConfig> getConfig({
     required String uid,
     required String chatId,

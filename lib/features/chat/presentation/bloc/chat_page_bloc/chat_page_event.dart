@@ -29,4 +29,9 @@ sealed class ChatPageEvent with _$ChatPageEvent {
   const factory ChatPageEvent.updateUserData({
     required UserData user,
   }) = _UpdateUserData;
+
+  const factory ChatPageEvent.toggleBlock({
+    required String targetUid,
+    required bool blocked,
+  }) = _ToggleBlock;
 }

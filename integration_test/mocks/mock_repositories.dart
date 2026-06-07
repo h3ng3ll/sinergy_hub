@@ -270,6 +270,13 @@ class MockChatRepository implements IChatRepository {
   }) async {}
 
   @override
+  Future<void> setBlocked({
+    required String uid,
+    required String chatId,
+    required bool blocked,
+  }) async {}
+
+  @override
   Future<ChatConfig> getConfig({
     required String uid,
     required String chatId,

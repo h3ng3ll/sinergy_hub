@@ -11,6 +11,7 @@ import '../../../domain/usecases/get_last_messages_use_case.dart';
 import '../../../domain/usecases/listen_chat_by_id_use_case.dart';
 import '../../../domain/usecases/open_chat_use_case.dart';
 import '../../../domain/usecases/send_message_use_case.dart';
+import '../../../domain/usecases/toggle_block_user_use_case.dart';
 import '../../../domain/usecases/update_typing_info_use_case.dart';
 
 part 'chat_page_event.dart';
@@ -28,6 +29,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   final OpenChatUseCase _openChatUseCase;
   final ListenUserDataUseCase _listenUserDataUseCase;
   final UpdateTypingInfoUseCase _updateTypingInfoUseCase;
+  final ToggleBlockUserUseCase _toggleBlockUserUseCase;
 
   StreamSubscription? _lastMessageSubscription;
   StreamSubscription? _updateChatSubscription;
@@ -40,12 +42,14 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     required OpenChatUseCase openChatUseCase,
     required UpdateTypingInfoUseCase updateTypingInfoUseCase,
     required ListenUserDataUseCase listenUserDataUseCase,
+    required ToggleBlockUserUseCase toggleBlockUserUseCase,
   }) : _sendMessageUseCase = sendMessageUseCase,
        _openChatUseCase = openChatUseCase,
        _getLastMessagesUseCase = getLastMessageUseCase,
        _updateTypingInfoUseCase = updateTypingInfoUseCase,
        _listenChatByIdUseCase = listenChatByIdUseCase,
        _listenUserDataUseCase = listenUserDataUseCase,
+       _toggleBlockUserUseCase = toggleBlockUserUseCase,
 
        super(
          ChatPageState(),
@@ -60,6 +64,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     on<_EndTyping>(_endTyping);
     on<_UpdateChat>(_updateChat);
     on<_UpdateUserData>(_updateUserData);
+    on<_ToggleBlock>(_toggleBlock);
   }
 
   void _updateMessages(
@@ -212,10 +217,40 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     );
   }
 
+  void _toggleBlock(
+    _ToggleBlock event,
+    Emitter<ChatPageState> emit,
+  ) async {
+    final res = await _toggleBlockUserUseCase.call(
+      chatId: state.chatId,
+      targetUid: event.targetUid,
+      blocked: event.blocked,
+    );
+    res.fold(
+      (_) {
+        /// The updated block flag arrives via the chat stream
+        /// (_listenChatByIdUseCase -> _updateChat), so no local state
+        /// change is needed here.
+      },
+      (failure) => emit(
+        state.copyWith(
+          errorMessage: failure.message,
+          status: ChatPageStatus.failed,
+        ),
+      ),
+    );
+  }
+
   void _sendMessage(
     _SendMessage event,
     Emitter<ChatPageState> emit,
   ) async {
+    /// Defense-in-depth: never send if the OTHER party has blocked me
+    /// (my own uid is flagged in `blocked`). The blocker is not restricted
+    /// by their own action.
+    final myUid = state.userData?.uid;
+    if (myUid != null && state.chat?.isBlockedBy(myUid) == true) return;
+
     emit(
       state.copyWith(
         status: ChatPageStatus.sending,

@@ -60,6 +60,7 @@ import 'package:sinergy_hub/features/chat/domain/usecases/listen_chats_use_case.
 import 'package:sinergy_hub/features/chat/domain/usecases/search_chats_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/toggle_archive_chat_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/toggle_block_user_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/toggle_favorite_chat_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/update_chat_info_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/update_typing_info_use_case.dart';
@@ -578,6 +579,11 @@ Future<void> setupTestDI() async {
       getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
     ),
   );
+  getIt.registerLazySingleton<ToggleBlockUserUseCase>(
+    () => ToggleBlockUserUseCase(
+      chatRepository: getIt<IChatRepository>(),
+    ),
+  );
   getIt.registerLazySingleton<ChatPageBloc>(
     () => ChatPageBloc(
       sendMessageUseCase: getIt<SendMessageUseCase>(),
@@ -586,6 +592,7 @@ Future<void> setupTestDI() async {
       getLastMessageUseCase: getIt<ListenLastMessagesUseCase>(),
       updateTypingInfoUseCase: getIt<UpdateTypingInfoUseCase>(),
       listenChatByIdUseCase: getIt<ListenChatByIdUseCase>(),
+      toggleBlockUserUseCase: getIt<ToggleBlockUserUseCase>(),
     ),
   );
   getIt.registerFactory<ChatsFilterBloc>(

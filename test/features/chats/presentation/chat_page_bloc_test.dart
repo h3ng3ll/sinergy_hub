@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/features/chat/domain/failures/chat_validation_failure.dart';
 import 'package:sinergy_hub/features/chat/domain/failures/typing_status_failure.dart';
+import 'package:sinergy_hub/features/chat/domain/failures/block_user_failure.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_config/chat_config.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_message/chat_message.dart';
@@ -13,6 +14,7 @@ import 'package:sinergy_hub/features/chat/domain/usecases/get_last_messages_use_
 import 'package:sinergy_hub/features/chat/domain/usecases/listen_chat_by_id_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/open_chat_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/send_message_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/toggle_block_user_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/update_typing_info_use_case.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chat_page_bloc/chat_page_bloc.dart';
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
@@ -32,6 +34,9 @@ class MockOpenChatUseCase extends Mock implements OpenChatUseCase {}
 
 class MockListenUserDataUseCase extends Mock implements ListenUserDataUseCase {}
 
+class MockToggleBlockUserUseCase extends Mock
+    implements ToggleBlockUserUseCase {}
+
 void main() {
   late MockSendMessageUseCase sendMessageUseCase;
   late MockListenLastMessagesUseCase listenLastMessagesUseCase;
@@ -39,6 +44,7 @@ void main() {
   late MockUpdateTypingInfoUseCase updateTypingInfoUseCase;
   late MockOpenChatUseCase openChatUseCase;
   late MockListenUserDataUseCase listenUserDataUseCase;
+  late MockToggleBlockUserUseCase toggleBlockUserUseCase;
 
   late StreamController<List<ChatMessage>> messagesController;
   late StreamController<Chat> chatController;
@@ -73,6 +79,7 @@ void main() {
     openChatUseCase: openChatUseCase,
     updateTypingInfoUseCase: updateTypingInfoUseCase,
     listenUserDataUseCase: listenUserDataUseCase,
+    toggleBlockUserUseCase: toggleBlockUserUseCase,
   );
 
   setUp(() {
@@ -82,6 +89,7 @@ void main() {
     updateTypingInfoUseCase = MockUpdateTypingInfoUseCase();
     openChatUseCase = MockOpenChatUseCase();
     listenUserDataUseCase = MockListenUserDataUseCase();
+    toggleBlockUserUseCase = MockToggleBlockUserUseCase();
 
     messagesController = StreamController<List<ChatMessage>>.broadcast();
     chatController = StreamController<Chat>.broadcast();
@@ -103,6 +111,13 @@ void main() {
       () => updateTypingInfoUseCase.call(
         chatId: any(named: 'chatId'),
         status: any(named: 'status'),
+      ),
+    ).thenAnswer((_) async => Left(null));
+    when(
+      () => toggleBlockUserUseCase.call(
+        chatId: any(named: 'chatId'),
+        targetUid: any(named: 'targetUid'),
+        blocked: any(named: 'blocked'),
       ),
     ).thenAnswer((_) async => Left(null));
   });
@@ -360,6 +375,149 @@ void main() {
 
         expect(bloc.state.status, ChatPageStatus.initial);
         expect(bloc.state.errorMessage, isEmpty);
+
+        await bloc.close();
+      },
+    );
+  });
+
+  group('ChatPageBloc blocking', () {
+    Future<ChatPageBloc> initialisedBloc() async {
+      final bloc = buildBloc();
+      bloc.add(const ChatPageEvent.init(chatId: chatId));
+      await Future.doWhile(() async {
+        await Future<void>.delayed(Duration.zero);
+        return bloc.state.status != ChatPageStatus.initial;
+      }).timeout(const Duration(seconds: 2));
+      return bloc;
+    }
+
+    test(
+      'toggleBlock calls ToggleBlockUserUseCase with chatId, target and flag',
+      () async {
+        final bloc = await initialisedBloc();
+
+        bloc.add(
+          const ChatPageEvent.toggleBlock(targetUid: otherUid, blocked: true),
+        );
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+
+        verify(
+          () => toggleBlockUserUseCase.call(
+            chatId: chatId,
+            targetUid: otherUid,
+            blocked: true,
+          ),
+        ).called(1);
+
+        await bloc.close();
+      },
+    );
+
+    test(
+      'chat stream emitting a blocked map updates the chat block flags',
+      () async {
+        final bloc = await initialisedBloc();
+
+        final restrictedChat = chat.copyWith(
+          blocked: {currentUid: true},
+        );
+        chatController.add(restrictedChat);
+
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return bloc.state.chat?.isBlockedBy(currentUid) != true;
+        }).timeout(const Duration(seconds: 2));
+
+        expect(bloc.state.chat?.isBlockedBy(currentUid), isTrue);
+
+        await bloc.close();
+      },
+    );
+
+    test(
+      'sendMessage is gated when the OTHER party has blocked me '
+      '(my uid flagged)',
+      () async {
+        final bloc = await initialisedBloc();
+
+        // The peer blocked me → my own uid is flagged.
+        chatController.add(chat.copyWith(blocked: {currentUid: true}));
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return bloc.state.chat?.isBlockedBy(currentUid) != true;
+        }).timeout(const Duration(seconds: 2));
+
+        bloc.add(const ChatPageEvent.sendMessage(message: 'hello'));
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+
+        verifyNever(
+          () => sendMessageUseCase.call(
+            chatId: any(named: 'chatId'),
+            message: any(named: 'message'),
+          ),
+        );
+        expect(bloc.state.status, isNot(ChatPageStatus.sending));
+
+        await bloc.close();
+      },
+    );
+
+    test(
+      'sendMessage is NOT gated when I blocked the peer (I am the blocker)',
+      () async {
+        when(
+          () => sendMessageUseCase.call(
+            chatId: any(named: 'chatId'),
+            message: any(named: 'message'),
+          ),
+        ).thenAnswer((_) async => Left(null));
+
+        final bloc = await initialisedBloc();
+
+        // I blocked the peer → only the peer's uid is flagged.
+        chatController.add(chat.copyWith(blocked: {otherUid: true}));
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return bloc.state.chat?.isBlockedBy(otherUid) != true;
+        }).timeout(const Duration(seconds: 2));
+
+        bloc.add(const ChatPageEvent.sendMessage(message: 'hello'));
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+
+        verify(
+          () => sendMessageUseCase.call(
+            chatId: chatId,
+            message: 'hello',
+          ),
+        ).called(1);
+
+        await bloc.close();
+      },
+    );
+
+    test(
+      'toggleBlock failure surfaces a failed status',
+      () async {
+        when(
+          () => toggleBlockUserUseCase.call(
+            chatId: any(named: 'chatId'),
+            targetUid: any(named: 'targetUid'),
+            blocked: any(named: 'blocked'),
+          ),
+        ).thenAnswer((_) async => Right(BlockUserFailure()));
+
+        final bloc = await initialisedBloc();
+
+        bloc.add(
+          const ChatPageEvent.toggleBlock(targetUid: otherUid, blocked: true),
+        );
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return bloc.state.status != ChatPageStatus.failed;
+        }).timeout(const Duration(seconds: 2));
+
+        expect(bloc.state.status, ChatPageStatus.failed);
 
         await bloc.close();
       },

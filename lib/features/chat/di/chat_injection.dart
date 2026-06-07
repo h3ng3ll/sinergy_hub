@@ -22,6 +22,7 @@ import '../domain/usecases/open_chat_use_case.dart';
 import '../domain/usecases/search_chats_use_case.dart';
 import '../domain/usecases/send_message_use_case.dart';
 import '../domain/usecases/toggle_archive_chat_use_case.dart';
+import '../domain/usecases/toggle_block_user_use_case.dart';
 import '../domain/usecases/toggle_favorite_chat_use_case.dart';
 import '../domain/usecases/update_chat_info_use_case.dart';
 import '../domain/usecases/update_typing_info_use_case.dart';
@@ -133,6 +134,11 @@ void initChatFeature(GetIt getIt) {
       getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
     ),
   );
+  getIt.registerLazySingleton<ToggleBlockUserUseCase>(
+    () => ToggleBlockUserUseCase(
+      chatRepository: getIt<IChatRepository>(),
+    ),
+  );
 
   /// Bloc
   getIt.registerFactory<ChatPageBloc>(
@@ -143,6 +149,7 @@ void initChatFeature(GetIt getIt) {
       getLastMessageUseCase: getIt<ListenLastMessagesUseCase>(),
       updateTypingInfoUseCase: getIt<UpdateTypingInfoUseCase>(),
       listenChatByIdUseCase: getIt<ListenChatByIdUseCase>(),
+      toggleBlockUserUseCase: getIt<ToggleBlockUserUseCase>(),
     ),
   );
   getIt.registerFactory<ChatsFilterBloc>(

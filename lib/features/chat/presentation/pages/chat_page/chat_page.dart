@@ -160,10 +160,26 @@ class _ChatPageState extends State<ChatPage> {
             final UserData chatterUser = chatPageState.users.first;
             final UserData currentUser = chatPageState.userData!;
 
+            /// "I blocked them" → the peer's uid is flagged in `blocked`.
+            /// Drives the AppBar Block/Unblock toggle.
+            final bool isPeerBlockedByMe = chat.isBlockedBy(chatterUser.uid);
+
+            /// "They blocked me" → MY uid is flagged. Only this restricts the
+            /// current user's input — the blocker is never locked out by
+            /// their own action.
+            final bool amIBlocked = chat.isBlockedBy(currentUser.uid);
+
             return Scaffold(
               appBar: ChatAppBar(
                 onTapUser: () => onTapUser(
                   chatterUser.uid,
+                ),
+                isBlocked: isPeerBlockedByMe,
+                onToggleBlock: () => _chatPageBloc.add(
+                  ChatPageEvent.toggleBlock(
+                    targetUid: chatterUser.uid,
+                    blocked: !isPeerBlockedByMe,
+                  ),
                 ),
                 user: chatterUser,
               ),
@@ -183,6 +199,7 @@ class _ChatPageState extends State<ChatPage> {
                     onSendMessage: _onSendMessage,
                     onAttachMedia: onAttachMedia,
                     chatController: _textEditingController,
+                    isBlocked: amIBlocked,
                   ),
                 ],
               ),

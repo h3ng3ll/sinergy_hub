@@ -12,6 +12,7 @@ import '../../features/home/domain/di/home_injection.dart';
 import '../../features/matches/di/matches_injection.dart';
 import '../../features/notifications/di/notifications_injection.dart';
 import '../../features/onboard_survey/di/onboard_survery_injection.dart';
+import '../../features/report/di/report_injection.dart';
 import '../../features/settings/di/settings_injection.dart';
 import '../../features/user/di/user_injection.dart';
 import '../../features/user_chat/di/user_chat_injection.dart';
@@ -133,6 +134,10 @@ Future<void> initDependencies() async {
   );
 
   initUserChatFeature(
+    getIt,
+  );
+
+  initReportFeature(
     getIt,
   );
   // TODO: Add onboarding, profile, etc.

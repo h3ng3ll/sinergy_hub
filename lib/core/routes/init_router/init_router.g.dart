@@ -98,6 +98,12 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                     GoRouteData.$route(
                       path: ':userId',
                       factory: $UserProfilePageRoute._fromState,
+                      routes: [
+                        GoRouteData.$route(
+                          path: 'report',
+                          factory: $ReportUserPageRoute._fromState,
+                        ),
+                      ],
                     ),
                     GoRouteData.$route(
                       path: '/',
@@ -448,6 +454,34 @@ mixin $UserProfilePageRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
     '/matches/${Uri.encodeComponent(_self.chatId)}/${Uri.encodeComponent(_self.userId)}',
+  );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $ReportUserPageRoute on GoRouteData {
+  static ReportUserPageRoute _fromState(GoRouterState state) =>
+      ReportUserPageRoute(
+        chatId: state.pathParameters['chatId']!,
+        userId: state.pathParameters['userId']!,
+      );
+
+  ReportUserPageRoute get _self => this as ReportUserPageRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/matches/${Uri.encodeComponent(_self.chatId)}/${Uri.encodeComponent(_self.userId)}/report',
   );
 
   @override

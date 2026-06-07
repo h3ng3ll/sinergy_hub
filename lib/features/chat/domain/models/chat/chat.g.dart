@@ -25,6 +25,9 @@ _Chat _$ChatFromJson(Map<String, dynamic> json) => _Chat(
             MapEntry(k, ParticipantInfo.fromJson(e as Map<String, dynamic>)),
       ) ??
       const {},
+  blocked: json['blocked'] == null
+      ? const {}
+      : _blockedFromJson(json['blocked']),
   participants: (json['participants'] as List<dynamic>)
       .map((e) => e as String)
       .toList(),
@@ -51,6 +54,7 @@ Map<String, dynamic> _$ChatToJson(_Chat instance) => <String, dynamic>{
   'participantInfo': instance.participantInfo.map(
     (k, e) => MapEntry(k, e.toJson()),
   ),
+  'blocked': instance.blocked,
   'participants': instance.participants,
   'createdAt': const TimestampConverter().toJson(instance.createdAt),
   'icon': instance.icon,

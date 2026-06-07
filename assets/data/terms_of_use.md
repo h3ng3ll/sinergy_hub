@@ -77,3 +77,20 @@ We reserve the right to:
 - Investigate and take action against reported content or users.
 
 Users may report inappropriate content or block other users directly within the Services. Reports are reviewed and may result in content removal or account restrictions.
+
+## 14. REPORTING AND BLOCKING OTHER USERS
+
+To help keep the community safe, the Services let you report and block other users. By using these features you acknowledge the following rights and obligations.
+
+Your rights:
+- You may report any user whose behavior or content you believe violates these Terms, by selecting a complaint type and describing the issue. Your report is sent to us for review.
+- You may block any user you are chatting with. Once a chat is blocked, messaging within that chat is restricted and neither party can send new messages until the block is removed.
+
+Your obligations:
+- You must submit reports in good faith and provide accurate information. Submitting false, malicious, abusive, or repetitive reports is itself a violation of these Terms and may lead to restrictions on your own account.
+- You must not use the reporting feature to harass other users or to gain an unfair advantage.
+- To prevent abuse and spam, the number of reports you may submit within a given period is limited. If you exceed this limit, additional reports will be temporarily declined and you will be asked to try again later.
+
+How we handle reports:
+- Reports are processed by the platform. We may, at our discretion, review the reported account and content and take action, including warning, restricting, suspending, or permanently terminating accounts that violate these Terms.
+- Blocking is applied to the relevant chat and does not by itself constitute a report; you may both block a user and submit a separate report.

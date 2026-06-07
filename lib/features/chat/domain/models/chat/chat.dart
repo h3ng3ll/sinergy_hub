@@ -23,6 +23,11 @@ abstract class Chat with _$Chat {
     @Default([]) List<String> typingUsers,
     @Default({}) Map<String, ParticipantInfo> participantInfo,
 
+    /// Per-user block flags keyed by userId. A missing key means the user
+    /// has not blocked the chat (default false).
+    @JsonKey(fromJson: _blockedFromJson)
+    @Default({}) Map<String, bool> blocked,
+
     /// who access this chat
     required List<String> participants,
 
@@ -50,10 +55,27 @@ abstract class Chat with _$Chat {
   );
 }
 
+/// Defensively coerces the stored `blocked` map into `Map<String, bool>`,
+/// tolerating null / non-bool values that may appear from the web client.
+Map<String, bool> _blockedFromJson(dynamic value) {
+  if (value is Map) {
+    return value.map(
+      (key, val) => MapEntry(key.toString(), val == true),
+    );
+  }
+  return {};
+}
+
 extension ChatX on Chat {
   String? otherUserUid(String uid) => participants.firstWhereOrNull(
     (p) => p != uid && p.isNotEmpty,
   );
+
+  /// Whether [uid] has blocked this chat.
+  bool isBlockedBy(String uid) => blocked[uid] == true;
+
+  /// Whether any participant has blocked the chat — messaging is restricted.
+  bool get anyBlocked => blocked.values.any((b) => b);
 
   ParticipantInfo? otherUser(String uid) {
     final oUid = participantInfo.keys.firstWhereOrNull(

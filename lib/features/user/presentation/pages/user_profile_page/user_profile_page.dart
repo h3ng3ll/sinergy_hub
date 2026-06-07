@@ -7,7 +7,10 @@ import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../core/routes/init_router/init_router.dart';
+import '../../../../../core/utils/extensions/go_router_x.dart';
 import '../../../../../core/utils/responsive_helper.dart';
+import '../../../../../core/widgets/btn/app_fab.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../bloc/user_profile_bloc/user_profile_bloc.dart';
 import '../../../domain/usecases/get_user_data_use_case.dart';
@@ -17,10 +20,12 @@ import 'widgets/looking_for_section.dart';
 
 class UserProfilePage extends StatefulWidget {
   final String userId;
+  final String chatId;
 
   const UserProfilePage({
     super.key,
     required this.userId,
+    required this.chatId,
   });
 
   @override
@@ -50,6 +55,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   void _onBack() {
     context.pop();
+  }
+
+  void _onReport() {
+    /// Always push (even on web) so the report page keeps a stack entry and
+    /// can be popped — `.navigate`/`.go` would replace the route and trap the
+    /// user on the report page with no way back.
+    ReportUserPageRoute(
+      chatId: widget.chatId,
+      userId: widget.userId,
+    ).push(context);
   }
 
   @override
@@ -101,6 +116,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
               return Scaffold(
                 backgroundColor: AppColors.white.value,
+                floatingActionButton: AppFab(
+                  onPressed: _onReport,
+                  child: const Icon(Icons.flag_outlined),
+                ),
                 body: SingleChildScrollView(
                   child: Center(
                     child: ConstrainedBox(

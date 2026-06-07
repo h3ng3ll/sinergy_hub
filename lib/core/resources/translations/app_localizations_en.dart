@@ -69,4 +69,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get connection_restored => 'Connection restored';
+
+  @override
+  String get report_user_title => 'Report user';
+
+  @override
+  String get report_user_type_label => 'Type of complaint';
+
+  @override
+  String get report_user_type_hint => 'Select a complaint type';
+
+  @override
+  String get report_user_details_label => 'Describe the issue';
+
+  @override
+  String get report_user_details_hint => 'Tell us what happened';
+
+  @override
+  String get report_user_details_required => 'Please describe the issue';
+
+  @override
+  String get report_user_type_required => 'Please select a complaint type';
+
+  @override
+  String get report_user_submit => 'Submit report';
+
+  @override
+  String get report_user_success =>
+      'Thank you. Your report has been submitted.';
+
+  @override
+  String get report_user_rate_limited =>
+      'You have submitted too many reports. Please try again later.';
+
+  @override
+  String get report_type_harassment => 'Harassment or bullying';
+
+  @override
+  String get report_type_spam => 'Spam or scam';
+
+  @override
+  String get report_type_inappropriate => 'Inappropriate content';
+
+  @override
+  String get report_type_fake_profile => 'Fake profile';
+
+  @override
+  String get report_type_other => 'Other';
+
+  @override
+  String get block_user => 'Block user';
+
+  @override
+  String get unblock_user => 'Unblock user';
+
+  @override
+  String get chat_blocked_message => 'Messaging is restricted in this chat';
 }

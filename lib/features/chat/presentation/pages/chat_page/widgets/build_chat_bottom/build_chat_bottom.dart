@@ -11,11 +11,15 @@ class BuildChatBottom extends StatelessWidget {
   final VoidCallback onSendMessage;
   final VoidCallback onAttachMedia;
 
+  /// True only when the OTHER party blocked the current user.
+  final bool isBlocked;
+
   const BuildChatBottom({
     super.key,
     required this.chatController,
     required this.onSendMessage,
     required this.onAttachMedia,
+    this.isBlocked = false,
   });
 
   @override
@@ -32,10 +36,12 @@ class BuildChatBottom extends StatelessWidget {
             Expanded(
               child: ChatInput(
                 textEditingController: chatController,
+                isBlocked: isBlocked,
               ),
             ),
             BuildSendBtn(
               onTap: onSendMessage,
+              isBlocked: isBlocked,
             ),
           ],
         ),

@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../../../../core/resources/colors/app_color_scheme.dart';
+import '../../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../../core/resources/colors/app_gradients.dart';
 import '../../../../../../../../gen/assets.gen.dart';
 
 class BuildSendBtn extends StatelessWidget {
   final VoidCallback onTap;
+  final bool isBlocked;
 
   const BuildSendBtn({
     super.key,
     required this.onTap,
+    this.isBlocked = false,
   });
 
   @override
@@ -18,7 +21,7 @@ class BuildSendBtn extends StatelessWidget {
     final colorScheme = AppColorScheme.of(context);
 
     return InkWell(
-      onTap: onTap,
+      onTap: isBlocked ? null : onTap,
       child: Container(
         width: 50.0,
         height: 50.0,
@@ -27,12 +30,17 @@ class BuildSendBtn extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: AppGradients.bluePurple,
+          gradient: isBlocked ? null : AppGradients.bluePurple,
+          color: isBlocked
+              ? AppColors.tartOrange.value.withValues(alpha: 0.4)
+              : null,
         ),
         child: SvgPicture.asset(
           Assets.icons.telegram,
           colorFilter: ColorFilter.mode(
-            colorScheme.onPrimary,
+            isBlocked
+                ? colorScheme.onPrimary.withValues(alpha: 0.5)
+                : colorScheme.onPrimary,
             BlendMode.srcIn,
           ),
         ),

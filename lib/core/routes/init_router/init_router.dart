@@ -26,6 +26,7 @@ import '../../../features/onboard_survey/presentation/pages/onboard_about_you_pa
 import '../../../features/onboard_survey/presentation/pages/onboard_shell_page/onboard_shell_page.dart';
 import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/onboard_survey_page.dart';
 import '../../../features/privacy_policy/presentation/pages/privacy_policy_page/privacy_policy_page.dart';
+import '../../../features/report/presentation/pages/report_user_page/report_user_page.dart';
 import '../../../features/settings/presentation/pages/settings_page/settings_page.dart';
 import '../../../features/support/presentation/pages/support_page/support_page.dart';
 import '../../../features/terms_of_use/presentation/pages/terms_of_use_page/terms_of_use_page.dart';
@@ -234,6 +235,11 @@ GoRouter initRouter({
                   routes: [
                     TypedGoRoute<UserProfilePageRoute>(
                       path: ':userId',
+                      routes: [
+                        TypedGoRoute<ReportUserPageRoute>(
+                          path: 'report',
+                        ),
+                      ],
                     ),
                     TypedGoRoute<ChatPageViewRoute>(
                       path: '/',
@@ -549,6 +555,26 @@ class UserProfilePageRoute extends GoRouteData with $UserProfilePageRoute {
     return GoRouterPageBuilder.pageBuilder(
       UserProfilePage(
         userId: userId,
+        chatId: chatId,
+      ),
+    );
+  }
+}
+
+class ReportUserPageRoute extends GoRouteData with $ReportUserPageRoute {
+  final String chatId;
+  final String userId;
+
+  const ReportUserPageRoute({
+    required this.chatId,
+    required this.userId,
+  });
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      ReportUserPage(
+        reportedUserId: userId,
       ),
     );
   }

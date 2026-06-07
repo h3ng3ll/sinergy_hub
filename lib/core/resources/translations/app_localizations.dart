@@ -213,6 +213,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Connection restored'**
   String get connection_restored;
+
+  /// No description provided for @report_user_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Report user'**
+  String get report_user_title;
+
+  /// No description provided for @report_user_type_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Type of complaint'**
+  String get report_user_type_label;
+
+  /// No description provided for @report_user_type_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a complaint type'**
+  String get report_user_type_hint;
+
+  /// No description provided for @report_user_details_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the issue'**
+  String get report_user_details_label;
+
+  /// No description provided for @report_user_details_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what happened'**
+  String get report_user_details_hint;
+
+  /// No description provided for @report_user_details_required.
+  ///
+  /// In en, this message translates to:
+  /// **'Please describe the issue'**
+  String get report_user_details_required;
+
+  /// No description provided for @report_user_type_required.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a complaint type'**
+  String get report_user_type_required;
+
+  /// No description provided for @report_user_submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit report'**
+  String get report_user_submit;
+
+  /// No description provided for @report_user_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you. Your report has been submitted.'**
+  String get report_user_success;
+
+  /// No description provided for @report_user_rate_limited.
+  ///
+  /// In en, this message translates to:
+  /// **'You have submitted too many reports. Please try again later.'**
+  String get report_user_rate_limited;
+
+  /// No description provided for @report_type_harassment.
+  ///
+  /// In en, this message translates to:
+  /// **'Harassment or bullying'**
+  String get report_type_harassment;
+
+  /// No description provided for @report_type_spam.
+  ///
+  /// In en, this message translates to:
+  /// **'Spam or scam'**
+  String get report_type_spam;
+
+  /// No description provided for @report_type_inappropriate.
+  ///
+  /// In en, this message translates to:
+  /// **'Inappropriate content'**
+  String get report_type_inappropriate;
+
+  /// No description provided for @report_type_fake_profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Fake profile'**
+  String get report_type_fake_profile;
+
+  /// No description provided for @report_type_other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get report_type_other;
+
+  /// No description provided for @block_user.
+  ///
+  /// In en, this message translates to:
+  /// **'Block user'**
+  String get block_user;
+
+  /// No description provided for @unblock_user.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock user'**
+  String get unblock_user;
+
+  /// No description provided for @chat_blocked_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Messaging is restricted in this chat'**
+  String get chat_blocked_message;
 }
 
 class _AppLocalizationsDelegate

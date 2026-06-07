@@ -262,6 +262,23 @@ class ChatFirebaseRepository implements IChatRepository {
   }
 
   @override
+  Future<void> setBlocked({
+    required String uid,
+    required String chatId,
+    required bool blocked,
+  }) async {
+    await _chats
+        .doc(
+          chatId,
+        )
+        .update(
+          {
+            'blocked.$uid': blocked,
+          },
+        );
+  }
+
+  @override
   Future<ChatConfig> getConfig({
     required String uid,
     required String chatId,
