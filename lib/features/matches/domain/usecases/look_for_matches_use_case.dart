@@ -1,4 +1,5 @@
 import '../../../auth/domain/repostories/i_auth_repository.dart';
+import '../../../user/domain/models/user_data/user_data.dart';
 import '../../../user/domain/models/users_data_pg_state/users_data_pg_state.dart';
 import '../../../user/domain/repositories/i_user_read_repository.dart';
 import '../models/matches_filter/matches_filter.dart';
@@ -42,6 +43,7 @@ class LookForMatchesUseCase {
               e.uid,
             ),
           )
+          .whereActive()
           .toList(),
     );
 

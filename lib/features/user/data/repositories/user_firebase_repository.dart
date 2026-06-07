@@ -80,7 +80,8 @@ class UserFirebaseRepository
       );
     }
 
-    return results;
+    // Deleted accounts must never surface in the matches feature.
+    return results.whereActive().toList();
   }
 
   @override
@@ -133,6 +134,8 @@ class UserFirebaseRepository
     final UserData? user = UserDataMapper.fromDocSnapshot(
       userSnapshot,
     );
+    // A deleted account must not be resolvable in the matches feature.
+    if (user != null && !user.isActive) return null;
     return user;
   }
 

@@ -45,3 +45,14 @@ sealed class UserData with _$UserData {
     return 'UserData(uid: $uid, name: $firstName $lastName, age: $age)';
   }
 }
+
+extension UserDataActiveX on UserData {
+  /// A user is active (eligible to be surfaced) unless they deleted their
+  /// account. Deleted users must never appear in the matches feature.
+  bool get isActive => !isDeleted;
+}
+
+extension UserDataListActiveX on Iterable<UserData> {
+  /// Drops users flagged [UserData.isDeleted].
+  Iterable<UserData> whereActive() => where((u) => u.isActive);
+}
