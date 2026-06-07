@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:sinergy_hub/core/models/failures.dart';
+import 'package:sinergy_hub/core/failures/failure.dart';
 import 'package:sinergy_hub/features/chat/domain/failures/chat_validation_failure.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_config/chat_config.dart';

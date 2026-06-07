@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/models/failures.dart';
+import '../../../../core/failures/failure.dart';
 import '../../../user/domain/models/user_data/user_data.dart';
 import '../../../user/domain/usecases/get_current_user_data_use_case.dart';
 import '../../../user/domain/usecases/get_users_use_case.dart';

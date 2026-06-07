@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/models/failures.dart';
+import '../../../../core/failures/failure.dart';
 import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../failures/message_not_sent_failure.dart';
 import '../models/chat/chat.dart';

@@ -1,6 +1,6 @@
 
 
-import '../../../../core/models/failures.dart';
+import '../../../../core/failures/failure.dart';
 
 class MessageNotSentFailure implements Failure{
   @override

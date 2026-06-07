@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/models/failures.dart';
+import '../../../../core/failures/failure.dart';
 import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../failures/typing_status_failure.dart';
 import '../repositories/i_chat_repository.dart';

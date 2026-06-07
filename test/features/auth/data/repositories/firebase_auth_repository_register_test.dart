@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/core/services/crypto_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_firestore_service.dart';
+import 'package:sinergy_hub/core/services/firebase/firebase_functions_service.dart';
 import 'package:sinergy_hub/core/services/google_sign_in_service/google_sign_in_service.dart';
 import 'package:sinergy_hub/core/utils/env/env.dart';
 import 'package:sinergy_hub/features/auth/data/repositories/auth_repository/firebase_auth_repository.dart';
@@ -22,6 +23,8 @@ class _FirestoreServiceMock extends Mock implements FirebaseFirestoreService {}
 class _GoogleSignInServiceMock extends Mock implements GoogleSignInService {}
 
 class _EnvMock extends Mock implements Env {}
+
+class _FirebaseFunctionsService extends Mock implements FirebaseFunctionsService {}
 
 class _CryptoServiceMock extends Mock implements CryptoService {}
 
@@ -46,6 +49,7 @@ void main() {
       googleSignInService: _GoogleSignInServiceMock(),
       env: _EnvMock(),
       cryptoService: _CryptoServiceMock(),
+      firebaseFunctionsService: _FirebaseFunctionsService(),
     );
   });
 

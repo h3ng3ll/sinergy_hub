@@ -8,9 +8,10 @@ import 'package:rxdart/rxdart.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../../../core/models/exceptions.dart';
-import '../../../../../core/models/failures.dart';
+import '../../../../../core/failures/failure.dart';
 import '../../../../../core/services/crypto_service.dart';
 import '../../../../../core/services/firebase/firebase_firestore_service.dart';
+import '../../../../../core/services/firebase/firebase_functions_service.dart';
 import '../../../../../core/services/google_sign_in_service/google_sign_in_service.dart';
 import '../../../../../core/utils/env/env.dart';
 import '../../../domain/exception/failed_sign_with_google.dart';
@@ -28,12 +29,12 @@ import '../../../domain/failures/user_exists_with_such_email_failure.dart';
 import '../../../domain/repostories/i_auth_repository.dart';
 
 class FirebaseAuthRepository extends IAuthRepository {
-  // final FirebaseAuthService _firebaseAuthService;
 
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;
   final GoogleSignInService _googleSignInService;
   final CryptoService _cryptoService;
+  final FirebaseFunctionsService _firebaseFunctionsService;
 
   final Env _env;
 
@@ -44,7 +45,9 @@ class FirebaseAuthRepository extends IAuthRepository {
     required GoogleSignInService googleSignInService,
     required Env env,
     required CryptoService cryptoService,
-  }) : _auth = auth,
+    required FirebaseFunctionsService firebaseFunctionsService,
+  }) : _firebaseFunctionsService = firebaseFunctionsService,
+       _auth = auth,
        _googleSignInService = googleSignInService,
        _env = env,
        _googleSignIn = googleSignIn,
@@ -158,7 +161,13 @@ class FirebaseAuthRepository extends IAuthRepository {
 
   @override
   Future<void> deleteAccount() async {
-    await _auth.currentUser?.delete();
+    await _firebaseFunctionsService.call(
+      functionName: 'deleteAccount',
+    );
+    // Revoke the local session so watchUser() emits null →
+    // AuthBloc → logout → GoRouter redirects to the auth page.
+    await _googleSignInService.signOut();
+    await _auth.signOut();
   }
 
   @override

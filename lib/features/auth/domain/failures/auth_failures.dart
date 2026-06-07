@@ -1,4 +1,4 @@
-import '../../../../core/models/failures.dart';
+import '../../../../core/failures/failure.dart';
 
 abstract class AuthFailure extends Failure {
   const AuthFailure({

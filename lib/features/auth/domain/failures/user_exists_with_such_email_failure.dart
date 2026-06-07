@@ -1,4 +1,4 @@
-import '../../../../core/models/failures.dart';
+import '../../../../core/failures/failure.dart';
 import 'auth_failures.dart';
 
 class UserExistsWithSuchEmailFailure extends AuthFailure {

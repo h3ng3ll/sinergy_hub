@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/models/failures.dart';
+import '../../../../core/failures/failure.dart';
 import '../../../../core/services/image_service.dart';
 import '../../../auth/domain/repostories/i_auth_repository.dart';
 import '../failures/user_update_failure.dart';

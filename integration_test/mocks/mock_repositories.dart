@@ -8,8 +8,9 @@ import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide Notification;
+import 'package:sinergy_hub/core/failures/failure.dart';
 import 'package:sinergy_hub/core/models/exceptions.dart';
-import 'package:sinergy_hub/core/models/failures.dart';
+
 import 'package:sinergy_hub/features/auth/domain/failures/auth_failures.dart';
 import 'package:sinergy_hub/features/auth/domain/repostories/i_auth_repository.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';

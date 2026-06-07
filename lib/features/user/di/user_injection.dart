@@ -2,10 +2,12 @@ import 'package:get_it/get_it.dart';
 
 import '../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../core/services/firebase/firebase_firestore_service.dart';
+import '../../../core/services/firebase/firebase_functions_service.dart';
 import '../../../core/services/firebase/firebase_storage_service.dart';
 import '../../../core/services/image_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../home/presentation/edit_profile_page/bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
+import '../../home/presentation/tabs/profile_tab/bloc/profile_bloc/profile_bloc.dart';
 import '../../onboard_survey/domain/use_cases/get_completion_status_use_case.dart';
 import '../../onboard_survey/domain/use_cases/get_skills_use_case.dart';
 import '../data/repositories/fake_user_firebase_repository.dart';
@@ -17,6 +19,7 @@ import '../domain/repositories/i_user_read_repository.dart';
 import '../domain/repositories/i_user_storage_repository.dart';
 import '../domain/repositories/i_user_write_repository.dart';
 import '../domain/services/i_app_mode_service.dart';
+import '../domain/usecases/delete_account_use_case.dart';
 import '../domain/usecases/get_current_user_data_use_case.dart';
 import '../domain/usecases/get_user_data_use_case.dart';
 import '../domain/usecases/get_users_use_case.dart';
@@ -60,7 +63,7 @@ void initUserFeature(GetIt getIt) {
   );
 
   getIt.registerLazySingleton<IUserWriteRepository>(
-    () => getIt<UserFirebaseRepository>() ,
+    () => getIt<UserFirebaseRepository>(),
   );
 
   getIt.registerLazySingleton<IUserStorageRepository>(
@@ -83,6 +86,11 @@ void initUserFeature(GetIt getIt) {
   getIt.registerLazySingleton<GetUserDataUseCase>(
     () => GetUserDataUseCase(
       userReadRepository: getIt<IUserReadRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<DeleteAccountUseCase>(
+    () => DeleteAccountUseCase(
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetUsersUseCase>(
@@ -131,6 +139,11 @@ void initUserFeature(GetIt getIt) {
   getIt.registerLazySingleton<UserBloc>(
     () => UserBloc(
       listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
+    ),
+  );
+  getIt.registerFactory<ProfileBloc>(
+    () => ProfileBloc(
+      deleteAccountUseCase: getIt<DeleteAccountUseCase>(),
     ),
   );
 }
