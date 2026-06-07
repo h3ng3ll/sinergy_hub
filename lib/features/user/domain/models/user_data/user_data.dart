@@ -25,6 +25,7 @@ sealed class UserData with _$UserData {
     required UserProfiler profiler,
     @TimestampConverter() required DateTime createdAt,
     @Default(false) bool isOnline,
+    @Default(false) bool isDeleted,
     @TimestampConverter() required DateTime lastSeen,
   }) = _UserData;
 
@@ -38,8 +39,6 @@ sealed class UserData with _$UserData {
     createdAt: DateTime.now(),
     lastSeen: DateTime.now(),
   );
-
-
 
   @override
   String toString() {

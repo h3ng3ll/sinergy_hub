@@ -52,35 +52,37 @@ class ChatMessageFirebaseRepository extends IChatMessageRepository {
     required String uid,
     required String chatId,
   }) =>
-      _messages(
-            chatId,
-          )
-          .orderBy(
-            'createdAt',
-            descending: true,
-          )
-          .limit(
-            30,
-          )
-          .snapshots()
-          .map(
-            (snapshot) {
-              return snapshot.docChanges
-                  .where(
-                    (change) => change.doc['createdAt'] != null,
-                  )
-                  .map(
-                    (change) {
-                      final data = change.doc.data()!;
-                      final message = ChatMessageDto.fromJson(
-                        data,
-                      );
-                      return message.toDomain(
-                        uid: uid,
-                      );
-                    },
-                  )
-                  .toList();
-            },
-          );
+      _firebaseFirestoreService.authGated(
+        (uid) => _messages(
+              chatId,
+            )
+            .orderBy(
+              'createdAt',
+              descending: true,
+            )
+            .limit(
+              30,
+            )
+            .snapshots()
+            .map(
+              (snapshot) {
+                return snapshot.docChanges
+                    .where(
+                      (change) => change.doc['createdAt'] != null,
+                    )
+                    .map(
+                      (change) {
+                        final data = change.doc.data()!;
+                        final message = ChatMessageDto.fromJson(
+                          data,
+                        );
+                        return message.toDomain(
+                          uid: uid,
+                        );
+                      },
+                    )
+                    .toList();
+              },
+            ),
+      );
 }

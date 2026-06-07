@@ -19,6 +19,7 @@ _UserData _$UserDataFromJson(Map<String, dynamic> json) => _UserData(
     json['createdAt'] as Timestamp?,
   ),
   isOnline: json['isOnline'] as bool? ?? false,
+  isDeleted: json['isDeleted'] as bool? ?? false,
   lastSeen: const TimestampConverter().fromJson(json['lastSeen'] as Timestamp?),
 );
 
@@ -33,5 +34,6 @@ Map<String, dynamic> _$UserDataToJson(_UserData instance) => <String, dynamic>{
   'profiler': instance.profiler.toJson(),
   'createdAt': const TimestampConverter().toJson(instance.createdAt),
   'isOnline': instance.isOnline,
+  'isDeleted': instance.isDeleted,
   'lastSeen': const TimestampConverter().toJson(instance.lastSeen),
 };

@@ -138,20 +138,22 @@ class UserFirebaseRepository
 
   @override
   Stream<UserData?> userDataStream(
-    String uid,
+    String streamUid,
   ) {
-    return _firebaseFirestoreService.usersDocument
-        .doc(
-          uid,
-        )
-        .snapshots()
-        .map(
-          (snapshot) {
-            return UserDataMapper.fromDocSnapshot(
-              snapshot,
-            );
-          },
-        );
+    return _firebaseFirestoreService.authGated(
+      (uid) => _firebaseFirestoreService.usersDocument
+          .doc(
+            streamUid,
+          )
+          .snapshots()
+          .map(
+            (snapshot) {
+              return UserDataMapper.fromDocSnapshot(
+                snapshot,
+              );
+            },
+          ),
+    );
   }
 
   @override

@@ -28,6 +28,7 @@ import '../services/firebase/firebase_storage_service.dart';
 import '../services/google_sign_in_service/google_sign_in_service.dart';
 import '../services/image_service.dart';
 import '../services/local_notification_service.dart';
+import '../services/logger_service.dart';
 import '../services/notification_tap_processor.dart';
 import '../services/permission_requester_service.dart';
 import '../utils/env/dev_env.dart';
@@ -44,9 +45,12 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => FirebaseAuth.instance);
   getIt.registerLazySingleton(() => FirebaseMessaging.instance);
   getIt.registerLazySingleton(() => FirebaseFunctions.instance);
+  getIt.registerLazySingleton(() => LoggerService());
   getIt.registerLazySingleton(
     () => FirebaseFirestoreService(
       firebaseFirestore: getIt<FirebaseFirestore>(),
+      firebaseAuth: getIt<FirebaseAuth>(),
+      logger: getIt<LoggerService>(),
     ),
   );
   getIt.registerLazySingleton(() => FirebaseAuthService());

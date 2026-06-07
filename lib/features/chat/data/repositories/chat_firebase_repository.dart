@@ -41,24 +41,26 @@ class ChatFirebaseRepository implements IChatRepository {
 
   @override
   Stream<List<Chat>> getStream(String uid) {
-    return _chats.snapshots().map(
-      (e) => e.docs
-          .where(
-            (e) {
-              if (!e.data().containsKey('participants')) {
-                return false;
-              }
-              return (e.data()['participants'] as List).contains(
-                uid,
-              );
-            },
-          )
-          .map(
-            (doc) => Chat.fromJson(
-              doc.data(),
-            ),
-          )
-          .toList(),
+    return _firebaseFirestoreService.authGated(
+      (uid) => _chats.snapshots().map(
+        (e) => e.docs
+            .where(
+              (e) {
+                if (!e.data().containsKey('participants')) {
+                  return false;
+                }
+                return (e.data()['participants'] as List).contains(
+                  uid,
+                );
+              },
+            )
+            .map(
+              (doc) => Chat.fromJson(
+                doc.data(),
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 
@@ -67,19 +69,21 @@ class ChatFirebaseRepository implements IChatRepository {
     required String uid,
     required String chatId,
   }) {
-    return _chats
-        .doc(
-          chatId,
-        )
-        .snapshots()
-        .map(
-          (e) {
-            final dto = Chat.fromJson(
-              e.data()!,
-            );
-            return dto;
-          },
-        );
+    return _firebaseFirestoreService.authGated(
+      (uid) => _chats
+          .doc(
+            chatId,
+          )
+          .snapshots()
+          .map(
+            (e) {
+              final dto = Chat.fromJson(
+                e.data()!,
+              );
+              return dto;
+            },
+          ),
+    );
   }
 
   @override
@@ -279,23 +283,27 @@ class ChatFirebaseRepository implements IChatRepository {
   @override
   Stream<Chat> chatUpdates({
     required String uid,
-  }) async* {
-    await for (final snapshot
-        in _chats
-            .where(
-              'participants',
-              arrayContains: uid,
-            )
-            .snapshots()) {
-      for (final change in snapshot.docChanges) {
-        if (change.type == DocumentChangeType.modified ||
-            change.type == DocumentChangeType.added) {
-          yield Chat.fromJson(
-            change.doc.data()!,
-          );
+  }) {
+    return _firebaseFirestoreService.authGated(
+      (uid) async* {
+        await for (final snapshot
+            in _chats
+                .where(
+                  'participants',
+                  arrayContains: uid,
+                )
+                .snapshots()) {
+          for (final change in snapshot.docChanges) {
+            if (change.type == DocumentChangeType.modified ||
+                change.type == DocumentChangeType.added) {
+              yield Chat.fromJson(
+                change.doc.data()!,
+              );
+            }
+          }
         }
-      }
-    }
+      },
+    );
   }
 
   @override

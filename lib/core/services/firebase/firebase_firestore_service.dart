@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../utils/app_config.dart';
+import '../logger_service.dart';
 
 typedef DocRef = DocumentReference<Map<String, dynamic>>;
 typedef DocSnap = DocumentSnapshot<Map<String, dynamic>>;
@@ -11,10 +14,74 @@ typedef ColRef = CollectionReference<Map<String, dynamic>>;
 class FirebaseFirestoreService {
   // final int _batchLimit = 500;
   final FirebaseFirestore _firebaseFirestore;
+  final FirebaseAuth _firebaseAuth;
+  final LoggerService _logger;
 
   FirebaseFirestoreService({
     required FirebaseFirestore firebaseFirestore,
-  }) : _firebaseFirestore = firebaseFirestore;
+    required FirebaseAuth firebaseAuth,
+    required LoggerService logger,
+  }) : _firebaseFirestore = firebaseFirestore,
+       _firebaseAuth = firebaseAuth,
+       _logger = logger;
+
+  /// Current authentication state, mirroring
+  /// [FirebaseAuthRepository.watchUser] so gated streams react to the same
+  /// signal that drives `AuthBloc`. Distinct on uid so the gate only rebuilds
+  /// when the signed-in user actually changes (sign-in / sign-out / swap).
+  Stream<User?> get authState => Rx.merge([
+    _firebaseAuth.userChanges(),
+    _firebaseAuth.authStateChanges(),
+    _firebaseAuth.idTokenChanges(),
+  ]).distinct((a, b) => a?.uid == b?.uid);
+
+  /// Gates a Firestore listening stream on the auth state.
+  ///
+  /// While a user is signed in, [build] is invoked with the current uid and its
+  /// stream flows through. The instant the user becomes `null` (sign-out /
+  /// account deletion), `switchMap` swaps to an empty stream, which cancels the
+  /// underlying `.snapshots()` listener automatically — no manual cancellation.
+  ///
+  /// A `permission-denied` error that races the sign-out (the listener firing
+  /// just before it is torn down) is expected and benign: it is swallowed and
+  /// logged as a WARNING. Any other error propagates unchanged so real failures
+  /// still surface.
+  ///
+  /// The benign error can land on either side of the race: on the INNER stream
+  /// (caught by the inner `handleError`) or — when auth emits `null` first and
+  /// `switchMap` has already cancelled the inner subscription — on the OUTER
+  /// stream. We therefore guard BOTH levels, otherwise an error that arrives
+  /// after the swap bypasses the inner guard and reaches the bloc as a `failed`
+  /// state.
+  Stream<T> authGated<T>(
+    Stream<T> Function(String uid) build,
+  ) {
+    return authState
+        .switchMap((user) {
+          if (user == null) {
+            return Stream<T>.empty();
+          }
+          return build(user.uid).handleError(
+            _warnAndSwallow,
+            test: _isExpectedPermissionDenied,
+          );
+        })
+        .handleError(
+          _warnAndSwallow,
+          test: _isExpectedPermissionDenied,
+        );
+  }
+
+  void _warnAndSwallow(Object e, StackTrace st) {
+    _logger.warning(
+      'Suppressed post-signout Firestore permission-denied',
+      error: e,
+      name: 'AuthGate',
+    );
+  }
+
+  bool _isExpectedPermissionDenied(dynamic e) =>
+      e is FirebaseException && e.code == 'permission-denied';
 
   Future<void> init() async {
     if (AppConfig.isQA) {

@@ -18,39 +18,41 @@ class MatchesFirebaseRepository extends IMatchesRepository {
   Stream<MatchesDto?> listenTwoWayMatch({
     required String uid,
   }) {
-    return _matches()
-        .where(
-          'completeness',
-          isEqualTo: EMatchesCompleteness.twoWayMatch.name,
-        )
-        .where(
-          'users',
-          arrayContains: uid,
-        )
-        .where(
-          'alreadyNotified.$uid',
-          isEqualTo: false,
-        )
-        .snapshots()
-        .map((
-          querySnapshot,
-        ) {
-          if (querySnapshot.docChanges.isEmpty) return null;
+    return _firebaseFirestoreService.authGated(
+      (uid) => _matches()
+          .where(
+            'completeness',
+            isEqualTo: EMatchesCompleteness.twoWayMatch.name,
+          )
+          .where(
+            'users',
+            arrayContains: uid,
+          )
+          .where(
+            'alreadyNotified.$uid',
+            isEqualTo: false,
+          )
+          .snapshots()
+          .map((
+            querySnapshot,
+          ) {
+            if (querySnapshot.docChanges.isEmpty) return null;
 
-          // Find the first added document
-          for (var change in querySnapshot.docChanges) {
-            if (change.type == DocumentChangeType.added) {
-              return MatchesDto.fromJson(
-                change.doc.data()!,
-              );
+            // Find the first added document
+            for (var change in querySnapshot.docChanges) {
+              if (change.type == DocumentChangeType.added) {
+                return MatchesDto.fromJson(
+                  change.doc.data()!,
+                );
+              }
             }
-          }
 
-          return null;
-        })
-        .where(
-          (match) => match != null,
-        );
+            return null;
+          })
+          .where(
+            (match) => match != null,
+          ),
+    );
   }
 
   /// Following path:
