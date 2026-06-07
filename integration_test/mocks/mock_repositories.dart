@@ -11,7 +11,9 @@ import 'package:flutter/material.dart' hide Notification;
 import 'package:sinergy_hub/core/failures/failure.dart';
 import 'package:sinergy_hub/core/models/exceptions.dart';
 
+import 'package:sinergy_hub/features/auth/data/models/apple_credentials/apple_credentials.dart';
 import 'package:sinergy_hub/features/auth/domain/failures/auth_failures.dart';
+import 'package:sinergy_hub/features/auth/domain/models/apple_sign_in_result/apple_sign_in_result.dart';
 import 'package:sinergy_hub/features/auth/domain/repostories/i_auth_repository.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_config/chat_config.dart';
@@ -64,8 +66,12 @@ class MockAuthRepository implements IAuthRepository {
   Future<Either<void, Exceptions>> signInWithGoogle() async => left(null);
 
   @override
-  Future<Either<UserCredential?, Failure>> signInWithApple() async =>
-      left(null);
+  Future<Either<AppleSignInResult, Failure>> signInWithApple() async => left(
+        const AppleSignInResult(
+          userCredential: null,
+          credentials: AppleCredentials(),
+        ),
+      );
 
   @override
   Future<void> signOut() async {}

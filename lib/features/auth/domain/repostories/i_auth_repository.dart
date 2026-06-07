@@ -5,6 +5,7 @@ import '../../../../core/models/exceptions.dart';
 import '../../../../core/failures/failure.dart';
 import '../../../user/domain/models/user_data/user_data.dart';
 import '../failures/auth_failures.dart';
+import '../models/apple_sign_in_result/apple_sign_in_result.dart';
 
 abstract class IAuthRepository {
   Stream<User?> watchUser();
@@ -16,7 +17,7 @@ abstract class IAuthRepository {
   Future<UserCredential> signInAnonymously();
 
   Future<Either<void, Exceptions>> signInWithGoogle();
-  Future<Either<UserCredential?, Failure>> signInWithApple();
+  Future<Either<AppleSignInResult, Failure>> signInWithApple();
 
   Future<void> signOut();
 

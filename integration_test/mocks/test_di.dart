@@ -2,11 +2,19 @@
 // types the production code reads. No Firebase, no network, no
 // real credentials.
 
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart' show Size;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/core/di/injection.dart';
+import 'package:sinergy_hub/core/hive/hive_adapters.dart';
+import 'package:sinergy_hub/core/hive/hive_registrar.g.dart';
+import 'package:sinergy_hub/features/auth/data/models/auth_temp_credentials/auth_temp_credentials.dart';
+import 'package:sinergy_hub/features/auth/data/repositories/auth_temp_credentials_local_repository.dart';
+import 'package:sinergy_hub/features/auth/domain/repostories/i_auth_temp_credentials_repository.dart';
 import 'package:sinergy_hub/core/services/audio_service.dart';
 import 'package:sinergy_hub/core/services/crypto_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_auth_service.dart';
@@ -155,6 +163,17 @@ Future<void> setupTestDI() async {
     await getIt.reset();
   }
 
+  // Hive cache (in-memory temp dir) — the Apple credentials cache repository.
+  if (!Hive.isAdapterRegistered(AuthTempCredentialsAdapter().typeId)) {
+    Hive.init(Directory.systemTemp.createTempSync('test_hive').path);
+    Hive.registerAdapters();
+  }
+  final authTempCredentialsBox =
+      await Hive.openBox<AuthTempCredentials>('auth_temp_credentials_test');
+  getIt.registerSingleton<IAuthTempCredentialsRepository>(
+    AuthTempCredentialsLocalRepository(box: authTempCredentialsBox),
+  );
+
   // Services & wrappers (Firebase-touching ones get mocktail stubs)
   getIt.registerLazySingleton<Env>(() => DevEnv());
   getIt.registerLazySingleton<FirebaseMessaging>(
@@ -279,6 +298,7 @@ Future<void> setupTestDI() async {
     () => AppleSignInUseCase(
       authRepository: getIt<IAuthRepository>(),
       authorizationUseCase: getIt<AuthorizationUseCase>(),
+      authTempCredentialsRepository: getIt<IAuthTempCredentialsRepository>(),
     ),
   );
 

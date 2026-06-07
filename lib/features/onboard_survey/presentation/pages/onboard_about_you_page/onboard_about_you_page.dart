@@ -30,6 +30,7 @@ import '../../../../user/presentation/dialogs/image_source_modal_sheet/image_sou
 import '../../../domain/models/skill/skill.dart';
 import '../../../domain/models/user_profiler/user_profiler.dart';
 import '../../bloc/onboard_bloc/onboard_bloc.dart';
+import 'bloc/onboard_about_you_bloc/onboard_about_you_bloc.dart';
 
 class OnboardAboutYouPage extends StatefulWidget {
   const OnboardAboutYouPage({super.key});
@@ -47,6 +48,7 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   late final EditProfilePageBloc _editProfilePageBloc;
   late final UserUpdateCubit _userUpdateCubit;
+  late final OnboardAboutYouBloc _onboardAboutYouBloc;
 
   @override
   void initState() {
@@ -55,6 +57,10 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
     _userUpdateCubit = UserUpdateCubit(
       updateUserUseCase: getIt<UpdateUserUseCase>(),
     );
+    _onboardAboutYouBloc = getIt<OnboardAboutYouBloc>()
+      ..add(
+        const OnboardAboutYouEvent.load(),
+      );
 
     _firstNameController.text =
         userCubit.state.userData?.firstName ?? _firstNameController.text;
@@ -69,11 +75,23 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
   @override
   void dispose() {
     _editProfilePageBloc.close();
+    _onboardAboutYouBloc.close();
     _firstNameController.dispose();
     _lastNameController.dispose();
     _bioController.dispose();
     _skillController.dispose();
     super.dispose();
+  }
+
+  void _onCachedCredentialsReady(OnboardAboutYouState state) {
+    // Seed the name fields from the Apple-authorization cache only when they
+    // are still empty (Firestore-loaded values take priority).
+    if (_firstNameController.text.isEmpty && state.firstName.isNotEmpty) {
+      _firstNameController.text = state.firstName;
+    }
+    if (_lastNameController.text.isEmpty && state.lastName.isNotEmpty) {
+      _lastNameController.text = state.lastName;
+    }
   }
 
   void onSubmitSkill(String skill) {
@@ -147,22 +165,36 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
     final userData = context.read<UserBloc>().state.userData;
-    return BlocProvider<EditProfilePageBloc>.value(
-      value: _editProfilePageBloc,
-      child: BlocListener<UserBloc, UserState>(
-        listenWhen: (p, n) => p.status == UserStatus.loading,
-        listener: (context, state) {
-          if (state.status == UserStatus.failed) {
-            UiMessageService.showError(
-              state.errorMessage,
-            );
-          } else if (state.status == UserStatus.updated) {
-            UiMessageService.showSuccess(
-              'Profile updated successfully',
-            );
-          }
-        },
-        child: BlocBuilder<EditProfilePageBloc, EditProfilePageState>(
+    return BlocProvider<OnboardAboutYouBloc>.value(
+      value: _onboardAboutYouBloc,
+      child: BlocProvider<EditProfilePageBloc>.value(
+        value: _editProfilePageBloc,
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<OnboardAboutYouBloc, OnboardAboutYouState>(
+              listenWhen: (p, c) => p.status != c.status,
+              listener: (context, state) {
+                if (state.isReady) {
+                  _onCachedCredentialsReady(state);
+                }
+              },
+            ),
+            BlocListener<UserBloc, UserState>(
+              listenWhen: (p, n) => p.status == UserStatus.loading,
+              listener: (context, state) {
+                if (state.status == UserStatus.failed) {
+                  UiMessageService.showError(
+                    state.errorMessage,
+                  );
+                } else if (state.status == UserStatus.updated) {
+                  UiMessageService.showSuccess(
+                    'Profile updated successfully',
+                  );
+                }
+              },
+            ),
+          ],
+          child: BlocBuilder<EditProfilePageBloc, EditProfilePageState>(
           bloc: _editProfilePageBloc,
           builder: (context, state) {
             final availableSkills = context.watch<SkillsBloc>().state.skills;
@@ -259,6 +291,7 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
               ),
             );
           },
+          ),
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../../../core/services/crypto_service.dart';
 import '../../../core/services/firebase/firebase_auth_service.dart';
@@ -12,8 +13,11 @@ import '../../../core/utils/env/env.dart';
 import '../../chat/data/services/presence_service.dart';
 import '../../chat/domain/services/i_presence_service.dart';
 import '../../user/domain/repositories/i_user_write_repository.dart';
+import '../data/models/auth_temp_credentials/auth_temp_credentials.dart';
 import '../data/repositories/auth_repository/firebase_auth_repository.dart';
+import '../data/repositories/auth_temp_credentials_local_repository.dart';
 import '../domain/repostories/i_auth_repository.dart';
+import '../domain/repostories/i_auth_temp_credentials_repository.dart';
 import '../domain/use_cases/apple_sign_in_use_case.dart';
 import '../domain/use_cases/authorization_use_case.dart';
 import '../domain/use_cases/complete_registration_use_case.dart';
@@ -32,6 +36,12 @@ void initAuthFeature(GetIt getIt) {
     () => PresenceService(
       firebaseRealtimeDbService: getIt<FirebaseRealtimeDbService>(),
       firebaseAuthService: getIt<FirebaseAuthService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<IAuthTempCredentialsRepository>(
+    () => AuthTempCredentialsLocalRepository(
+      box: getIt<Box<AuthTempCredentials>>(),
     ),
   );
 
@@ -95,6 +105,7 @@ void initAuthFeature(GetIt getIt) {
     () => AppleSignInUseCase(
       authRepository: getIt<IAuthRepository>(),
       authorizationUseCase: getIt<AuthorizationUseCase>(),
+      authTempCredentialsRepository: getIt<IAuthTempCredentialsRepository>(),
     ),
   );
 

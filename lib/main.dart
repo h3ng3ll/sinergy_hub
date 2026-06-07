@@ -10,6 +10,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 import 'core/bloc/app_observer.dart';
 import 'core/di/injection.dart';
+import 'core/hive/hive_initializer.dart';
 import 'core/resources/app_locale.dart';
 import 'core/resources/app_theme.dart';
 import 'core/resources/translations/app_localizations.dart';
@@ -37,6 +38,7 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await initFirebase();
 
+  await initHive();
 
   await initDependencies();
 

@@ -26,7 +26,9 @@ import '../../../domain/failures/something_went_wrong_sign_in_failure.dart';
 import '../../../domain/failures/such_user_not_exists_failure.dart';
 import '../../../domain/failures/unauthorized_failure.dart';
 import '../../../domain/failures/user_exists_with_such_email_failure.dart';
+import '../../../domain/models/apple_sign_in_result/apple_sign_in_result.dart';
 import '../../../domain/repostories/i_auth_repository.dart';
+import '../../models/apple_credentials/apple_credentials.dart';
 
 class FirebaseAuthRepository extends IAuthRepository {
 
@@ -313,8 +315,12 @@ class FirebaseAuthRepository extends IAuthRepository {
 
   /// Entry point for Apple Sign-In.
   /// Chooses flow based on platform.
+  ///
+  /// Returns the Firebase credential alongside the [AppleCredentials] Apple
+  /// provided (name/email — first authorization only). The repository does NOT
+  /// persist them; the use case decides what to cache.
   @override
-  Future<Either<UserCredential?, Failure>> signInWithApple() async {
+  Future<Either<AppleSignInResult, Failure>> signInWithApple() async {
     if (Platform.isAndroid) {
       final res = await _androidCall();
       return Left(
@@ -332,7 +338,7 @@ class FirebaseAuthRepository extends IAuthRepository {
   // =========================
   // ANDROID (Firebase Web OAuth)
   // =========================
-  Future<UserCredential?> _androidCall() async {
+  Future<AppleSignInResult> _androidCall() async {
     try {
       final provider =
           OAuthProvider(
@@ -341,8 +347,23 @@ class FirebaseAuthRepository extends IAuthRepository {
             ..addScope('email')
             ..addScope('name');
 
-      return await _auth.signInWithProvider(
+      final res = await _auth.signInWithProvider(
         provider,
+      );
+
+      // On first sign-in the display name arrives on the Firebase user.
+      final parts = res.user?.displayName?.trim().split(
+        ' ',
+      );
+      return AppleSignInResult(
+        userCredential: res,
+        credentials: AppleCredentials(
+          firstName: parts != null && parts.isNotEmpty ? parts.first : null,
+          lastName: parts != null && parts.length > 1
+              ? parts.sublist(1).join(' ')
+              : null,
+          email: res.user?.email,
+        ),
       );
     } catch (e) {
       throw Exception('Android Apple Sign-In failed: $e');
@@ -352,11 +373,11 @@ class FirebaseAuthRepository extends IAuthRepository {
   // =====================
   // iOS (Native Apple API)
   // =====================
-  Future<Either<UserCredential, Failure>> _iosCall() async {
+  Future<Either<AppleSignInResult, Failure>> _iosCall() async {
     try {
       // Generate secure nonce
       final rawNonce = _cryptoService.generateNonce();
-      final hashedNonce = _cryptoService.sha256ofString(
+      _cryptoService.sha256ofString(
         rawNonce,
       );
 
@@ -368,6 +389,7 @@ class FirebaseAuthRepository extends IAuthRepository {
         ],
         // nonce: hashedNonce,
       );
+
       final oauthCredentials =
           OAuthProvider(
             'apple.com',
@@ -375,20 +397,20 @@ class FirebaseAuthRepository extends IAuthRepository {
             idToken: credential.identityToken,
             accessToken: credential.authorizationCode,
           );
-      // Convert Apple credential to Firebase credential
-      // final oauthCredential =
-      //     OAuthProvider(
-      //       'apple.com',
-      //     ).credential(
-      //       idToken: credential.identityToken,
-      //       rawNonce: rawNonce,
-      //     );
 
       final res = await _auth.signInWithCredential(
         oauthCredentials,
       );
       return Left(
-        res,
+        AppleSignInResult(
+          userCredential: res,
+          // Apple only returns the name/email on the FIRST authorization.
+          credentials: AppleCredentials(
+            firstName: credential.givenName,
+            lastName: credential.familyName,
+            email: credential.email,
+          ),
+        ),
       );
     } catch (e) {
       return Right(
