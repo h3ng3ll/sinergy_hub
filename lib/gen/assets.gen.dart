@@ -23,8 +23,11 @@ class $AssetsDataGen {
   /// File path: assets/data/support.md
   String get support => 'assets/data/support.md';
 
+  /// File path: assets/data/terms_of_use.md
+  String get termsOfUse => 'assets/data/terms_of_use.md';
+
   /// List of all assets
-  List<String> get values => [privacyPolicy, skills, support];
+  List<String> get values => [privacyPolicy, skills, support, termsOfUse];
 }
 
 class $AssetsIconsGen {

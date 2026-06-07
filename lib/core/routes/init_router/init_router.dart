@@ -28,6 +28,7 @@ import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/
 import '../../../features/privacy_policy/presentation/pages/privacy_policy_page/privacy_policy_page.dart';
 import '../../../features/settings/presentation/pages/settings_page/settings_page.dart';
 import '../../../features/support/presentation/pages/support_page/support_page.dart';
+import '../../../features/terms_of_use/presentation/pages/terms_of_use_page/terms_of_use_page.dart';
 import '../../../features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
 import '../../../features/user/presentation/pages/user_profile_page/user_profile_page.dart';
@@ -94,6 +95,7 @@ String? resolveRedirect({
     ResetPasswordPageRoute().location,
     PrivacyPolicyPageRoute().location,
     SupportPageRoute().location,
+    TermsOfUsePageRoute().location,
   ];
   final isAuthRoute = authRoutes.contains(effectiveLocation);
 
@@ -180,6 +182,9 @@ GoRouter initRouter({
         ),
         TypedGoRoute<SupportPageRoute>(
           path: '/support',
+        ),
+        TypedGoRoute<TermsOfUsePageRoute>(
+          path: '/terms-of-use',
         ),
       ],
     ),
@@ -338,6 +343,15 @@ class SupportPageRoute extends GoRouteData with $SupportPageRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       SupportPage(),
+    );
+  }
+}
+
+class TermsOfUsePageRoute extends GoRouteData with $TermsOfUsePageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      TermsOfUsePage(),
     );
   }
 }

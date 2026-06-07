@@ -35,6 +35,10 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
           path: '/support',
           factory: $SupportPageRoute._fromState,
         ),
+        GoRouteData.$route(
+          path: '/terms-of-use',
+          factory: $TermsOfUsePageRoute._fromState,
+        ),
       ],
     ),
     ShellRouteData.$route(
@@ -245,6 +249,27 @@ mixin $SupportPageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/support');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $TermsOfUsePageRoute on GoRouteData {
+  static TermsOfUsePageRoute _fromState(GoRouterState state) =>
+      TermsOfUsePageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/terms-of-use');
 
   @override
   void go(BuildContext context) => context.go(location);

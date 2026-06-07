@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,6 +20,7 @@ import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../../gen/assets.gen.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import '../../bloc/auth_bloc/auth_bloc.dart';
+import 'widgets/or_divider.dart';
 
 class AuthorizationPage extends StatefulWidget {
   const AuthorizationPage({super.key});
@@ -28,6 +30,23 @@ class AuthorizationPage extends StatefulWidget {
 }
 
 class _AuthorizationPageState extends State<AuthorizationPage> {
+  late final TapGestureRecognizer _termsRecognizer;
+  late final TapGestureRecognizer _privacyRecognizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _termsRecognizer = TapGestureRecognizer()..onTap = onTapTermsOfUse;
+    _privacyRecognizer = TapGestureRecognizer()..onTap = onTapPrivacyPolicy;
+  }
+
+  @override
+  void dispose() {
+    _termsRecognizer.dispose();
+    _privacyRecognizer.dispose();
+    super.dispose();
+  }
+
   void onAuthWithGoogle() {
     context.read<AuthBloc>().add(
       AuthEvent.signInViaGoogle(),
@@ -52,10 +71,28 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
     );
   }
 
+  void onTapPrivacyPolicy() {
+    PrivacyPolicyPageRoute().push(
+      context,
+    );
+  }
+
+  void onTapTermsOfUse() {
+    TermsOfUsePageRoute().push(
+      context,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
+
+    final linkStyle = textTheme.bold14.copyWith(
+      color: AppColors.black.value,
+      decoration: TextDecoration.underline,
+      decorationColor: AppColors.black.value,
+    );
 
     return BuildAnimatedBackground(
       child: Scaffold(
@@ -69,27 +106,55 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (state.status == AuthStatus.failed)
+                        Text(
+                          'Synergy Hub',
+                          style: textTheme.bold32.copyWith(
+                            color: AppColors.white.value,
+                          ),
+                        ),
+                        Gap(8.0),
+                        Text(
+                          'Welcome to Synergy Hub',
+                          style: textTheme.medium16.copyWith(
+                            color: AppColors.white.value,
+                          ),
+                        ),
+                        Gap(32.0),
+                        if (state.status == AuthStatus.failed) ...[
                           ErrorMessageWidget(message: state.errorMessage),
-                        Gap(24.0),
-                        TextButton(
-                          onPressed: onRegister,
-                          child: Text(
-                            'Register',
-                            style: textTheme.medium16.copyWith(
-                              color: AppColors.white.value,
+                          Gap(20.0),
+                        ],
+                        if (!kIsWeb && Platform.isIOS) ...[
+                          ActionBtn(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 15.0,
+                              horizontal: 20.0,
+                            ),
+                            onPressed: onAuthWithApple,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SvgPicture.asset(
+                                  Assets.icons.apple,
+                                  width: 20.0,
+                                  height: 20.0,
+                                  colorFilter: ColorFilter.mode(
+                                    colorScheme.onSecondary,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                                Gap(10.0),
+                                Text(
+                                  'Continue with Apple',
+                                  style: textTheme.medium16.copyWith(
+                                    color: colorScheme.onSecondary,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        TextButton(
-                          onPressed: onLogin,
-                          child: Text(
-                            'Login',
-                            style: textTheme.medium16.copyWith(
-                              color: AppColors.white.value,
-                            ),
-                          ),
-                        ),
+                          Gap(12.0),
+                        ],
                         if (kIsWeb)
                           getIt<GoogleSignInService>().renderButton()
                         else
@@ -113,7 +178,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                 ),
                                 Gap(10.0),
                                 Text(
-                                  'SIGN IN WITH GOOGLE',
+                                  'Continue with Google',
                                   style: textTheme.medium16.copyWith(
                                     color: colorScheme.onSecondary,
                                   ),
@@ -121,37 +186,71 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                               ],
                             ),
                           ),
-                        if (!kIsWeb && Platform.isIOS) ...[
-                          Gap(20.0),
-                          ActionBtn(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 15.0,
-                              horizontal: 20.0,
-                            ),
-                            onPressed: onAuthWithApple,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SvgPicture.asset(
-                                  Assets.icons.apple,
-                                  width: 20.0,
-                                  height: 20.0,
-                                  colorFilter: ColorFilter.mode(
-                                    colorScheme.onSecondary,
-                                    BlendMode.srcIn,
-                                  ),
+                        Gap(24.0),
+                        OrDivider(),
+                        Gap(24.0),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ActionBtn(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 15.0,
+                                  horizontal: 20.0,
                                 ),
-                                Gap(10.0),
-                                Text(
-                                  'SIGN IN WITH APPLE',
+                                onPressed: onLogin,
+                                child: Text(
+                                  'Login',
                                   style: textTheme.medium16.copyWith(
                                     color: colorScheme.onSecondary,
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
+                            Gap(12.0),
+                            Expanded(
+                              child: ActionBtn(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 15.0,
+                                  horizontal: 20.0,
+                                ),
+                                onPressed: onRegister,
+                                child: Text(
+                                  'Register',
+                                  style: textTheme.medium16.copyWith(
+                                    color: colorScheme.onSecondary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Gap(24.0),
+                        Text.rich(
+                          TextSpan(
+                            style: textTheme.regular14.copyWith(
+                              color: AppColors.white.value,
+                            ),
+                            children: [
+                              const TextSpan(
+                                text: 'By continuing you agree to ',
+                              ),
+                              TextSpan(
+                                text: 'Terms',
+                                style: linkStyle,
+                                recognizer: _termsRecognizer,
+                              ),
+                              const TextSpan(
+                                text: ' & ',
+                              ),
+                              TextSpan(
+                                text: 'Privacy Policy',
+                                style: linkStyle,
+                                recognizer: _privacyRecognizer,
+                              ),
+                            ],
                           ),
-                        ],
+                          textAlign: TextAlign.center,
+                        ),
                       ],
                     ),
                   ),
