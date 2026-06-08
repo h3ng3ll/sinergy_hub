@@ -1,5 +1,3 @@
-# TERMS OF USE
-
 **Last updated May 25, 2026**
 
 These Terms of Use ("**Terms**") govern your access to and use of the Sinergy Hub mobile application and related services (collectively, the "**Services**") provided by Sinergy Hub ("**we**," "**us**," or "**our**"). By creating an account, signing in, or otherwise using the Services, you agree to be bound by these Terms. If you do not agree with these Terms, please do not use the Services.

@@ -1,5 +1,3 @@
-# PRIVACY NOTICE
-
 **Last updated May 25, 2026**
 
 This Privacy Notice for Sinergy Hub ("**we**," "**us**," or "**our**"), describes how and why we might access, collect, store, use, and/or share ("**process**") your personal information when you use our services ("**Services**"), including when you:

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../../core/resources/colors/app_color_scheme.dart';
+import '../../../../../core/resources/colors/app_colors.dart';
+import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
@@ -28,10 +30,18 @@ class _TermsOfUsePageState extends State<TermsOfUsePage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
+    final textTheme = AppTextTheme.of(context);
 
     return BuildAnimatedBackground(
       child: Scaffold(
-        appBar: CustomAppBar(),
+        appBar: CustomAppBar(
+          title: Text(
+            'TERMS OF USE',
+            style: textTheme.bold24.copyWith(
+              color: AppColors.white.value,
+            ),
+          ),
+        ),
         backgroundColor: Colors.transparent,
         body: FutureBuilder<String>(
           future: _markdownFuture,

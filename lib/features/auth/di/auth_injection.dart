@@ -65,6 +65,7 @@ void initAuthFeature(GetIt getIt) {
   getIt.registerFactory(
     () => LogoutUseCase(
       authRepository: getIt<IAuthRepository>(),
+      presenceService: getIt<IPresenceService>(),
     ),
   );
   getIt.registerFactory(

@@ -72,4 +72,17 @@ class PresenceService implements IPresenceService {
       });
     }
   }
+
+  @override
+  Future<void> setOffline() async {
+    final user = _firebaseAuthService.currentUser;
+    if (user == null) return;
+
+    await userStatusRef(
+      user.uid,
+    ).set({
+      'state': 'offline',
+      'last_seen': ServerValue.timestamp,
+    });
+  }
 }

@@ -1,5 +1,3 @@
-# Support
-
 Welcome to **Sinergy Hub** support. We're here to help you get the most out of the app.
 
 ## Contact Us
