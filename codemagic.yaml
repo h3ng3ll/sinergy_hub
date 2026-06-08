@@ -207,6 +207,9 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
+      - name: Test passing
+        script: |
+          flutter test
       - name: Set up provisioning profiles settings on Xcode project
         script: xcode-project use-profiles --verbose
       - name: Clean Flutter project
