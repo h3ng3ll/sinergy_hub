@@ -56,9 +56,7 @@ workflows:
 
       - name: Prevent caching Service Worker
         script: |
-          mkdir -p build/web/scripts/ 
-          echo "$CUSTOM_SW" >  build/web/scripts/flutter_service_worker.js
-          cp build/web/scripts/flutter_service_worker.js build/web/flutter_service_worker.js
+          echo "$CUSTOM_SW" >   build/web/flutter_service_worker.js
           echo "✅ Build complete and service worker replaced."
       - name: Deploy to Firebase
         script: |
