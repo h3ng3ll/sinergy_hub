@@ -54,10 +54,10 @@ workflows:
             --dart-define=FIREBASE_PROJECT_WEB_URL="FIREBASE_PROJECT_WEB_URL" \
             --release
 
-      - name: Prevent caching Service Worker
-        script: |
-          echo "$CUSTOM_SW" >   build/web/flutter_service_worker.js
-          echo "✅ Build complete and service worker replaced."
+#      - name: Prevent caching Service Worker
+#        script: |
+#          echo "$CUSTOM_SW" >   build/web/flutter_service_worker.js
+#          echo "✅ Build complete and service worker replaced."
       - name: Deploy to Firebase
         script: |
           firebase deploy \
