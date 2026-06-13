@@ -37,7 +37,7 @@ workflows:
 
       - name: Create firebase.json file
         script: |
-          cp "$FIREBASE_JSON" "$CM_BUILD_DIR/firebase.json"
+          echo "$FIREBASE_JSON" > "$CM_BUILD_DIR/firebase.json"
           echo "firebase.json contents:"
           cat "$CM_BUILD_DIR/firebase.json"
 
@@ -175,12 +175,12 @@ workflows:
   ios-workflow:
     name: iOS Workflow
 
-    triggering:
-      events:
-        - push
-      branch_patterns:
-        - pattern: main
-          include: true
+#    triggering:
+#      events:
+#        - push
+#      branch_patterns:
+#        - pattern: main
+#          include: true
     cache:
       cache_paths:
         - ~/.pub-cache

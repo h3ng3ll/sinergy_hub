@@ -410,4 +410,7 @@ class MockPresenceService implements IPresenceService {
 
   @override
   Future<void> onChangeState(AppLifecycleState state) async {}
+
+  @override
+  Future<void> setOffline() async {}
 }

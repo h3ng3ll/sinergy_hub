@@ -1,31 +1,11 @@
 #!/bin/bash
 set -e
 
-# Usage:
-#   flutter_screenshot_maker.sh <zip_number> [device]
-#
-# Project name is auto-derived from the current working directory
-# (the folder you run this script from).
-#
-# Examples:
-#   flutter_screenshot_maker.sh 4498
-#   flutter_screenshot_maker.sh 4498 "iPhone 16 Pro Max"
-
-if [ -z "$1" ]; then
-  echo "Usage: $(basename "$0") <zip_number> [device]"
-  echo ""
-  echo "Example:"
-  echo "  $(basename "$0") 4498"
-  echo "  $(basename "$0") 4498 \"iPhone 16 Pro Max\""
-  exit 1
-fi
-
 ZIP_NUMBER="$1"
 DEVICE="${2:-iPhone 14 Plus}" # Cause it supports uploading dimensions of screen for App Store
 
 PROJECT_ROOT="$PWD"
 OUTPUT_DIR="$PROJECT_ROOT/outputs/screenshots"
-ZIP_PATH="$PROJECT_ROOT/outputs/${ZIP_NUMBER}_screenshots.zip"
 
 echo "Project root: $PROJECT_ROOT"
 echo "Output dir: $OUTPUT_DIR"
@@ -51,19 +31,14 @@ flutter drive \
   --web-port 5000 \
   --web-hostname localhost \
   --flavor=development \
-  --dart-define=DARTENV=development \
+  --dart-define=DARTENV="development" \
+  --dart-define=DEV_FIREBASE_WEB_PUSH_CERTIFICATE=BCKEAwpmH6SLxg7xEcpu6ClB70l6qDefo0EHIU2-gwR6WbmVsDE4vpDvpt0o1hjgWvE3Jvvz8GqTwEttKpeq-YE \
+  --dart-define=DEV_SERVER_CLIENT_ID="752696702645-7bc646mgsn0vfe37qvquvf5fh4gjuehv.apps.googleusercontent.com" \
+  --dart-define=FIREBASE_PROJECT_WEB_URL="synergyhub-a3e1b.web.app"
   -d "$DEVICE"
 
-echo "Creating archive..."
-rm -f "$ZIP_PATH"
-
 cd "$PROJECT_ROOT/outputs"
-zip -r "$ZIP_PATH" screenshots
 
-echo ""
 echo "✅ Screenshots saved to:"
 echo "$OUTPUT_DIR"
 
-echo ""
-echo "✅ Archive created:"
-echo "$ZIP_PATH"

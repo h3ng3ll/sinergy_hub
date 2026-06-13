@@ -68,6 +68,10 @@ import 'package:sinergy_hub/features/chat/presentation/bloc/chat_bloc/chat_bloc.
 import 'package:sinergy_hub/features/chat/presentation/bloc/chat_page_bloc/chat_page_bloc.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 import 'package:sinergy_hub/features/home/presentation/edit_profile_page/bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
+import 'package:sinergy_hub/features/home/presentation/tabs/profile_tab/bloc/profile_bloc/profile_bloc.dart';
+import 'package:sinergy_hub/features/user/domain/usecases/delete_account_use_case.dart';
+import 'package:sinergy_hub/features/onboard_survey/domain/use_cases/get_cached_auth_credentials_use_case.dart';
+import 'package:sinergy_hub/features/onboard_survey/presentation/pages/onboard_about_you_page/bloc/onboard_about_you_bloc/onboard_about_you_bloc.dart';
 import 'package:sinergy_hub/features/matches/domain/repositories/i_matches_repository.dart';
 import 'package:sinergy_hub/features/matches/domain/usecases/create_user_matches_use_case.dart';
 import 'package:sinergy_hub/features/matches/domain/usecases/find_match_chat_id_use_case.dart';
@@ -261,7 +265,10 @@ Future<void> setupTestDI() async {
     () => AuthorizationUseCase(presenceService: getIt<IPresenceService>()),
   );
   getIt.registerFactory<LogoutUseCase>(
-    () => LogoutUseCase(authRepository: getIt<IAuthRepository>()),
+    () => LogoutUseCase(
+      authRepository: getIt<IAuthRepository>(),
+      presenceService: getIt<IPresenceService>(),
+    ),
   );
   getIt.registerFactory<RegisterUseCase>(
     () => RegisterUseCase(
@@ -359,6 +366,19 @@ Future<void> setupTestDI() async {
   );
   getIt.registerFactory<GetSkillsUseCase>(
     () => GetSkillsUseCase(skillRepository: getIt<ISkillRepository>()),
+  );
+  getIt.registerLazySingleton<DeleteAccountUseCase>(
+    () => DeleteAccountUseCase(authRepository: getIt<IAuthRepository>()),
+  );
+  getIt.registerFactory<GetCachedAuthCredentialsUseCase>(
+    () => GetCachedAuthCredentialsUseCase(
+      authTempCredentialsRepository: getIt<IAuthTempCredentialsRepository>(),
+    ),
+  );
+  getIt.registerFactory<OnboardAboutYouBloc>(
+    () => OnboardAboutYouBloc(
+      getCachedAuthCredentialsUseCase: getIt<GetCachedAuthCredentialsUseCase>(),
+    ),
   );
 
   // Matches use cases
@@ -557,6 +577,11 @@ Future<void> setupTestDI() async {
   getIt.registerFactory<ResetPasswordPageBloc>(
     () => ResetPasswordPageBloc(
       resetPasswordByEmailUseCase: getIt<ResetPasswordByEmailUseCase>(),
+    ),
+  );
+  getIt.registerFactory<ProfileBloc>(
+    () => ProfileBloc(
+      deleteAccountUseCase: getIt<DeleteAccountUseCase>(),
     ),
   );
   getIt.registerFactory<EditProfilePageBloc>(

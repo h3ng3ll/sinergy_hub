@@ -57,8 +57,10 @@ flutter run --flavor=prod --dart-define=DARTENV=prod
 ```shell
 
 flutter test integration_test/screenshots_test.dart \
-    -d 3D771733-DEE8-48D1-BC37-1A0A409E0C0D \
+    -d 47349896-73A7-4271-9D66-5970AB2C5BB8 \
     --flavor=development \
-    --dart-define=DARTENV=development
-    
+    --dart-define=DARTENV="development" \
+    --dart-define=DEV_FIREBASE_WEB_PUSH_CERTIFICATE=BCKEAwpmH6SLxg7xEcpu6ClB70l6qDefo0EHIU2-gwR6WbmVsDE4vpDvpt0o1hjgWvE3Jvvz8GqTwEttKpeq-YE \
+    --dart-define=DEV_SERVER_CLIENT_ID="752696702645-7bc646mgsn0vfe37qvquvf5fh4gjuehv.apps.googleusercontent.com" \
+    --dart-define=FIREBASE_PROJECT_WEB_URL="synergyhub-a3e1b.web.app"
 ```
