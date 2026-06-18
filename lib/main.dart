@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'core/bloc/app_observer.dart';
 import 'core/di/injection.dart';
@@ -36,6 +37,11 @@ import 'firebase.dart';
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  if(!kIsWeb){
+    await dotenv.load(
+      fileName: '.env',
+    );
+  }
   await initFirebase();
 
   await initHive();

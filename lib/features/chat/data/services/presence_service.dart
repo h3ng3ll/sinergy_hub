@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -78,6 +79,10 @@ class PresenceService implements IPresenceService {
     final user = _firebaseAuthService.currentUser;
     if (user == null) return;
 
+    /// Bug temporary skip .
+    /// Occur on ios simulators or
+    /// 16 Pro and 14 Plus
+    // if(Platform.isIOS) return;
     await userStatusRef(
       user.uid,
     ).set({

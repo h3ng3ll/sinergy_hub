@@ -94,6 +94,7 @@ dependencies:
   connectivity_plus: ^7.0.0
   hive_ce: ^2.18.0
   hive_ce_flutter: ^2.3.4
+  flutter_dotenv: ^6.0.1
 
 dev_dependencies:
   flutter_test:
@@ -133,6 +134,10 @@ flutter:
     - assets/lottie/
     - assets/sounds/
     - assets/data/
+    - path: .env
+      platforms:
+        - ios
+        - android
 #    - assets/shaders/
 
   # must be only at root shaders folder
