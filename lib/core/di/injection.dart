@@ -63,8 +63,11 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => ImageService());
   getIt.registerLazySingleton(() => CryptoService());
   getIt.registerLazySingleton(() => ConnectivityService());
-  getIt.registerLazySingleton<Env>(() {
+  getIt.registerLazySingleton(
+    () => FirebaseDatabase.instance,
+  );
 
+  getIt.registerLazySingleton<Env>(() {
     switch (EnvHelper.dartEnv) {
       case EnvHelper.production:
         return ProdEnv();
@@ -79,7 +82,7 @@ Future<void> initDependencies() async {
   );
   getIt.registerLazySingleton<FirebaseRealtimeDbService>(
     () => FirebaseRealtimeDbService(
-      database: FirebaseDatabase.instance,
+      database: getIt<FirebaseDatabase>(),
     ),
   );
   getIt.registerLazySingleton(

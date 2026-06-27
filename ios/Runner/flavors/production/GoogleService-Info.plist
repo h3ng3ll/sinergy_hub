@@ -32,5 +32,7 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:758987089244:ios:3490525dd3bbaafa878d99</string>
+	<key>DATABASE_URL</key>
+	<string>https://sinergyhub-prod-default-rtdb.europe-west1.firebasedatabase.app</string>
 </dict>
 </plist>

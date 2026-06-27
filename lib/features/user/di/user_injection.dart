@@ -2,7 +2,6 @@ import 'package:get_it/get_it.dart';
 
 import '../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../core/services/firebase/firebase_firestore_service.dart';
-import '../../../core/services/firebase/firebase_functions_service.dart';
 import '../../../core/services/firebase/firebase_storage_service.dart';
 import '../../../core/services/image_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
@@ -14,6 +13,7 @@ import '../data/repositories/fake_user_firebase_repository.dart';
 import '../data/repositories/user_composite_repository.dart';
 import '../data/repositories/user_firebase_repository.dart';
 import '../data/services/app_mode_service.dart';
+import '../data/services/user_service.dart';
 import '../domain/repositories/i_user_auth_repository.dart';
 import '../domain/repositories/i_user_read_repository.dart';
 import '../domain/repositories/i_user_storage_repository.dart';
@@ -104,6 +104,9 @@ void initUserFeature(GetIt getIt) {
       userReadRepository: getIt<IUserReadRepository>(),
       authRepository: getIt<IAuthRepository>(),
     ),
+  );
+  getIt.registerLazySingleton<UserService>(
+    () => UserService(),
   );
   getIt.registerFactory<EditLookingForBloc>(
     () => EditLookingForBloc(

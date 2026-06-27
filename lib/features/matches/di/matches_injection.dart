@@ -5,6 +5,7 @@ import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../core/services/firebase/firebase_functions_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../chat/domain/repositories/i_chat_repository.dart';
+import '../../user/data/services/user_service.dart';
 import '../../user/domain/repositories/i_user_read_repository.dart';
 import '../data/repositories/user_matches_firebase_repository.dart';
 import '../domain/repositories/i_matches_repository.dart';
@@ -74,6 +75,7 @@ void initMatchingFeature(GetIt getIt) {
     () => FindMatchChatIdUseCase(
       authRepository: getIt<IAuthRepository>(),
       chatRepository: getIt<IChatRepository>(),
+      userService: getIt<UserService>(),
     ),
   );
   getIt.registerFactory<TinderCardCubit>(

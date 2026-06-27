@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '758987089244',
     projectId: 'sinergyhub-prod',
     authDomain: 'sinergyhub-prod.firebaseapp.com',
+    databaseURL: 'https://sinergyhub-prod-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'sinergyhub-prod.firebasestorage.app',
     measurementId: 'G-05R27WE3J8',
   );
@@ -55,6 +56,7 @@ class DefaultFirebaseOptions {
     appId: '1:758987089244:android:1a33878b54f6b2f4878d99',
     messagingSenderId: '758987089244',
     projectId: 'sinergyhub-prod',
+    databaseURL: 'https://sinergyhub-prod-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'sinergyhub-prod.firebasestorage.app',
   );
 
@@ -63,6 +65,7 @@ class DefaultFirebaseOptions {
     appId: '1:758987089244:ios:3490525dd3bbaafa878d99',
     messagingSenderId: '758987089244',
     projectId: 'sinergyhub-prod',
+    databaseURL: 'https://sinergyhub-prod-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'sinergyhub-prod.firebasestorage.app',
     androidClientId: '758987089244-2ecir44j2n0efhvsqmismaf3dva26op9.apps.googleusercontent.com',
     iosClientId: '758987089244-btueguabu8lj2srk72amrilu46prfhgq.apps.googleusercontent.com',
@@ -74,6 +77,7 @@ class DefaultFirebaseOptions {
     appId: '1:758987089244:ios:2adcfcb66c29e7f5878d99',
     messagingSenderId: '758987089244',
     projectId: 'sinergyhub-prod',
+    databaseURL: 'https://sinergyhub-prod-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'sinergyhub-prod.firebasestorage.app',
     androidClientId: '758987089244-2ecir44j2n0efhvsqmismaf3dva26op9.apps.googleusercontent.com',
     iosClientId: '758987089244-g465cr1h8aerk40d3ifpgr2klquqlbaa.apps.googleusercontent.com',
@@ -86,6 +90,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '758987089244',
     projectId: 'sinergyhub-prod',
     authDomain: 'sinergyhub-prod.firebaseapp.com',
+    databaseURL: 'https://sinergyhub-prod-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'sinergyhub-prod.firebasestorage.app',
     measurementId: 'G-434BWQ2ZSR',
   );
