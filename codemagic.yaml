@@ -211,6 +211,15 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
+      - name: Create env
+        script: |
+          cat << EOF > ".$CM_BUILD_DIR/.env"
+          DEV_SERVER_CLIENT_ID=$DEV_SERVER_CLIENT_ID
+          PROD_SERVER_CLIENT_ID=$PROD_SERVER_CLIENT_ID
+          DEV_FIREBASE_WEB_PUSH_CERTIFICATE=$DEV_FIREBASE_WEB_PUSH_CERTIFICATE
+          PROD_FIREBASE_WEB_PUSH_CERTIFICATE=$PROD_FIREBASE_WEB_PUSH_CERTIFICATE
+          FIREBASE_PROJECT_WEB_URL=synergyhub-a3e1b.web.app
+          EOF
       - name: Test passing
         script: |
           flutter test
