@@ -213,7 +213,7 @@ workflows:
     scripts:
       - name: Create env
         script: |
-          cat << EOF > ".$CM_BUILD_DIR/.env"
+          cat << EOF > "$CM_BUILD_DIR/.env"
           DEV_SERVER_CLIENT_ID=$DEV_SERVER_CLIENT_ID
           PROD_SERVER_CLIENT_ID=$PROD_SERVER_CLIENT_ID
           DEV_FIREBASE_WEB_PUSH_CERTIFICATE=$DEV_FIREBASE_WEB_PUSH_CERTIFICATE
