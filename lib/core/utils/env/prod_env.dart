@@ -27,4 +27,7 @@ class ProdEnv extends Env {
           );
     return value;
   }
+
+  @override
+  String get appName => 'Synergy Hub';
 }

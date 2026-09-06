@@ -19,7 +19,7 @@ flutter_launcher_icons:
 
 #  web:
 #    generate: true
-#    image_path: "assets/flutter_launcher_icons/web/ic_launcher.png"
+#    image_path: "assets/flutter_launcher_icons/web/ic_launcher_prod.png"
 #    background_color: "#ffffff"
 #    theme_color: "#FF4500"
 #

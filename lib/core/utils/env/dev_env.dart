@@ -23,4 +23,7 @@ class DevEnv extends Env {
       : dotenv.get(
           'DEV_FIREBASE_WEB_PUSH_CERTIFICATE',
         );
+
+  @override
+  String get appName => '[DEV] Synergy Hub';
 }

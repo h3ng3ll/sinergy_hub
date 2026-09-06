@@ -24,4 +24,6 @@ abstract class Env {
   String serverClientId();
 
   String webPushCertificate();
+
+  String get appName;
 }

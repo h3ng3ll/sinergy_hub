@@ -33,11 +33,10 @@ import 'features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import 'features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'firebase.dart';
 
-
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  if(!kIsWeb){
+  if (!kIsWeb) {
     await dotenv.load(
       fileName: '.env',
     );
@@ -55,59 +54,68 @@ void main() async {
     ],
   );
 
-
-  if(!kIsWeb){
+  if (!kIsWeb) {
     /// Firebase doesn't support web
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
       true,
     );
     FlutterError.onError =
         (
-        FlutterErrorDetails details,
+          FlutterErrorDetails details,
         ) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(
-        details,
-      );
-    };
+          FirebaseCrashlytics.instance.recordFlutterFatalError(
+            details,
+          );
+        };
 
     PlatformDispatcher.instance.onError =
         (
-        error,
-        stack,
+          error,
+          stack,
         ) {
-      FirebaseCrashlytics.instance.recordError(
-        error,
-        stack,
-        fatal: true,
-      );
-      return true;
-    };
+          FirebaseCrashlytics.instance.recordError(
+            error,
+            stack,
+            fatal: true,
+          );
+          return true;
+        };
   }
-
-
-
-
 
   await getIt<ConnectivityService>().init();
   await getIt<FirebaseAuthService>().init();
   await getIt<FirebaseFirestoreService>().init();
-  await getIt<LocalNotificationService>().init();
 
-  await getIt<FirebaseMessagingService>().init();
   await getIt<GoogleSignInService>().init(
     getIt<Env>(),
   );
   await getIt<IPresenceService>().init();
   Bloc.observer = AppObserver.instance();
 
+  /// Blocking UI if await
+  getIt<LocalNotificationService>().init().then(
+    (_) {
+      getIt<FirebaseMessagingService>().init();
+    },
+  );
+  final appName = getIt<Env>().appName;
+
   FlutterNativeSplash.remove();
+
   runApp(
-    const MyApp(),
+    MyApp(
+      appName: appName,
+    ),
   );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final String appName;
+
+  const MyApp({
+    super.key,
+    required this.appName,
+  });
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -139,11 +147,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (_splashRemoved) return;
     final auth = getIt<AuthBloc>().state;
     final onboard = getIt<OnboardBloc>().state;
-    final ready = auth.isLogout ||
-        (auth.isAuthorized && onboard.isLoaded);
+    final ready = auth.isLogout || (auth.isAuthorized && onboard.isLoaded);
     if (ready) {
       _splashRemoved = true;
-
     }
   }
 
@@ -213,6 +219,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ),
         ],
         child: MaterialApp.router(
+          title: widget.appName,
           theme: AppThemeData.light,
           supportedLocales: AppLocale.supportedLocales,
           locale: AppLocale.startLocale,
