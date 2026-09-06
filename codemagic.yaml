@@ -1,6 +1,6 @@
 workflows:
   web-deploy:
-    name: Web Deploy
+    name: Web Dev Deploy
 
 #    triggering:
 #      events:
@@ -35,9 +35,9 @@ workflows:
       #      - name: Create firebase options File
       #        script:  echo "$FIREBASE_OPTIONS" > lib/firebase/firebase_options_dev.dart
       # Ensure prod flavor icons and Names are publishing
-      - name: Configure Prod Flavor
+      - name: Configure Dev Flavor
         script: |
-          cp -r web/flavor/prod/ web
+          cp -r web/flavor/dev/ web
       - name: Create firebase.json file
         script: |
           echo "$FIREBASE_JSON" > "$CM_BUILD_DIR/firebase.json"
