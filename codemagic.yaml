@@ -37,7 +37,14 @@ workflows:
       # Ensure prod flavor icons and Names are publishing
       - name: Configure Dev Flavor
         script: |
+          
           cp -r web/flavor/dev/ web
+          
+          TEMPLATE="web/index.html.template"
+          OUTPUT="web/index.html"
+  
+          sed "s|{{GOOGLE_SIGNIN_CLIENT_ID}}|$DEV_SERVER_CLIENT_ID|g" \
+              $TEMPLATE > $OUTPUT
       - name: Create firebase.json file
         script: |
           echo "$FIREBASE_JSON" > "$CM_BUILD_DIR/firebase.json"
@@ -52,9 +59,9 @@ workflows:
         script: |
           flutter build web \
             --dart-define=DARTENV=development \
-            --dart-define=DEV_SERVER_CLIENT_ID="DEV_SERVER_CLIENT_ID" \
+            --dart-define=DEV_SERVER_CLIENT_ID="$DEV_SERVER_CLIENT_ID" \
             --dart-define=DEV_FIREBASE_WEB_PUSH_CERTIFICATE="$DEV_FIREBASE_WEB_PUSH_CERTIFICATE" \
-            --dart-define=FIREBASE_PROJECT_WEB_URL="FIREBASE_PROJECT_WEB_URL" \
+            --dart-define=FIREBASE_PROJECT_WEB_URL="$FIREBASE_PROJECT_WEB_URL" \
             --release
 
 #      - name: Prevent caching Service Worker
