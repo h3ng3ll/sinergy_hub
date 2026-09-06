@@ -54,3 +54,4 @@ android/app/google-services.json
 /instructions/*
 .claude
 outputs
+web/firebase-config.js
