@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
@@ -15,8 +14,6 @@ import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
-import '../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
-import '../../../domain/use_cases/login_use_case.dart';
 import '../register_page/widgets/inputs/email_input.dart';
 import '../register_page/widgets/inputs/password_input.dart';
 import 'bloc/login_bloc/login_bloc.dart';

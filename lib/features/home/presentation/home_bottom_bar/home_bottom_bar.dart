@@ -4,14 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../../core/resources/colors/app_color_scheme.dart';
-import '../../../../core/resources/text/app_text_theme.dart';
 import '../../../../core/routes/init_router/init_router.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../home_drawer/home_drawer.dart';
 import 'widgets/build_animated_background/build_animated_background.dart';
 import 'widgets/custom_bottom_bar_container.dart';
-import 'widgets/custom_bottom_bar_item.dart';
 import 'widgets/home_app_bar_web.dart';
 
 class HomeBottomBar extends StatefulWidget {

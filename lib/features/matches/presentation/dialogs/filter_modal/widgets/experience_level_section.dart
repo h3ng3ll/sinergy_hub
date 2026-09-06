@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../../core/resources/colors/app_gradients.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
-import '../../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../../onboard_survey/domain/models/experience/experience.dart';
 
 /// Experience level section widget with vertical list of selectable options.
@@ -95,8 +94,4 @@ class _ExperienceLevelOption extends StatelessWidget {
   }
 }
 
-String _formatExperienceName(String name) {
-  final withSpaces = name.replaceAll(RegExp(r'([A-Z])'), ' \$1');
-  final trimmed = withSpaces.trim();
-  return trimmed[0].toUpperCase() + trimmed.substring(1);
-}
+

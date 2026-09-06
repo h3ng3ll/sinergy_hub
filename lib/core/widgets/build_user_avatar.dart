@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
-import '../resources/colors/app_colors.dart';
 import 'build_image.dart';
 
 class BuildUserAvatar extends StatelessWidget {

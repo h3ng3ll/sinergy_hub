@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/models/exceptions.dart';
 import '../../../../core/failures/failure.dart';
-import '../../../user/domain/models/user_data/user_data.dart';
 import '../failures/auth_failures.dart';
 import '../models/apple_sign_in_result/apple_sign_in_result.dart';
 

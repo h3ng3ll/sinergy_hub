@@ -1,4 +1,3 @@
-import '../../../../core/models/exceptions.dart';
 import 'auth_failures.dart';
 
 class LoginOrPasswordIncorrectFailure implements AuthFailure {

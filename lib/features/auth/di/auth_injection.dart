@@ -12,7 +12,6 @@ import '../../../core/services/google_sign_in_service/google_sign_in_service.dar
 import '../../../core/utils/env/env.dart';
 import '../../chat/data/services/presence_service.dart';
 import '../../chat/domain/services/i_presence_service.dart';
-import '../../user/domain/repositories/i_user_write_repository.dart';
 import '../data/models/auth_temp_credentials/auth_temp_credentials.dart';
 import '../data/repositories/auth_repository/firebase_auth_repository.dart';
 import '../data/repositories/auth_temp_credentials_local_repository.dart';

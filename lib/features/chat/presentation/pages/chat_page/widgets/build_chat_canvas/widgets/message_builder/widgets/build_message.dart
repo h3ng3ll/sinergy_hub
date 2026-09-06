@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 
-import '../../../../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../../../../core/resources/colors/app_gradients.dart';
-import '../../../../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../../../../core/widgets/build_user_avatar.dart';
-import '../../../../../../../../../../gen/assets.gen.dart';
 import '../../../../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../../../../domain/models/chat_message/chat_message.dart';
 import 'build_message_content/build_message_content.dart';
@@ -43,9 +39,6 @@ class BuildMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = AppColorScheme.of(context);
-    final textTheme = AppTextTheme.of(context);
-
     final radius = Radius.circular(
       17.5,
     );

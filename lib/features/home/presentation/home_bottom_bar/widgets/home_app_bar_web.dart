@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
-import '../../../../../gen/assets.gen.dart';
 
 class HomeAppBarWeb extends CustomAppBar {
   final VoidCallback onTapNotifications;

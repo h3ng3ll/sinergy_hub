@@ -105,7 +105,7 @@ class FirebaseMessagingService {
 
   void _handleMessage(RemoteMessage message) {
     final notification = message.notification;
-    print('Has notification $notification');
+    debugPrint('Has notification $notification');
     if (notification != null) {
       debugPrint('Message notification details: ');
       debugPrint('Title: ${message.notification?.title}');

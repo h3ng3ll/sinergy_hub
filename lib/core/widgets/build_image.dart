@@ -53,7 +53,7 @@ class BuildImage extends StatelessWidget {
         imageUrl: url!,
         fit: fit,
         placeholder: (context, _) => _loading(),
-        errorWidget: (context, _, __) => _placeholder(colorScheme),
+        errorWidget: (context, _, _) => _placeholder(colorScheme),
       );
     }
 

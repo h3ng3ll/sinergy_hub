@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../../core/resources/colors/app_gradients.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
-import '../../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import '../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 

@@ -16,8 +16,6 @@ import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../core/widgets/build_user_avatar.dart';
 import '../../../onboard_survey/domain/models/skill/skill.dart';
-import '../../../user/domain/usecases/listen_current_user_data_use_case.dart';
-import '../../../user/domain/usecases/update_user_usecase.dart';
 import '../../../user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import '../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../user/presentation/dialogs/image_source_modal_sheet/image_source_modal_sheet.dart';

@@ -193,7 +193,7 @@ class FirebaseAuthRepository extends IAuthRepository {
         return Right(UserExistsWithSuchEmailFailure());
       }
       rethrow;
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (_) {
       rethrow;
     }
   }
@@ -224,7 +224,6 @@ class FirebaseAuthRepository extends IAuthRepository {
       return Right(
         SomethingWentWrongSignInFailure(),
       );
-      rethrow;
     } catch (_) {
       return Right(
         SomethingWentWrongSignInFailure(),

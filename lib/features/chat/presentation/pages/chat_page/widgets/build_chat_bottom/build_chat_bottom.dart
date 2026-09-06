@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../inputs/chat_input.dart';
-import 'widgets/build_attach_btn.dart';
 import 'widgets/build_chat_bottom_container.dart';
 import 'widgets/build_send_btn.dart';
 

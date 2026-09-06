@@ -33,7 +33,6 @@ import '../../../features/terms_of_use/presentation/pages/terms_of_use_page/term
 import '../../../features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
 import '../../../features/user/presentation/pages/user_profile_page/user_profile_page.dart';
-import '../../di/injection.dart';
 import '../root_page/root_page.dart';
 
 part 'init_router.g.dart';

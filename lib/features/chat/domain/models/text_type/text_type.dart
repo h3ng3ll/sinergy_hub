@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
 
 part 'text_type.freezed.dart';
 

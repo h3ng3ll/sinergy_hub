@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../user/domain/usecases/get_current_user_data_use_case.dart';
-import '../../user/domain/usecases/get_user_data_use_case.dart';
 import '../../user/domain/usecases/get_users_use_case.dart';
 import '../../user/domain/usecases/listen_user_data_use_case.dart';
 import '../data/repositories/chat_firebase_repository.dart';

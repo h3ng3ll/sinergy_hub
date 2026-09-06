@@ -231,7 +231,7 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
     );
   }
 
-  Future<void> _removeVisible(event, emit) async {
+  Future<void> _removeVisible(_RemoveVisible event, emit) async {
     try {
       emit(
         state.copyWith(
