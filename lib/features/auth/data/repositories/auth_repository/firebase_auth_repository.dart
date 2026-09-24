@@ -13,6 +13,7 @@ import '../../../../../core/services/crypto_service.dart';
 import '../../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../../../core/services/firebase/firebase_functions_service.dart';
 import '../../../../../core/services/google_sign_in_service/google_sign_in_service.dart';
+import '../../../../../core/services/logger_service.dart';
 import '../../../../../core/utils/env/env.dart';
 import '../../../domain/exception/failed_sign_with_google.dart';
 import '../../../domain/exception/max_tries_exceeded_exception.dart';
@@ -31,29 +32,25 @@ import '../../../domain/repostories/i_auth_repository.dart';
 import '../../models/apple_credentials/apple_credentials.dart';
 
 class FirebaseAuthRepository extends IAuthRepository {
-
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;
   final GoogleSignInService _googleSignInService;
   final CryptoService _cryptoService;
   final FirebaseFunctionsService _firebaseFunctionsService;
-
+  final FirebaseFirestoreService _firebaseFirestoreService;
+  final LoggerService _loggerService;
   final Env _env;
 
   FirebaseAuthRepository({
-    required FirebaseAuth auth,
-    required GoogleSignIn googleSignIn,
-    required FirebaseFirestoreService firebaseFirestoreService,
-    required GoogleSignInService googleSignInService,
-    required Env env,
-    required CryptoService cryptoService,
-    required FirebaseFunctionsService firebaseFunctionsService,
-  }) : _firebaseFunctionsService = firebaseFunctionsService,
-       _auth = auth,
-       _googleSignInService = googleSignInService,
-       _env = env,
-       _googleSignIn = googleSignIn,
-       _cryptoService = cryptoService {
+    required this._loggerService,
+    required this._auth,
+    required this._googleSignIn,
+    required this._firebaseFirestoreService,
+    required this._googleSignInService,
+    required this._env,
+    required this._cryptoService,
+    required this._firebaseFunctionsService,
+  }) {
     if (kIsWeb) {
       _initSignInEvents();
     }
@@ -322,9 +319,7 @@ class FirebaseAuthRepository extends IAuthRepository {
   Future<Either<AppleSignInResult, Failure>> signInWithApple() async {
     if (Platform.isAndroid) {
       final res = await _androidCall();
-      return Left(
-        res,
-      );
+      return res;
     } else if (Platform.isIOS) {
       return await _iosCall();
     } else {
@@ -337,7 +332,7 @@ class FirebaseAuthRepository extends IAuthRepository {
   // =========================
   // ANDROID (Firebase Web OAuth)
   // =========================
-  Future<AppleSignInResult> _androidCall() async {
+  Future<Either<AppleSignInResult, AuthFailure>> _androidCall() async {
     try {
       final provider =
           OAuthProvider(
@@ -354,18 +349,26 @@ class FirebaseAuthRepository extends IAuthRepository {
       final parts = res.user?.displayName?.trim().split(
         ' ',
       );
-      return AppleSignInResult(
-        userCredential: res,
-        credentials: AppleCredentials(
-          firstName: parts != null && parts.isNotEmpty ? parts.first : null,
-          lastName: parts != null && parts.length > 1
-              ? parts.sublist(1).join(' ')
-              : null,
-          email: res.user?.email,
+      return Left(
+        AppleSignInResult(
+          userCredential: res,
+          credentials: AppleCredentials(
+            firstName: parts != null && parts.isNotEmpty ? parts.first : null,
+            lastName: parts != null && parts.length > 1
+                ? parts.sublist(1).join(' ')
+                : null,
+            email: res.user?.email,
+          ),
         ),
       );
     } catch (e) {
-      throw Exception('Android Apple Sign-In failed: $e');
+      _loggerService.error(
+        'Auth with Apple Android',
+        error: e,
+      );
+      return Right(
+        FailedSignInWithApple(),
+      );
     }
   }
 
@@ -412,6 +415,10 @@ class FirebaseAuthRepository extends IAuthRepository {
         ),
       );
     } catch (e) {
+      _loggerService.error(
+        'Google auth with Apple Ios',
+        error: e,
+      );
       return Right(
         FailedSignInWithApple(),
       );

@@ -59,7 +59,6 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://sinergyhub-prod-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'sinergyhub-prod.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDwZ2pGndA3SiExLUoXs95eznV7zRbXoaU',
     appId: '1:758987089244:ios:3490525dd3bbaafa878d99',
@@ -71,7 +70,6 @@ class DefaultFirebaseOptions {
     iosClientId: '758987089244-btueguabu8lj2srk72amrilu46prfhgq.apps.googleusercontent.com',
     iosBundleId: 'com.hengell.synergyhub',
   );
-
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDwZ2pGndA3SiExLUoXs95eznV7zRbXoaU',
     appId: '1:758987089244:ios:2adcfcb66c29e7f5878d99',
@@ -94,5 +92,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'sinergyhub-prod.firebasestorage.app',
     measurementId: 'G-434BWQ2ZSR',
   );
-
 }

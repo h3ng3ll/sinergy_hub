@@ -124,7 +124,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                           ErrorMessageWidget(message: state.errorMessage),
                           Gap(20.0),
                         ],
-                        if (!kIsWeb && Platform.isIOS) ...[
+                        // if (!kIsWeb && Platform.isIOS) ...[
                           ActionBtn(
                             padding: EdgeInsets.symmetric(
                               vertical: 15.0,
@@ -154,7 +154,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                             ),
                           ),
                           Gap(12.0),
-                        ],
+                        // ],
                         if (kIsWeb)
                           getIt<GoogleSignInService>().renderButton()
                         else

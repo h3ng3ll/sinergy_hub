@@ -9,6 +9,7 @@ import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../core/services/firebase/firebase_functions_service.dart';
 import '../../../core/services/firebase/firebase_realtime_db_service.dart';
 import '../../../core/services/google_sign_in_service/google_sign_in_service.dart';
+import '../../../core/services/logger_service.dart';
 import '../../../core/utils/env/env.dart';
 import '../../chat/data/services/presence_service.dart';
 import '../../chat/domain/services/i_presence_service.dart';
@@ -53,6 +54,7 @@ void initAuthFeature(GetIt getIt) {
       env: getIt<Env>(),
       cryptoService: getIt<CryptoService>(),
       firebaseFunctionsService: getIt<FirebaseFunctionsService>(),
+      loggerService: getIt<LoggerService>(),
     ),
   );
 

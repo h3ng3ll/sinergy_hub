@@ -5,6 +5,6 @@ class FailedSignInWithApple implements AuthFailure {
   final String message;
 
   FailedSignInWithApple({
-    this.message = 'iOS Apple Sign-In failed',
+    this.message = ' Apple Sign-In failed',
   });
 }
