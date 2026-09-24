@@ -13,6 +13,7 @@ import '../../bloc/people_data_bloc/people_data_bloc.dart';
 import '../../bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../bloc/matches_bloc/matches_bloc.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
+import '../../../../subscription/presentation/dialogs/paywall_modal_sheet/paywall_modal_sheet.dart';
 import 'widgets/build_tinder_card/build_tinder_card.dart';
 import '../../dialogs/filter_modal/matches_filters_modal_sheet.dart';
 
@@ -29,6 +30,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
   late final TinderCardCubit _tinderCardCubit;
   late final PeopleDataBloc _peopleDataBloc;
   late final MatchesBloc _matchesBloc;
+  bool _isPaywallOpen = false;
 
   @override
   void initState() {
@@ -143,6 +145,15 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
     );
   }
 
+  Future<void> _onShowPaywall() async {
+    if (_isPaywallOpen) return;
+    _isPaywallOpen = true;
+    await PaywallModalSheet.show(
+      HomeBottomBarRoute.homeBottomBarKey.currentState!.context,
+    );
+    _isPaywallOpen = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -180,6 +191,17 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                 ),
               );
             }
+          }
+          if (state.status == MatchesStatus.limitReached) {
+            final failed = state.lastFailedUser;
+            if (failed != null) {
+              _peopleDataBloc.add(
+                PeopleDataEvent.restoreVisible(
+                  user: failed,
+                ),
+              );
+            }
+            _onShowPaywall();
           }
         },
         child: Builder(

@@ -24,5 +24,9 @@ abstract class Env {
 
   String webPushCertificate();
 
+  String revenueCatAppleApiKey();
+
+  String revenueCatGoogleApiKey();
+
   String get appName;
 }

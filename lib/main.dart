@@ -29,6 +29,8 @@ import 'features/chat/domain/services/i_presence_service.dart';
 import 'features/connectivity/presentation/bloc/connectivity_bloc/connectivity_bloc.dart';
 import 'features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
 import 'features/onboard_survey/presentation/bloc/onboard_bloc/onboard_bloc.dart';
+import 'features/subscription/domain/repositories/i_subscription_repository.dart';
+import 'features/subscription/presentation/bloc/premium_bloc/premium_bloc.dart';
 import 'features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import 'features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'firebase.dart';
@@ -46,6 +48,8 @@ void main() async {
   await initHive();
 
   await initDependencies();
+
+  await getIt<ISubscriptionRepository>().configure();
 
   SystemChrome.setPreferredOrientations(
     [
@@ -194,6 +198,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider(
           create: (_) => getIt<NotificationConfigBloc>(),
         ),
+        BlocProvider<PremiumBloc>.value(
+          value: getIt<PremiumBloc>(),
+        ),
       ],
       child: ResponsiveBreakpoints(
         breakpoints: [
@@ -246,6 +253,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       getIt<OnboardBloc>().add(
                         OnboardEvent.load(),
                       );
+                      getIt<PremiumBloc>().add(
+                        PremiumEvent.init(uid: state.uid!),
+                      );
                     }
                     if (state.isLogout) {
                       getIt<UserBloc>().add(
@@ -253,6 +263,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       );
                       getIt<OnboardBloc>().add(
                         OnboardEvent.reset(),
+                      );
+                      getIt<PremiumBloc>().add(
+                        const PremiumEvent.reset(),
                       );
                     }
                     _maybeRemoveSplash();

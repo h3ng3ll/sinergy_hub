@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/core/models/exceptions.dart';
+import 'package:sinergy_hub/features/matches/domain/exception/daily_match_limit_exceeded_exception.dart';
 import 'package:sinergy_hub/features/matches/domain/exception/failed_matches_exception.dart';
 import 'package:sinergy_hub/features/matches/domain/models/user_match/matches.dart';
 import 'package:sinergy_hub/features/matches/domain/usecases/create_user_matches_use_case.dart';
@@ -109,6 +110,36 @@ void main() {
             .having((s) => s.lastFailedUser, 'lastFailedUser', isNull),
         isA<MatchesState>()
             .having((s) => s.status, 'status', MatchesStatus.failed)
+            .having((s) => s.lastFailedUser, 'lastFailedUser', swipedUser)
+            .having((s) => s.errorMessage, 'errorMessage', isNotEmpty),
+      ],
+    );
+
+    blocTest<MatchesBloc, MatchesState>(
+      'on daily limit exceeded: emits limitReached (not failed) with lastFailedUser set',
+      setUp: () {
+        when(() => createUseCase.call(
+          status: any(named: 'status'),
+          matchedID: any(named: 'matchedID'),
+        )).thenAnswer(
+          (_) async => Right<void, Exceptions>(
+            DailyMatchLimitExceededException(),
+          ),
+        );
+      },
+      build: buildBloc,
+      act: (bloc) => bloc.add(
+        MatchesEvent.create(
+          status: TinderCardStatus.liked,
+          user: swipedUser,
+        ),
+      ),
+      expect: () => [
+        isA<MatchesState>()
+            .having((s) => s.status, 'status', MatchesStatus.loading)
+            .having((s) => s.lastFailedUser, 'lastFailedUser', isNull),
+        isA<MatchesState>()
+            .having((s) => s.status, 'status', MatchesStatus.limitReached)
             .having((s) => s.lastFailedUser, 'lastFailedUser', swipedUser)
             .having((s) => s.errorMessage, 'errorMessage', isNotEmpty),
       ],

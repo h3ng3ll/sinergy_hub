@@ -40,5 +40,19 @@
   "report_type_other": "Other",
   "block_user": "Block user",
   "unblock_user": "Unblock user",
-  "chat_blocked_message": "Messaging is restricted in this chat"
+  "chat_blocked_message": "Messaging is restricted in this chat",
+  "paywall_title": "Go Premium",
+  "paywall_benefit_unlimited_likes": "Unlimited daily likes",
+  "paywall_continue": "Continue",
+  "paywall_restore": "Restore purchases",
+  "paywall_unavailable": "Premium is not available right now. Please try again later.",
+  "paywall_no_plans": "No subscription plans are available right now.",
+  "paywall_restore_nothing": "No previous purchases found to restore.",
+  "paywall_purchase_success": "Premium unlocked. Enjoy unlimited likes!",
+  "paywall_auto_renew_note": "Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period.",
+  "paywall_best_value": "Best value",
+  "terms_of_use": "Terms of Use",
+  "privacy_policy": "Privacy Policy",
+  "premium_upgrade": "Upgrade to Premium",
+  "premium_active": "Premium active"
 }

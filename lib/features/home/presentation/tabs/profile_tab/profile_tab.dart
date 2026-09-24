@@ -4,12 +4,16 @@ import 'package:gap/gap.dart';
 
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
+import '../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
+import '../../../../subscription/presentation/bloc/premium_bloc/premium_bloc.dart';
+import '../../../../subscription/presentation/dialogs/paywall_modal_sheet/paywall_modal_sheet.dart';
 import '../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import 'bloc/profile_bloc/profile_bloc.dart';
@@ -45,6 +49,10 @@ class _ProfileTabState extends State<ProfileTab> {
     EditProfilePageRoute().push(
       context,
     );
+  }
+
+  Future<void> _onUpgrade() async {
+    await PaywallModalSheet.show(context);
   }
 
   Future<void> _onDeletePressed(BuildContext context) async {
@@ -110,6 +118,34 @@ class _ProfileTabState extends State<ProfileTab> {
                               //   onTapEdit: onTapEditSkills,
                               // ),
                               // Gap(20.0),
+                              BlocBuilder<PremiumBloc, PremiumState>(
+                                builder: (context, premiumState) {
+                                  if (premiumState.isPremium) {
+                                    return Text(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.premium_active,
+                                      style: AppTextTheme.of(
+                                        context,
+                                      ).medium14.copyWith(
+                                        color: AppColors.majorelleBlue.value,
+                                      ),
+                                    );
+                                  }
+                                  return SizedBox(
+                                    width: double.infinity,
+                                    child: ActionBtn(
+                                      text: AppLocalizations.of(
+                                        context,
+                                      )!.premium_upgrade,
+                                      anyStateColor:
+                                          AppColors.majorelleBlue.value,
+                                      onPressed: _onUpgrade,
+                                    ),
+                                  );
+                                },
+                              ),
+                              Gap(20.0),
                               BlocBuilder<ProfileBloc, ProfileState>(
                                 builder: (context, profileState) {
                                   return SizedBox(

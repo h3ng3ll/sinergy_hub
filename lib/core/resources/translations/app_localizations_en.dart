@@ -125,4 +125,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chat_blocked_message => 'Messaging is restricted in this chat';
+
+  @override
+  String get paywall_title => 'Go Premium';
+
+  @override
+  String get paywall_benefit_unlimited_likes => 'Unlimited daily likes';
+
+  @override
+  String get paywall_continue => 'Continue';
+
+  @override
+  String get paywall_restore => 'Restore purchases';
+
+  @override
+  String get paywall_unavailable =>
+      'Premium is not available right now. Please try again later.';
+
+  @override
+  String get paywall_no_plans =>
+      'No subscription plans are available right now.';
+
+  @override
+  String get paywall_restore_nothing =>
+      'No previous purchases found to restore.';
+
+  @override
+  String get paywall_purchase_success =>
+      'Premium unlocked. Enjoy unlimited likes!';
+
+  @override
+  String get paywall_auto_renew_note =>
+      'Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period.';
+
+  @override
+  String get paywall_best_value => 'Best value';
+
+  @override
+  String get terms_of_use => 'Terms of Use';
+
+  @override
+  String get privacy_policy => 'Privacy Policy';
+
+  @override
+  String get premium_upgrade => 'Upgrade to Premium';
+
+  @override
+  String get premium_active => 'Premium active';
 }

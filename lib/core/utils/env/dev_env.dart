@@ -25,5 +25,25 @@ class DevEnv extends Env {
         );
 
   @override
+  String revenueCatAppleApiKey() => kIsWeb
+      ? const String.fromEnvironment(
+          'DEV_REVENUECAT_APPLE_API_KEY',
+        )
+      : dotenv.maybeGet(
+          'DEV_REVENUECAT_APPLE_API_KEY',
+          fallback: '',
+        )!;
+
+  @override
+  String revenueCatGoogleApiKey() => kIsWeb
+      ? const String.fromEnvironment(
+          'DEV_REVENUECAT_GOOGLE_API_KEY',
+        )
+      : dotenv.maybeGet(
+          'DEV_REVENUECAT_GOOGLE_API_KEY',
+          fallback: '',
+        )!;
+
+  @override
   String get appName => '[DEV] Synergy Hub';
 }

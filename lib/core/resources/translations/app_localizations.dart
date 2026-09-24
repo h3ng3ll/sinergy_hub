@@ -321,6 +321,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Messaging is restricted in this chat'**
   String get chat_blocked_message;
+
+  /// No description provided for @paywall_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Premium'**
+  String get paywall_title;
+
+  /// No description provided for @paywall_benefit_unlimited_likes.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited daily likes'**
+  String get paywall_benefit_unlimited_likes;
+
+  /// No description provided for @paywall_continue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get paywall_continue;
+
+  /// No description provided for @paywall_restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get paywall_restore;
+
+  /// No description provided for @paywall_unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium is not available right now. Please try again later.'**
+  String get paywall_unavailable;
+
+  /// No description provided for @paywall_no_plans.
+  ///
+  /// In en, this message translates to:
+  /// **'No subscription plans are available right now.'**
+  String get paywall_no_plans;
+
+  /// No description provided for @paywall_restore_nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'No previous purchases found to restore.'**
+  String get paywall_restore_nothing;
+
+  /// No description provided for @paywall_purchase_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium unlocked. Enjoy unlimited likes!'**
+  String get paywall_purchase_success;
+
+  /// No description provided for @paywall_auto_renew_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period.'**
+  String get paywall_auto_renew_note;
+
+  /// No description provided for @paywall_best_value.
+  ///
+  /// In en, this message translates to:
+  /// **'Best value'**
+  String get paywall_best_value;
+
+  /// No description provided for @terms_of_use.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get terms_of_use;
+
+  /// No description provided for @privacy_policy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacy_policy;
+
+  /// No description provided for @premium_upgrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium'**
+  String get premium_upgrade;
+
+  /// No description provided for @premium_active.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium active'**
+  String get premium_active;
 }
 
 class _AppLocalizationsDelegate

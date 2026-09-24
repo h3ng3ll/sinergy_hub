@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../user/domain/models/user_data/user_data.dart';
+import '../../../domain/exception/daily_match_limit_exceeded_exception.dart';
 import '../../../domain/models/user_match/matches.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
 import '../../../domain/usecases/listen_two_way_match_use_case.dart';
@@ -77,7 +78,9 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
       (e) {
         emit(
           state.copyWith(
-            status: MatchesStatus.failed,
+            status: e is DailyMatchLimitExceededException
+                ? MatchesStatus.limitReached
+                : MatchesStatus.failed,
             errorMessage: e.message,
             lastFailedUser: event.user,
           ),
