@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:sinergy_hub/core/services/firebase/firebase_messaging_service.dart';
 import 'package:sinergy_hub/features/notifications/domain/failures/load_notification_config_failure.dart';
 import 'package:sinergy_hub/features/notifications/domain/failures/register_device_token_failure.dart';
 import 'package:sinergy_hub/features/notifications/domain/failures/save_notification_config_failure.dart';
@@ -18,10 +21,15 @@ class _SaveUseCaseMock extends Mock implements SaveNotificationsConfigUseCase {}
 class _RegisterTokenUseCaseMock extends Mock
     implements RegisterCurrentDeviceTokenUseCase {}
 
+class _FirebaseMessagingServiceMock extends Mock
+    implements FirebaseMessagingService {}
+
 void main() {
   late _GetUseCaseMock getUseCase;
   late _SaveUseCaseMock saveUseCase;
   late _RegisterTokenUseCaseMock registerTokenUseCase;
+  late _FirebaseMessagingServiceMock messagingService;
+  late StreamController<String> tokenRefreshController;
 
   setUpAll(() {
     registerFallbackValue(const NotificationConfig());
@@ -31,12 +39,22 @@ void main() {
     getUseCase = _GetUseCaseMock();
     saveUseCase = _SaveUseCaseMock();
     registerTokenUseCase = _RegisterTokenUseCaseMock();
+    messagingService = _FirebaseMessagingServiceMock();
+    tokenRefreshController = StreamController<String>.broadcast();
+    when(() => messagingService.onTokenRefresh).thenAnswer(
+      (_) => tokenRefreshController.stream,
+    );
+  });
+
+  tearDown(() {
+    tokenRefreshController.close();
   });
 
   NotificationConfigBloc buildBloc() => NotificationConfigBloc(
         getNotificationsConfigUseCase: getUseCase,
         saveNotificationsConfigUseCase: saveUseCase,
         registerCurrentDeviceTokenUseCase: registerTokenUseCase,
+        firebaseMessagingService: messagingService,
       );
 
   group('NotificationConfigBloc.init', () {
@@ -230,6 +248,69 @@ void main() {
       verify: (_) {
         verifyNever(() => saveUseCase.call(config: any(named: 'config')));
       },
+    );
+  });
+
+  group('NotificationConfigBloc token rotation', () {
+    blocTest<NotificationConfigBloc, NotificationConfigState>(
+      'FirebaseMessagingService.onTokenRefresh re-registers the new token '
+      'with the backend, so it is never left stale',
+      build: () {
+        when(
+          () => registerTokenUseCase.call(
+            config: any(named: 'config'),
+            tokenOverride: any(named: 'tokenOverride'),
+          ),
+        ).thenAnswer(
+          (_) async => const Left(
+            NotificationConfig(fcmTokens: {'android': 'rotated-tok'}),
+          ),
+        );
+        return buildBloc();
+      },
+      seed: () => const NotificationConfigState(
+        config: NotificationConfig(fcmTokens: {'android': 'stale-tok'}),
+      ),
+      act: (b) => tokenRefreshController.add('rotated-tok'),
+      wait: const Duration(milliseconds: 10),
+      expect: () => [
+        const NotificationConfigState(
+          config: NotificationConfig(fcmTokens: {'android': 'rotated-tok'}),
+        ),
+      ],
+      verify: (_) {
+        verify(
+          () => registerTokenUseCase.call(
+            config: const NotificationConfig(
+              fcmTokens: {'android': 'stale-tok'},
+            ),
+            tokenOverride: 'rotated-tok',
+          ),
+        ).called(1);
+      },
+    );
+
+    blocTest<NotificationConfigBloc, NotificationConfigState>(
+      'a failed re-registration on refresh surfaces as failed status',
+      build: () {
+        when(
+          () => registerTokenUseCase.call(
+            config: any(named: 'config'),
+            tokenOverride: any(named: 'tokenOverride'),
+          ),
+        ).thenAnswer(
+          (_) async => Right(RegisterDeviceTokenFailure()),
+        );
+        return buildBloc();
+      },
+      act: (b) => tokenRefreshController.add('rotated-tok'),
+      wait: const Duration(milliseconds: 10),
+      expect: () => [
+        NotificationConfigState(
+          status: NotificationConfigStatus.failed,
+          errorMessage: RegisterDeviceTokenFailure().message,
+        ),
+      ],
     );
   });
 }

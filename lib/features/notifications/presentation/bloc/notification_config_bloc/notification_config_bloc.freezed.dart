@@ -55,12 +55,13 @@ extension NotificationConfigEventPatterns on NotificationConfigEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Init value)?  init,TResult Function( _Save value)?  save,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Init value)?  init,TResult Function( _Save value)?  save,TResult Function( _TokenRefreshed value)?  tokenRefreshed,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Init() when init != null:
 return init(_that);case _Save() when save != null:
-return save(_that);case _:
+return save(_that);case _TokenRefreshed() when tokenRefreshed != null:
+return tokenRefreshed(_that);case _:
   return orElse();
 
 }
@@ -78,12 +79,13 @@ return save(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Init value)  init,required TResult Function( _Save value)  save,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Init value)  init,required TResult Function( _Save value)  save,required TResult Function( _TokenRefreshed value)  tokenRefreshed,}){
 final _that = this;
 switch (_that) {
 case _Init():
 return init(_that);case _Save():
-return save(_that);case _:
+return save(_that);case _TokenRefreshed():
+return tokenRefreshed(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -100,12 +102,13 @@ return save(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Init value)?  init,TResult? Function( _Save value)?  save,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Init value)?  init,TResult? Function( _Save value)?  save,TResult? Function( _TokenRefreshed value)?  tokenRefreshed,}){
 final _that = this;
 switch (_that) {
 case _Init() when init != null:
 return init(_that);case _Save() when save != null:
-return save(_that);case _:
+return save(_that);case _TokenRefreshed() when tokenRefreshed != null:
+return tokenRefreshed(_that);case _:
   return null;
 
 }
@@ -122,11 +125,12 @@ return save(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  init,TResult Function( bool? isEnabledNotifications)?  save,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  init,TResult Function( bool? isEnabledNotifications)?  save,TResult Function( String token)?  tokenRefreshed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Init() when init != null:
 return init();case _Save() when save != null:
-return save(_that.isEnabledNotifications);case _:
+return save(_that.isEnabledNotifications);case _TokenRefreshed() when tokenRefreshed != null:
+return tokenRefreshed(_that.token);case _:
   return orElse();
 
 }
@@ -144,11 +148,12 @@ return save(_that.isEnabledNotifications);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  init,required TResult Function( bool? isEnabledNotifications)  save,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  init,required TResult Function( bool? isEnabledNotifications)  save,required TResult Function( String token)  tokenRefreshed,}) {final _that = this;
 switch (_that) {
 case _Init():
 return init();case _Save():
-return save(_that.isEnabledNotifications);case _:
+return save(_that.isEnabledNotifications);case _TokenRefreshed():
+return tokenRefreshed(_that.token);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -165,11 +170,12 @@ return save(_that.isEnabledNotifications);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  init,TResult? Function( bool? isEnabledNotifications)?  save,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  init,TResult? Function( bool? isEnabledNotifications)?  save,TResult? Function( String token)?  tokenRefreshed,}) {final _that = this;
 switch (_that) {
 case _Init() when init != null:
 return init();case _Save() when save != null:
-return save(_that.isEnabledNotifications);case _:
+return save(_that.isEnabledNotifications);case _TokenRefreshed() when tokenRefreshed != null:
+return tokenRefreshed(_that.token);case _:
   return null;
 
 }
@@ -269,6 +275,72 @@ class __$SaveCopyWithImpl<$Res>
   return _then(_Save(
 isEnabledNotifications: freezed == isEnabledNotifications ? _self.isEnabledNotifications : isEnabledNotifications // ignore: cast_nullable_to_non_nullable
 as bool?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _TokenRefreshed implements NotificationConfigEvent {
+  const _TokenRefreshed({required this.token});
+  
+
+ final  String token;
+
+/// Create a copy of NotificationConfigEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TokenRefreshedCopyWith<_TokenRefreshed> get copyWith => __$TokenRefreshedCopyWithImpl<_TokenRefreshed>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TokenRefreshed&&(identical(other.token, token) || other.token == token));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,token);
+
+@override
+String toString() {
+  return 'NotificationConfigEvent.tokenRefreshed(token: $token)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$TokenRefreshedCopyWith<$Res> implements $NotificationConfigEventCopyWith<$Res> {
+  factory _$TokenRefreshedCopyWith(_TokenRefreshed value, $Res Function(_TokenRefreshed) _then) = __$TokenRefreshedCopyWithImpl;
+@useResult
+$Res call({
+ String token
+});
+
+
+
+
+}
+/// @nodoc
+class __$TokenRefreshedCopyWithImpl<$Res>
+    implements _$TokenRefreshedCopyWith<$Res> {
+  __$TokenRefreshedCopyWithImpl(this._self, this._then);
+
+  final _TokenRefreshed _self;
+  final $Res Function(_TokenRefreshed) _then;
+
+/// Create a copy of NotificationConfigEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? token = null,}) {
+  return _then(_TokenRefreshed(
+token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

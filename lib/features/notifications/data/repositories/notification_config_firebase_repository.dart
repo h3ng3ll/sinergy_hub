@@ -16,20 +16,15 @@ class NotificationConfigFirebaseRepository
   Future<NotificationConfig?> get({
     required String uid,
   }) async {
-    final doc =  _firebaseFirestoreService.notificationConfig(
-      uid: uid,
-    );
-    final isExists = await _firebaseFirestoreService.isExistsDocument(
-      doc,
-    );
-    if (!isExists) return null;
+    /// Server read: the token-registration skip decision is made against
+    /// this snapshot, so a stale local-cache copy must never be trusted.
+    final snap = await _firebaseFirestoreService
+        .notificationConfig(uid: uid)
+        .get(const GetOptions(source: Source.server));
+    final data = snap.data();
+    if (!snap.exists || data == null) return null;
 
-    final configData = await doc.get();
-
-    final config = NotificationConfig.fromJson(
-      configData.data()!,
-    );
-    return config;
+    return NotificationConfig.fromJson(data);
   }
 
   @override
@@ -42,7 +37,11 @@ class NotificationConfigFirebaseRepository
           uid: uid,
         )
         .set(
-          config.toJson(),
+          /// Only the field this writer owns — fcmTokens belongs to
+          /// [upsertToken]; a full overwrite here would erase tokens with
+          /// whatever stale copy the caller loaded.
+          {'enabledNotifications': config.enabledNotifications},
+          SetOptions(merge: true),
         );
   }
 

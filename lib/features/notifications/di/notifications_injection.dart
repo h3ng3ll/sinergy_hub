@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../core/services/firebase/firebase_messaging_service.dart';
+import '../../../core/services/logger_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../data/repositories/notification_config_firebase_repository.dart';
 import '../data/repositories/notification_firebase_repository.dart';
@@ -54,6 +55,7 @@ void initNotificationFeature(GetIt getIt) {
       notificationConfigRepository: getIt<INotificationConfigRepository>(),
       authRepository: getIt<IAuthRepository>(),
       firebaseMessagingService: getIt<FirebaseMessagingService>(),
+      logger: getIt<LoggerService>(),
     ),
   );
  getIt.registerLazySingleton<NotificationConfigBloc>(
@@ -64,6 +66,7 @@ void initNotificationFeature(GetIt getIt) {
       getIt<SaveNotificationsConfigUseCase>(),
       registerCurrentDeviceTokenUseCase:
       getIt<RegisterCurrentDeviceTokenUseCase>(),
+      firebaseMessagingService: getIt<FirebaseMessagingService>(),
     )
   );
 }

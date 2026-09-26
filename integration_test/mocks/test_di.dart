@@ -21,6 +21,7 @@ import 'package:sinergy_hub/core/services/firebase/firebase_auth_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_firestore_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_functions_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_messaging_service.dart';
+import 'package:sinergy_hub/core/services/logger_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_realtime_db_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_storage_service.dart';
 import 'package:sinergy_hub/core/services/google_sign_in_service/google_sign_in_service.dart';
@@ -69,6 +70,7 @@ import 'package:sinergy_hub/features/chat/presentation/bloc/chat_page_bloc/chat_
 import 'package:sinergy_hub/features/chat/presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 import 'package:sinergy_hub/features/home/presentation/edit_profile_page/bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import 'package:sinergy_hub/features/home/presentation/tabs/profile_tab/bloc/profile_bloc/profile_bloc.dart';
+import 'package:sinergy_hub/features/user/data/services/user_service.dart';
 import 'package:sinergy_hub/features/user/domain/usecases/delete_account_use_case.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/use_cases/get_cached_auth_credentials_use_case.dart';
 import 'package:sinergy_hub/features/onboard_survey/presentation/pages/onboard_about_you_page/bloc/onboard_about_you_bloc/onboard_about_you_bloc.dart';
@@ -137,6 +139,13 @@ class _FakeFirebaseMessagingService extends Mock
     implements FirebaseMessagingService {
   @override
   String get fcmToken => 'mock-fcm-token';
+
+  @override
+  Future<String?> get fcmTokenReady =>
+      Future<String?>.value('mock-fcm-token');
+
+  @override
+  Stream<String> get onTokenRefresh => const Stream<String>.empty();
 }
 
 class _FakeFirebaseRealtimeDbService extends Mock
@@ -430,6 +439,7 @@ Future<void> setupTestDI() async {
     () => FindMatchChatIdUseCase(
       authRepository: getIt<IAuthRepository>(),
       chatRepository: getIt<IChatRepository>(),
+      userService: getIt<UserService>(),
     ),
   );
   // Cubits — registered as factory to match production. The discovery
@@ -559,6 +569,7 @@ Future<void> setupTestDI() async {
       notificationConfigRepository: getIt<INotificationConfigRepository>(),
       authRepository: getIt<IAuthRepository>(),
       firebaseMessagingService: getIt<FirebaseMessagingService>(),
+      logger: LoggerService(),
     ),
   );
 
@@ -663,6 +674,7 @@ Future<void> setupTestDI() async {
       saveNotificationsConfigUseCase: getIt<SaveNotificationsConfigUseCase>(),
       registerCurrentDeviceTokenUseCase:
           getIt<RegisterCurrentDeviceTokenUseCase>(),
+      firebaseMessagingService: getIt<FirebaseMessagingService>(),
     ),
   );
 }

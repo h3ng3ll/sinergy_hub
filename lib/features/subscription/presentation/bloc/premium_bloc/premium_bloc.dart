@@ -41,7 +41,8 @@ class PremiumBloc extends Bloc<PremiumEvent, PremiumState> {
   ) {
     return events
         .distinct(
-          (prev, next) => prev is _Init && next is _Init && prev.uid == next.uid,
+          (prev, next) =>
+              prev is _Init && next is _Init && prev.uid == next.uid,
         )
         .switchMap(mapper);
   }

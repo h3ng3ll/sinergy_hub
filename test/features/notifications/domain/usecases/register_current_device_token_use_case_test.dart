@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_messaging_service.dart';
+import 'package:sinergy_hub/core/services/logger_service.dart';
 import 'package:sinergy_hub/features/notifications/domain/failures/register_device_token_failure.dart';
 import 'package:sinergy_hub/features/notifications/domain/models/notification_config/notification_config.dart';
 import 'package:sinergy_hub/features/notifications/domain/usecases/register_current_device_token_use_case.dart';
@@ -27,6 +28,7 @@ void main() {
       notificationConfigRepository: repo,
       authRepository: authRepo,
       firebaseMessagingService: messaging,
+      logger: LoggerService(),
     );
   });
 
@@ -53,7 +55,9 @@ void main() {
 
   test('token already matches for this platform → Left(config unchanged), no writes', () async {
     when(() => messaging.platformKey).thenReturn('android');
-    when(() => messaging.fcmToken).thenReturn('tok-a');
+    when(
+      () => messaging.fcmTokenReady,
+    ).thenAnswer((_) => Future<String?>.value('tok-a'));
 
     const input = NotificationConfig(fcmTokens: {'android': 'tok-a'});
     final res = await useCase.call(config: input);
@@ -75,7 +79,9 @@ void main() {
 
   test('new token on android → Left(merged map), persists', () async {
     when(() => messaging.platformKey).thenReturn('android');
-    when(() => messaging.fcmToken).thenReturn('tok-a-new');
+    when(
+      () => messaging.fcmTokenReady,
+    ).thenAnswer((_) => Future<String?>.value('tok-a-new'));
     when(() => authRepo.requireUserId()).thenAnswer((_) async => uid);
     when(
       () => repo.upsertToken(
@@ -102,7 +108,9 @@ void main() {
 
   test('repository throws → Right(RegisterDeviceTokenFailure)', () async {
     when(() => messaging.platformKey).thenReturn('ios');
-    when(() => messaging.fcmToken).thenReturn('tok-i');
+    when(
+      () => messaging.fcmTokenReady,
+    ).thenAnswer((_) => Future<String?>.value('tok-i'));
     when(() => authRepo.requireUserId()).thenAnswer((_) async => uid);
     when(
       () => repo.upsertToken(
@@ -120,4 +128,60 @@ void main() {
       (f) => expect(f, isA<RegisterDeviceTokenFailure>()),
     );
   });
+
+  test(
+    'fcmTokenReady resolves to null (init lost the race / no token yet) → '
+    'Left(config unchanged), no writes — this is the startup-race fix',
+    () async {
+      when(() => messaging.platformKey).thenReturn('android');
+      when(
+        () => messaging.fcmTokenReady,
+      ).thenAnswer((_) => Future<String?>.value(null));
+
+      const input = NotificationConfig(fcmTokens: {'ios': 'tok-i'});
+      final res = await useCase.call(config: input);
+
+      expect(res.isLeft(), isTrue);
+      res.fold(
+        (c) => expect(c, same(input)),
+        (_) => fail('expected Left'),
+      );
+      verifyNever(() => authRepo.requireUserId());
+      verifyNever(
+        () => repo.upsertToken(
+          uid: any(named: 'uid'),
+          platform: any(named: 'platform'),
+          token: any(named: 'token'),
+        ),
+      );
+    },
+  );
+
+  test(
+    'tokenOverride (from onTokenRefresh) is used directly, never waits on '
+    'fcmTokenReady',
+    () async {
+      when(() => messaging.platformKey).thenReturn('android');
+      when(() => authRepo.requireUserId()).thenAnswer((_) async => uid);
+      when(
+        () => repo.upsertToken(
+          uid: any(named: 'uid'),
+          platform: any(named: 'platform'),
+          token: any(named: 'token'),
+        ),
+      ).thenAnswer((_) async {});
+
+      final res = await useCase.call(
+        config: const NotificationConfig(fcmTokens: {'android': 'old-tok'}),
+        tokenOverride: 'rotated-tok',
+      );
+
+      expect(res.isLeft(), isTrue);
+      res.fold(
+        (c) => expect(c.fcmTokens['android'], 'rotated-tok'),
+        (_) => fail('expected Left'),
+      );
+      verifyNever(() => messaging.fcmTokenReady);
+    },
+  );
 }

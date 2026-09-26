@@ -6,6 +6,7 @@ import 'package:sinergy_hub/core/services/crypto_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_firestore_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_functions_service.dart';
 import 'package:sinergy_hub/core/services/google_sign_in_service/google_sign_in_service.dart';
+import 'package:sinergy_hub/core/services/logger_service.dart';
 import 'package:sinergy_hub/core/utils/env/env.dart';
 import 'package:sinergy_hub/features/auth/data/repositories/auth_repository/firebase_auth_repository.dart';
 import 'package:sinergy_hub/features/auth/domain/failures/user_exists_with_such_email_failure.dart';
@@ -27,12 +28,14 @@ class _EnvMock extends Mock implements Env {}
 class _FirebaseFunctionsService extends Mock implements FirebaseFunctionsService {}
 
 class _CryptoServiceMock extends Mock implements CryptoService {}
+class _LoggerServiceMock extends Mock implements LoggerService {}
 
 void main() {
   late _FirebaseAuthMock auth;
   late _UserCredentialMock credential;
   late _UserMock user;
   late FirebaseAuthRepository repository;
+  late _LoggerServiceMock loggerService ;
 
   const email = 'new.user@example.com';
   const password = 'secret123';
@@ -41,6 +44,7 @@ void main() {
     auth = _FirebaseAuthMock();
     credential = _UserCredentialMock();
     user = _UserMock();
+    loggerService = _LoggerServiceMock();
 
     repository = FirebaseAuthRepository(
       auth: auth,
@@ -50,6 +54,7 @@ void main() {
       env: _EnvMock(),
       cryptoService: _CryptoServiceMock(),
       firebaseFunctionsService: _FirebaseFunctionsService(),
+      loggerService: loggerService,
     );
   });
 

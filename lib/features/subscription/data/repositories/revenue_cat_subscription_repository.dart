@@ -132,9 +132,7 @@ class RevenueCatSubscriptionRepository implements ISubscriptionRepository {
         kPremiumEntitlementId,
       );
       return Left(
-        isActive
-            ? ERestoreOutcome.restored
-            : ERestoreOutcome.nothingToRestore,
+        isActive ? ERestoreOutcome.restored : ERestoreOutcome.nothingToRestore,
       );
     } catch (e) {
       return Right(RestoreFailedFailure(e.toString()));
