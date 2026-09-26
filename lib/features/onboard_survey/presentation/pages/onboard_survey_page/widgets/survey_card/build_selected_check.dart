@@ -3,7 +3,6 @@ import 'package:flutter_shaders/flutter_shaders.dart';
 
 import '../../../../../../../core/resources/app_shader.dart';
 import '../../../../../../../core/resources/colors/app_colors.dart';
-import '../../../../../../../core/utils/shader_painter.dart';
 
 class BuildSelectedCheck extends StatefulWidget {
   final double? width;
@@ -61,27 +60,10 @@ class _BuildSelectedCheckState extends State<BuildSelectedCheck>
       child: ShaderBuilder(
         (context, shader, child) {
           return CustomPaint(
-            painter: ShaderPainter(
+            size: size,
+            painter: _ShaderBuildSelectedCheckPainter(
               shader: shader,
-              repaint: _controller,
-              parameters: [
-                /// size
-                ShaderType(
-                  // resolution
-                  shaderType: EShaderDataType.float2Shader,
-                  value: [
-                    size.width,
-                    size.height,
-                  ],
-                ),
-
-                /// pulse speed
-                ShaderType(
-                  shaderType: EShaderDataType.floatShader,
-                  value:
-                      _controller.lastElapsedDuration!.inMilliseconds / 1000.0,
-                ),
-              ],
+              controller: _controller,
             ),
             child: child,
           );
@@ -101,4 +83,41 @@ class _BuildSelectedCheckState extends State<BuildSelectedCheck>
       ),
     );
   }
+}
+
+class _ShaderBuildSelectedCheckPainter extends CustomPainter {
+  final FragmentShader shader;
+  final AnimationController controller;
+
+  const _ShaderBuildSelectedCheckPainter({
+    super.repaint,
+    required this.shader,
+    required this.controller,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    shader.setFloat(
+      0,
+      size.width,
+    );
+
+    shader.setFloat(
+      1,
+      size.height,
+    );
+    shader.setFloat(
+      2,
+      controller.lastElapsedDuration!.inMilliseconds / 1000,
+    );
+    canvas.drawRect(
+      Offset.zero & size,
+      Paint()..shader = shader,
+    );
+  }
+
+  @override
+  bool shouldRepaint(
+    covariant CustomPainter oldDelegate,
+  ) => false;
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 
 import '../../../../../../core/resources/app_shader.dart';
-import '../../../../../../core/utils/shader_painter.dart';
 
 class AnimatedGradientBackground extends StatefulWidget {
   final Widget child;
@@ -24,20 +23,22 @@ class _AnimatedGradientBackgroundState extends State<AnimatedGradientBackground>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(
-        seconds: 100000, // Very long duration for smooth continuous animation
-      ),
-    )
-      ..repeat()
-      ..addListener(
-        () {
-          if (mounted) {
-            setState(() {});
-          }
-        },
-      );
+    _controller =
+        AnimationController(
+            vsync: this,
+            duration: const Duration(
+              seconds:
+                  100000, // Very long duration for smooth continuous animation
+            ),
+          )
+          ..repeat()
+          ..addListener(
+            () {
+              if (mounted) {
+                setState(() {});
+              }
+            },
+          );
   }
 
   @override
@@ -51,22 +52,9 @@ class _AnimatedGradientBackgroundState extends State<AnimatedGradientBackground>
     return ShaderBuilder(
       (context, shader, child) {
         return CustomPaint(
-          painter: ShaderPainter(
-            repaint: _controller,
+          painter: _ShaderAnimatedBackgroundPainter(
             shader: shader,
-            parameters: [
-              ShaderType(
-                shaderType: EShaderDataType.float2Shader,
-                value: [
-                  MediaQuery.of(context).size.width,
-                  MediaQuery.of(context).size.height,
-                ],
-              ),
-              ShaderType(
-                shaderType: EShaderDataType.floatShader,
-                value: _controller.lastElapsedDuration!.inMilliseconds / 1000,
-              ),
-            ],
+            controller: _controller,
           ),
           child: child,
         );
@@ -75,4 +63,41 @@ class _AnimatedGradientBackgroundState extends State<AnimatedGradientBackground>
       child: widget.child,
     );
   }
+}
+
+class _ShaderAnimatedBackgroundPainter extends CustomPainter {
+  final FragmentShader shader;
+  final AnimationController controller;
+
+  const _ShaderAnimatedBackgroundPainter({
+    super.repaint,
+    required this.shader,
+    required this.controller,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    shader.setFloat(
+      0,
+      size.width,
+    );
+
+    shader.setFloat(
+      1,
+      size.height,
+    );
+    shader.setFloat(
+      2,
+      controller.lastElapsedDuration!.inMilliseconds / 1000,
+    );
+    canvas.drawRect(
+      Offset.zero & size,
+      Paint()..shader = shader,
+    );
+  }
+
+  @override
+  bool shouldRepaint(
+    covariant CustomPainter oldDelegate,
+  ) => false;
 }

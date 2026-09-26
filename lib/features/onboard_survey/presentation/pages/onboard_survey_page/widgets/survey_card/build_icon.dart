@@ -3,7 +3,6 @@ import 'package:flutter_shaders/flutter_shaders.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../../../core/resources/app_shader.dart';
-import '../../../../../../../core/utils/shader_painter.dart';
 
 class BuildIcon extends StatefulWidget {
   final List<Color> colors;
@@ -79,49 +78,10 @@ class _BuildIconState extends State<BuildIcon>
             : ShaderBuilder(
                 (context, shader, child) {
                   return CustomPaint(
-                    painter: ShaderPainter(
-                      repaint: _animationController,
+                    painter: _ShaderIconPainter(
                       shader: shader,
-                      parameters: [
-                        /// resolution
-                        ShaderType(
-                          shaderType: EShaderDataType.float2Shader,
-                          value: [
-                            widget.width,
-                            widget.height,
-                          ],
-                        ),
-
-                        /// time
-                        ShaderType(
-                          shaderType: EShaderDataType.floatShader,
-                          value:
-                              _animationController
-                                  .lastElapsedDuration!
-                                  .inMilliseconds /
-                              1000,
-                        ),
-
-                        /// color1
-                        ShaderType(
-                          shaderType: EShaderDataType.float3Shader,
-                          value: [
-                            widget.colors.first.r,
-                            widget.colors.first.g,
-                            widget.colors.first.b,
-                          ],
-                        ),
-
-                        /// color2
-                        ShaderType(
-                          shaderType: EShaderDataType.float3Shader,
-                          value: [
-                            widget.colors[1].r,
-                            widget.colors[1].g,
-                            widget.colors[1].b,
-                          ],
-                        ),
-                      ],
+                      controller: _animationController,
+                      colors: widget.colors,
                     ),
                     child: child,
                   );
@@ -152,4 +112,72 @@ class _BuildIconState extends State<BuildIcon>
       ),
     );
   }
+}
+
+class _ShaderIconPainter extends CustomPainter {
+  final FragmentShader shader;
+  final AnimationController controller;
+  final List<Color> colors;
+
+  const _ShaderIconPainter({
+    super.repaint,
+    required this.shader,
+    required this.controller,
+    required this.colors,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    shader.setFloat(
+      0,
+      size.width,
+    );
+
+    shader.setFloat(
+      1,
+      size.height,
+    );
+    shader.setFloat(
+      2,
+      controller.lastElapsedDuration!.inMilliseconds / 1000,
+    );
+
+    /// color1
+    shader.setFloat(
+      3,
+      colors.first.r,
+    );
+    shader.setFloat(
+      4,
+      colors.first.g,
+    );
+    shader.setFloat(
+      5,
+      colors.first.b,
+    );
+
+    /// color2
+    shader.setFloat(
+      6,
+      colors[1].r,
+    );
+    shader.setFloat(
+      7,
+      colors[1].g,
+    );
+    shader.setFloat(
+      8,
+      colors[1].b,
+    );
+
+    canvas.drawRect(
+      Offset.zero & size,
+      Paint()..shader = shader,
+    );
+  }
+
+  @override
+  bool shouldRepaint(
+    covariant CustomPainter oldDelegate,
+  ) => false;
 }

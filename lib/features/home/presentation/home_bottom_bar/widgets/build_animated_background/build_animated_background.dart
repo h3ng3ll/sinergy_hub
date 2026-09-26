@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 
 import '../../../../../../core/resources/app_shader.dart';
-import '../../../../../../core/utils/shader_painter.dart';
 
 class BuildAnimatedBackground extends StatefulWidget {
   final Widget child;
@@ -27,21 +26,13 @@ class _BuildAnimatedBackgroundState extends State<BuildAnimatedBackground>
   void initState() {
     _controller =
         AnimationController(
-            vsync: this,
-            duration: const Duration(
-              seconds: 5,
-            ),
-          )
-          ..repeat(
-            reverse: true,
-          )
-          ..addListener(
-            () {
-              if (mounted) {
-                setState(() {});
-              }
-            },
-          );
+          vsync: this,
+          duration: const Duration(
+            seconds: 5,
+          ),
+        )..repeat(
+          reverse: true,
+        );
 
     super.initState();
   }
@@ -57,24 +48,29 @@ class _BuildAnimatedBackgroundState extends State<BuildAnimatedBackground>
     return ShaderBuilder(
       (context, shader, child) {
         return CustomPaint(
-          painter: ShaderPainter(
-            repaint: _controller,
+          size: MediaQuery.of(context).size,
+          painter: _ShaderBackgroundPainter(
             shader: shader,
-            parameters: [
-              ShaderType(
-                shaderType: EShaderDataType.floatShader,
-                value: _controller.lastElapsedDuration!.inMilliseconds / 1000,
-              ),
-              ShaderType(
-                shaderType: EShaderDataType.floatShader,
-                value: MediaQuery.of(context).size.width,
-              ),
-              ShaderType(
-                shaderType: EShaderDataType.floatShader,
-                value: MediaQuery.of(context).size.height,
-              ),
-            ],
+            controller: _controller,
           ),
+          // painter: ShaderPainter(
+          //   repaint: _controller,
+          //   shader: shader,
+          //   parameters: [
+          //     ShaderType(
+          //       shaderType: EShaderDataType.floatShader,
+          //       value: _controller.lastElapsedDuration!.inMilliseconds / 1000,
+          //     ),
+          //     ShaderType(
+          //       shaderType: EShaderDataType.floatShader,
+          //       value: width,
+          //     ),
+          //     ShaderType(
+          //       shaderType: EShaderDataType.floatShader,
+          //       value: height,
+          //     ),
+          //   ],
+          // ),
           child: child,
         );
       },
@@ -85,4 +81,39 @@ class _BuildAnimatedBackgroundState extends State<BuildAnimatedBackground>
       ),
     );
   }
+}
+
+class _ShaderBackgroundPainter extends CustomPainter {
+  final FragmentShader shader;
+  final AnimationController controller;
+
+  const _ShaderBackgroundPainter({
+    super.repaint,
+    required this.shader,
+    required this.controller,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    shader.setFloat(
+      0,
+      controller.lastElapsedDuration!.inMilliseconds / 1000,
+    );
+
+    shader.setFloat(
+      1,
+      size.width,
+    );
+    shader.setFloat(
+      2,
+      size.height,
+    );
+    canvas.drawRect(
+      Offset.zero & size,
+      Paint()..shader = shader,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
