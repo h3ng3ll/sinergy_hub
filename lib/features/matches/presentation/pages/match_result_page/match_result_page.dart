@@ -19,6 +19,8 @@ import '../../../domain/usecases/mark_as_notified_match_use_case.dart';
 import '../../bloc/match_result_bloc/match_result_bloc.dart';
 import '../discovery_page/widgets/build_has_match/widgets/build_match_avatar.dart';
 import 'widgets/animated_gradient_background.dart';
+import 'widgets/build_avatars_row.dart';
+import 'widgets/build_heart.dart';
 
 class MatchResultPage extends StatefulWidget {
   final String matchId;
@@ -151,16 +153,17 @@ class _MatchResultPageState extends State<MatchResultPage> {
                           ),
                           child: SingleChildScrollView(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 24.0),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 24.0,
+                              ),
                               child: Column(
                                 children: [
                                   const SizedBox(height: 20),
                                   // User Avatars Row
-                                  _buildAvatarsRow(
-                                    context,
-                                    screenWidth,
+                                  BuildAvatarsRow(
                                     matchedUser: match.user,
                                     currentUser: state.user,
+                                    screenWidth: screenWidth,
                                   ),
                                   Gap(
                                     ResponsiveHelper.responsiveSpacing(
@@ -173,11 +176,12 @@ class _MatchResultPageState extends State<MatchResultPage> {
                                     'You + ${match.user.firstName}',
                                     style: textTheme.bold24.copyWith(
                                       color: AppColors.white.value,
-                                      fontSize: ResponsiveHelper.responsiveFontSize(
-                                        screenWidth,
-                                        32.0,
-                                        maxFontSize: 48,
-                                      ),
+                                      fontSize:
+                                          ResponsiveHelper.responsiveFontSize(
+                                            screenWidth,
+                                            32.0,
+                                            maxFontSize: 48,
+                                          ),
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
@@ -190,12 +194,15 @@ class _MatchResultPageState extends State<MatchResultPage> {
                                   Text(
                                     'Perfect Co-founder Match!',
                                     style: textTheme.medium16.copyWith(
-                                      color: AppColors.white.value.withValues(alpha: 0.9),
-                                      fontSize: ResponsiveHelper.responsiveFontSize(
-                                        screenWidth,
-                                        18.0,
-                                        maxFontSize: 24,
+                                      color: AppColors.white.value.withValues(
+                                        alpha: 0.9,
                                       ),
+                                      fontSize:
+                                          ResponsiveHelper.responsiveFontSize(
+                                            screenWidth,
+                                            18.0,
+                                            maxFontSize: 24,
+                                          ),
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
@@ -222,26 +229,32 @@ class _MatchResultPageState extends State<MatchResultPage> {
                                       ),
                                       Padding(
                                         padding: EdgeInsets.symmetric(
-                                          horizontal: ResponsiveHelper.responsiveSpacing(
-                                            screenWidth,
-                                            12.0,
-                                          ),
+                                          horizontal:
+                                              ResponsiveHelper.responsiveSpacing(
+                                                screenWidth,
+                                                12.0,
+                                              ),
                                         ),
                                         child: Icon(
                                           Icons.add,
-                                          color: AppColors.white.value.withValues(alpha: 0.8),
-                                          size: ResponsiveHelper.responsiveIconSize(
-                                            screenWidth,
-                                            20.0,
-                                            maxSize: 28,
-                                          ),
+                                          color: AppColors.white.value
+                                              .withValues(alpha: 0.8),
+                                          size:
+                                              ResponsiveHelper.responsiveIconSize(
+                                                screenWidth,
+                                                20.0,
+                                                maxSize: 28,
+                                              ),
                                         ),
                                       ),
                                       Flexible(
                                         child: _buildRoleBadge(
                                           state.user != null
                                               ? Specializations.get(
-                                                  state.user!.profiler.specialization,
+                                                  state
+                                                      .user!
+                                                      .profiler
+                                                      .specialization,
                                                 ).name
                                               : '',
                                           screenWidth,
@@ -300,81 +313,6 @@ class _MatchResultPageState extends State<MatchResultPage> {
     );
   }
 
-  Widget _buildAvatarsRow(
-    BuildContext context,
-    double screenWidth, {
-    required UserData matchedUser,
-    required UserData? currentUser,
-  }) {
-    final avatarSize = ResponsiveHelper.responsiveAvatarSize(
-      screenWidth,
-      110.0,
-      maxSize: 160,
-    );
-    final heartSize = ResponsiveHelper.responsiveIconSize(
-      screenWidth,
-      56.0,
-      maxSize: 80,
-    );
-    final heartIconSize = ResponsiveHelper.responsiveIconSize(
-      screenWidth,
-      32.0,
-      maxSize: 48,
-    );
-    final stackGap = ResponsiveHelper.responsiveSpacing(
-      screenWidth,
-      100.0,
-      maxSpacing: 140,
-    );
-
-    final Specialization matchedSpecialization = Specializations.get(
-      matchedUser.profiler.specialization,
-    );
-    final Specialization? currentSpecialization = currentUser != null
-        ? Specializations.get(currentUser.profiler.specialization)
-        : null;
-
-    return Stack(
-      alignment: Alignment.center,
-      clipBehavior: Clip.none,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            BuildMatchAvatar(
-              avatarUrl: matchedUser.avatarUrl,
-              specialization: matchedSpecialization,
-              size: avatarSize,
-            ),
-            Gap(stackGap),
-            if (currentSpecialization != null)
-              BuildMatchAvatar(
-                avatarUrl: currentUser?.avatarUrl,
-                specialization: currentSpecialization,
-                size: avatarSize,
-              ),
-          ],
-        ),
-        // Heart Icon in the middle
-        Positioned(
-          child: Container(
-            width: heartSize,
-            height: heartSize,
-            decoration: BoxDecoration(
-              color: AppColors.heartRed.value.withValues(alpha: 0.9),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.favorite,
-              color: AppColors.white.value,
-              size: heartIconSize,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildRoleBadge(
     String role,

@@ -1,5 +1,8 @@
 import 'dart:math' show min;
 
+import 'package:flutter/cupertino.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+
 /// Responsive breakpoint names matching the app's ResponsiveBreakpoints configuration
 abstract class BreakpointNames {
   static const String mobile = 'MOBILE';
@@ -34,6 +37,10 @@ class ResponsiveHelper {
   /// Returns true if the current screen is considered tablet or larger
   static bool isTablet(double screenWidth) {
     return screenWidth > 450;
+  }
+
+  static bool isMobile(BuildContext context) {
+    return ResponsiveBreakpoints.of(context).isMobile;
   }
 
   /// Calculates responsive padding based on screen width
