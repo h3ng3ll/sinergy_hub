@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../../../../core/models/exceptions.dart';
+import '../../../../core/services/logger_service.dart';
 import '../../../../core/utils/env/env.dart';
 import '../../domain/failures/subscription_failures.dart';
 import '../../domain/models/subscription_plan/subscription_plan.dart';
@@ -13,14 +14,17 @@ import '../../domain/repositories/i_subscription_repository.dart';
 /// Must match the entitlement identifier configured in the RevenueCat
 /// dashboard exactly — this project's dashboard uses `hengell_pro`, not the
 /// generic `premium` placeholder. See docs/subscription_backend_contract.md.
-const String kPremiumEntitlementId = 'hengell_pro';
+const String kPremiumEntitlementId = 'sinergyhub_pro';
 
 class RevenueCatSubscriptionRepository implements ISubscriptionRepository {
   final Env _env;
+  final LoggerService _loggerService;
+  final String _offerName = 'synergy_hub_premium';
   bool _configured = false;
 
   RevenueCatSubscriptionRepository({
     required this._env,
+    required this._loggerService,
   });
 
   String get _apiKey => Platform.isIOS
@@ -73,14 +77,18 @@ class RevenueCatSubscriptionRepository implements ISubscriptionRepository {
     if (!isAvailable) return Right(PurchasesUnavailableFailure());
     try {
       final offerings = await Purchases.getOfferings();
-      final current = offerings.current;
+      final current = offerings.all[_offerName];
       if (current == null || current.availablePackages.isEmpty) {
         return Right(NoPlansFoundFailure());
       }
       return Left(
         current.availablePackages.map(_toSubscriptionPlan).toList(),
       );
-    } catch (_) {
+    } catch (e) {
+      _loggerService.error(
+        'Failed to get products',
+        error: e,
+      );
       return Right(NoPlansFoundFailure());
     }
   }
@@ -140,7 +148,8 @@ class RevenueCatSubscriptionRepository implements ISubscriptionRepository {
   }
 
   Package? _findPackage(Offerings offerings, String planId) {
-    for (final package in offerings.current?.availablePackages ?? const []) {
+    for (final package
+        in offerings.all[_offerName]?.availablePackages ?? const <Package>[]) {
       if (package.identifier == planId) return package;
     }
     return null;
