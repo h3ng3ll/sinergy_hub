@@ -9,6 +9,8 @@ part 'notification_event.dart';
 
 part 'notification_state.dart';
 
+part 'notification_state_ext.dart';
+
 part 'notification_bloc.freezed.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {

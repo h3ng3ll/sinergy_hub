@@ -5,10 +5,12 @@ import 'package:gap/gap.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
+import '../../../../../core/widgets/custom_loading_indicator.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import '../../../domain/models/notification/notification.dart';
 import '../../bloc/notification_bloc/notification_bloc.dart';
+import 'widgets/failed_notifications/failed_notifications.dart';
 import 'widgets/no_found_notifications/no_found_notifications.dart';
 import 'widgets/notification_builder/notification_builder.dart';
 
@@ -40,6 +42,14 @@ class _NotificationPageState extends State<NotificationPage> {
           color: AppColors.white.value,
           child: BlocBuilder<NotificationBloc, NotificationState>(
             builder: (context, state) {
+              if (state.isFailed) {
+                return FailedNotifications(
+                  errorMessage: state.errorMessage,
+                );
+              }
+              if (state.isLoading && state.notifications.isEmpty) {
+                return const CustomLoadingIndicator();
+              }
               if (state.notifications.isEmpty) {
                 return NoFoundNotifications();
               }
