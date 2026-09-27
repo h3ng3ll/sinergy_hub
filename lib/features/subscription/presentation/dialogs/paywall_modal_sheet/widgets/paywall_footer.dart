@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../core/resources/translations/app_localizations.dart';
-import '../../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../../core/widgets/btn/app_btn.dart';
 import '../../../../../../core/widgets/btn/custom_text_btn.dart';
 
@@ -12,6 +11,8 @@ class PaywallFooter extends StatelessWidget {
   final bool isBusy;
   final VoidCallback onContinue;
   final VoidCallback onRestore;
+  final VoidCallback onTermsOfUse;
+  final VoidCallback onPrivacyPolicy;
 
   const PaywallFooter({
     super.key,
@@ -19,15 +20,9 @@ class PaywallFooter extends StatelessWidget {
     required this.isBusy,
     required this.onContinue,
     required this.onRestore,
+    required this.onTermsOfUse,
+    required this.onPrivacyPolicy,
   });
-
-  void _onTermsOfUse(BuildContext context) {
-    TermsOfUsePageRoute().push(context);
-  }
-
-  void _onPrivacyPolicy(BuildContext context) {
-    PrivacyPolicyPageRoute().push(context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +68,11 @@ class PaywallFooter extends StatelessWidget {
           children: [
             CustomTextBtn(
               text: l10n.terms_of_use,
-              onPressed: () => _onTermsOfUse(context),
+              onPressed: onTermsOfUse,
             ),
             CustomTextBtn(
               text: l10n.privacy_policy,
-              onPressed: () => _onPrivacyPolicy(context),
+              onPressed: onPrivacyPolicy,
             ),
           ],
         ),

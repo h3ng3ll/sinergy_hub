@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/translations/app_localizations.dart';
+import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../domain/repositories/i_subscription_repository.dart';
 import '../../../domain/usecases/get_plans_use_case.dart';
@@ -49,6 +51,20 @@ class PaywallModalSheet extends StatelessWidget {
 
   void _onRestore(BuildContext context) {
     context.read<PaywallBloc>().add(const PaywallEvent.restore());
+  }
+
+  void _onTermsOfUse(BuildContext context) {
+    context.pop();
+    TermsOfUsePageRoute().push(
+      context,
+    );
+  }
+
+  void _onPrivacyPolicy(BuildContext context) {
+    context.pop();
+    PrivacyPolicyPageRoute().push(
+      context,
+    );
   }
 
   @override
@@ -118,6 +134,8 @@ class PaywallModalSheet extends StatelessWidget {
                           isBusy: state.isBusy,
                           onContinue: () => _onContinue(context),
                           onRestore: () => _onRestore(context),
+                          onTermsOfUse: () => _onTermsOfUse(context),
+                          onPrivacyPolicy: () => _onPrivacyPolicy(context),
                         ),
                       ),
                     ],

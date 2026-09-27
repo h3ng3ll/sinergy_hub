@@ -80,15 +80,6 @@ class _LikedYouPageState extends State<LikedYouPage> {
         listener: (context, state) => _onPremiumChanged(),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            title: Text(
-              l10n.liked_you_title,
-              style: textTheme.bold22.copyWith(
-                color: AppColors.white.value,
-              ),
-            ),
-          ),
           body: BlocBuilder<LikedYouBloc, LikedYouState>(
             builder: (context, state) {
               if (state.isFailed && state.isEmpty) {

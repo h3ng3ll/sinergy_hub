@@ -24,6 +24,7 @@ import 'core/services/firebase/firebase_messaging_service.dart';
 import 'core/services/google_sign_in_service/google_sign_in_service.dart';
 import 'core/services/local_notification_service.dart';
 import 'core/utils/env/env.dart';
+import 'core/widgets/custom_scroll_behavior.dart';
 import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'features/chat/domain/services/i_presence_service.dart';
 import 'features/connectivity/presentation/bloc/connectivity_bloc/connectivity_bloc.dart';
@@ -231,6 +232,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           supportedLocales: AppLocale.supportedLocales,
           locale: AppLocale.startLocale,
           routerConfig: _router,
+          scrollBehavior: CustomCustomScrollBehavior(),
           debugShowCheckedModeBanner: false,
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
