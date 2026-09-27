@@ -148,6 +148,10 @@ class FirebaseAuthRepository extends IAuthRepository {
       }
       return Right(FailedSignWithGoogle());
     } catch (e) {
+      _loggerService.error(
+        'Failed sign in ${e.toString()}',
+        error: e,
+      );
       return Right(FailedSignWithGoogle());
     }
   }
@@ -374,7 +378,7 @@ class FirebaseAuthRepository extends IAuthRepository {
       );
     } catch (e) {
       _loggerService.error(
-        'Auth with Apple Android',
+        'Auth with Apple Android $e',
         error: e,
       );
       return Right(
