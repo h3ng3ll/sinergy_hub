@@ -2,12 +2,15 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../domain/exception/daily_match_limit_exceeded_exception.dart';
 import '../../../domain/exception/liked_you_failures.dart';
 import '../../../domain/models/liked_you/liked_you_item.dart';
 import '../../../domain/models/liked_you/liked_you_quota.dart';
 import '../../../domain/models/liked_you_pg_state/liked_you_pg_state.dart';
+import '../../../domain/usecases/create_user_matches_use_case.dart';
 import '../../../domain/usecases/get_liked_you_use_case.dart';
 import '../../../domain/usecases/watch_liked_you_changes_use_case.dart';
+import '../tinder_card_cubit/tinder_card_cubit.dart';
 
 part 'liked_you_event.dart';
 
@@ -20,10 +23,12 @@ part 'liked_you_bloc.freezed.dart';
 class LikedYouBloc extends Bloc<LikedYouEvent, LikedYouState> {
   final GetLikedYouUseCase _getLikedYouUseCase;
   final WatchLikedYouChangesUseCase _watchLikedYouChangesUseCase;
+  final CreateUserMatchesUseCase _createUserMatchesUseCase;
 
   LikedYouBloc({
     required this._getLikedYouUseCase,
     required this._watchLikedYouChangesUseCase,
+    required this._createUserMatchesUseCase,
   }) : super(const LikedYouState()) {
     on<_Load>(_load);
     on<_LoadMore>(
@@ -37,6 +42,68 @@ class LikedYouBloc extends Bloc<LikedYouEvent, LikedYouState> {
     on<_WatchChanges>(
       _watchChanges,
       transformer: restartable(),
+    );
+    on<_Respond>(_respond);
+  }
+
+  /// Like / reject an incoming like through the existing `matchUser`
+  /// callable. The card leaves the list optimistically, like the swipe deck's
+  /// `removeVisible`, and is restored at its old position if the call fails.
+  /// A like-back that completes the pair is picked up by the existing
+  /// two-way-match listener, which opens the match screen.
+  Future<void> _respond(_Respond event, Emitter<LikedYouState> emit) async {
+    final item = event.item;
+    final uid = item.uid;
+    if (uid == null || state.isResponding(item.likeId)) return;
+
+    final index = state.items.indexWhere((e) => e.likeId == item.likeId);
+    if (index == -1) return;
+
+    emit(
+      state.copyWith(
+        actionStatus: ELikedYouActionStatus.idle,
+        respondingIds: {...state.respondingIds, item.likeId},
+        likesState: state.likesState.copyWith(
+          items: [
+            for (final e in state.items)
+              if (e.likeId != item.likeId) e,
+          ],
+        ),
+      ),
+    );
+
+    final result = await _createUserMatchesUseCase.call(
+      status: event.status,
+      matchedID: uid,
+    );
+
+    final respondingIds = {...state.respondingIds}..remove(item.likeId);
+
+    result.fold(
+      (_) => emit(
+        state.copyWith(
+          respondingIds: respondingIds,
+        ),
+      ),
+      (failure) {
+        final items = [...state.items];
+        if (!items.any((e) => e.likeId == item.likeId)) {
+          items.insert(
+            index > items.length ? items.length : index,
+            item,
+          );
+        }
+        emit(
+          state.copyWith(
+            respondingIds: respondingIds,
+            likesState: state.likesState.copyWith(items: items),
+            errorMessage: failure.message,
+            actionStatus: failure is DailyMatchLimitExceededException
+                ? ELikedYouActionStatus.limitReached
+                : ELikedYouActionStatus.failed,
+          ),
+        );
+      },
     );
   }
 

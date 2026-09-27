@@ -407,7 +407,41 @@ match /likedYouMeta/{uid} {
 }
 ```
 
-## 12. Backend checklist
+## 12. Responding from the feed (like / reject)
+
+Unlocked cards carry **Like** and **Reject** buttons. Both call the
+**existing** `matchUser` callable, exactly as the swipe deck does. No new
+endpoint is needed:
+
+```json
+{ "matchId": "<liker uid>", "status": "liked" }   // or "reject"
+```
+
+`matchId` is the **liker's uid**. This is why unlocked items must carry `uid`
+(§5). Locked items have no `uid`, so the client shows no buttons on them, and
+the server must reject a `matchUser` call for a pair the viewer could only see
+locked.
+
+`matchUser` must, **in the same transaction** as the match-doc write:
+
+| Answer | Match doc | `likedYouMeta/{viewer}` |
+|---|---|---|
+| `liked` | `completeness: "twoWayMatch"`, viewer added to `answeredUids`, `pendingFor: null`, `alreadyNotified.<viewer>: false` and `alreadyNotified.<liker>: false` | Bumped (§11) |
+| `reject` | Viewer added to `answeredUids`, `pendingFor: null`. It must **never** become `twoWayMatch`. | Bumped (§11) |
+
+- `alreadyNotified.<viewer> == false` is what makes the client's existing
+  two-way-match listener open the match screen right after a like-back.
+- The daily like limit applies to like-backs exactly as to deck likes. It
+  keeps the legacy `{ "success": false, "status": "failed" }` response when
+  exceeded, because that is what the shared client use case parses. The client
+  puts the card back and opens the paywall.
+- Any thrown error puts the card back and shows an error message.
+
+Client behaviour: the card is removed **optimistically** on tap. It is
+restored at its original position only if `matchUser` fails. The following
+§11 signal then re-fetches the first page, which confirms the removal.
+
+## 13. Backend checklist
 
 - [ ] `matchUser` maintains `pendingFor` and `likedAt` on match docs (set on
   the first like, cleared on answer, delete or block). Existing
@@ -431,6 +465,9 @@ match /likedYouMeta/{uid} {
   server-only.
 - [ ] Per-viewer rate limit and structured logging, with no signed URLs in
   the logs.
+- [ ] `matchUser` handles feed responses per §12: it clears `pendingFor`, sets
+  `twoWayMatch` and `alreadyNotified` on a like-back, bumps `likedYouMeta`,
+  and refuses pairs that were only visible locked.
 - [ ] `likedYouMeta/{uid}` (`pendingCount`, `updatedAt`) is written in the same
   transaction as every feed-changing event in §11, coalesced to one bump per
   logical change. It has an owner-read, server-write rule. Existing users are

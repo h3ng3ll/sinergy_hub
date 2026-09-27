@@ -55,14 +55,15 @@ extension LikedYouEventPatterns on LikedYouEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Load value)?  load,TResult Function( _LoadMore value)?  loadMore,TResult Function( _Refresh value)?  refresh,TResult Function( _WatchChanges value)?  watchChanges,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Load value)?  load,TResult Function( _LoadMore value)?  loadMore,TResult Function( _Refresh value)?  refresh,TResult Function( _WatchChanges value)?  watchChanges,TResult Function( _Respond value)?  respond,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Load() when load != null:
 return load(_that);case _LoadMore() when loadMore != null:
 return loadMore(_that);case _Refresh() when refresh != null:
 return refresh(_that);case _WatchChanges() when watchChanges != null:
-return watchChanges(_that);case _:
+return watchChanges(_that);case _Respond() when respond != null:
+return respond(_that);case _:
   return orElse();
 
 }
@@ -80,14 +81,15 @@ return watchChanges(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Load value)  load,required TResult Function( _LoadMore value)  loadMore,required TResult Function( _Refresh value)  refresh,required TResult Function( _WatchChanges value)  watchChanges,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Load value)  load,required TResult Function( _LoadMore value)  loadMore,required TResult Function( _Refresh value)  refresh,required TResult Function( _WatchChanges value)  watchChanges,required TResult Function( _Respond value)  respond,}){
 final _that = this;
 switch (_that) {
 case _Load():
 return load(_that);case _LoadMore():
 return loadMore(_that);case _Refresh():
 return refresh(_that);case _WatchChanges():
-return watchChanges(_that);case _:
+return watchChanges(_that);case _Respond():
+return respond(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -104,14 +106,15 @@ return watchChanges(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Load value)?  load,TResult? Function( _LoadMore value)?  loadMore,TResult? Function( _Refresh value)?  refresh,TResult? Function( _WatchChanges value)?  watchChanges,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Load value)?  load,TResult? Function( _LoadMore value)?  loadMore,TResult? Function( _Refresh value)?  refresh,TResult? Function( _WatchChanges value)?  watchChanges,TResult? Function( _Respond value)?  respond,}){
 final _that = this;
 switch (_that) {
 case _Load() when load != null:
 return load(_that);case _LoadMore() when loadMore != null:
 return loadMore(_that);case _Refresh() when refresh != null:
 return refresh(_that);case _WatchChanges() when watchChanges != null:
-return watchChanges(_that);case _:
+return watchChanges(_that);case _Respond() when respond != null:
+return respond(_that);case _:
   return null;
 
 }
@@ -128,13 +131,14 @@ return watchChanges(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  load,TResult Function()?  loadMore,TResult Function()?  refresh,TResult Function()?  watchChanges,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  load,TResult Function()?  loadMore,TResult Function()?  refresh,TResult Function()?  watchChanges,TResult Function( LikedYouItem item,  TinderCardStatus status)?  respond,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Load() when load != null:
 return load();case _LoadMore() when loadMore != null:
 return loadMore();case _Refresh() when refresh != null:
 return refresh();case _WatchChanges() when watchChanges != null:
-return watchChanges();case _:
+return watchChanges();case _Respond() when respond != null:
+return respond(_that.item,_that.status);case _:
   return orElse();
 
 }
@@ -152,13 +156,14 @@ return watchChanges();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  load,required TResult Function()  loadMore,required TResult Function()  refresh,required TResult Function()  watchChanges,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  load,required TResult Function()  loadMore,required TResult Function()  refresh,required TResult Function()  watchChanges,required TResult Function( LikedYouItem item,  TinderCardStatus status)  respond,}) {final _that = this;
 switch (_that) {
 case _Load():
 return load();case _LoadMore():
 return loadMore();case _Refresh():
 return refresh();case _WatchChanges():
-return watchChanges();case _:
+return watchChanges();case _Respond():
+return respond(_that.item,_that.status);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +180,14 @@ return watchChanges();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  load,TResult? Function()?  loadMore,TResult? Function()?  refresh,TResult? Function()?  watchChanges,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  load,TResult? Function()?  loadMore,TResult? Function()?  refresh,TResult? Function()?  watchChanges,TResult? Function( LikedYouItem item,  TinderCardStatus status)?  respond,}) {final _that = this;
 switch (_that) {
 case _Load() when load != null:
 return load();case _LoadMore() when loadMore != null:
 return loadMore();case _Refresh() when refresh != null:
 return refresh();case _WatchChanges() when watchChanges != null:
-return watchChanges();case _:
+return watchChanges();case _Respond() when respond != null:
+return respond(_that.item,_that.status);case _:
   return null;
 
 }
@@ -318,9 +324,86 @@ String toString() {
 
 
 /// @nodoc
+
+
+class _Respond implements LikedYouEvent {
+  const _Respond({required this.item, required this.status});
+  
+
+ final  LikedYouItem item;
+ final  TinderCardStatus status;
+
+/// Create a copy of LikedYouEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$RespondCopyWith<_Respond> get copyWith => __$RespondCopyWithImpl<_Respond>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Respond&&(identical(other.item, item) || other.item == item)&&(identical(other.status, status) || other.status == status));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,item,status);
+
+@override
+String toString() {
+  return 'LikedYouEvent.respond(item: $item, status: $status)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$RespondCopyWith<$Res> implements $LikedYouEventCopyWith<$Res> {
+  factory _$RespondCopyWith(_Respond value, $Res Function(_Respond) _then) = __$RespondCopyWithImpl;
+@useResult
+$Res call({
+ LikedYouItem item, TinderCardStatus status
+});
+
+
+$LikedYouItemCopyWith<$Res> get item;
+
+}
+/// @nodoc
+class __$RespondCopyWithImpl<$Res>
+    implements _$RespondCopyWith<$Res> {
+  __$RespondCopyWithImpl(this._self, this._then);
+
+  final _Respond _self;
+  final $Res Function(_Respond) _then;
+
+/// Create a copy of LikedYouEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? item = null,Object? status = null,}) {
+  return _then(_Respond(
+item: null == item ? _self.item : item // ignore: cast_nullable_to_non_nullable
+as LikedYouItem,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as TinderCardStatus,
+  ));
+}
+
+/// Create a copy of LikedYouEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$LikedYouItemCopyWith<$Res> get item {
+  
+  return $LikedYouItemCopyWith<$Res>(_self.item, (value) {
+    return _then(_self.copyWith(item: value));
+  });
+}
+}
+
+/// @nodoc
 mixin _$LikedYouState {
 
- LikedYouPgState get likesState; ELikedYouStatus get status; String get errorMessage;
+ LikedYouPgState get likesState; ELikedYouStatus get status; String get errorMessage; ELikedYouActionStatus get actionStatus; Set<String> get respondingIds;
 /// Create a copy of LikedYouState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -331,16 +414,16 @@ $LikedYouStateCopyWith<LikedYouState> get copyWith => _$LikedYouStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LikedYouState&&(identical(other.likesState, likesState) || other.likesState == likesState)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LikedYouState&&(identical(other.likesState, likesState) || other.likesState == likesState)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.actionStatus, actionStatus) || other.actionStatus == actionStatus)&&const DeepCollectionEquality().equals(other.respondingIds, respondingIds));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,likesState,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,likesState,status,errorMessage,actionStatus,const DeepCollectionEquality().hash(respondingIds));
 
 @override
 String toString() {
-  return 'LikedYouState(likesState: $likesState, status: $status, errorMessage: $errorMessage)';
+  return 'LikedYouState(likesState: $likesState, status: $status, errorMessage: $errorMessage, actionStatus: $actionStatus, respondingIds: $respondingIds)';
 }
 
 
@@ -351,7 +434,7 @@ abstract mixin class $LikedYouStateCopyWith<$Res>  {
   factory $LikedYouStateCopyWith(LikedYouState value, $Res Function(LikedYouState) _then) = _$LikedYouStateCopyWithImpl;
 @useResult
 $Res call({
- LikedYouPgState likesState, ELikedYouStatus status, String errorMessage
+ LikedYouPgState likesState, ELikedYouStatus status, String errorMessage, ELikedYouActionStatus actionStatus, Set<String> respondingIds
 });
 
 
@@ -368,12 +451,14 @@ class _$LikedYouStateCopyWithImpl<$Res>
 
 /// Create a copy of LikedYouState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? likesState = null,Object? status = null,Object? errorMessage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? likesState = null,Object? status = null,Object? errorMessage = null,Object? actionStatus = null,Object? respondingIds = null,}) {
   return _then(_self.copyWith(
 likesState: null == likesState ? _self.likesState : likesState // ignore: cast_nullable_to_non_nullable
 as LikedYouPgState,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ELikedYouStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,
+as String,actionStatus: null == actionStatus ? _self.actionStatus : actionStatus // ignore: cast_nullable_to_non_nullable
+as ELikedYouActionStatus,respondingIds: null == respondingIds ? _self.respondingIds : respondingIds // ignore: cast_nullable_to_non_nullable
+as Set<String>,
   ));
 }
 /// Create a copy of LikedYouState
@@ -464,10 +549,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage,  ELikedYouActionStatus actionStatus,  Set<String> respondingIds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LikedYouState() when $default != null:
-return $default(_that.likesState,_that.status,_that.errorMessage);case _:
+return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionStatus,_that.respondingIds);case _:
   return orElse();
 
 }
@@ -485,10 +570,10 @@ return $default(_that.likesState,_that.status,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage,  ELikedYouActionStatus actionStatus,  Set<String> respondingIds)  $default,) {final _that = this;
 switch (_that) {
 case _LikedYouState():
-return $default(_that.likesState,_that.status,_that.errorMessage);}
+return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionStatus,_that.respondingIds);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -502,10 +587,10 @@ return $default(_that.likesState,_that.status,_that.errorMessage);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage,  ELikedYouActionStatus actionStatus,  Set<String> respondingIds)?  $default,) {final _that = this;
 switch (_that) {
 case _LikedYouState() when $default != null:
-return $default(_that.likesState,_that.status,_that.errorMessage);case _:
+return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionStatus,_that.respondingIds);case _:
   return null;
 
 }
@@ -517,12 +602,20 @@ return $default(_that.likesState,_that.status,_that.errorMessage);case _:
 
 
 class _LikedYouState implements LikedYouState {
-  const _LikedYouState({this.likesState = const LikedYouPgState(), this.status = ELikedYouStatus.loading, this.errorMessage = ''});
+  const _LikedYouState({this.likesState = const LikedYouPgState(), this.status = ELikedYouStatus.loading, this.errorMessage = '', this.actionStatus = ELikedYouActionStatus.idle, final  Set<String> respondingIds = const <String>{}}): _respondingIds = respondingIds;
   
 
 @override@JsonKey() final  LikedYouPgState likesState;
 @override@JsonKey() final  ELikedYouStatus status;
 @override@JsonKey() final  String errorMessage;
+@override@JsonKey() final  ELikedYouActionStatus actionStatus;
+ final  Set<String> _respondingIds;
+@override@JsonKey() Set<String> get respondingIds {
+  if (_respondingIds is EqualUnmodifiableSetView) return _respondingIds;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableSetView(_respondingIds);
+}
+
 
 /// Create a copy of LikedYouState
 /// with the given fields replaced by the non-null parameter values.
@@ -534,16 +627,16 @@ _$LikedYouStateCopyWith<_LikedYouState> get copyWith => __$LikedYouStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LikedYouState&&(identical(other.likesState, likesState) || other.likesState == likesState)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LikedYouState&&(identical(other.likesState, likesState) || other.likesState == likesState)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.actionStatus, actionStatus) || other.actionStatus == actionStatus)&&const DeepCollectionEquality().equals(other._respondingIds, _respondingIds));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,likesState,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,likesState,status,errorMessage,actionStatus,const DeepCollectionEquality().hash(_respondingIds));
 
 @override
 String toString() {
-  return 'LikedYouState(likesState: $likesState, status: $status, errorMessage: $errorMessage)';
+  return 'LikedYouState(likesState: $likesState, status: $status, errorMessage: $errorMessage, actionStatus: $actionStatus, respondingIds: $respondingIds)';
 }
 
 
@@ -554,7 +647,7 @@ abstract mixin class _$LikedYouStateCopyWith<$Res> implements $LikedYouStateCopy
   factory _$LikedYouStateCopyWith(_LikedYouState value, $Res Function(_LikedYouState) _then) = __$LikedYouStateCopyWithImpl;
 @override @useResult
 $Res call({
- LikedYouPgState likesState, ELikedYouStatus status, String errorMessage
+ LikedYouPgState likesState, ELikedYouStatus status, String errorMessage, ELikedYouActionStatus actionStatus, Set<String> respondingIds
 });
 
 
@@ -571,12 +664,14 @@ class __$LikedYouStateCopyWithImpl<$Res>
 
 /// Create a copy of LikedYouState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? likesState = null,Object? status = null,Object? errorMessage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? likesState = null,Object? status = null,Object? errorMessage = null,Object? actionStatus = null,Object? respondingIds = null,}) {
   return _then(_LikedYouState(
 likesState: null == likesState ? _self.likesState : likesState // ignore: cast_nullable_to_non_nullable
 as LikedYouPgState,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ELikedYouStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,
+as String,actionStatus: null == actionStatus ? _self.actionStatus : actionStatus // ignore: cast_nullable_to_non_nullable
+as ELikedYouActionStatus,respondingIds: null == respondingIds ? _self._respondingIds : respondingIds // ignore: cast_nullable_to_non_nullable
+as Set<String>,
   ));
 }
 

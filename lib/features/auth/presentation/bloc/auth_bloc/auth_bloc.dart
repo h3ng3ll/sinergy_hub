@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../domain/exception/user_canceled_sign_in_exception.dart';
 import '../../../domain/repostories/i_auth_repository.dart';
 import '../../../domain/use_cases/apple_sign_in_use_case.dart';
 import '../../../domain/use_cases/logout_use_case.dart';
@@ -93,6 +94,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     res.fold(
       (_) {},
       (e) {
+        // Closing the account picker is not a failure: the user is simply
+        // still signed out, so no error message is shown.
+        if (e is UserCanceledSignInException) {
+          emit(
+            state.copyWith(
+              status: AuthStatus.logout,
+              errorMessage: '',
+            ),
+          );
+          return;
+        }
         emit(
           state.copyWith(
             status: AuthStatus.failed,

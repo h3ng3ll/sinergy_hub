@@ -32,7 +32,17 @@ class GoogleSignInServiceMobile {
         /// 🔥 тот же notifier
         authToken.value = token;
       }
-    });
+    }, onError: _onAuthenticationEventError);
+  }
+
+  /// `authenticate()` rethrows the same error to its caller, which already
+  /// maps it (a user cancel included) to a failure. The stream copy must be
+  /// consumed here, or it escapes as an uncaught error and is recorded by
+  /// Crashlytics as a fatal crash.
+  void _onAuthenticationEventError(Object error) {
+    if (kDebugMode) {
+      print('Google sign-in event error: $error');
+    }
   }
 
   Future<void> signOut() async {

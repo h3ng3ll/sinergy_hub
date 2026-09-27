@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 
 import '../../../../../../../core/utils/extensions/scroll_controller_ext.dart';
 import '../../../../../../../core/widgets/padding/horizontal_padding.dart';
-import '../../../../../../subscription/presentation/dialogs/paywall_modal_sheet/paywall_modal_sheet.dart';
 import '../../../../../domain/models/liked_you/liked_you_item.dart';
 import '../../../../../domain/models/liked_you/liked_you_quota.dart';
 import '../liked_you_card/liked_you_card.dart';
@@ -17,6 +16,10 @@ class LikedYouBuilder extends StatefulWidget {
   final bool isLoadMoreFailed;
   final VoidCallback onReachToEnd;
   final VoidCallback onRetryLoadMore;
+  final VoidCallback onShowPaywall;
+  final Function(LikedYouItem item) onLike;
+  final Function(LikedYouItem item) onReject;
+  final Set<String> respondingIds;
 
   const LikedYouBuilder({
     super.key,
@@ -26,6 +29,10 @@ class LikedYouBuilder extends StatefulWidget {
     required this.isLoadMoreFailed,
     required this.onReachToEnd,
     required this.onRetryLoadMore,
+    required this.onShowPaywall,
+    required this.onLike,
+    required this.onReject,
+    required this.respondingIds,
   });
 
   @override
@@ -34,7 +41,6 @@ class LikedYouBuilder extends StatefulWidget {
 
 class _LikedYouBuilderState extends State<LikedYouBuilder> {
   final ScrollController _scrollController = ScrollController();
-  bool _isPaywallOpen = false;
 
   @override
   void initState() {
@@ -52,13 +58,6 @@ class _LikedYouBuilderState extends State<LikedYouBuilder> {
     if (_scrollController.reachToEnd) {
       widget.onReachToEnd();
     }
-  }
-
-  Future<void> _onShowPaywall() async {
-    if (_isPaywallOpen) return;
-    _isPaywallOpen = true;
-    await PaywallModalSheet.show(context);
-    _isPaywallOpen = false;
   }
 
   @override
@@ -82,7 +81,7 @@ class _LikedYouBuilderState extends State<LikedYouBuilder> {
             return HorizontalPadding(
               child: LikedYouQuotaBanner(
                 quota: quota,
-                onUpgrade: _onShowPaywall,
+                onUpgrade: widget.onShowPaywall,
               ),
             );
           }
@@ -91,10 +90,15 @@ class _LikedYouBuilderState extends State<LikedYouBuilder> {
 
         if (localIndex < widget.items.length) {
           final item = widget.items[localIndex];
+          final isActionable = !item.isLocked && item.uid != null;
           return HorizontalPadding(
             child: LikedYouCard(
+              key: ValueKey(item.likeId),
               item: item,
-              onTapLocked: item.isLocked ? _onShowPaywall : null,
+              onTapLocked: item.isLocked ? widget.onShowPaywall : null,
+              onLike: isActionable ? () => widget.onLike(item) : null,
+              onReject: isActionable ? () => widget.onReject(item) : null,
+              isResponding: widget.respondingIds.contains(item.likeId),
             ),
           );
         }

@@ -24,4 +24,11 @@ extension LikedYouStateX on LikedYouState {
   bool get isEmpty => items.isEmpty;
 
   bool get hasLocked => items.any((item) => item.isLocked);
+
+  bool get isActionFailed => actionStatus == ELikedYouActionStatus.failed;
+
+  bool get isActionLimitReached =>
+      actionStatus == ELikedYouActionStatus.limitReached;
+
+  bool isResponding(String likeId) => respondingIds.contains(likeId);
 }

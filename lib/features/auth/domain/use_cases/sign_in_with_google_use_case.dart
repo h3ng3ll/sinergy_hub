@@ -9,10 +9,9 @@ class SignInWithGoogleUseCase {
   final AuthorizationUseCase _authorizationUseCase;
 
   SignInWithGoogleUseCase({
-    required IAuthRepository authRepository,
-    required AuthorizationUseCase authorizationUseCase,
-  })  : _authRepository = authRepository,
-        _authorizationUseCase = authorizationUseCase;
+    required this._authRepository,
+    required this._authorizationUseCase,
+  });
 
   /// register if success Update UID of user .
   Future<Either<void, Exceptions>> call() async {

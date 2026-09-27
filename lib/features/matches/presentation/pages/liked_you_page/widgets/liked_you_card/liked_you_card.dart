@@ -9,6 +9,7 @@ import '../../../../../../../core/widgets/build_image.dart';
 import '../../../../../../onboard_survey/domain/models/experiences/experiences.dart';
 import '../../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 import '../../../../../domain/models/liked_you/liked_you_item.dart';
+import '../liked_you_actions/liked_you_actions.dart';
 import '../locked_overlay/locked_overlay.dart';
 
 /// Cards show at most this many skill chips — the server already caps the
@@ -22,11 +23,17 @@ const double _kCardBorderRadius = 20.0;
 class LikedYouCard extends StatelessWidget {
   final LikedYouItem item;
   final VoidCallback? onTapLocked;
+  final VoidCallback? onLike;
+  final VoidCallback? onReject;
+  final bool isResponding;
 
   const LikedYouCard({
     super.key,
     required this.item,
     this.onTapLocked,
+    this.onLike,
+    this.onReject,
+    this.isResponding = false,
   });
 
   @override
@@ -37,6 +44,7 @@ class LikedYouCard extends StatelessWidget {
     final nameLine = _nameLine(item);
     final subtitleLine = _subtitleLine(item);
     final skills = item.skills.take(_kMaxDisplayedSkills).toList();
+    final hasActions = onLike != null && onReject != null;
 
     return GestureDetector(
       onTap: onTapLocked?.call,
@@ -59,7 +67,7 @@ class LikedYouCard extends StatelessWidget {
               ),
               Positioned(
                 left: 16.0,
-                right: 16.0,
+                right: hasActions ? 148.0 : 16.0,
                 bottom: 16.0,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,6 +115,15 @@ class LikedYouCard extends StatelessWidget {
                   ],
                 ),
               ),
+              if (hasActions)
+                Positioned(
+                  right: 16.0,
+                  bottom: 16.0,
+                  child: LikedYouActions(
+                    onLike: isResponding ? null : onLike,
+                    onReject: isResponding ? null : onReject,
+                  ),
+                ),
               if (item.isLocked) const LockedOverlay(),
             ],
           ),

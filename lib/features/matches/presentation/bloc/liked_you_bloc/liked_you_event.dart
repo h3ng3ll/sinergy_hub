@@ -9,4 +9,9 @@ class LikedYouEvent with _$LikedYouEvent {
   const factory LikedYouEvent.refresh() = _Refresh;
 
   const factory LikedYouEvent.watchChanges() = _WatchChanges;
+
+  const factory LikedYouEvent.respond({
+    required LikedYouItem item,
+    required TinderCardStatus status,
+  }) = _Respond;
 }
