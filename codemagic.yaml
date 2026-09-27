@@ -228,6 +228,7 @@ workflows:
           PROD_SERVER_CLIENT_ID=$PROD_SERVER_CLIENT_ID
           DEV_FIREBASE_WEB_PUSH_CERTIFICATE=$DEV_FIREBASE_WEB_PUSH_CERTIFICATE
           PROD_FIREBASE_WEB_PUSH_CERTIFICATE=$PROD_FIREBASE_WEB_PUSH_CERTIFICATE
+          PROD_REVENUECAT_APPLE_API_KEY=$PROD_REVENUECAT_APPLE_API_KEY
           FIREBASE_PROJECT_WEB_URL=synergyhub-a3e1b.web.app
           EOF
       - name: Test passing
@@ -280,3 +281,60 @@ workflows:
         # Configuration related to App Store (optional)
         # Note: This action is performed during post-processing.
         submit_to_app_store: false
+
+  upload_to_internal_test_aab:
+    name: Upload to Internal Test AAB
+    #    instance_type: linux
+    max_build_duration: 15
+    environment:
+      groups:
+        - env
+        - purchase
+      flutter: 3.44.4
+    scripts:
+      - name: Create firebase.json file
+        script: |
+          echo "$FIREBASE_JSON" > "$CM_BUILD_DIR/firebase.json"
+          echo "firebase.json contents:"
+          cat "$CM_BUILD_DIR/firebase.json"
+      - name: Create firebase_options.dart file
+        script: |
+          echo "$FIREBASE_OPTIONS" > "$CM_BUILD_DIR/lib/firebase_options.dart"
+          echo "firebase_options.dart contents:"
+          cat "$CM_BUILD_DIR/lib/firebase_options.dart"
+      - name: Restore key
+        script: |
+          echo "$KEY_PROPERTY" > android/key.properties
+          echo  "$UPLOAD_KEYSTORE_BASE64" | base64 --decode > android/app/upload-keystore.jks
+          pwd
+          ls -la android/key.properties
+          ls -la android/app/upload-keystore.jks
+      - name: Create env
+        script: |
+          cat << EOF > "$CM_BUILD_DIR/.env"
+          DEV_SERVER_CLIENT_ID=$DEV_SERVER_CLIENT_ID
+          PROD_SERVER_CLIENT_ID=$PROD_SERVER_CLIENT_ID
+          DEV_FIREBASE_WEB_PUSH_CERTIFICATE=$DEV_FIREBASE_WEB_PUSH_CERTIFICATE
+          PROD_FIREBASE_WEB_PUSH_CERTIFICATE=$PROD_FIREBASE_WEB_PUSH_CERTIFICATE
+          FIREBASE_PROJECT_WEB_URL=synergyhub-a3e1b.web.app
+          PROD_REVENUECAT_GOOGLE_API_KEY=$PROD_REVENUECAT_GOOGLE_API_KEY
+          EOF
+      - name: Clean Flutter project
+        script: |
+          flutter clean
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Flutter build appbundle
+        script: |
+          flutter build appbundle --release
+    artifacts:
+      - build/app/outputs/bundle/release/
+    publishing:
+      google_play:
+
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+
+        track: internal
+
+        release_name: Test AAB
