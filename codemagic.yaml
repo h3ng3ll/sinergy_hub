@@ -337,9 +337,9 @@ workflows:
           flutter pub get
       - name: Flutter build appbundle
         script: |
-          flutter build appbundle --release
+          flutter build appbundle --release --flavor prod
     artifacts:
-      - build/app/outputs/bundle/release/
+      - build/app/outputs/bundle/prodRelease/*.aab
     publishing:
       google_play:
 
