@@ -405,6 +405,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Premium active'**
   String get premium_active;
+
+  /// No description provided for @liked_you_tab_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Liked you'**
+  String get liked_you_tab_label;
+
+  /// No description provided for @liked_you_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Liked you'**
+  String get liked_you_title;
+
+  /// Free-user quota banner on the Liked you tab
+  ///
+  /// In en, this message translates to:
+  /// **'{remaining} of {limit} reveals left · resets {resetTime}'**
+  String liked_you_quota_banner(int remaining, int limit, String resetTime);
+
+  /// No description provided for @liked_you_locked_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to see who liked you'**
+  String get liked_you_locked_message;
+
+  /// No description provided for @liked_you_empty_title.
+  ///
+  /// In en, this message translates to:
+  /// **'No likes yet'**
+  String get liked_you_empty_title;
+
+  /// No description provided for @liked_you_failed_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load who liked you'**
+  String get liked_you_failed_title;
+
+  /// No description provided for @liked_you_retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get liked_you_retry;
+
+  /// No description provided for @liked_you_load_more_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load more · Retry'**
+  String get liked_you_load_more_failed;
+
+  /// No description provided for @liked_you_just_now.
+  ///
+  /// In en, this message translates to:
+  /// **'Liked just now'**
+  String get liked_you_just_now;
+
+  /// Relative time on a Liked you card
+  ///
+  /// In en, this message translates to:
+  /// **'Liked {time} ago'**
+  String liked_you_ago(String time);
 }
 
 class _AppLocalizationsDelegate

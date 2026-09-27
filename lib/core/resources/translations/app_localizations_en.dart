@@ -172,4 +172,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premium_active => 'Premium active';
+
+  @override
+  String get liked_you_tab_label => 'Liked you';
+
+  @override
+  String get liked_you_title => 'Liked you';
+
+  @override
+  String liked_you_quota_banner(int remaining, int limit, String resetTime) {
+    return '$remaining of $limit reveals left · resets $resetTime';
+  }
+
+  @override
+  String get liked_you_locked_message => 'Upgrade to see who liked you';
+
+  @override
+  String get liked_you_empty_title => 'No likes yet';
+
+  @override
+  String get liked_you_failed_title => 'Failed to load who liked you';
+
+  @override
+  String get liked_you_retry => 'Retry';
+
+  @override
+  String get liked_you_load_more_failed => 'Couldn\'t load more · Retry';
+
+  @override
+  String get liked_you_just_now => 'Liked just now';
+
+  @override
+  String liked_you_ago(String time) {
+    return 'Liked $time ago';
+  }
 }

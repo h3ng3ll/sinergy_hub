@@ -13,6 +13,7 @@ class ActionBtn extends StatelessWidget {
   final String? text;
   final BorderSide? border;
   final BorderRadius? borderRadius;
+  final bool _filled;
 
   const ActionBtn({
     super.key,
@@ -24,7 +25,25 @@ class ActionBtn extends StatelessWidget {
     this.text,
     this.border,
     this.borderRadius,
-  }) : assert(
+  }) : _filled = false,
+       assert(
+         text != null || child != null,
+       );
+
+  /// Solid [AppColorScheme.primary] background, so the [AppColorScheme.onPrimary]
+  /// label stays readable on light or gradient surfaces.
+  const ActionBtn.filled({
+    super.key,
+    required this.onPressed,
+    this.child,
+    this.padding,
+    this.colors = const {},
+    this.text,
+    this.border,
+    this.borderRadius,
+  }) : _filled = true,
+       anyStateColor = null,
+       assert(
          text != null || child != null,
        );
 
@@ -58,6 +77,9 @@ class ActionBtn extends StatelessWidget {
             // }
             if (anyStateColor != null) {
               return anyStateColor!;
+            }
+            if (_filled) {
+              return colorScheme.primary;
             }
             return AppColors.white.value.withValues(
               alpha: 1,

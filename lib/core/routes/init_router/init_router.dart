@@ -16,6 +16,7 @@ import '../../../features/chat/presentation/pages/chat_shell/chat_shell.dart';
 import '../../../features/home/presentation/home_bottom_bar/home_bottom_bar.dart';
 import '../../../features/home/presentation/home_root/home_root.dart';
 import '../../../features/matches/presentation/pages/discovery_page/discovery_page.dart';
+import '../../../features/matches/presentation/pages/liked_you_page/liked_you_page.dart';
 import '../../../features/matches/presentation/pages/match_result_page/match_result_page.dart';
 import '../../../features/matches/presentation/pages/matches_page/matches_page.dart';
 import '../../../features/home/presentation/edit_profile_page/edit_profile_page.dart';
@@ -208,6 +209,13 @@ GoRouter initRouter({
                   routes: [
                     TypedGoRoute<DiscoveryPageRoute>(
                       path: '/discovery',
+                    ),
+                  ],
+                ),
+                TypedStatefulShellBranch(
+                  routes: [
+                    TypedGoRoute<LikedYouPageRoute>(
+                      path: '/liked-you',
                     ),
                   ],
                 ),
@@ -430,6 +438,15 @@ class DiscoveryPageRoute extends GoRouteData with $DiscoveryPageRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       DiscoveryPage(),
+    );
+  }
+}
+
+class LikedYouPageRoute extends GoRouteData with $LikedYouPageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      LikedYouPage(),
     );
   }
 }

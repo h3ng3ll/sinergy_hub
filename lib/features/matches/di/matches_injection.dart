@@ -3,16 +3,20 @@ import 'package:get_it/get_it.dart';
 
 import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../core/services/firebase/firebase_functions_service.dart';
+import '../../../core/services/logger_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../chat/domain/repositories/i_chat_repository.dart';
 import '../../user/data/services/user_service.dart';
 import '../../user/domain/repositories/i_user_read_repository.dart';
+import '../data/repositories/liked_you_functions_repository.dart';
 import '../data/repositories/user_matches_firebase_repository.dart';
+import '../domain/repositories/i_liked_you_repository.dart';
 import '../domain/repositories/i_matches_repository.dart';
 import '../domain/usecases/create_user_matches_use_case.dart';
 import '../domain/usecases/find_match_chat_id_use_case.dart';
 import '../domain/usecases/get_a_user_match_income_use_case.dart';
 import '../domain/usecases/get_excluded_matches_use_case.dart';
+import '../domain/usecases/get_liked_you_use_case.dart';
 import '../domain/usecases/get_match_by_id_use_case.dart';
 import '../domain/usecases/look_for_matches_use_case.dart';
 import '../domain/usecases/listen_two_way_match_use_case.dart';
@@ -81,6 +85,18 @@ void initMatchingFeature(GetIt getIt) {
   getIt.registerFactory<TinderCardCubit>(
     () => TinderCardCubit(
       size: const Size(300.0, 590.0),
+    ),
+  );
+
+  getIt.registerLazySingleton<ILikedYouRepository>(
+    () => LikedYouFunctionsRepository(
+      firebaseFunctionsService: getIt<FirebaseFunctionsService>(),
+      loggerService: getIt<LoggerService>(),
+    ),
+  );
+  getIt.registerLazySingleton<GetLikedYouUseCase>(
+    () => GetLikedYouUseCase(
+      likedYouRepository: getIt<ILikedYouRepository>(),
     ),
   );
 }

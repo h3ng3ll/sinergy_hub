@@ -54,5 +54,37 @@
   "terms_of_use": "Terms of Use",
   "privacy_policy": "Privacy Policy",
   "premium_upgrade": "Upgrade to Premium",
-  "premium_active": "Premium active"
+  "premium_active": "Premium active",
+  "liked_you_tab_label": "Liked you",
+  "liked_you_title": "Liked you",
+  "liked_you_quota_banner": "{remaining} of {limit} reveals left · resets {resetTime}",
+  "@liked_you_quota_banner": {
+    "description": "Free-user quota banner on the Liked you tab",
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      },
+      "resetTime": {
+        "type": "String"
+      }
+    }
+  },
+  "liked_you_locked_message": "Upgrade to see who liked you",
+  "liked_you_empty_title": "No likes yet",
+  "liked_you_failed_title": "Failed to load who liked you",
+  "liked_you_retry": "Retry",
+  "liked_you_load_more_failed": "Couldn't load more · Retry",
+  "liked_you_just_now": "Liked just now",
+  "liked_you_ago": "Liked {time} ago",
+  "@liked_you_ago": {
+    "description": "Relative time on a Liked you card",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

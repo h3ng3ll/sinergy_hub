@@ -92,6 +92,13 @@ class HomeAppBarWeb extends CustomAppBar {
                     InkWell(
                       onTap: () => onTapItem(1),
                       child: Icon(
+                        Icons.volunteer_activism,
+                        color: colorScheme.secondary,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () => onTapItem(2),
+                      child: Icon(
                         Icons.favorite,
                         color: colorScheme.secondary,
                       ),

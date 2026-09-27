@@ -19,16 +19,7 @@ mixin _$Matches {
 /// matched as liked and other side received as none
 /// If other size confirm both completeness must
 /// transform to twoWayMatch
- EMatchesCompleteness get completeness; DateTime get time;// Vision Align — насколько совпадают цели,
-// видение, подходы двух людей.
-// Можно оценивать по описаниям профилей / текстам о себе. 0 -10
- int? get align;/// Берём Experience.experience (junior, middle, senior, leadExpert).
-// Считаем совпадение, например:
-// 10/10 — один уровень разницы (например middle-middle)
-// 8/10 — разница на один уровень (junior-middle)
-// 5/10 — разница на два уровня
-// 0/10 — разница на три уровня
-// Можно учесть rangeExperience (годы опыта) для тонкой настройки.
+ EMatchesCompleteness get completeness; DateTime get time; int? get align;/// Берём Experience.experience (junior, middle, senior, leadExpert).
  int? get experienceScore; int? get skillsMatch; int? get visionScore;
 /// Create a copy of Matches
 /// with the given fields replaced by the non-null parameter values.
@@ -246,17 +237,8 @@ class _Matches implements Matches {
 /// transform to twoWayMatch
 @override@JsonKey() final  EMatchesCompleteness completeness;
 @override final  DateTime time;
-// Vision Align — насколько совпадают цели,
-// видение, подходы двух людей.
-// Можно оценивать по описаниям профилей / текстам о себе. 0 -10
 @override final  int? align;
 /// Берём Experience.experience (junior, middle, senior, leadExpert).
-// Считаем совпадение, например:
-// 10/10 — один уровень разницы (например middle-middle)
-// 8/10 — разница на один уровень (junior-middle)
-// 5/10 — разница на два уровня
-// 0/10 — разница на три уровня
-// Можно учесть rangeExperience (годы опыта) для тонкой настройки.
 @override final  int? experienceScore;
 @override final  int? skillsMatch;
 @override final  int? visionScore;

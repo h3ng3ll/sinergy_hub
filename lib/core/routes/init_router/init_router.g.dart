@@ -13,30 +13,37 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
   routes: [
     GoRouteData.$route(
       path: '/',
+      hasOverriddenOnExit: false,
       factory: $AuthorizationPageRoute._fromState,
       routes: [
         GoRouteData.$route(
           path: '/sign-up',
+          hasOverriddenOnExit: false,
           factory: $RegisterPageRoute._fromState,
         ),
         GoRouteData.$route(
           path: '/sign-in',
+          hasOverriddenOnExit: false,
           factory: $LoginPageRoute._fromState,
         ),
         GoRouteData.$route(
           path: '/reset-password',
+          hasOverriddenOnExit: false,
           factory: $ResetPasswordPageRoute._fromState,
         ),
         GoRouteData.$route(
           path: '/privacy-policy',
+          hasOverriddenOnExit: false,
           factory: $PrivacyPolicyPageRoute._fromState,
         ),
         GoRouteData.$route(
           path: '/support',
+          hasOverriddenOnExit: false,
           factory: $SupportPageRoute._fromState,
         ),
         GoRouteData.$route(
           path: '/terms-of-use',
+          hasOverriddenOnExit: false,
           factory: $TermsOfUsePageRoute._fromState,
         ),
       ],
@@ -46,10 +53,12 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
       routes: [
         GoRouteData.$route(
           path: '/onboard',
+          hasOverriddenOnExit: false,
           factory: $OnboardSurveyPageRoute._fromState,
         ),
         GoRouteData.$route(
           path: '/onboard-about',
+          hasOverriddenOnExit: false,
           factory: $OnboardAboutYouPageRoute._fromState,
         ),
       ],
@@ -66,6 +75,7 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                   routes: [
                     GoRouteData.$route(
                       path: '/discovery',
+                      hasOverriddenOnExit: false,
                       factory: $DiscoveryPageRoute._fromState,
                     ),
                   ],
@@ -73,7 +83,17 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                 StatefulShellBranchData.$branch(
                   routes: [
                     GoRouteData.$route(
+                      path: '/liked-you',
+                      hasOverriddenOnExit: false,
+                      factory: $LikedYouPageRoute._fromState,
+                    ),
+                  ],
+                ),
+                StatefulShellBranchData.$branch(
+                  routes: [
+                    GoRouteData.$route(
                       path: '/matches',
+                      hasOverriddenOnExit: false,
                       factory: $MatchesPageRoute._fromState,
                     ),
                   ],
@@ -86,6 +106,7 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
           routes: [
             GoRouteData.$route(
               path: '/match-result',
+              hasOverriddenOnExit: false,
               factory: $MatchResultPageRoute._fromState,
             ),
             ShellRouteData.$route(
@@ -93,20 +114,24 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
               routes: [
                 GoRouteData.$route(
                   path: '/matches/:chatId',
+                  hasOverriddenOnExit: false,
                   factory: $ChatPageRoute._fromState,
                   routes: [
                     GoRouteData.$route(
                       path: ':userId',
+                      hasOverriddenOnExit: false,
                       factory: $UserProfilePageRoute._fromState,
                       routes: [
                         GoRouteData.$route(
                           path: 'report',
+                          hasOverriddenOnExit: false,
                           factory: $ReportUserPageRoute._fromState,
                         ),
                       ],
                     ),
                     GoRouteData.$route(
                       path: '/',
+                      hasOverriddenOnExit: false,
                       factory: $ChatPageViewRoute._fromState,
                     ),
                   ],
@@ -115,24 +140,29 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
             ),
             GoRouteData.$route(
               path: '/edit-profile-page',
+              hasOverriddenOnExit: false,
               factory: $EditProfilePageRoute._fromState,
               routes: [
                 GoRouteData.$route(
                   path: 'looking-for-edit',
+                  hasOverriddenOnExit: false,
                   factory: $EditLookingForRoute._fromState,
                 ),
               ],
             ),
             GoRouteData.$route(
               path: '/profile',
+              hasOverriddenOnExit: false,
               factory: $ProfilePageRoute._fromState,
             ),
             GoRouteData.$route(
               path: '/notification',
+              hasOverriddenOnExit: false,
               factory: $NotificationPageRoute._fromState,
             ),
             GoRouteData.$route(
               path: '/settings',
+              hasOverriddenOnExit: false,
               factory: $SettingsPageRoute._fromState,
             ),
           ],
@@ -353,6 +383,27 @@ mixin $DiscoveryPageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/discovery');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $LikedYouPageRoute on GoRouteData {
+  static LikedYouPageRoute _fromState(GoRouterState state) =>
+      LikedYouPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/liked-you');
 
   @override
   void go(BuildContext context) => context.go(location);
@@ -629,6 +680,7 @@ mixin $SettingsPageRoute on GoRouteData {
 
 RouteBase get $noConnectionPageRoute => GoRouteData.$route(
   path: '/no-connection',
+  hasOverriddenOnExit: false,
   factory: $NoConnectionPageRoute._fromState,
 );
 

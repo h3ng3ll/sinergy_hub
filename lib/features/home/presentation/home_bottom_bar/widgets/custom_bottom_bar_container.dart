@@ -40,9 +40,15 @@ class CustomBottomBarContainer extends StatelessWidget {
               ),
               CustomBottomBarItem(
                 onTapItem: () => onTapItem(1),
+                icon: Icons.volunteer_activism,
+                text: 'Liked you',
+                isSelected: selectedIndex == 1,
+              ),
+              CustomBottomBarItem(
+                onTapItem: () => onTapItem(2),
                 icon: Icons.favorite,
                 text: 'Matches',
-                isSelected: selectedIndex == 1,
+                isSelected: selectedIndex == 2,
               ),
               // CustomBottomBarItem(
               //   onTapItem: () => onTapItem(2),

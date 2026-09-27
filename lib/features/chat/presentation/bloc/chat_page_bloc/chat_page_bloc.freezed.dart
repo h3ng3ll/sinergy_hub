@@ -768,8 +768,7 @@ as bool,
 /// @nodoc
 mixin _$ChatPageState {
 
- String get chatId; List<ChatMessage> get messages; List<UserData> get users; UserData? get userData; Chat? get chat; ChatPageStatus get status;// @Default(true) bool isOnlineUser,
- dynamic get errorMessage;
+ String get chatId; List<ChatMessage> get messages; List<UserData> get users; UserData? get userData; Chat? get chat; ChatPageStatus get status; dynamic get errorMessage;
 /// Create a copy of ChatPageState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1006,7 +1005,6 @@ class _ChatPageState implements ChatPageState {
 @override final  UserData? userData;
 @override final  Chat? chat;
 @override@JsonKey() final  ChatPageStatus status;
-// @Default(true) bool isOnlineUser,
 @override@JsonKey() final  dynamic errorMessage;
 
 /// Create a copy of ChatPageState
