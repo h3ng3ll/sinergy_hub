@@ -98,5 +98,24 @@
         "type": "String"
       }
     }
+  },
+  "location_group_title": "Location",
+  "location_country_hint": "Country",
+  "location_city_hint": "City",
+  "location_use_my_location": "📍 Use my location",
+  "location_open_settings": "Open settings",
+  "location_open_location_settings": "Open Location Settings",
+  "filter_location_title": "Location",
+  "filter_location_city_option": "City",
+  "filter_location_distance_option": "Distance",
+  "filter_location_distance_locked": "Set your location in Edit Profile first",
+  "filter_location_radius_km": "{km} km",
+  "@filter_location_radius_km": {
+    "description": "Selected radius on the Home filter's Distance slider",
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
   }
 }

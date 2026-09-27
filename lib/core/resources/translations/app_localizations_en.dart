@@ -247,4 +247,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String liked_you_ago(String time) {
     return 'Liked $time ago';
   }
+
+  @override
+  String get location_group_title => 'Location';
+
+  @override
+  String get location_country_hint => 'Country';
+
+  @override
+  String get location_city_hint => 'City';
+
+  @override
+  String get location_use_my_location => '📍 Use my location';
+
+  @override
+  String get location_open_settings => 'Open settings';
+
+  @override
+  String get location_open_location_settings => 'Open Location Settings';
+
+  @override
+  String get filter_location_title => 'Location';
+
+  @override
+  String get filter_location_city_option => 'City';
+
+  @override
+  String get filter_location_distance_option => 'Distance';
+
+  @override
+  String get filter_location_distance_locked =>
+      'Set your location in Edit Profile first';
+
+  @override
+  String filter_location_radius_km(int km) {
+    return '$km km';
+  }
 }

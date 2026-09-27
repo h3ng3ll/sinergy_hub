@@ -15,7 +15,12 @@ T _$identity<T>(T value) => value;
 mixin _$UserDataPgState {
 
  int get startIndex; int get pageSize; bool get hasMore;/// Firebase field
- DocumentSnapshot? get lastDocument; Set<String> get excludedUids; List<UserData> get items;
+ DocumentSnapshot? get lastDocument;/// Opaque backend cursor, used when the page comes from a callable
+/// (`searchNearbyCandidates`, radius mode) instead of a Firestore query.
+ String? get cursor; Set<String> get excludedUids; List<UserData> get items;/// uid → distance in km. Populated by `getCandidateDistances` (place
+/// mode / no filter) or embedded directly in a radius-mode search
+/// response. A missing key means no distance is known for that uid.
+ Map<String, double> get distancesKm;
 /// Create a copy of UserDataPgState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +31,16 @@ $UserDataPgStateCopyWith<UserDataPgState> get copyWith => _$UserDataPgStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserDataPgState&&(identical(other.startIndex, startIndex) || other.startIndex == startIndex)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.lastDocument, lastDocument) || other.lastDocument == lastDocument)&&const DeepCollectionEquality().equals(other.excludedUids, excludedUids)&&const DeepCollectionEquality().equals(other.items, items));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserDataPgState&&(identical(other.startIndex, startIndex) || other.startIndex == startIndex)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.lastDocument, lastDocument) || other.lastDocument == lastDocument)&&(identical(other.cursor, cursor) || other.cursor == cursor)&&const DeepCollectionEquality().equals(other.excludedUids, excludedUids)&&const DeepCollectionEquality().equals(other.items, items)&&const DeepCollectionEquality().equals(other.distancesKm, distancesKm));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,startIndex,pageSize,hasMore,lastDocument,const DeepCollectionEquality().hash(excludedUids),const DeepCollectionEquality().hash(items));
+int get hashCode => Object.hash(runtimeType,startIndex,pageSize,hasMore,lastDocument,cursor,const DeepCollectionEquality().hash(excludedUids),const DeepCollectionEquality().hash(items),const DeepCollectionEquality().hash(distancesKm));
 
 @override
 String toString() {
-  return 'UserDataPgState(startIndex: $startIndex, pageSize: $pageSize, hasMore: $hasMore, lastDocument: $lastDocument, excludedUids: $excludedUids, items: $items)';
+  return 'UserDataPgState(startIndex: $startIndex, pageSize: $pageSize, hasMore: $hasMore, lastDocument: $lastDocument, cursor: $cursor, excludedUids: $excludedUids, items: $items, distancesKm: $distancesKm)';
 }
 
 
@@ -46,7 +51,7 @@ abstract mixin class $UserDataPgStateCopyWith<$Res>  {
   factory $UserDataPgStateCopyWith(UserDataPgState value, $Res Function(UserDataPgState) _then) = _$UserDataPgStateCopyWithImpl;
 @useResult
 $Res call({
- int startIndex, int pageSize, bool hasMore, DocumentSnapshot? lastDocument, Set<String> excludedUids, List<UserData> items
+ int startIndex, int pageSize, bool hasMore, DocumentSnapshot? lastDocument, String? cursor, Set<String> excludedUids, List<UserData> items, Map<String, double> distancesKm
 });
 
 
@@ -63,15 +68,17 @@ class _$UserDataPgStateCopyWithImpl<$Res>
 
 /// Create a copy of UserDataPgState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? startIndex = null,Object? pageSize = null,Object? hasMore = null,Object? lastDocument = freezed,Object? excludedUids = null,Object? items = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? startIndex = null,Object? pageSize = null,Object? hasMore = null,Object? lastDocument = freezed,Object? cursor = freezed,Object? excludedUids = null,Object? items = null,Object? distancesKm = null,}) {
   return _then(_self.copyWith(
 startIndex: null == startIndex ? _self.startIndex : startIndex // ignore: cast_nullable_to_non_nullable
 as int,pageSize: null == pageSize ? _self.pageSize : pageSize // ignore: cast_nullable_to_non_nullable
 as int,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
 as bool,lastDocument: freezed == lastDocument ? _self.lastDocument : lastDocument // ignore: cast_nullable_to_non_nullable
-as DocumentSnapshot?,excludedUids: null == excludedUids ? _self.excludedUids : excludedUids // ignore: cast_nullable_to_non_nullable
+as DocumentSnapshot?,cursor: freezed == cursor ? _self.cursor : cursor // ignore: cast_nullable_to_non_nullable
+as String?,excludedUids: null == excludedUids ? _self.excludedUids : excludedUids // ignore: cast_nullable_to_non_nullable
 as Set<String>,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
-as List<UserData>,
+as List<UserData>,distancesKm: null == distancesKm ? _self.distancesKm : distancesKm // ignore: cast_nullable_to_non_nullable
+as Map<String, double>,
   ));
 }
 
@@ -153,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int startIndex,  int pageSize,  bool hasMore,  DocumentSnapshot? lastDocument,  Set<String> excludedUids,  List<UserData> items)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int startIndex,  int pageSize,  bool hasMore,  DocumentSnapshot? lastDocument,  String? cursor,  Set<String> excludedUids,  List<UserData> items,  Map<String, double> distancesKm)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UsersDataPgState() when $default != null:
-return $default(_that.startIndex,_that.pageSize,_that.hasMore,_that.lastDocument,_that.excludedUids,_that.items);case _:
+return $default(_that.startIndex,_that.pageSize,_that.hasMore,_that.lastDocument,_that.cursor,_that.excludedUids,_that.items,_that.distancesKm);case _:
   return orElse();
 
 }
@@ -174,10 +181,10 @@ return $default(_that.startIndex,_that.pageSize,_that.hasMore,_that.lastDocument
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int startIndex,  int pageSize,  bool hasMore,  DocumentSnapshot? lastDocument,  Set<String> excludedUids,  List<UserData> items)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int startIndex,  int pageSize,  bool hasMore,  DocumentSnapshot? lastDocument,  String? cursor,  Set<String> excludedUids,  List<UserData> items,  Map<String, double> distancesKm)  $default,) {final _that = this;
 switch (_that) {
 case _UsersDataPgState():
-return $default(_that.startIndex,_that.pageSize,_that.hasMore,_that.lastDocument,_that.excludedUids,_that.items);}
+return $default(_that.startIndex,_that.pageSize,_that.hasMore,_that.lastDocument,_that.cursor,_that.excludedUids,_that.items,_that.distancesKm);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -191,10 +198,10 @@ return $default(_that.startIndex,_that.pageSize,_that.hasMore,_that.lastDocument
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int startIndex,  int pageSize,  bool hasMore,  DocumentSnapshot? lastDocument,  Set<String> excludedUids,  List<UserData> items)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int startIndex,  int pageSize,  bool hasMore,  DocumentSnapshot? lastDocument,  String? cursor,  Set<String> excludedUids,  List<UserData> items,  Map<String, double> distancesKm)?  $default,) {final _that = this;
 switch (_that) {
 case _UsersDataPgState() when $default != null:
-return $default(_that.startIndex,_that.pageSize,_that.hasMore,_that.lastDocument,_that.excludedUids,_that.items);case _:
+return $default(_that.startIndex,_that.pageSize,_that.hasMore,_that.lastDocument,_that.cursor,_that.excludedUids,_that.items,_that.distancesKm);case _:
   return null;
 
 }
@@ -206,7 +213,7 @@ return $default(_that.startIndex,_that.pageSize,_that.hasMore,_that.lastDocument
 
 
 class _UsersDataPgState implements UserDataPgState {
-  const _UsersDataPgState({this.startIndex = 0, this.pageSize = 10, this.hasMore = true, this.lastDocument, final  Set<String> excludedUids = const {}, final  List<UserData> items = const []}): _excludedUids = excludedUids,_items = items;
+  const _UsersDataPgState({this.startIndex = 0, this.pageSize = 10, this.hasMore = true, this.lastDocument, this.cursor, final  Set<String> excludedUids = const {}, final  List<UserData> items = const [], final  Map<String, double> distancesKm = const {}}): _excludedUids = excludedUids,_items = items,_distancesKm = distancesKm;
   
 
 @override@JsonKey() final  int startIndex;
@@ -214,6 +221,9 @@ class _UsersDataPgState implements UserDataPgState {
 @override@JsonKey() final  bool hasMore;
 /// Firebase field
 @override final  DocumentSnapshot? lastDocument;
+/// Opaque backend cursor, used when the page comes from a callable
+/// (`searchNearbyCandidates`, radius mode) instead of a Firestore query.
+@override final  String? cursor;
  final  Set<String> _excludedUids;
 @override@JsonKey() Set<String> get excludedUids {
   if (_excludedUids is EqualUnmodifiableSetView) return _excludedUids;
@@ -228,6 +238,19 @@ class _UsersDataPgState implements UserDataPgState {
   return EqualUnmodifiableListView(_items);
 }
 
+/// uid → distance in km. Populated by `getCandidateDistances` (place
+/// mode / no filter) or embedded directly in a radius-mode search
+/// response. A missing key means no distance is known for that uid.
+ final  Map<String, double> _distancesKm;
+/// uid → distance in km. Populated by `getCandidateDistances` (place
+/// mode / no filter) or embedded directly in a radius-mode search
+/// response. A missing key means no distance is known for that uid.
+@override@JsonKey() Map<String, double> get distancesKm {
+  if (_distancesKm is EqualUnmodifiableMapView) return _distancesKm;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_distancesKm);
+}
+
 
 /// Create a copy of UserDataPgState
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +262,16 @@ _$UsersDataPgStateCopyWith<_UsersDataPgState> get copyWith => __$UsersDataPgStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UsersDataPgState&&(identical(other.startIndex, startIndex) || other.startIndex == startIndex)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.lastDocument, lastDocument) || other.lastDocument == lastDocument)&&const DeepCollectionEquality().equals(other._excludedUids, _excludedUids)&&const DeepCollectionEquality().equals(other._items, _items));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UsersDataPgState&&(identical(other.startIndex, startIndex) || other.startIndex == startIndex)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.lastDocument, lastDocument) || other.lastDocument == lastDocument)&&(identical(other.cursor, cursor) || other.cursor == cursor)&&const DeepCollectionEquality().equals(other._excludedUids, _excludedUids)&&const DeepCollectionEquality().equals(other._items, _items)&&const DeepCollectionEquality().equals(other._distancesKm, _distancesKm));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,startIndex,pageSize,hasMore,lastDocument,const DeepCollectionEquality().hash(_excludedUids),const DeepCollectionEquality().hash(_items));
+int get hashCode => Object.hash(runtimeType,startIndex,pageSize,hasMore,lastDocument,cursor,const DeepCollectionEquality().hash(_excludedUids),const DeepCollectionEquality().hash(_items),const DeepCollectionEquality().hash(_distancesKm));
 
 @override
 String toString() {
-  return 'UserDataPgState(startIndex: $startIndex, pageSize: $pageSize, hasMore: $hasMore, lastDocument: $lastDocument, excludedUids: $excludedUids, items: $items)';
+  return 'UserDataPgState(startIndex: $startIndex, pageSize: $pageSize, hasMore: $hasMore, lastDocument: $lastDocument, cursor: $cursor, excludedUids: $excludedUids, items: $items, distancesKm: $distancesKm)';
 }
 
 
@@ -259,7 +282,7 @@ abstract mixin class _$UsersDataPgStateCopyWith<$Res> implements $UserDataPgStat
   factory _$UsersDataPgStateCopyWith(_UsersDataPgState value, $Res Function(_UsersDataPgState) _then) = __$UsersDataPgStateCopyWithImpl;
 @override @useResult
 $Res call({
- int startIndex, int pageSize, bool hasMore, DocumentSnapshot? lastDocument, Set<String> excludedUids, List<UserData> items
+ int startIndex, int pageSize, bool hasMore, DocumentSnapshot? lastDocument, String? cursor, Set<String> excludedUids, List<UserData> items, Map<String, double> distancesKm
 });
 
 
@@ -276,15 +299,17 @@ class __$UsersDataPgStateCopyWithImpl<$Res>
 
 /// Create a copy of UserDataPgState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? startIndex = null,Object? pageSize = null,Object? hasMore = null,Object? lastDocument = freezed,Object? excludedUids = null,Object? items = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? startIndex = null,Object? pageSize = null,Object? hasMore = null,Object? lastDocument = freezed,Object? cursor = freezed,Object? excludedUids = null,Object? items = null,Object? distancesKm = null,}) {
   return _then(_UsersDataPgState(
 startIndex: null == startIndex ? _self.startIndex : startIndex // ignore: cast_nullable_to_non_nullable
 as int,pageSize: null == pageSize ? _self.pageSize : pageSize // ignore: cast_nullable_to_non_nullable
 as int,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
 as bool,lastDocument: freezed == lastDocument ? _self.lastDocument : lastDocument // ignore: cast_nullable_to_non_nullable
-as DocumentSnapshot?,excludedUids: null == excludedUids ? _self._excludedUids : excludedUids // ignore: cast_nullable_to_non_nullable
+as DocumentSnapshot?,cursor: freezed == cursor ? _self.cursor : cursor // ignore: cast_nullable_to_non_nullable
+as String?,excludedUids: null == excludedUids ? _self._excludedUids : excludedUids // ignore: cast_nullable_to_non_nullable
 as Set<String>,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
-as List<UserData>,
+as List<UserData>,distancesKm: null == distancesKm ? _self._distancesKm : distancesKm // ignore: cast_nullable_to_non_nullable
+as Map<String, double>,
   ));
 }
 

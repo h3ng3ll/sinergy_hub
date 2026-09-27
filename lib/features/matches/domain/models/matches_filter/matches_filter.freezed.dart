@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MatchesFilter {
 
- EExperience? get experience; ESpecialization? get specialization; List<Skill> get skills;
+ EExperience? get experience; ESpecialization? get specialization; List<Skill> get skills; ELocationFilterMode? get locationMode; String? get country; String? get city; int? get radiusKm;
 /// Create a copy of MatchesFilter
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $MatchesFilterCopyWith<MatchesFilter> get copyWith => _$MatchesFilterCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MatchesFilter&&(identical(other.experience, experience) || other.experience == experience)&&(identical(other.specialization, specialization) || other.specialization == specialization)&&const DeepCollectionEquality().equals(other.skills, skills));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MatchesFilter&&(identical(other.experience, experience) || other.experience == experience)&&(identical(other.specialization, specialization) || other.specialization == specialization)&&const DeepCollectionEquality().equals(other.skills, skills)&&(identical(other.locationMode, locationMode) || other.locationMode == locationMode)&&(identical(other.country, country) || other.country == country)&&(identical(other.city, city) || other.city == city)&&(identical(other.radiusKm, radiusKm) || other.radiusKm == radiusKm));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,experience,specialization,const DeepCollectionEquality().hash(skills));
+int get hashCode => Object.hash(runtimeType,experience,specialization,const DeepCollectionEquality().hash(skills),locationMode,country,city,radiusKm);
 
 @override
 String toString() {
-  return 'MatchesFilter(experience: $experience, specialization: $specialization, skills: $skills)';
+  return 'MatchesFilter(experience: $experience, specialization: $specialization, skills: $skills, locationMode: $locationMode, country: $country, city: $city, radiusKm: $radiusKm)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $MatchesFilterCopyWith<$Res>  {
   factory $MatchesFilterCopyWith(MatchesFilter value, $Res Function(MatchesFilter) _then) = _$MatchesFilterCopyWithImpl;
 @useResult
 $Res call({
- EExperience? experience, ESpecialization? specialization, List<Skill> skills
+ EExperience? experience, ESpecialization? specialization, List<Skill> skills, ELocationFilterMode? locationMode, String? country, String? city, int? radiusKm
 });
 
 
@@ -65,12 +65,16 @@ class _$MatchesFilterCopyWithImpl<$Res>
 
 /// Create a copy of MatchesFilter
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? experience = freezed,Object? specialization = freezed,Object? skills = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? experience = freezed,Object? specialization = freezed,Object? skills = null,Object? locationMode = freezed,Object? country = freezed,Object? city = freezed,Object? radiusKm = freezed,}) {
   return _then(_self.copyWith(
 experience: freezed == experience ? _self.experience : experience // ignore: cast_nullable_to_non_nullable
 as EExperience?,specialization: freezed == specialization ? _self.specialization : specialization // ignore: cast_nullable_to_non_nullable
 as ESpecialization?,skills: null == skills ? _self.skills : skills // ignore: cast_nullable_to_non_nullable
-as List<Skill>,
+as List<Skill>,locationMode: freezed == locationMode ? _self.locationMode : locationMode // ignore: cast_nullable_to_non_nullable
+as ELocationFilterMode?,country: freezed == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
+as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String?,radiusKm: freezed == radiusKm ? _self.radiusKm : radiusKm // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -152,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( EExperience? experience,  ESpecialization? specialization,  List<Skill> skills)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( EExperience? experience,  ESpecialization? specialization,  List<Skill> skills,  ELocationFilterMode? locationMode,  String? country,  String? city,  int? radiusKm)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MatchesFilter() when $default != null:
-return $default(_that.experience,_that.specialization,_that.skills);case _:
+return $default(_that.experience,_that.specialization,_that.skills,_that.locationMode,_that.country,_that.city,_that.radiusKm);case _:
   return orElse();
 
 }
@@ -173,10 +177,10 @@ return $default(_that.experience,_that.specialization,_that.skills);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( EExperience? experience,  ESpecialization? specialization,  List<Skill> skills)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( EExperience? experience,  ESpecialization? specialization,  List<Skill> skills,  ELocationFilterMode? locationMode,  String? country,  String? city,  int? radiusKm)  $default,) {final _that = this;
 switch (_that) {
 case _MatchesFilter():
-return $default(_that.experience,_that.specialization,_that.skills);}
+return $default(_that.experience,_that.specialization,_that.skills,_that.locationMode,_that.country,_that.city,_that.radiusKm);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -190,10 +194,10 @@ return $default(_that.experience,_that.specialization,_that.skills);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( EExperience? experience,  ESpecialization? specialization,  List<Skill> skills)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( EExperience? experience,  ESpecialization? specialization,  List<Skill> skills,  ELocationFilterMode? locationMode,  String? country,  String? city,  int? radiusKm)?  $default,) {final _that = this;
 switch (_that) {
 case _MatchesFilter() when $default != null:
-return $default(_that.experience,_that.specialization,_that.skills);case _:
+return $default(_that.experience,_that.specialization,_that.skills,_that.locationMode,_that.country,_that.city,_that.radiusKm);case _:
   return null;
 
 }
@@ -205,7 +209,7 @@ return $default(_that.experience,_that.specialization,_that.skills);case _:
 @JsonSerializable()
 
 class _MatchesFilter implements MatchesFilter {
-  const _MatchesFilter({this.experience, this.specialization, final  List<Skill> skills = const []}): _skills = skills;
+  const _MatchesFilter({this.experience, this.specialization, final  List<Skill> skills = const [], this.locationMode, this.country, this.city, this.radiusKm}): _skills = skills;
   factory _MatchesFilter.fromJson(Map<String, dynamic> json) => _$MatchesFilterFromJson(json);
 
 @override final  EExperience? experience;
@@ -217,6 +221,10 @@ class _MatchesFilter implements MatchesFilter {
   return EqualUnmodifiableListView(_skills);
 }
 
+@override final  ELocationFilterMode? locationMode;
+@override final  String? country;
+@override final  String? city;
+@override final  int? radiusKm;
 
 /// Create a copy of MatchesFilter
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +239,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MatchesFilter&&(identical(other.experience, experience) || other.experience == experience)&&(identical(other.specialization, specialization) || other.specialization == specialization)&&const DeepCollectionEquality().equals(other._skills, _skills));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MatchesFilter&&(identical(other.experience, experience) || other.experience == experience)&&(identical(other.specialization, specialization) || other.specialization == specialization)&&const DeepCollectionEquality().equals(other._skills, _skills)&&(identical(other.locationMode, locationMode) || other.locationMode == locationMode)&&(identical(other.country, country) || other.country == country)&&(identical(other.city, city) || other.city == city)&&(identical(other.radiusKm, radiusKm) || other.radiusKm == radiusKm));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,experience,specialization,const DeepCollectionEquality().hash(_skills));
+int get hashCode => Object.hash(runtimeType,experience,specialization,const DeepCollectionEquality().hash(_skills),locationMode,country,city,radiusKm);
 
 @override
 String toString() {
-  return 'MatchesFilter(experience: $experience, specialization: $specialization, skills: $skills)';
+  return 'MatchesFilter(experience: $experience, specialization: $specialization, skills: $skills, locationMode: $locationMode, country: $country, city: $city, radiusKm: $radiusKm)';
 }
 
 
@@ -251,7 +259,7 @@ abstract mixin class _$MatchesFilterCopyWith<$Res> implements $MatchesFilterCopy
   factory _$MatchesFilterCopyWith(_MatchesFilter value, $Res Function(_MatchesFilter) _then) = __$MatchesFilterCopyWithImpl;
 @override @useResult
 $Res call({
- EExperience? experience, ESpecialization? specialization, List<Skill> skills
+ EExperience? experience, ESpecialization? specialization, List<Skill> skills, ELocationFilterMode? locationMode, String? country, String? city, int? radiusKm
 });
 
 
@@ -268,12 +276,16 @@ class __$MatchesFilterCopyWithImpl<$Res>
 
 /// Create a copy of MatchesFilter
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? experience = freezed,Object? specialization = freezed,Object? skills = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? experience = freezed,Object? specialization = freezed,Object? skills = null,Object? locationMode = freezed,Object? country = freezed,Object? city = freezed,Object? radiusKm = freezed,}) {
   return _then(_MatchesFilter(
 experience: freezed == experience ? _self.experience : experience // ignore: cast_nullable_to_non_nullable
 as EExperience?,specialization: freezed == specialization ? _self.specialization : specialization // ignore: cast_nullable_to_non_nullable
 as ESpecialization?,skills: null == skills ? _self._skills : skills // ignore: cast_nullable_to_non_nullable
-as List<Skill>,
+as List<Skill>,locationMode: freezed == locationMode ? _self.locationMode : locationMode // ignore: cast_nullable_to_non_nullable
+as ELocationFilterMode?,country: freezed == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
+as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String?,radiusKm: freezed == radiusKm ? _self.radiusKm : radiusKm // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

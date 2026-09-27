@@ -45,6 +45,8 @@
 	<string>We need access to your microphone for use camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Update user avatar from library</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Used to fill in your city and show how far other members are. Your exact location is never shown to anyone.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
+import '../../../matches/domain/models/e_location_filter_mode.dart';
 import '../../../matches/domain/models/matches_filter/matches_filter.dart';
 import '../mapper/user_data_mapper.dart';
 import '../../domain/models/user_data/user_data.dart';
@@ -30,6 +31,13 @@ class FakeUserFirebaseRepository implements IUserReadRepository {
     required UserDataPgState userDataState,
     MatchesFilter? filter,
   }) async {
+    // The tutorial/demo collection has no stored coordinates to search by —
+    // a radius search here always yields no further results rather than
+    // calling the (production-only) searchNearbyCandidates callable.
+    if (filter?.locationMode == ELocationFilterMode.radius) {
+      return userDataState.copyWith(hasMore: false);
+    }
+
     Query query = _fakeUsers;
 
     query = UserQueryBuilder.applyFilters(query, filter);

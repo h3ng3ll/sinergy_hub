@@ -16,6 +16,12 @@ sealed class EditProfilePageEvent with _$EditProfilePageEvent {
     String? firstName,
     String? lastName,
     String? aboutMe,
+    String? country,
+    String? city,
     Uint8List? img,
   }) = _ApplyChanges;
+
+  /// Runs permission → position → reverse-geocode and fills
+  /// [EditProfilePageState.detectedPosition] / `.detectedPlace` on success.
+  const factory EditProfilePageEvent.detectLocation() = _DetectLocation;
 }

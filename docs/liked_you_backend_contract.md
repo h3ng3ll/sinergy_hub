@@ -156,7 +156,10 @@ has an Upgrade button.
   "age": 29,
   "specialization": "mobileDeveloper",
   "experience": "senior",
-  "skills": [ { "name": "Flutter" }, { "name": "Firebase" } ]
+  "skills": [ { "name": "Flutter" }, { "name": "Firebase" } ],
+  "city": "Kyiv",
+  "country": "Ukraine",
+  "distanceKm": 3.4
 }
 ```
 
@@ -173,9 +176,13 @@ has an Upgrade button.
 | `specialization` | `string \| null` | An `ESpecialization` name (below). | Optional teaser; product decides. `null` hides it. |
 | `experience` | `string \| null` | An `EExperience` name (below). | Optional teaser; product decides. `null` hides it. |
 | `skills` | `{name: string}[]` | Up to 3 skills, shown as chips (the client also caps at 3). | `[]` |
+| `city` | `string \| null` | The liker's public `users/{uid}.location.city`. | Optional teaser; product decides. `null` hides it. |
+| `country` | `string \| null` | The liker's public `users/{uid}.location.country`. | Optional teaser; product decides. `null` hides it. |
+| `distanceKm` | `number \| null` | The distance between the viewer's and the liker's **stored** coordinates, computed with the rounding and `0.5` floor rules of `docs/location_backend_contract.md` §3. `null` if either side has no coordinates. | **MUST be `null`/omitted.** An exact distance plus a city would help identify a locked liker. |
 
-**Surname, `aboutMe`, `avatarPath`, `lastSeen`, `isOnline` and contact data
-are never sent in this feed**, locked or not.
+**Surname, `aboutMe`, `avatarPath`, `lastSeen`, `isOnline`, contact data and
+any coordinates are never sent in this feed**, locked or not. Only the
+server-computed `distanceKm` is sent, never a position.
 
 Enum values must be the exact Dart enum names the client already parses:
 
@@ -303,11 +310,13 @@ Request: `{ "limit": 3, "cursor": null }`
       "imageState": "clear", "imageUrl": "https://…/avatars/uA.jpg?X-Goog-Signature=…",
       "uid": "uA", "firstName": "Anna", "age": 29,
       "specialization": "mobileDeveloper", "experience": "senior",
-      "skills": [{ "name": "Flutter" }, { "name": "Firebase" }] },
+      "skills": [{ "name": "Flutter" }, { "name": "Firebase" }],
+      "city": "Kyiv", "country": "Ukraine", "distanceKm": 3.4 },
     { "likeId": "b2", "likedAt": "2026-09-27T07:40:11Z", "isLocked": true,
       "imageState": "blurred", "imageUrl": "https://…/avatars_blurred/uB.jpg?X-Goog-Signature=…",
       "uid": null, "firstName": null, "age": null,
-      "specialization": "backendDeveloper", "experience": null, "skills": [] },
+      "specialization": "backendDeveloper", "experience": null, "skills": [],
+      "city": "Lviv", "country": "Ukraine", "distanceKm": null },
     { "likeId": "c3", "likedAt": "2026-09-26T21:02:45Z", "isLocked": true,
       "imageState": "none", "imageUrl": null,
       "uid": null, "firstName": null, "age": null,
@@ -333,7 +342,8 @@ Request: `{ "limit": 20, "cursor": "eyJ0IjoxNzU4OTIwNTY1MDAwLCJpZCI6ImMzIn0" }`
       "imageState": "clear", "imageUrl": "https://…/avatars/uD.jpg?X-Goog-Signature=…",
       "uid": "uD", "firstName": "Marek", "age": 34,
       "specialization": "techLeadCTO", "experience": "senior",
-      "skills": [{ "name": "Kubernetes" }] }
+      "skills": [{ "name": "Kubernetes" }],
+      "city": "Warsaw", "country": "Poland", "distanceKm": 690.2 }
   ],
   "nextCursor": null,
   "hasMore": false,
@@ -468,6 +478,8 @@ restored at its original position only if `matchUser` fails. The following
 - [ ] `matchUser` handles feed responses per §12: it clears `pendingFor`, sets
   `twoWayMatch` and `alreadyNotified` on a like-back, bumps `likedYouMeta`,
   and refuses pairs that were only visible locked.
+- [ ] Items carry `city`, `country` and `distanceKm` per §5. Locked items never
+  carry `distanceKm`, and no item ever carries coordinates.
 - [ ] `likedYouMeta/{uid}` (`pendingCount`, `updatedAt`) is written in the same
   transaction as every feed-changing event in §11, coalesced to one bump per
   logical change. It has an owner-read, server-write rule. Existing users are

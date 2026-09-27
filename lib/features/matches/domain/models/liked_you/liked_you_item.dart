@@ -33,6 +33,13 @@ sealed class LikedYouItem with _$LikedYouItem {
     @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
     EExperience? experience,
     @Default(<Skill>[]) List<Skill> skills,
+    String? city,
+    String? country,
+
+    /// `null` when either side has no coordinates. A locked item MUST NOT
+    /// carry a distance (`docs/liked_you_backend_contract.md` §5) — an
+    /// exact distance plus a city would help identify a locked liker.
+    double? distanceKm,
   }) = _LikedYouItem;
 
   factory LikedYouItem.fromJson(Map<String, dynamic> json) =>

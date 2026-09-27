@@ -2,29 +2,37 @@ import 'package:get_it/get_it.dart';
 
 import '../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../core/services/firebase/firebase_firestore_service.dart';
+import '../../../core/services/firebase/firebase_functions_service.dart';
 import '../../../core/services/firebase/firebase_storage_service.dart';
+import '../../../core/services/geolocation/i_geolocation_service.dart';
 import '../../../core/services/image_service.dart';
+import '../../../core/services/logger_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../home/presentation/edit_profile_page/bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import '../../home/presentation/tabs/profile_tab/bloc/profile_bloc/profile_bloc.dart';
+import '../../matches/domain/repositories/i_nearby_candidates_repository.dart';
 import '../../onboard_survey/domain/use_cases/get_completion_status_use_case.dart';
 import '../../onboard_survey/domain/use_cases/get_skills_use_case.dart';
 import '../data/repositories/fake_user_firebase_repository.dart';
+import '../data/repositories/user_coordinates_functions_repository.dart';
 import '../data/repositories/user_composite_repository.dart';
 import '../data/repositories/user_firebase_repository.dart';
 import '../data/services/app_mode_service.dart';
 import '../data/services/user_service.dart';
 import '../domain/repositories/i_user_auth_repository.dart';
+import '../domain/repositories/i_user_coordinates_repository.dart';
 import '../domain/repositories/i_user_read_repository.dart';
 import '../domain/repositories/i_user_storage_repository.dart';
 import '../domain/repositories/i_user_write_repository.dart';
 import '../domain/services/i_app_mode_service.dart';
 import '../domain/usecases/delete_account_use_case.dart';
+import '../domain/usecases/detect_current_location_use_case.dart';
 import '../domain/usecases/get_current_user_data_use_case.dart';
 import '../domain/usecases/get_user_data_use_case.dart';
 import '../domain/usecases/get_users_use_case.dart';
 import '../domain/usecases/listen_current_user_data_use_case.dart';
 import '../domain/usecases/listen_user_data_use_case.dart';
+import '../domain/usecases/update_user_coordinates_use_case.dart';
 import '../domain/usecases/update_user_profiler_use_case.dart';
 import '../domain/usecases/update_user_usecase.dart';
 import '../presentation/bloc/skills_bloc/skills_bloc.dart';
@@ -45,6 +53,7 @@ void initUserFeature(GetIt getIt) {
       firebaseAuthService: getIt<FirebaseAuthService>(),
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
       firebaseStorageService: getIt<FirebaseStorageService>(),
+      nearbyCandidatesRepository: getIt<INearbyCandidatesRepository>(),
     ),
   );
 
@@ -74,7 +83,24 @@ void initUserFeature(GetIt getIt) {
     () => getIt<UserFirebaseRepository>(),
   );
 
+  getIt.registerLazySingleton<IUserCoordinatesRepository>(
+    () => UserCoordinatesFunctionsRepository(
+      firebaseFunctionsService: getIt<FirebaseFunctionsService>(),
+      loggerService: getIt<LoggerService>(),
+    ),
+  );
+
   /// Use Cases
+  getIt.registerLazySingleton<DetectCurrentLocationUseCase>(
+    () => DetectCurrentLocationUseCase(
+      geolocationService: getIt<IGeolocationService>(),
+    ),
+  );
+  getIt.registerLazySingleton<UpdateUserCoordinatesUseCase>(
+    () => UpdateUserCoordinatesUseCase(
+      userCoordinatesRepository: getIt<IUserCoordinatesRepository>(),
+    ),
+  );
   getIt.registerLazySingleton<UpdateUserUseCase>(
     () => UpdateUserUseCase(
       userStorageRepository: getIt<IUserStorageRepository>(),
@@ -137,6 +163,8 @@ void initUserFeature(GetIt getIt) {
     () => EditProfilePageBloc(
       listenCurrentUserDataUseCase: getIt<ListenCurrentUserDataUseCase>(),
       updateUserUseCase: getIt<UpdateUserUseCase>(),
+      detectCurrentLocationUseCase: getIt<DetectCurrentLocationUseCase>(),
+      updateUserCoordinatesUseCase: getIt<UpdateUserCoordinatesUseCase>(),
     ),
   );
   getIt.registerLazySingleton<UserBloc>(

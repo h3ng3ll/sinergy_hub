@@ -11,10 +11,12 @@ import 'widgets/tinder_card_personal_info/tinder_card_personal_info.dart';
 
 class TinderCardStatic extends StatelessWidget {
   final UserData user;
+  final double? distanceKm;
 
   const TinderCardStatic({
     super.key,
     required this.user,
+    this.distanceKm,
   });
 
   @override
@@ -52,6 +54,7 @@ class TinderCardStatic extends StatelessWidget {
             child: TinderCardPersonalInfo(
               specialization: specialization,
               user: user,
+              distanceKm: distanceKm,
             ),
           ),
         ],

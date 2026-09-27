@@ -4,14 +4,55 @@ import '../../../../../core/services/ui_message_service.dart';
 import '../../../../onboard_survey/domain/models/experience/experience.dart';
 import '../../../../onboard_survey/domain/models/skill/skill.dart';
 import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
+import '../e_location_filter_mode.dart';
 
 part 'matches_filter.g.dart';
 
 part 'matches_filter.freezed.dart';
 
+/// Default radius (km) applied when the user switches into Distance mode.
+const int kDefaultLocationRadiusKm = 50;
+
 extension MatchesFilterX on MatchesFilter {
   bool get isApplied =>
-      skills.isNotEmpty || experience != null || specialization != null;
+      skills.isNotEmpty ||
+      experience != null ||
+      specialization != null ||
+      locationMode != null;
+
+  bool get isPlaceMode => locationMode == ELocationFilterMode.place;
+
+  bool get isRadiusMode => locationMode == ELocationFilterMode.radius;
+
+  /// Switches to City mode, clearing any active radius. Passing an empty
+  /// country/city keeps the mode active with no text yet.
+  MatchesFilter setPlaceLocation({
+    String? country,
+    String? city,
+  }) => copyWith(
+    locationMode: ELocationFilterMode.place,
+    country: country,
+    city: city,
+    radiusKm: null,
+  );
+
+  /// Switches to Distance mode, clearing any active City text.
+  MatchesFilter setRadiusLocation([
+    int radiusKm = kDefaultLocationRadiusKm,
+  ]) => copyWith(
+    locationMode: ELocationFilterMode.radius,
+    radiusKm: radiusKm,
+    country: null,
+    city: null,
+  );
+
+  /// Turns location filtering off entirely.
+  MatchesFilter clearLocation() => copyWith(
+    locationMode: null,
+    country: null,
+    city: null,
+    radiusKm: null,
+  );
 
   bool isSelectedSkill(
     Skill skill,
@@ -79,6 +120,10 @@ sealed class MatchesFilter with _$MatchesFilter {
     EExperience? experience,
     ESpecialization? specialization,
     @Default([]) List<Skill> skills,
+    ELocationFilterMode? locationMode,
+    String? country,
+    String? city,
+    int? radiusKm,
   }) = _MatchesFilter;
 
   factory MatchesFilter.fromJson(Map<String, Object?> json) =>

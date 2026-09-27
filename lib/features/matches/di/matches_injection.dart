@@ -8,8 +8,12 @@ import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../chat/domain/repositories/i_chat_repository.dart';
 import '../../user/data/services/user_service.dart';
 import '../../user/domain/repositories/i_user_read_repository.dart';
+import '../data/repositories/candidate_distance_functions_repository.dart';
 import '../data/repositories/liked_you_meta_firestore_repository.dart';
+import '../data/repositories/nearby_candidates_functions_repository.dart';
+import '../domain/repositories/i_candidate_distance_repository.dart';
 import '../domain/repositories/i_liked_you_meta_repository.dart';
+import '../domain/repositories/i_nearby_candidates_repository.dart';
 import '../domain/usecases/watch_liked_you_changes_use_case.dart';
 import '../data/repositories/liked_you_functions_repository.dart';
 import '../data/repositories/user_matches_firebase_repository.dart';
@@ -45,11 +49,24 @@ void initMatchingFeature(GetIt getIt) {
     ),
   );
 
+  getIt.registerLazySingleton<ICandidateDistanceRepository>(
+    () => CandidateDistanceFunctionsRepository(
+      firebaseFunctionsService: getIt<FirebaseFunctionsService>(),
+      loggerService: getIt<LoggerService>(),
+    ),
+  );
+  getIt.registerLazySingleton<INearbyCandidatesRepository>(
+    () => NearbyCandidatesFunctionsRepository(
+      firebaseFunctionsService: getIt<FirebaseFunctionsService>(),
+    ),
+  );
+
   getIt.registerLazySingleton<LookForMatchesUseCase>(
     () => LookForMatchesUseCase(
       authRepository: getIt<IAuthRepository>(),
       getExcludedMatchesUseCase: getIt<GetExcludedMatchesUseCase>(),
       userReadRepository: getIt<IUserReadRepository>(),
+      candidateDistanceRepository: getIt<ICandidateDistanceRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetAUserMatchIncomeUseCase>(

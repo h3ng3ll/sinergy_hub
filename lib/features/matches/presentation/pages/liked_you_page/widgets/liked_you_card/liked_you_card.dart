@@ -9,6 +9,7 @@ import '../../../../../../../core/widgets/build_image.dart';
 import '../../../../../../onboard_survey/domain/models/experiences/experiences.dart';
 import '../../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 import '../../../../../domain/models/liked_you/liked_you_item.dart';
+import '../../../../widgets/location_line/location_line.dart';
 import '../liked_you_actions/liked_you_actions.dart';
 import '../locked_overlay/locked_overlay.dart';
 
@@ -85,6 +86,17 @@ class LikedYouCard extends StatelessWidget {
                       Text(
                         subtitleLine,
                         style: textTheme.regular14.copyWith(
+                          color: AppColors.white.value,
+                        ),
+                      ),
+                    if (item.city != null ||
+                        item.country != null ||
+                        item.distanceKm != null)
+                      LocationLine(
+                        city: item.city,
+                        country: item.country,
+                        distanceKm: item.distanceKm,
+                        style: textTheme.regular12.copyWith(
                           color: AppColors.white.value,
                         ),
                       ),

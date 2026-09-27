@@ -30,6 +30,28 @@ class UserQueryBuilder {
       );
     }
 
+    // Distance mode can't be expressed as a Firestore query — it has no
+    // coordinates to compare against. It is handled entirely server-side by
+    // `searchNearbyCandidates` (see UserFirebaseRepository.get).
+    if (filter.isPlaceMode) {
+      final countryKey = filter.country?.trim().toLowerCase();
+      final cityKey = filter.city?.trim().toLowerCase();
+
+      if (countryKey != null && countryKey.isNotEmpty) {
+        query = query.where(
+          'location.countryKey',
+          isEqualTo: countryKey,
+        );
+      }
+
+      if (cityKey != null && cityKey.isNotEmpty) {
+        query = query.where(
+          'location.cityKey',
+          isEqualTo: cityKey,
+        );
+      }
+    }
+
     return query;
   }
 }

@@ -11,6 +11,7 @@ import 'tinder_card_static.dart';
 
 class TinderCardItem extends StatelessWidget {
   final UserData user;
+  final double? distanceKm;
   final void Function(DragUpdateDetails) onPanUpdate;
   final void Function(DragEndDetails) onPanEnd;
   final void Function(DragStartDetails)? onPanStart;
@@ -19,6 +20,7 @@ class TinderCardItem extends StatelessWidget {
   const TinderCardItem({
     super.key,
     required this.user,
+    this.distanceKm,
     required this.onPanUpdate,
     required this.onPanEnd,
     required this.onPanStart,
@@ -32,6 +34,7 @@ class TinderCardItem extends StatelessWidget {
     if (!isActive) {
       return TinderCardStatic(
         user: user,
+        distanceKm: distanceKm,
       );
     }
     final angle = tinderCardCubit.rotation * pi / 180;
@@ -70,6 +73,7 @@ class TinderCardItem extends StatelessWidget {
               children: [
                 TinderCardStatic(
                   user: user,
+                  distanceKm: distanceKm,
                 ),
               ],
             ),

@@ -9,9 +9,12 @@ import '../../../../onboard_survey/domain/models/experience/experience.dart';
 import '../../../../onboard_survey/domain/models/skill/skill.dart';
 import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import '../../../../user/presentation/bloc/skills_bloc/skills_bloc.dart';
+import '../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
+import '../../../domain/models/e_location_filter_mode.dart';
 import '../../../domain/models/matches_filter/matches_filter.dart';
 import 'widgets/experience_level_section.dart';
 import 'widgets/filter_header.dart';
+import 'widgets/location_section.dart';
 import 'widgets/specialization_section.dart';
 
 /// Matches filters modal bottom sheet widget.
@@ -57,11 +60,26 @@ class MatchesFiltersModalSheet extends StatefulWidget {
 
 class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
   late MatchesFilter _options;
+  final TextEditingController _countryController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _options = widget.initialOptions;
+    // City mode prefills from whatever the filter already has; falling back
+    // to the caller's own profile location makes "search near where I am"
+    // the zero-effort default.
+    final ownLocation = context.read<UserBloc>().state.userData?.location;
+    _countryController.text = _options.country ?? ownLocation?.country ?? '';
+    _cityController.text = _options.city ?? ownLocation?.city ?? '';
+  }
+
+  @override
+  void dispose() {
+    _countryController.dispose();
+    _cityController.dispose();
+    super.dispose();
   }
 
   void _onExperienceLevelSelected(EExperience? level) {
@@ -73,6 +91,28 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
   void _onSpecializationSelected(ESpecialization? specialization) {
     setState(() {
       _options = _options.copyWith(specialization: specialization);
+    });
+  }
+
+  void _onLocationModeSelected(ELocationFilterMode tapped) {
+    setState(() {
+      if (_options.locationMode == tapped) {
+        _options = _options.clearLocation();
+        return;
+      }
+
+      _options = tapped == ELocationFilterMode.place
+          ? _options.setPlaceLocation(
+              country: _countryController.text,
+              city: _cityController.text,
+            )
+          : _options.setRadiusLocation();
+    });
+  }
+
+  void _onRadiusChanged(int radiusKm) {
+    setState(() {
+      _options = _options.copyWith(radiusKm: radiusKm);
     });
   }
 
@@ -95,7 +135,18 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
   }
 
   void _onApply() {
-    widget.onApply?.call(_options);
+    var options = _options;
+    if (options.isPlaceMode) {
+      options = options.copyWith(
+        country: _countryController.text.trim().isEmpty
+            ? null
+            : _countryController.text.trim(),
+        city: _cityController.text.trim().isEmpty
+            ? null
+            : _cityController.text.trim(),
+      );
+    }
+    widget.onApply?.call(options);
   }
 
   void _onClose() {
@@ -144,6 +195,19 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
                     SpecializationSection(
                       selectedSpecialization: _options.specialization,
                       onSpecializationSelected: _onSpecializationSelected,
+                    ),
+                    const SizedBox(height: 24.0),
+                    LocationSection(
+                      mode: _options.locationMode,
+                      onModeSelected: _onLocationModeSelected,
+                      countryController: _countryController,
+                      cityController: _cityController,
+                      radiusKm: _options.radiusKm ?? kDefaultLocationRadiusKm,
+                      onRadiusChanged: _onRadiusChanged,
+                      hasCoordinates:
+                          context.watch<UserBloc>().state.userData?.location
+                              ?.hasCoordinates ??
+                          false,
                     ),
                     const SizedBox(height: 24.0),
 

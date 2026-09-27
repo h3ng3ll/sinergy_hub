@@ -46,6 +46,7 @@ class BuildTinderCard extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: TinderCardItem(
                       user: e,
+                      distanceKm: state.usersState.distancesKm[e.uid],
                       onPanUpdate: onPanUpdate,
                       onPanStart: onPanStart,
                       onPanEnd: onPanEnd,

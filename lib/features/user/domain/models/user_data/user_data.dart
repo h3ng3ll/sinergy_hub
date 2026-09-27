@@ -5,6 +5,7 @@ import '../../../../onboard_survey/domain/models/experience/experience.dart';
 import '../../../../onboard_survey/domain/models/role/role.dart';
 import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import '../../../../onboard_survey/domain/models/user_profiler/user_profiler.dart';
+import '../user_location/user_location.dart';
 
 part 'user_data.g.dart';
 
@@ -23,6 +24,7 @@ sealed class UserData with _$UserData {
     int? age,
     String? aboutMe,
     required UserProfiler profiler,
+    UserLocation? location,
     @TimestampConverter() required DateTime createdAt,
     @Default(false) bool isOnline,
     @Default(false) bool isDeleted,

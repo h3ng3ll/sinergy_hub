@@ -8,7 +8,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../core/resources/text/app_text_theme.dart';
+import '../../../../core/resources/translations/app_localizations.dart';
 import '../../../../core/routes/presentation/loading_data_widget.dart';
+import '../../../../core/services/geolocation/i_geolocation_service.dart';
 import '../../../../core/services/ui_message_service.dart';
 import '../../../../core/widgets/btn/custom_text_btn.dart';
 import '../../../../core/widgets/btn/translucent_btn.dart';
@@ -19,6 +21,7 @@ import '../../../onboard_survey/domain/models/skill/skill.dart';
 import '../../../user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import '../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../user/presentation/dialogs/image_source_modal_sheet/image_source_modal_sheet.dart';
+import '../../../user/presentation/widgets/build_location_section/build_location_section.dart';
 import '../home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import 'bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import 'widgets/build_grouped_input.dart';
@@ -39,6 +42,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _skillController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
   Uint8List? image;
 
   late final EditProfilePageBloc _editProfilePageBloc;
@@ -57,6 +62,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
         userCubit.state.userData?.lastName ?? _lastNameController.text;
     _bioController.text =
         userCubit.state.userData?.aboutMe ?? _bioController.text;
+    _countryController.text =
+        userCubit.state.userData?.location?.country ?? _countryController.text;
+    _cityController.text =
+        userCubit.state.userData?.location?.city ?? _cityController.text;
 
     super.initState();
   }
@@ -68,6 +77,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _lastNameController.dispose();
     _bioController.dispose();
     _skillController.dispose();
+    _countryController.dispose();
+    _cityController.dispose();
     super.dispose();
   }
 
@@ -95,9 +106,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
         aboutMe: _bioController.text,
+        country: _countryController.text,
+        city: _cityController.text,
         img: image,
       ),
     );
+  }
+
+  void onUseMyLocation() {
+    _editProfilePageBloc.add(
+      const EditProfilePageEvent.detectLocation(),
+    );
+  }
+
+  Future<void> onOpenLocationSettings() async {
+    final target = _editProfilePageBloc.state.locationSettingsTarget;
+    if (target == null) return;
+    await getIt<IGeolocationService>().openSettings(target);
+  }
+
+  void _onLocationDetected(EditProfilePageState state) {
+    final place = state.detectedPlace;
+    if (place == null) return;
+    if (place.country != null) _countryController.text = place.country!;
+    if (place.city != null) _cityController.text = place.city!;
   }
 
   Future<void> onTapAvatar() async {
@@ -115,6 +147,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
     final textTheme = AppTextTheme.of(context);
+    final lo = AppLocalizations.of(context)!;
     return BlocProvider<EditProfilePageBloc>.value(
       value: _editProfilePageBloc,
       child: MultiBlocListener(
@@ -123,9 +156,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
             bloc: _editProfilePageBloc,
             listener: (context, state) {
               if (state.isUpdated) {
-                UiMessageService.showSuccess(
-                  'Profile updated successfully',
-                );
+                if (state.locationError.isNotEmpty) {
+                  UiMessageService.showError(
+                    state.locationError,
+                  );
+                } else {
+                  UiMessageService.showSuccess(
+                    'Profile updated successfully',
+                  );
+                }
                 context.pop();
               }
             },
@@ -139,6 +178,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 state.errorMessage,
               );
             },
+          ),
+          BlocListener<EditProfilePageBloc, EditProfilePageState>(
+            bloc: _editProfilePageBloc,
+            // Fires on every finished, successful detection — not only when the
+            // place differs — so a repeat tap refills text the user edited.
+            listenWhen: (p, n) =>
+                p.isDetectingLocation &&
+                !n.isDetectingLocation &&
+                n.locationError.isEmpty,
+            listener: (context, state) => _onLocationDetected(state),
           ),
         ],
         child: BlocBuilder<EditProfilePageBloc, EditProfilePageState>(
@@ -196,6 +245,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   title: 'Bio',
                                   child: BioInput(
                                     controller: _bioController,
+                                  ),
+                                ),
+                                BuildGroupedInput(
+                                  title: lo.location_group_title,
+                                  child: BuildLocationSection(
+                                    countryController: _countryController,
+                                    cityController: _cityController,
+                                    isDetecting: state.isDetectingLocation,
+                                    errorMessage: state.locationError,
+                                    settingsTarget:
+                                        state.locationSettingsTarget,
+                                    onUseMyLocation: onUseMyLocation,
+                                    onOpenSettings: onOpenLocationSettings,
                                   ),
                                 ),
                               ],

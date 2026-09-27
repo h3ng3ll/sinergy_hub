@@ -8,17 +8,20 @@ import '../../../../../../../../../../../../../core/widgets/padding/horizontal_p
 import '../../../../../../../../../../../../onboard_survey/domain/models/experiences/experiences.dart';
 import '../../../../../../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import '../../../../../../../../../../../../user/domain/models/user_data/user_data.dart';
+import '../../../../../../../../../../../../../features/matches/presentation/widgets/location_line/location_line.dart';
 import 'widgets/build_specialization_names.dart';
 import 'widgets/specialization_info_bar.dart';
 
 class TinderCardPersonalInfo extends StatelessWidget {
   final UserData user;
   final Specialization specialization;
+  final double? distanceKm;
 
   const TinderCardPersonalInfo({
     super.key,
     required this.user,
     required this.specialization,
+    this.distanceKm,
   });
 
   @override
@@ -41,6 +44,12 @@ class TinderCardPersonalInfo extends StatelessWidget {
         Text(
           user.age?.toString() ?? 'unknown age',
           style: textTheme.regular16,
+        ),
+        LocationLine(
+          city: user.location?.city,
+          country: user.location?.country,
+          distanceKm: distanceKm,
+          style: textTheme.regular14,
         ),
         SpecializationInfoBar(
           specialization: specialization,

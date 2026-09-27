@@ -18,6 +18,13 @@ _MatchesFilter _$MatchesFilterFromJson(Map<String, dynamic> json) =>
               ?.map((e) => Skill.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      locationMode: $enumDecodeNullable(
+        _$ELocationFilterModeEnumMap,
+        json['locationMode'],
+      ),
+      country: json['country'] as String?,
+      city: json['city'] as String?,
+      radiusKm: (json['radiusKm'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$MatchesFilterToJson(_MatchesFilter instance) =>
@@ -25,6 +32,10 @@ Map<String, dynamic> _$MatchesFilterToJson(_MatchesFilter instance) =>
       'experience': _$EExperienceEnumMap[instance.experience],
       'specialization': _$ESpecializationEnumMap[instance.specialization],
       'skills': instance.skills.map((e) => e.toJson()).toList(),
+      'locationMode': _$ELocationFilterModeEnumMap[instance.locationMode],
+      'country': instance.country,
+      'city': instance.city,
+      'radiusKm': instance.radiusKm,
     };
 
 const _$EExperienceEnumMap = {
@@ -53,4 +64,9 @@ const _$ESpecializationEnumMap = {
   ESpecialization.businessDeveloper: 'businessDeveloper',
   ESpecialization.technicalCoFounder: 'technicalCoFounder',
   ESpecialization.nonTechnicalCoFounder: 'nonTechnicalCoFounder',
+};
+
+const _$ELocationFilterModeEnumMap = {
+  ELocationFilterMode.place: 'place',
+  ELocationFilterMode.radius: 'radius',
 };

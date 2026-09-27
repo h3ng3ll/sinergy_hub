@@ -15,7 +15,10 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LikedYouItem {
 
- String get likeId; DateTime get likedAt; bool get isLocked;@JsonKey(unknownEnumValue: EImageState.none) EImageState get imageState; String? get imageUrl; String? get uid; String? get firstName; int? get age;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) ESpecialization? get specialization;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) EExperience? get experience; List<Skill> get skills;
+ String get likeId; DateTime get likedAt; bool get isLocked;@JsonKey(unknownEnumValue: EImageState.none) EImageState get imageState; String? get imageUrl; String? get uid; String? get firstName; int? get age;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) ESpecialization? get specialization;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) EExperience? get experience; List<Skill> get skills; String? get city; String? get country;/// `null` when either side has no coordinates. A locked item MUST NOT
+/// carry a distance (`docs/liked_you_backend_contract.md` §5) — an
+/// exact distance plus a city would help identify a locked liker.
+ double? get distanceKm;
 /// Create a copy of LikedYouItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +31,16 @@ $LikedYouItemCopyWith<LikedYouItem> get copyWith => _$LikedYouItemCopyWithImpl<L
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LikedYouItem&&(identical(other.likeId, likeId) || other.likeId == likeId)&&(identical(other.likedAt, likedAt) || other.likedAt == likedAt)&&(identical(other.isLocked, isLocked) || other.isLocked == isLocked)&&(identical(other.imageState, imageState) || other.imageState == imageState)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.age, age) || other.age == age)&&(identical(other.specialization, specialization) || other.specialization == specialization)&&(identical(other.experience, experience) || other.experience == experience)&&const DeepCollectionEquality().equals(other.skills, skills));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LikedYouItem&&(identical(other.likeId, likeId) || other.likeId == likeId)&&(identical(other.likedAt, likedAt) || other.likedAt == likedAt)&&(identical(other.isLocked, isLocked) || other.isLocked == isLocked)&&(identical(other.imageState, imageState) || other.imageState == imageState)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.age, age) || other.age == age)&&(identical(other.specialization, specialization) || other.specialization == specialization)&&(identical(other.experience, experience) || other.experience == experience)&&const DeepCollectionEquality().equals(other.skills, skills)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.distanceKm, distanceKm) || other.distanceKm == distanceKm));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,likeId,likedAt,isLocked,imageState,imageUrl,uid,firstName,age,specialization,experience,const DeepCollectionEquality().hash(skills));
+int get hashCode => Object.hash(runtimeType,likeId,likedAt,isLocked,imageState,imageUrl,uid,firstName,age,specialization,experience,const DeepCollectionEquality().hash(skills),city,country,distanceKm);
 
 @override
 String toString() {
-  return 'LikedYouItem(likeId: $likeId, likedAt: $likedAt, isLocked: $isLocked, imageState: $imageState, imageUrl: $imageUrl, uid: $uid, firstName: $firstName, age: $age, specialization: $specialization, experience: $experience, skills: $skills)';
+  return 'LikedYouItem(likeId: $likeId, likedAt: $likedAt, isLocked: $isLocked, imageState: $imageState, imageUrl: $imageUrl, uid: $uid, firstName: $firstName, age: $age, specialization: $specialization, experience: $experience, skills: $skills, city: $city, country: $country, distanceKm: $distanceKm)';
 }
 
 
@@ -48,7 +51,7 @@ abstract mixin class $LikedYouItemCopyWith<$Res>  {
   factory $LikedYouItemCopyWith(LikedYouItem value, $Res Function(LikedYouItem) _then) = _$LikedYouItemCopyWithImpl;
 @useResult
 $Res call({
- String likeId, DateTime likedAt, bool isLocked,@JsonKey(unknownEnumValue: EImageState.none) EImageState imageState, String? imageUrl, String? uid, String? firstName, int? age,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) ESpecialization? specialization,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) EExperience? experience, List<Skill> skills
+ String likeId, DateTime likedAt, bool isLocked,@JsonKey(unknownEnumValue: EImageState.none) EImageState imageState, String? imageUrl, String? uid, String? firstName, int? age,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) ESpecialization? specialization,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) EExperience? experience, List<Skill> skills, String? city, String? country, double? distanceKm
 });
 
 
@@ -65,7 +68,7 @@ class _$LikedYouItemCopyWithImpl<$Res>
 
 /// Create a copy of LikedYouItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? likeId = null,Object? likedAt = null,Object? isLocked = null,Object? imageState = null,Object? imageUrl = freezed,Object? uid = freezed,Object? firstName = freezed,Object? age = freezed,Object? specialization = freezed,Object? experience = freezed,Object? skills = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? likeId = null,Object? likedAt = null,Object? isLocked = null,Object? imageState = null,Object? imageUrl = freezed,Object? uid = freezed,Object? firstName = freezed,Object? age = freezed,Object? specialization = freezed,Object? experience = freezed,Object? skills = null,Object? city = freezed,Object? country = freezed,Object? distanceKm = freezed,}) {
   return _then(_self.copyWith(
 likeId: null == likeId ? _self.likeId : likeId // ignore: cast_nullable_to_non_nullable
 as String,likedAt: null == likedAt ? _self.likedAt : likedAt // ignore: cast_nullable_to_non_nullable
@@ -78,7 +81,10 @@ as String?,age: freezed == age ? _self.age : age // ignore: cast_nullable_to_non
 as int?,specialization: freezed == specialization ? _self.specialization : specialization // ignore: cast_nullable_to_non_nullable
 as ESpecialization?,experience: freezed == experience ? _self.experience : experience // ignore: cast_nullable_to_non_nullable
 as EExperience?,skills: null == skills ? _self.skills : skills // ignore: cast_nullable_to_non_nullable
-as List<Skill>,
+as List<Skill>,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String?,country: freezed == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
+as String?,distanceKm: freezed == distanceKm ? _self.distanceKm : distanceKm // ignore: cast_nullable_to_non_nullable
+as double?,
   ));
 }
 
@@ -160,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String likeId,  DateTime likedAt,  bool isLocked, @JsonKey(unknownEnumValue: EImageState.none)  EImageState imageState,  String? imageUrl,  String? uid,  String? firstName,  int? age, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  ESpecialization? specialization, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  EExperience? experience,  List<Skill> skills)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String likeId,  DateTime likedAt,  bool isLocked, @JsonKey(unknownEnumValue: EImageState.none)  EImageState imageState,  String? imageUrl,  String? uid,  String? firstName,  int? age, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  ESpecialization? specialization, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  EExperience? experience,  List<Skill> skills,  String? city,  String? country,  double? distanceKm)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LikedYouItem() when $default != null:
-return $default(_that.likeId,_that.likedAt,_that.isLocked,_that.imageState,_that.imageUrl,_that.uid,_that.firstName,_that.age,_that.specialization,_that.experience,_that.skills);case _:
+return $default(_that.likeId,_that.likedAt,_that.isLocked,_that.imageState,_that.imageUrl,_that.uid,_that.firstName,_that.age,_that.specialization,_that.experience,_that.skills,_that.city,_that.country,_that.distanceKm);case _:
   return orElse();
 
 }
@@ -181,10 +187,10 @@ return $default(_that.likeId,_that.likedAt,_that.isLocked,_that.imageState,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String likeId,  DateTime likedAt,  bool isLocked, @JsonKey(unknownEnumValue: EImageState.none)  EImageState imageState,  String? imageUrl,  String? uid,  String? firstName,  int? age, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  ESpecialization? specialization, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  EExperience? experience,  List<Skill> skills)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String likeId,  DateTime likedAt,  bool isLocked, @JsonKey(unknownEnumValue: EImageState.none)  EImageState imageState,  String? imageUrl,  String? uid,  String? firstName,  int? age, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  ESpecialization? specialization, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  EExperience? experience,  List<Skill> skills,  String? city,  String? country,  double? distanceKm)  $default,) {final _that = this;
 switch (_that) {
 case _LikedYouItem():
-return $default(_that.likeId,_that.likedAt,_that.isLocked,_that.imageState,_that.imageUrl,_that.uid,_that.firstName,_that.age,_that.specialization,_that.experience,_that.skills);}
+return $default(_that.likeId,_that.likedAt,_that.isLocked,_that.imageState,_that.imageUrl,_that.uid,_that.firstName,_that.age,_that.specialization,_that.experience,_that.skills,_that.city,_that.country,_that.distanceKm);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -198,10 +204,10 @@ return $default(_that.likeId,_that.likedAt,_that.isLocked,_that.imageState,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String likeId,  DateTime likedAt,  bool isLocked, @JsonKey(unknownEnumValue: EImageState.none)  EImageState imageState,  String? imageUrl,  String? uid,  String? firstName,  int? age, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  ESpecialization? specialization, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  EExperience? experience,  List<Skill> skills)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String likeId,  DateTime likedAt,  bool isLocked, @JsonKey(unknownEnumValue: EImageState.none)  EImageState imageState,  String? imageUrl,  String? uid,  String? firstName,  int? age, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  ESpecialization? specialization, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  EExperience? experience,  List<Skill> skills,  String? city,  String? country,  double? distanceKm)?  $default,) {final _that = this;
 switch (_that) {
 case _LikedYouItem() when $default != null:
-return $default(_that.likeId,_that.likedAt,_that.isLocked,_that.imageState,_that.imageUrl,_that.uid,_that.firstName,_that.age,_that.specialization,_that.experience,_that.skills);case _:
+return $default(_that.likeId,_that.likedAt,_that.isLocked,_that.imageState,_that.imageUrl,_that.uid,_that.firstName,_that.age,_that.specialization,_that.experience,_that.skills,_that.city,_that.country,_that.distanceKm);case _:
   return null;
 
 }
@@ -213,7 +219,7 @@ return $default(_that.likeId,_that.likedAt,_that.isLocked,_that.imageState,_that
 
 @JsonSerializable(anyMap: true)
 class _LikedYouItem implements LikedYouItem {
-  const _LikedYouItem({required this.likeId, required this.likedAt, required this.isLocked, @JsonKey(unknownEnumValue: EImageState.none) this.imageState = EImageState.none, this.imageUrl, this.uid, this.firstName, this.age, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.specialization, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.experience, final  List<Skill> skills = const <Skill>[]}): _skills = skills;
+  const _LikedYouItem({required this.likeId, required this.likedAt, required this.isLocked, @JsonKey(unknownEnumValue: EImageState.none) this.imageState = EImageState.none, this.imageUrl, this.uid, this.firstName, this.age, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.specialization, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.experience, final  List<Skill> skills = const <Skill>[], this.city, this.country, this.distanceKm}): _skills = skills;
   factory _LikedYouItem.fromJson(Map<String, dynamic> json) => _$LikedYouItemFromJson(json);
 
 @override final  String likeId;
@@ -233,6 +239,12 @@ class _LikedYouItem implements LikedYouItem {
   return EqualUnmodifiableListView(_skills);
 }
 
+@override final  String? city;
+@override final  String? country;
+/// `null` when either side has no coordinates. A locked item MUST NOT
+/// carry a distance (`docs/liked_you_backend_contract.md` §5) — an
+/// exact distance plus a city would help identify a locked liker.
+@override final  double? distanceKm;
 
 /// Create a copy of LikedYouItem
 /// with the given fields replaced by the non-null parameter values.
@@ -247,16 +259,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LikedYouItem&&(identical(other.likeId, likeId) || other.likeId == likeId)&&(identical(other.likedAt, likedAt) || other.likedAt == likedAt)&&(identical(other.isLocked, isLocked) || other.isLocked == isLocked)&&(identical(other.imageState, imageState) || other.imageState == imageState)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.age, age) || other.age == age)&&(identical(other.specialization, specialization) || other.specialization == specialization)&&(identical(other.experience, experience) || other.experience == experience)&&const DeepCollectionEquality().equals(other._skills, _skills));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LikedYouItem&&(identical(other.likeId, likeId) || other.likeId == likeId)&&(identical(other.likedAt, likedAt) || other.likedAt == likedAt)&&(identical(other.isLocked, isLocked) || other.isLocked == isLocked)&&(identical(other.imageState, imageState) || other.imageState == imageState)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.age, age) || other.age == age)&&(identical(other.specialization, specialization) || other.specialization == specialization)&&(identical(other.experience, experience) || other.experience == experience)&&const DeepCollectionEquality().equals(other._skills, _skills)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.distanceKm, distanceKm) || other.distanceKm == distanceKm));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,likeId,likedAt,isLocked,imageState,imageUrl,uid,firstName,age,specialization,experience,const DeepCollectionEquality().hash(_skills));
+int get hashCode => Object.hash(runtimeType,likeId,likedAt,isLocked,imageState,imageUrl,uid,firstName,age,specialization,experience,const DeepCollectionEquality().hash(_skills),city,country,distanceKm);
 
 @override
 String toString() {
-  return 'LikedYouItem(likeId: $likeId, likedAt: $likedAt, isLocked: $isLocked, imageState: $imageState, imageUrl: $imageUrl, uid: $uid, firstName: $firstName, age: $age, specialization: $specialization, experience: $experience, skills: $skills)';
+  return 'LikedYouItem(likeId: $likeId, likedAt: $likedAt, isLocked: $isLocked, imageState: $imageState, imageUrl: $imageUrl, uid: $uid, firstName: $firstName, age: $age, specialization: $specialization, experience: $experience, skills: $skills, city: $city, country: $country, distanceKm: $distanceKm)';
 }
 
 
@@ -267,7 +279,7 @@ abstract mixin class _$LikedYouItemCopyWith<$Res> implements $LikedYouItemCopyWi
   factory _$LikedYouItemCopyWith(_LikedYouItem value, $Res Function(_LikedYouItem) _then) = __$LikedYouItemCopyWithImpl;
 @override @useResult
 $Res call({
- String likeId, DateTime likedAt, bool isLocked,@JsonKey(unknownEnumValue: EImageState.none) EImageState imageState, String? imageUrl, String? uid, String? firstName, int? age,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) ESpecialization? specialization,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) EExperience? experience, List<Skill> skills
+ String likeId, DateTime likedAt, bool isLocked,@JsonKey(unknownEnumValue: EImageState.none) EImageState imageState, String? imageUrl, String? uid, String? firstName, int? age,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) ESpecialization? specialization,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) EExperience? experience, List<Skill> skills, String? city, String? country, double? distanceKm
 });
 
 
@@ -284,7 +296,7 @@ class __$LikedYouItemCopyWithImpl<$Res>
 
 /// Create a copy of LikedYouItem
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? likeId = null,Object? likedAt = null,Object? isLocked = null,Object? imageState = null,Object? imageUrl = freezed,Object? uid = freezed,Object? firstName = freezed,Object? age = freezed,Object? specialization = freezed,Object? experience = freezed,Object? skills = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? likeId = null,Object? likedAt = null,Object? isLocked = null,Object? imageState = null,Object? imageUrl = freezed,Object? uid = freezed,Object? firstName = freezed,Object? age = freezed,Object? specialization = freezed,Object? experience = freezed,Object? skills = null,Object? city = freezed,Object? country = freezed,Object? distanceKm = freezed,}) {
   return _then(_LikedYouItem(
 likeId: null == likeId ? _self.likeId : likeId // ignore: cast_nullable_to_non_nullable
 as String,likedAt: null == likedAt ? _self.likedAt : likedAt // ignore: cast_nullable_to_non_nullable
@@ -297,7 +309,10 @@ as String?,age: freezed == age ? _self.age : age // ignore: cast_nullable_to_non
 as int?,specialization: freezed == specialization ? _self.specialization : specialization // ignore: cast_nullable_to_non_nullable
 as ESpecialization?,experience: freezed == experience ? _self.experience : experience // ignore: cast_nullable_to_non_nullable
 as EExperience?,skills: null == skills ? _self._skills : skills // ignore: cast_nullable_to_non_nullable
-as List<Skill>,
+as List<Skill>,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String?,country: freezed == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
+as String?,distanceKm: freezed == distanceKm ? _self.distanceKm : distanceKm // ignore: cast_nullable_to_non_nullable
+as double?,
   ));
 }
 

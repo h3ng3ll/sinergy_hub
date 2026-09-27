@@ -36,6 +36,9 @@ _LikedYouItem _$LikedYouItemFromJson(Map json) => _LikedYouItem(
           ?.map((e) => Skill.fromJson(Map<String, Object?>.from(e as Map)))
           .toList() ??
       const <Skill>[],
+  city: json['city'] as String?,
+  country: json['country'] as String?,
+  distanceKm: (json['distanceKm'] as num?)?.toDouble(),
 );
 
 Map<String, dynamic> _$LikedYouItemToJson(_LikedYouItem instance) =>
@@ -51,6 +54,9 @@ Map<String, dynamic> _$LikedYouItemToJson(_LikedYouItem instance) =>
       'specialization': _$ESpecializationEnumMap[instance.specialization],
       'experience': _$EExperienceEnumMap[instance.experience],
       'skills': instance.skills.map((e) => e.toJson()).toList(),
+      'city': instance.city,
+      'country': instance.country,
+      'distanceKm': instance.distanceKm,
     };
 
 const _$EImageStateEnumMap = {

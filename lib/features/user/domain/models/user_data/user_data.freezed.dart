@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserData {
 
- String get uid; String? get avatarUrl; String? get avatarPath; String? get firstName; String? get lastName; int? get age; String? get aboutMe; UserProfiler get profiler;@TimestampConverter() DateTime get createdAt; bool get isOnline; bool get isDeleted;@TimestampConverter() DateTime get lastSeen;
+ String get uid; String? get avatarUrl; String? get avatarPath; String? get firstName; String? get lastName; int? get age; String? get aboutMe; UserProfiler get profiler; UserLocation? get location;@TimestampConverter() DateTime get createdAt; bool get isOnline; bool get isDeleted;@TimestampConverter() DateTime get lastSeen;
 /// Create a copy of UserData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,12 +28,12 @@ $UserDataCopyWith<UserData> get copyWith => _$UserDataCopyWithImpl<UserData>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserData&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.avatarPath, avatarPath) || other.avatarPath == avatarPath)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.age, age) || other.age == age)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.profiler, profiler) || other.profiler == profiler)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isOnline, isOnline) || other.isOnline == isOnline)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.lastSeen, lastSeen) || other.lastSeen == lastSeen));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserData&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.avatarPath, avatarPath) || other.avatarPath == avatarPath)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.age, age) || other.age == age)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.profiler, profiler) || other.profiler == profiler)&&(identical(other.location, location) || other.location == location)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isOnline, isOnline) || other.isOnline == isOnline)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.lastSeen, lastSeen) || other.lastSeen == lastSeen));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uid,avatarUrl,avatarPath,firstName,lastName,age,aboutMe,profiler,createdAt,isOnline,isDeleted,lastSeen);
+int get hashCode => Object.hash(runtimeType,uid,avatarUrl,avatarPath,firstName,lastName,age,aboutMe,profiler,location,createdAt,isOnline,isDeleted,lastSeen);
 
 
 
@@ -44,11 +44,11 @@ abstract mixin class $UserDataCopyWith<$Res>  {
   factory $UserDataCopyWith(UserData value, $Res Function(UserData) _then) = _$UserDataCopyWithImpl;
 @useResult
 $Res call({
- String uid, String? avatarUrl, String? avatarPath, String? firstName, String? lastName, int? age, String? aboutMe, UserProfiler profiler,@TimestampConverter() DateTime createdAt, bool isOnline, bool isDeleted,@TimestampConverter() DateTime lastSeen
+ String uid, String? avatarUrl, String? avatarPath, String? firstName, String? lastName, int? age, String? aboutMe, UserProfiler profiler, UserLocation? location,@TimestampConverter() DateTime createdAt, bool isOnline, bool isDeleted,@TimestampConverter() DateTime lastSeen
 });
 
 
-$UserProfilerCopyWith<$Res> get profiler;
+$UserProfilerCopyWith<$Res> get profiler;$UserLocationCopyWith<$Res>? get location;
 
 }
 /// @nodoc
@@ -61,7 +61,7 @@ class _$UserDataCopyWithImpl<$Res>
 
 /// Create a copy of UserData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? uid = null,Object? avatarUrl = freezed,Object? avatarPath = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? age = freezed,Object? aboutMe = freezed,Object? profiler = null,Object? createdAt = null,Object? isOnline = null,Object? isDeleted = null,Object? lastSeen = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? uid = null,Object? avatarUrl = freezed,Object? avatarPath = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? age = freezed,Object? aboutMe = freezed,Object? profiler = null,Object? location = freezed,Object? createdAt = null,Object? isOnline = null,Object? isDeleted = null,Object? lastSeen = null,}) {
   return _then(_self.copyWith(
 uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
@@ -71,7 +71,8 @@ as String?,lastName: freezed == lastName ? _self.lastName : lastName // ignore: 
 as String?,age: freezed == age ? _self.age : age // ignore: cast_nullable_to_non_nullable
 as int?,aboutMe: freezed == aboutMe ? _self.aboutMe : aboutMe // ignore: cast_nullable_to_non_nullable
 as String?,profiler: null == profiler ? _self.profiler : profiler // ignore: cast_nullable_to_non_nullable
-as UserProfiler,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as UserProfiler,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as UserLocation?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,isOnline: null == isOnline ? _self.isOnline : isOnline // ignore: cast_nullable_to_non_nullable
 as bool,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
 as bool,lastSeen: null == lastSeen ? _self.lastSeen : lastSeen // ignore: cast_nullable_to_non_nullable
@@ -86,6 +87,18 @@ $UserProfilerCopyWith<$Res> get profiler {
   
   return $UserProfilerCopyWith<$Res>(_self.profiler, (value) {
     return _then(_self.copyWith(profiler: value));
+  });
+}/// Create a copy of UserData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserLocationCopyWith<$Res>? get location {
+    if (_self.location == null) {
+    return null;
+  }
+
+  return $UserLocationCopyWith<$Res>(_self.location!, (value) {
+    return _then(_self.copyWith(location: value));
   });
 }
 }
@@ -166,10 +179,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String uid,  String? avatarUrl,  String? avatarPath,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler, @TimestampConverter()  DateTime createdAt,  bool isOnline,  bool isDeleted, @TimestampConverter()  DateTime lastSeen)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String uid,  String? avatarUrl,  String? avatarPath,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler,  UserLocation? location, @TimestampConverter()  DateTime createdAt,  bool isOnline,  bool isDeleted, @TimestampConverter()  DateTime lastSeen)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserData() when $default != null:
-return $default(_that.uid,_that.avatarUrl,_that.avatarPath,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler,_that.createdAt,_that.isOnline,_that.isDeleted,_that.lastSeen);case _:
+return $default(_that.uid,_that.avatarUrl,_that.avatarPath,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler,_that.location,_that.createdAt,_that.isOnline,_that.isDeleted,_that.lastSeen);case _:
   return orElse();
 
 }
@@ -187,10 +200,10 @@ return $default(_that.uid,_that.avatarUrl,_that.avatarPath,_that.firstName,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String uid,  String? avatarUrl,  String? avatarPath,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler, @TimestampConverter()  DateTime createdAt,  bool isOnline,  bool isDeleted, @TimestampConverter()  DateTime lastSeen)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String uid,  String? avatarUrl,  String? avatarPath,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler,  UserLocation? location, @TimestampConverter()  DateTime createdAt,  bool isOnline,  bool isDeleted, @TimestampConverter()  DateTime lastSeen)  $default,) {final _that = this;
 switch (_that) {
 case _UserData():
-return $default(_that.uid,_that.avatarUrl,_that.avatarPath,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler,_that.createdAt,_that.isOnline,_that.isDeleted,_that.lastSeen);}
+return $default(_that.uid,_that.avatarUrl,_that.avatarPath,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler,_that.location,_that.createdAt,_that.isOnline,_that.isDeleted,_that.lastSeen);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -204,10 +217,10 @@ return $default(_that.uid,_that.avatarUrl,_that.avatarPath,_that.firstName,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String uid,  String? avatarUrl,  String? avatarPath,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler, @TimestampConverter()  DateTime createdAt,  bool isOnline,  bool isDeleted, @TimestampConverter()  DateTime lastSeen)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String uid,  String? avatarUrl,  String? avatarPath,  String? firstName,  String? lastName,  int? age,  String? aboutMe,  UserProfiler profiler,  UserLocation? location, @TimestampConverter()  DateTime createdAt,  bool isOnline,  bool isDeleted, @TimestampConverter()  DateTime lastSeen)?  $default,) {final _that = this;
 switch (_that) {
 case _UserData() when $default != null:
-return $default(_that.uid,_that.avatarUrl,_that.avatarPath,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler,_that.createdAt,_that.isOnline,_that.isDeleted,_that.lastSeen);case _:
+return $default(_that.uid,_that.avatarUrl,_that.avatarPath,_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.profiler,_that.location,_that.createdAt,_that.isOnline,_that.isDeleted,_that.lastSeen);case _:
   return null;
 
 }
@@ -219,7 +232,7 @@ return $default(_that.uid,_that.avatarUrl,_that.avatarPath,_that.firstName,_that
 @JsonSerializable()
 
 class _UserData extends UserData {
-  const _UserData({required this.uid, this.avatarUrl, this.avatarPath, this.firstName, this.lastName, this.age, this.aboutMe, required this.profiler, @TimestampConverter() required this.createdAt, this.isOnline = false, this.isDeleted = false, @TimestampConverter() required this.lastSeen}): super._();
+  const _UserData({required this.uid, this.avatarUrl, this.avatarPath, this.firstName, this.lastName, this.age, this.aboutMe, required this.profiler, this.location, @TimestampConverter() required this.createdAt, this.isOnline = false, this.isDeleted = false, @TimestampConverter() required this.lastSeen}): super._();
   factory _UserData.fromJson(Map<String, dynamic> json) => _$UserDataFromJson(json);
 
 @override final  String uid;
@@ -230,6 +243,7 @@ class _UserData extends UserData {
 @override final  int? age;
 @override final  String? aboutMe;
 @override final  UserProfiler profiler;
+@override final  UserLocation? location;
 @override@TimestampConverter() final  DateTime createdAt;
 @override@JsonKey() final  bool isOnline;
 @override@JsonKey() final  bool isDeleted;
@@ -248,12 +262,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserData&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.avatarPath, avatarPath) || other.avatarPath == avatarPath)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.age, age) || other.age == age)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.profiler, profiler) || other.profiler == profiler)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isOnline, isOnline) || other.isOnline == isOnline)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.lastSeen, lastSeen) || other.lastSeen == lastSeen));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserData&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.avatarPath, avatarPath) || other.avatarPath == avatarPath)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.age, age) || other.age == age)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.profiler, profiler) || other.profiler == profiler)&&(identical(other.location, location) || other.location == location)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isOnline, isOnline) || other.isOnline == isOnline)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.lastSeen, lastSeen) || other.lastSeen == lastSeen));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uid,avatarUrl,avatarPath,firstName,lastName,age,aboutMe,profiler,createdAt,isOnline,isDeleted,lastSeen);
+int get hashCode => Object.hash(runtimeType,uid,avatarUrl,avatarPath,firstName,lastName,age,aboutMe,profiler,location,createdAt,isOnline,isDeleted,lastSeen);
 
 
 
@@ -264,11 +278,11 @@ abstract mixin class _$UserDataCopyWith<$Res> implements $UserDataCopyWith<$Res>
   factory _$UserDataCopyWith(_UserData value, $Res Function(_UserData) _then) = __$UserDataCopyWithImpl;
 @override @useResult
 $Res call({
- String uid, String? avatarUrl, String? avatarPath, String? firstName, String? lastName, int? age, String? aboutMe, UserProfiler profiler,@TimestampConverter() DateTime createdAt, bool isOnline, bool isDeleted,@TimestampConverter() DateTime lastSeen
+ String uid, String? avatarUrl, String? avatarPath, String? firstName, String? lastName, int? age, String? aboutMe, UserProfiler profiler, UserLocation? location,@TimestampConverter() DateTime createdAt, bool isOnline, bool isDeleted,@TimestampConverter() DateTime lastSeen
 });
 
 
-@override $UserProfilerCopyWith<$Res> get profiler;
+@override $UserProfilerCopyWith<$Res> get profiler;@override $UserLocationCopyWith<$Res>? get location;
 
 }
 /// @nodoc
@@ -281,7 +295,7 @@ class __$UserDataCopyWithImpl<$Res>
 
 /// Create a copy of UserData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? uid = null,Object? avatarUrl = freezed,Object? avatarPath = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? age = freezed,Object? aboutMe = freezed,Object? profiler = null,Object? createdAt = null,Object? isOnline = null,Object? isDeleted = null,Object? lastSeen = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? uid = null,Object? avatarUrl = freezed,Object? avatarPath = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? age = freezed,Object? aboutMe = freezed,Object? profiler = null,Object? location = freezed,Object? createdAt = null,Object? isOnline = null,Object? isDeleted = null,Object? lastSeen = null,}) {
   return _then(_UserData(
 uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
@@ -291,7 +305,8 @@ as String?,lastName: freezed == lastName ? _self.lastName : lastName // ignore: 
 as String?,age: freezed == age ? _self.age : age // ignore: cast_nullable_to_non_nullable
 as int?,aboutMe: freezed == aboutMe ? _self.aboutMe : aboutMe // ignore: cast_nullable_to_non_nullable
 as String?,profiler: null == profiler ? _self.profiler : profiler // ignore: cast_nullable_to_non_nullable
-as UserProfiler,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as UserProfiler,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as UserLocation?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,isOnline: null == isOnline ? _self.isOnline : isOnline // ignore: cast_nullable_to_non_nullable
 as bool,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
 as bool,lastSeen: null == lastSeen ? _self.lastSeen : lastSeen // ignore: cast_nullable_to_non_nullable
@@ -307,6 +322,18 @@ $UserProfilerCopyWith<$Res> get profiler {
   
   return $UserProfilerCopyWith<$Res>(_self.profiler, (value) {
     return _then(_self.copyWith(profiler: value));
+  });
+}/// Create a copy of UserData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserLocationCopyWith<$Res>? get location {
+    if (_self.location == null) {
+    return null;
+  }
+
+  return $UserLocationCopyWith<$Res>(_self.location!, (value) {
+    return _then(_self.copyWith(location: value));
   });
 }
 }

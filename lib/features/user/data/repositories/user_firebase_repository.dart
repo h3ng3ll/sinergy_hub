@@ -6,7 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../../core/services/firebase/firebase_storage_service.dart';
+import '../../../matches/domain/models/e_location_filter_mode.dart';
 import '../../../matches/domain/models/matches_filter/matches_filter.dart';
+import '../../../matches/domain/repositories/i_nearby_candidates_repository.dart';
 import '../../../onboard_survey/domain/models/user_profiler/user_profiler.dart';
 import '../mapper/user_data_mapper.dart';
 import '../../domain/models/user_data/user_data.dart';
@@ -26,6 +28,7 @@ class UserFirebaseRepository
   final FirebaseAuthService _firebaseAuthService;
   final FirebaseFirestoreService _firebaseFirestoreService;
   final FirebaseStorageService _firebaseStorageService;
+  final INearbyCandidatesRepository _nearbyCandidatesRepository;
 
   final String path = 'user_avatars';
 
@@ -38,9 +41,11 @@ class UserFirebaseRepository
     required FirebaseAuthService firebaseAuthService,
     required FirebaseFirestoreService firebaseFirestoreService,
     required FirebaseStorageService firebaseStorageService,
+    required INearbyCandidatesRepository nearbyCandidatesRepository,
   }) : _firebaseAuthService = firebaseAuthService,
        _firebaseFirestoreService = firebaseFirestoreService,
-       _firebaseStorageService = firebaseStorageService;
+       _firebaseStorageService = firebaseStorageService,
+       _nearbyCandidatesRepository = nearbyCandidatesRepository;
 
   @override
   Stream<User?> currentUserStream() => _firebaseAuthService.userStream;
@@ -89,6 +94,15 @@ class UserFirebaseRepository
     required UserDataPgState userDataState,
     MatchesFilter? filter,
   }) async {
+    // Distance mode has no coordinates to query with locally — it can only
+    // run server-side (docs/location_backend_contract.md §4).
+    if (filter?.locationMode == ELocationFilterMode.radius) {
+      return _nearbyCandidatesRepository.search(
+        userDataState: userDataState,
+        filter: filter!,
+      );
+    }
+
     Query query = _firebaseFirestoreService.usersDocument;
 
     query = UserQueryBuilder.applyFilters(query, filter);

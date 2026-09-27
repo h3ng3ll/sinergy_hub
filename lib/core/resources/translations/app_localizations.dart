@@ -537,6 +537,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Liked {time} ago'**
   String liked_you_ago(String time);
+
+  /// No description provided for @location_group_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location_group_title;
+
+  /// No description provided for @location_country_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get location_country_hint;
+
+  /// No description provided for @location_city_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get location_city_hint;
+
+  /// No description provided for @location_use_my_location.
+  ///
+  /// In en, this message translates to:
+  /// **'📍 Use my location'**
+  String get location_use_my_location;
+
+  /// No description provided for @location_open_settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get location_open_settings;
+
+  /// No description provided for @location_open_location_settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Location Settings'**
+  String get location_open_location_settings;
+
+  /// No description provided for @filter_location_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get filter_location_title;
+
+  /// No description provided for @filter_location_city_option.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get filter_location_city_option;
+
+  /// No description provided for @filter_location_distance_option.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get filter_location_distance_option;
+
+  /// No description provided for @filter_location_distance_locked.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your location in Edit Profile first'**
+  String get filter_location_distance_locked;
+
+  /// Selected radius on the Home filter's Distance slider
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km'**
+  String filter_location_radius_km(int km);
 }
 
 class _AppLocalizationsDelegate

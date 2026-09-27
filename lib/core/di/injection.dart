@@ -21,6 +21,8 @@ import '../../features/connectivity/di/connectivity_injection.dart';
 import '../services/audio_service.dart';
 import '../services/connectivity_service.dart';
 import '../services/crypto_service.dart';
+import '../services/geolocation/geolocator_geolocation_service.dart';
+import '../services/geolocation/i_geolocation_service.dart';
 import '../services/firebase/firebase_auth_service.dart';
 import '../services/firebase/firebase_firestore_service.dart';
 import '../services/firebase/firebase_functions_service.dart';
@@ -64,6 +66,9 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => ImageService());
   getIt.registerLazySingleton(() => CryptoService());
   getIt.registerLazySingleton(() => ConnectivityService());
+  getIt.registerLazySingleton<IGeolocationService>(
+    () => GeolocatorGeolocationService(),
+  );
   getIt.registerLazySingleton(
     () => FirebaseDatabase.instance,
   );
