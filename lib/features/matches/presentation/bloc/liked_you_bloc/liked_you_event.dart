@@ -7,4 +7,6 @@ class LikedYouEvent with _$LikedYouEvent {
   const factory LikedYouEvent.loadMore() = _LoadMore;
 
   const factory LikedYouEvent.refresh() = _Refresh;
+
+  const factory LikedYouEvent.watchChanges() = _WatchChanges;
 }

@@ -9,6 +9,7 @@ import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/custom_loading_indicator.dart';
 import '../../../../subscription/presentation/bloc/premium_bloc/premium_bloc.dart';
 import '../../../domain/usecases/get_liked_you_use_case.dart';
+import '../../../domain/usecases/watch_liked_you_changes_use_case.dart';
 import '../../bloc/liked_you_bloc/liked_you_bloc.dart';
 import 'widgets/failed_liked_you/failed_liked_you.dart';
 import 'widgets/liked_you_builder/liked_you_builder.dart';
@@ -29,9 +30,14 @@ class _LikedYouPageState extends State<LikedYouPage> {
     _likedYouBloc =
         LikedYouBloc(
           getLikedYouUseCase: getIt<GetLikedYouUseCase>(),
-        )..add(
-          const LikedYouEvent.load(),
-        );
+          watchLikedYouChangesUseCase: getIt<WatchLikedYouChangesUseCase>(),
+        )
+          ..add(
+            const LikedYouEvent.load(),
+          )
+          ..add(
+            const LikedYouEvent.watchChanges(),
+          );
     super.initState();
   }
 
@@ -92,7 +98,9 @@ class _LikedYouPageState extends State<LikedYouPage> {
                 return const CustomLoadingIndicator();
               }
               if (state.isEmpty) {
-                return const NoFoundLikedYou();
+                return NoFoundLikedYou(
+                  onReload: _onLoad,
+                );
               }
               return RefreshIndicator(
                 onRefresh: _onRefresh,

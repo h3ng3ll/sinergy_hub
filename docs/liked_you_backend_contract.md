@@ -352,7 +352,62 @@ Request: `{ "limit": 20, "cursor": "eyJ0IjoxNzU4OTIwNTY1MDAwLCJpZCI6ImMzIn0" }`
              "resetsAt": "2026-09-28T00:00:00Z", "isUnlimited": false } }
 ```
 
-## 11. Backend checklist
+## 11. Live updates — `likedYouMeta/{uid}` signal document
+
+A callable cannot push, so the client learns about feed changes from a tiny
+Firestore document that it **listens** to. The document carries **no feed data
+and no gating decisions**, only a change signal. On every change, the client
+re-calls `getLikedYou` with `cursor: null` and replaces the list with the
+fresh first page. Pagination and every gating rule stay in the callable.
+
+Read-only for the client. It is written **only** by the backend.
+
+| Field | Type | Meaning |
+|---|---|---|
+| `pendingCount` | `int` | Current number of pending likes for `uid`, i.e. the same total as `totalCount`. |
+| `updatedAt` | `timestamp` (server) | Bumped on **every** change listed below. The client re-fetches on any change of the document. |
+
+Write it (`set` with merge; `pendingCount` recomputed or incremented, and
+`updatedAt: FieldValue.serverTimestamp()`) in the same transaction or batch as
+the match-doc change, whenever:
+
+1. a new like targets `uid` (`pendingFor` set to `uid`);
+2. `uid` answers a pending like (like-back or reject; `pendingFor` cleared);
+3. a liker is deleted or blocked, or blocks `uid`;
+4. `uid`'s reveal set changes for a reason other than paging (e.g. an
+   admin reset). A new quota period does **not** need a write: the client
+   picks it up on its next fetch.
+
+Rules for the writer:
+
+- Bump **at most once per logical change**. Batch fan-outs (e.g. deleting a
+  user who liked many people) must write each affected `likedYouMeta` doc once,
+  not once per match doc.
+- Never put names, uids or image URLs in this document. It is readable by its
+  owner even when they are Free.
+- A missing document is valid (no likes yet). The client treats it as "no
+  signal" and still shows the feed from the callable.
+
+Client behaviour the backend should expect:
+
+- The listener ignores the first snapshot it receives, because the initial
+  `getLikedYou` load already covers it.
+- Each later change triggers one first-page fetch. A burst of changes while a
+  fetch is in flight is processed in order, one fetch per change. Keep bumps
+  coalesced (rule above) to avoid extra calls.
+- If the listener errors, the client stops live updates silently.
+  Pull-to-refresh and Retry keep working.
+
+Firestore rule:
+
+```
+match /likedYouMeta/{uid} {
+  allow read: if request.auth != null && request.auth.uid == uid;
+  allow write: if false;   // server-only
+}
+```
+
+## 12. Backend checklist
 
 - [ ] `matchUser` maintains `pendingFor` and `likedAt` on match docs (set on
   the first like, cleared on answer, delete or block). Existing
@@ -376,3 +431,7 @@ Request: `{ "limit": 20, "cursor": "eyJ0IjoxNzU4OTIwNTY1MDAwLCJpZCI6ImMzIn0" }`
   server-only.
 - [ ] Per-viewer rate limit and structured logging, with no signed URLs in
   the logs.
+- [ ] `likedYouMeta/{uid}` (`pendingCount`, `updatedAt`) is written in the same
+  transaction as every feed-changing event in §11, coalesced to one bump per
+  logical change. It has an owner-read, server-write rule. Existing users are
+  backfilled.

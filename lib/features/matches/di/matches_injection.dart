@@ -8,6 +8,9 @@ import '../../auth/domain/repostories/i_auth_repository.dart';
 import '../../chat/domain/repositories/i_chat_repository.dart';
 import '../../user/data/services/user_service.dart';
 import '../../user/domain/repositories/i_user_read_repository.dart';
+import '../data/repositories/liked_you_meta_firestore_repository.dart';
+import '../domain/repositories/i_liked_you_meta_repository.dart';
+import '../domain/usecases/watch_liked_you_changes_use_case.dart';
 import '../data/repositories/liked_you_functions_repository.dart';
 import '../data/repositories/user_matches_firebase_repository.dart';
 import '../domain/repositories/i_liked_you_repository.dart';
@@ -97,6 +100,16 @@ void initMatchingFeature(GetIt getIt) {
   getIt.registerLazySingleton<GetLikedYouUseCase>(
     () => GetLikedYouUseCase(
       likedYouRepository: getIt<ILikedYouRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<ILikedYouMetaRepository>(
+    () => LikedYouMetaFirestoreRepository(
+      firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
+    ),
+  );
+  getIt.registerLazySingleton<WatchLikedYouChangesUseCase>(
+    () => WatchLikedYouChangesUseCase(
+      likedYouMetaRepository: getIt<ILikedYouMetaRepository>(),
     ),
   );
 }

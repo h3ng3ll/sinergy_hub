@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import '../../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../../../gen/assets.gen.dart';
 
 class BuildChatsEmpty extends StatelessWidget {
@@ -14,6 +15,7 @@ class BuildChatsEmpty extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = AppTextTheme.of(context);
     final colorScheme = AppColorScheme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Center(
       child: Padding(
@@ -65,6 +67,47 @@ class BuildChatsEmpty extends StatelessWidget {
                 ),
               ),
               textAlign: TextAlign.center,
+            ),
+            const Gap(32.0),
+            Container(
+              padding: const EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 20.0),
+              decoration: BoxDecoration(
+                color: AppColors.white.value.withValues(
+                  alpha: 0.12,
+                ),
+                borderRadius: BorderRadius.circular(
+                  16.0,
+                ),
+                border: Border.all(
+                  color: AppColors.white.value.withValues(
+                    alpha: 0.2,
+                  ),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    '“',
+                    style: textTheme.bold50.copyWith(
+                      color: colorScheme.onPrimary.withValues(
+                        alpha: 0.5,
+                      ),
+                      height: 1.0,
+                    ),
+                  ),
+                  Text(
+                    l10n.chats_empty_quote,
+                    style: textTheme.regular14.copyWith(
+                      color: colorScheme.onPrimary.withValues(
+                        alpha: 0.9,
+                      ),
+                      fontStyle: FontStyle.italic,
+                      height: 1.5,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ],
         ),

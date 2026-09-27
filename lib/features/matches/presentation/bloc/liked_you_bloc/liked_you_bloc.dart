@@ -7,6 +7,7 @@ import '../../../domain/models/liked_you/liked_you_item.dart';
 import '../../../domain/models/liked_you/liked_you_quota.dart';
 import '../../../domain/models/liked_you_pg_state/liked_you_pg_state.dart';
 import '../../../domain/usecases/get_liked_you_use_case.dart';
+import '../../../domain/usecases/watch_liked_you_changes_use_case.dart';
 
 part 'liked_you_event.dart';
 
@@ -18,9 +19,11 @@ part 'liked_you_bloc.freezed.dart';
 
 class LikedYouBloc extends Bloc<LikedYouEvent, LikedYouState> {
   final GetLikedYouUseCase _getLikedYouUseCase;
+  final WatchLikedYouChangesUseCase _watchLikedYouChangesUseCase;
 
   LikedYouBloc({
     required this._getLikedYouUseCase,
+    required this._watchLikedYouChangesUseCase,
   }) : super(const LikedYouState()) {
     on<_Load>(_load);
     on<_LoadMore>(
@@ -30,6 +33,10 @@ class LikedYouBloc extends Bloc<LikedYouEvent, LikedYouState> {
     on<_Refresh>(
       _refresh,
       transformer: droppable(),
+    );
+    on<_WatchChanges>(
+      _watchChanges,
+      transformer: restartable(),
     );
   }
 
@@ -61,7 +68,28 @@ class LikedYouBloc extends Bloc<LikedYouEvent, LikedYouState> {
     );
   }
 
-  Future<void> _refresh(_Refresh event, Emitter<LikedYouState> emit) async {
+  Future<void> _refresh(_Refresh event, Emitter<LikedYouState> emit) =>
+      _reloadFirstPage(emit);
+
+  /// Re-fetches the first page whenever the backend's `likedYouMeta/{uid}`
+  /// signal changes (a new like arrived, or one left the feed). The feed data
+  /// itself still comes from the gated `getLikedYou` callable.
+  Future<void> _watchChanges(
+    _WatchChanges event,
+    Emitter<LikedYouState> emit,
+  ) async {
+    try {
+      await for (final _ in _watchLikedYouChangesUseCase.call()) {
+        if (emit.isDone) return;
+        await _reloadFirstPage(emit);
+      }
+    } catch (_) {
+      // A broken signal stream only loses live updates; pull-to-refresh
+      // and Retry still work, so the feed state is left untouched.
+    }
+  }
+
+  Future<void> _reloadFirstPage(Emitter<LikedYouState> emit) async {
     emit(
       state.copyWith(
         status: ELikedYouStatus.refreshing,

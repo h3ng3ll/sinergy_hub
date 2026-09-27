@@ -101,6 +101,18 @@ class FirebaseFirestoreService {
     'fakeUsers',
   );
 
+  /// Backend-owned "Liked you" change signal — read-only for the client.
+  /// See docs/liked_you_backend_contract.md §11.
+  DocRef likedYouMeta(
+    String uid,
+  ) => _firebaseFirestore
+      .collection(
+        'likedYouMeta',
+      )
+      .doc(
+        uid,
+      );
+
   DocRef userDocument(
     String uid,
   ) => usersDocument.doc(

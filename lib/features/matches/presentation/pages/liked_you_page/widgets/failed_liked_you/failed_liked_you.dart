@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../core/resources/translations/app_localizations.dart';
-import '../../../../../../../core/widgets/btn/action_btn.dart';
+import '../../../../../../../core/widgets/btn/translucent_btn.dart';
 import '../../../../../../../core/widgets/padding/horizontal_padding.dart';
 
 class FailedLikedYou extends StatelessWidget {
@@ -45,7 +45,7 @@ class FailedLikedYou extends StatelessWidget {
                 color: AppColors.greyLight.value,
               ),
             ),
-            ActionBtn.filled(
+            TranslucentBtn(
               onPressed: onRetry,
               text: l10n.liked_you_retry,
             ),

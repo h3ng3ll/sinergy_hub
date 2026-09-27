@@ -130,7 +130,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywall_title => 'Go Premium';
 
   @override
+  String get chat_empty_title => 'Make a great first impression';
+
+  @override
+  String get chat_empty_subtitle =>
+      'You matched for a reason. Say hi, be yourself. You\'ve got this! 💪';
+
+  @override
+  String get notifications_empty_title => 'All quiet for now';
+
+  @override
+  String get notifications_empty_subtitle =>
+      'When someone likes you or sends a message, you\'ll hear it here first. Good things are on their way ✨';
+
+  @override
+  String get chats_empty_quote =>
+      'The right people don\'t arrive early, they arrive on time. Every day you wait, you\'re becoming someone worth finding. 💫';
+
+  @override
   String get paywall_benefit_unlimited_likes => 'Unlimited daily likes';
+
+  @override
+  String get paywall_benefit_see_who_liked_you => 'See who liked you';
+
+  @override
+  String get paywall_benefit_unlock_content => 'Unlock Premium content';
+
+  @override
+  String get paywall_benefit_more_visibility => 'Get more visibility';
+
+  @override
+  String get paywall_benefit_unlimited_interactions =>
+      'Enjoy unlimited interactions';
+
+  @override
+  String get paywall_benefit_exclusive_features => 'Access exclusive features';
 
   @override
   String get paywall_continue => 'Continue';
@@ -191,10 +225,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get liked_you_empty_title => 'No likes yet';
 
   @override
+  String get liked_you_empty_subtitle =>
+      'Your admirers are on their way. Keep swiping and they\'ll show up here 💜';
+
+  @override
   String get liked_you_failed_title => 'Failed to load who liked you';
 
   @override
   String get liked_you_retry => 'Retry';
+
+  @override
+  String get liked_you_reload => 'Reload';
 
   @override
   String get liked_you_load_more_failed => 'Couldn\'t load more · Retry';

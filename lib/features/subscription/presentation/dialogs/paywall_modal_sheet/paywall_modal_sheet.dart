@@ -118,8 +118,35 @@ class PaywallModalSheet extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 20.0,
                     children: [
-                      PremiumBenefitRow(
-                        text: l10n.paywall_benefit_unlimited_likes,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 12.0,
+                        children: [
+                          PremiumBenefitRow(
+                            emoji: '❤️',
+                            text: l10n.paywall_benefit_unlimited_likes,
+                          ),
+                          PremiumBenefitRow(
+                            emoji: '💎',
+                            text: l10n.paywall_benefit_see_who_liked_you,
+                          ),
+                          PremiumBenefitRow(
+                            emoji: '🔓',
+                            text: l10n.paywall_benefit_unlock_content,
+                          ),
+                          PremiumBenefitRow(
+                            emoji: '🚀',
+                            text: l10n.paywall_benefit_more_visibility,
+                          ),
+                          PremiumBenefitRow(
+                            emoji: '⚡',
+                            text: l10n.paywall_benefit_unlimited_interactions,
+                          ),
+                          PremiumBenefitRow(
+                            emoji: '💬',
+                            text: l10n.paywall_benefit_exclusive_features,
+                          ),
+                        ],
                       ),
                       BlocBuilder<PaywallBloc, PaywallState>(
                         builder: (context, state) => PaywallPlansList(

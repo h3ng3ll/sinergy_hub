@@ -328,11 +328,71 @@ abstract class AppLocalizations {
   /// **'Go Premium'**
   String get paywall_title;
 
+  /// No description provided for @chat_empty_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Make a great first impression'**
+  String get chat_empty_title;
+
+  /// No description provided for @chat_empty_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You matched for a reason. Say hi, be yourself. You\'ve got this! 💪'**
+  String get chat_empty_subtitle;
+
+  /// No description provided for @notifications_empty_title.
+  ///
+  /// In en, this message translates to:
+  /// **'All quiet for now'**
+  String get notifications_empty_title;
+
+  /// No description provided for @notifications_empty_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When someone likes you or sends a message, you\'ll hear it here first. Good things are on their way ✨'**
+  String get notifications_empty_subtitle;
+
+  /// No description provided for @chats_empty_quote.
+  ///
+  /// In en, this message translates to:
+  /// **'The right people don\'t arrive early, they arrive on time. Every day you wait, you\'re becoming someone worth finding. 💫'**
+  String get chats_empty_quote;
+
   /// No description provided for @paywall_benefit_unlimited_likes.
   ///
   /// In en, this message translates to:
   /// **'Unlimited daily likes'**
   String get paywall_benefit_unlimited_likes;
+
+  /// No description provided for @paywall_benefit_see_who_liked_you.
+  ///
+  /// In en, this message translates to:
+  /// **'See who liked you'**
+  String get paywall_benefit_see_who_liked_you;
+
+  /// No description provided for @paywall_benefit_unlock_content.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Premium content'**
+  String get paywall_benefit_unlock_content;
+
+  /// No description provided for @paywall_benefit_more_visibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Get more visibility'**
+  String get paywall_benefit_more_visibility;
+
+  /// No description provided for @paywall_benefit_unlimited_interactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoy unlimited interactions'**
+  String get paywall_benefit_unlimited_interactions;
+
+  /// No description provided for @paywall_benefit_exclusive_features.
+  ///
+  /// In en, this message translates to:
+  /// **'Access exclusive features'**
+  String get paywall_benefit_exclusive_features;
 
   /// No description provided for @paywall_continue.
   ///
@@ -436,6 +496,12 @@ abstract class AppLocalizations {
   /// **'No likes yet'**
   String get liked_you_empty_title;
 
+  /// No description provided for @liked_you_empty_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your admirers are on their way. Keep swiping and they\'ll show up here 💜'**
+  String get liked_you_empty_subtitle;
+
   /// No description provided for @liked_you_failed_title.
   ///
   /// In en, this message translates to:
@@ -447,6 +513,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get liked_you_retry;
+
+  /// No description provided for @liked_you_reload.
+  ///
+  /// In en, this message translates to:
+  /// **'Reload'**
+  String get liked_you_reload;
 
   /// No description provided for @liked_you_load_more_failed.
   ///

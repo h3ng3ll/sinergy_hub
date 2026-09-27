@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
 
 class PremiumBenefitRow extends StatelessWidget {
+  final String emoji;
   final String text;
 
   const PremiumBenefitRow({
     super.key,
+    required this.emoji,
     required this.text,
   });
 
@@ -18,10 +19,13 @@ class PremiumBenefitRow extends StatelessWidget {
     return Row(
       spacing: 12.0,
       children: [
-        Icon(
-          Icons.check_circle_rounded,
-          color: AppColors.majorelleBlue.value,
-          size: 20.0,
+        SizedBox(
+          width: 24.0,
+          child: Text(
+            emoji,
+            textAlign: TextAlign.center,
+            style: textTheme.regular16,
+          ),
         ),
         Expanded(
           child: Text(

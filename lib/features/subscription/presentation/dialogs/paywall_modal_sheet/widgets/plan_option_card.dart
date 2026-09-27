@@ -47,7 +47,7 @@ class PlanOptionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 4.0,
                 children: [
-                  Row(
+                  Wrap(
                     spacing: 8.0,
                     children: [
                       Text(
