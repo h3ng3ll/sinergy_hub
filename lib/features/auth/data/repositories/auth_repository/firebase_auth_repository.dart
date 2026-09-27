@@ -154,8 +154,19 @@ class FirebaseAuthRepository extends IAuthRepository {
 
   @override
   Future<void> signOut() async {
-    await _googleSignInService.signOut();
+    await _signOutGoogleSafely();
     await _auth.signOut();
+  }
+
+  /// Google revoke is best-effort: it throws on iOS when the session was not
+  /// created by Google (e.g. Apple sign-in), and must never block Firebase
+  /// sign-out.
+  Future<void> _signOutGoogleSafely() async {
+    try {
+      await _googleSignInService.signOut();
+    } catch (e) {
+      debugPrint('Google sign-out skipped: $e');
+    }
   }
 
   @override
@@ -165,7 +176,7 @@ class FirebaseAuthRepository extends IAuthRepository {
     );
     // Revoke the local session so watchUser() emits null →
     // AuthBloc → logout → GoRouter redirects to the auth page.
-    await _googleSignInService.signOut();
+    await _signOutGoogleSafely();
     await _auth.signOut();
   }
 

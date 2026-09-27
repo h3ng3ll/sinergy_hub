@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -70,6 +72,20 @@ void main() {
 
       verifyNever(() => database.ref(any()));
       verifyNever(() => statusRef.set(any()));
+    });
+
+    test('returns after the timeout when the write never completes (iOS hang)',
+        () async {
+      final user = _UserMock();
+      when(() => user.uid).thenReturn(uid);
+      when(() => authService.currentUser).thenReturn(user);
+      when(() => statusRef.set(any()))
+          .thenAnswer((_) => Completer<void>().future);
+
+      await expectLater(
+        service.setOffline().timeout(const Duration(seconds: 5)),
+        completes,
+      );
     });
   });
 }
