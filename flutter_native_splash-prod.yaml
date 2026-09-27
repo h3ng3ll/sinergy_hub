@@ -5,7 +5,7 @@ flutter_native_splash:
   # 1. Customize the parameters below.
   # 2. run the following command in the terminal:
   # dart run flutter_native_splash:create
-  # or if you place this not in pubspec.yaml and not in flutter_native_splash.yaml:
+  # or if you place this not in pubspec.yaml and not in flutter_native_splash-development.yaml:
   # dart run flutter_native_splash:create -p ../your-filepath.yaml
   # 3. voila, done!
 
@@ -14,7 +14,7 @@ flutter_native_splash:
   # flutter clean ; flutter pub get
   # - To restore Flutter's default white splash screen, run the following command in the terminal:
   # dart run flutter_native_splash:remove
-  # or if you place this not in pubspec.yaml and not in flutter_native_splash.yaml:
+  # or if you place this not in pubspec.yaml and not in flutter_native_splash-development.yaml:
   # dart run flutter_native_splash:remove -p ../your-filepath.yaml
 
   # IMPORTANT NOTE: These parameter do not affect the configuration of Android 12 and later, which
@@ -25,8 +25,8 @@ flutter_native_splash:
 
   # uncomment this if you want to disable this package for specific platform:
   android: true
-  ios: false
-  web: true
+  ios: true
+  web: false
 
   #======================================================================
 
@@ -42,10 +42,12 @@ flutter_native_splash:
   # platform-specific color. will override general color if active:
   color_android: "#121212"
   color_dark_android: "#121212"
-  #color_ios: "#42a5f5"
-  #color_dark_ios: "#042a49"
+  color_ios: "#42a5f5"
+  color_dark_ios: "#121212"
   color_web: "#42a5f5"
   color_dark_web: "#042a49"
+
+  image: assets/flutter_native_splash/android/ic_splash_image_prod.png
 
   # general background_image for all platform (except android 12+)
   # if you specify this [required] background_image, then you should comment the
@@ -148,7 +150,7 @@ flutter_native_splash:
     # center-logo background color
     #icon_background_color: "#111111"
     # icon_background_color_dark: "#eeeeee"
-
+    image: assets/flutter_native_splash/android/ic_splash_image_prod.png
     # branding:
     # The branding image dimensions must be 800x320 px.
     #branding:      assets/dart.png

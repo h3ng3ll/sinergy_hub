@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:sinergy_hub/features/auth/domain/repostories/i_auth_repository.dart';
 import 'package:sinergy_hub/features/matches/domain/models/matches_filter/matches_filter.dart';
+import 'package:sinergy_hub/features/matches/domain/repositories/i_candidate_distance_repository.dart';
 import 'package:sinergy_hub/features/matches/domain/usecases/get_excluded_matches_use_case.dart';
 import 'package:sinergy_hub/features/matches/domain/usecases/look_for_matches_use_case.dart';
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
@@ -16,11 +17,15 @@ class _MockAuthRepository extends Mock implements IAuthRepository {}
 class _MockGetExcludedMatchesUseCase extends Mock
     implements GetExcludedMatchesUseCase {}
 
+class _CandidateDistanceRepository extends Mock
+    implements ICandidateDistanceRepository {}
+
 void main() {
   late _MockUserReadRepository userReadRepository;
   late _MockAuthRepository authRepository;
   late _MockGetExcludedMatchesUseCase getExcludedMatchesUseCase;
   late LookForMatchesUseCase useCase;
+  late _CandidateDistanceRepository candidateDistanceRepository;
 
   const currentUid = 'me';
 
@@ -36,11 +41,13 @@ void main() {
     userReadRepository = _MockUserReadRepository();
     authRepository = _MockAuthRepository();
     getExcludedMatchesUseCase = _MockGetExcludedMatchesUseCase();
+    candidateDistanceRepository  = _CandidateDistanceRepository();
 
     useCase = LookForMatchesUseCase(
       userReadRepository: userReadRepository,
       authRepository: authRepository,
       getExcludedMatchesUseCase: getExcludedMatchesUseCase,
+      candidateDistanceRepository: candidateDistanceRepository,
     );
 
     when(() => authRepository.requireUserId()).thenAnswer((_) async => currentUid);
