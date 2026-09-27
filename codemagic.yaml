@@ -305,10 +305,20 @@ workflows:
       - name: Restore key
         script: |
           echo "$KEY_PROPERTY" > android/key.properties
-          echo  "$UPLOAD_KEYSTORE_BASE64" | base64 --decode > "$CM_BUILD_DIR/android/app/upload-keystore.jks"
+          echo "$UPLOAD_KEYSTORE_BASE64" | base64 --decode > "$CM_BUILD_DIR/android/app/upload-keystore.jks"
+          
           pwd
           ls -la android/key.properties
           ls -la android/app/upload-keystore.jks
+          
+          SUM=$(shasum -a 256 android/app/upload-keystore.jks | awk '{print $1}')
+          
+          if [ "$SUM" != "a42214da12097ad6f9fcee4355c19a47090de263ec759035757b2e87d8b92705" ]; then
+            echo "❌ Key invalid"
+            exit 1
+          fi
+          
+          echo "✅ Key is valid"
       - name: Create env
         script: |
           cat << EOF > "$CM_BUILD_DIR/.env"
