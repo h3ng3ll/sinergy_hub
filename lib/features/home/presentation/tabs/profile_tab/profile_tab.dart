@@ -43,6 +43,12 @@ class _ProfileTabState extends State<ProfileTab> {
     );
   }
 
+  void onTapEditExperience() {
+    EditExperienceRoute().push(
+      context,
+    );
+  }
+
   void onTapEditSkills() {}
 
   void onTapAvatar() {
@@ -107,6 +113,7 @@ class _ProfileTabState extends State<ProfileTab> {
                               BuildAbout(
                                 userData: userData,
                                 onTapEdit: onTapEditAbout,
+                                onTapEditExperience: onTapEditExperience,
                               ),
                               Gap(20.0),
                               BuildLookingFor(

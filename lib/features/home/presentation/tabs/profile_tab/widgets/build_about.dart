@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../onboard_survey/domain/models/experiences/experiences.dart';
 import '../../../../../user/domain/models/user_data/user_data.dart';
@@ -9,11 +10,13 @@ import 'shadow_container.dart';
 
 class BuildAbout extends StatelessWidget {
   final VoidCallback onTapEdit;
+  final VoidCallback onTapEditExperience;
   final UserData userData;
 
   const BuildAbout({
     super.key,
     required this.onTapEdit,
+    required this.onTapEditExperience,
     required this.userData,
   });
 
@@ -36,23 +39,34 @@ class BuildAbout extends StatelessWidget {
             userData.aboutMe.toString(),
             style: textTheme.regular16,
           ),
-          Row(
-            spacing: 10.0,
-            children: [
-              SvgPicture.asset(
-                experience.icon,
-                width: 20.0,
-                height: 20.0,
-              ),
-
-              Text(
-                experience.name,
-                style: textTheme.bold16,
-              ),
-              Text(
-                experience.rangeExperience,
-              ),
-            ],
+          InkWell(
+            onTap: onTapEditExperience,
+            child: Row(
+              spacing: 10.0,
+              children: [
+                SvgPicture.asset(
+                  experience.icon,
+                  width: 20.0,
+                  height: 20.0,
+                ),
+                Text(
+                  experience.name,
+                  style: textTheme.bold16,
+                ),
+                Expanded(
+                  child: Text(
+                    experience.rangeExperience,
+                  ),
+                ),
+                Icon(
+                  Icons.edit,
+                  size: 20.0,
+                  color: AppColors.black.value.withValues(
+                    alpha: 0.5,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -32,6 +32,7 @@ import '../../../features/settings/presentation/pages/settings_page/settings_pag
 import '../../../features/support/presentation/pages/support_page/support_page.dart';
 import '../../../features/terms_of_use/presentation/pages/terms_of_use_page/terms_of_use_page.dart';
 import '../../../features/user/presentation/bloc/user_bloc/user_bloc.dart';
+import '../../../features/user/presentation/pages/edit_experience_page/edit_experience_page.dart';
 import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
 import '../../../features/user/presentation/pages/user_profile_page/user_profile_page.dart';
 import '../root_page/root_page.dart';
@@ -261,6 +262,9 @@ GoRouter initRouter({
                 TypedGoRoute<EditLookingForRoute>(
                   path: 'looking-for-edit',
                 ),
+                TypedGoRoute<EditExperienceRoute>(
+                  path: 'experience-edit',
+                ),
               ],
             ),
             TypedGoRoute<ProfilePageRoute>(
@@ -474,6 +478,15 @@ class EditLookingForRoute extends GoRouteData with $EditLookingForRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       EditLookingForPage(),
+    );
+  }
+}
+
+class EditExperienceRoute extends GoRouteData with $EditExperienceRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      EditExperiencePage(),
     );
   }
 }

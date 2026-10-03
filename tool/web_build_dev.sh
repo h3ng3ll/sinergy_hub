@@ -8,7 +8,7 @@ OUTPUT="web/index.html"
 
 # Загружаем .env
 set -a
-source .env
+source ../.env
 set +a
 
 sed "s|{{GOOGLE_SIGNIN_CLIENT_ID}}|$DEV_SERVER_CLIENT_ID|g" \
