@@ -55,7 +55,7 @@ extension ChatPageEventPatterns on ChatPageEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Subscribe value)?  subscribe,TResult Function( _Init value)?  init,TResult Function( _SendMessage value)?  sendMessage,TResult Function( _UpdateMessages value)?  updateMessages,TResult Function( _UpdateChat value)?  updateChat,TResult Function( _StartTyping value)?  startTyping,TResult Function( _EndTyping value)?  endTyping,TResult Function( _UpdateUserData value)?  updateUserData,TResult Function( _ToggleBlock value)?  toggleBlock,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Subscribe value)?  subscribe,TResult Function( _Init value)?  init,TResult Function( _SendMessage value)?  sendMessage,TResult Function( _UpdateMessages value)?  updateMessages,TResult Function( _UpdateChat value)?  updateChat,TResult Function( _StartTyping value)?  startTyping,TResult Function( _EndTyping value)?  endTyping,TResult Function( _UpdateUserData value)?  updateUserData,TResult Function( _ToggleBlock value)?  toggleBlock,TResult Function( _LoadOlder value)?  loadOlder,TResult Function( _MessagesFailed value)?  messagesFailed,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
@@ -67,7 +67,9 @@ return updateChat(_that);case _StartTyping() when startTyping != null:
 return startTyping(_that);case _EndTyping() when endTyping != null:
 return endTyping(_that);case _UpdateUserData() when updateUserData != null:
 return updateUserData(_that);case _ToggleBlock() when toggleBlock != null:
-return toggleBlock(_that);case _:
+return toggleBlock(_that);case _LoadOlder() when loadOlder != null:
+return loadOlder(_that);case _MessagesFailed() when messagesFailed != null:
+return messagesFailed(_that);case _:
   return orElse();
 
 }
@@ -85,7 +87,7 @@ return toggleBlock(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Subscribe value)  subscribe,required TResult Function( _Init value)  init,required TResult Function( _SendMessage value)  sendMessage,required TResult Function( _UpdateMessages value)  updateMessages,required TResult Function( _UpdateChat value)  updateChat,required TResult Function( _StartTyping value)  startTyping,required TResult Function( _EndTyping value)  endTyping,required TResult Function( _UpdateUserData value)  updateUserData,required TResult Function( _ToggleBlock value)  toggleBlock,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Subscribe value)  subscribe,required TResult Function( _Init value)  init,required TResult Function( _SendMessage value)  sendMessage,required TResult Function( _UpdateMessages value)  updateMessages,required TResult Function( _UpdateChat value)  updateChat,required TResult Function( _StartTyping value)  startTyping,required TResult Function( _EndTyping value)  endTyping,required TResult Function( _UpdateUserData value)  updateUserData,required TResult Function( _ToggleBlock value)  toggleBlock,required TResult Function( _LoadOlder value)  loadOlder,required TResult Function( _MessagesFailed value)  messagesFailed,}){
 final _that = this;
 switch (_that) {
 case _Subscribe():
@@ -97,7 +99,9 @@ return updateChat(_that);case _StartTyping():
 return startTyping(_that);case _EndTyping():
 return endTyping(_that);case _UpdateUserData():
 return updateUserData(_that);case _ToggleBlock():
-return toggleBlock(_that);}
+return toggleBlock(_that);case _LoadOlder():
+return loadOlder(_that);case _MessagesFailed():
+return messagesFailed(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -111,7 +115,7 @@ return toggleBlock(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Subscribe value)?  subscribe,TResult? Function( _Init value)?  init,TResult? Function( _SendMessage value)?  sendMessage,TResult? Function( _UpdateMessages value)?  updateMessages,TResult? Function( _UpdateChat value)?  updateChat,TResult? Function( _StartTyping value)?  startTyping,TResult? Function( _EndTyping value)?  endTyping,TResult? Function( _UpdateUserData value)?  updateUserData,TResult? Function( _ToggleBlock value)?  toggleBlock,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Subscribe value)?  subscribe,TResult? Function( _Init value)?  init,TResult? Function( _SendMessage value)?  sendMessage,TResult? Function( _UpdateMessages value)?  updateMessages,TResult? Function( _UpdateChat value)?  updateChat,TResult? Function( _StartTyping value)?  startTyping,TResult? Function( _EndTyping value)?  endTyping,TResult? Function( _UpdateUserData value)?  updateUserData,TResult? Function( _ToggleBlock value)?  toggleBlock,TResult? Function( _LoadOlder value)?  loadOlder,TResult? Function( _MessagesFailed value)?  messagesFailed,}){
 final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
@@ -123,7 +127,9 @@ return updateChat(_that);case _StartTyping() when startTyping != null:
 return startTyping(_that);case _EndTyping() when endTyping != null:
 return endTyping(_that);case _UpdateUserData() when updateUserData != null:
 return updateUserData(_that);case _ToggleBlock() when toggleBlock != null:
-return toggleBlock(_that);case _:
+return toggleBlock(_that);case _LoadOlder() when loadOlder != null:
+return loadOlder(_that);case _MessagesFailed() when messagesFailed != null:
+return messagesFailed(_that);case _:
   return null;
 
 }
@@ -140,7 +146,7 @@ return toggleBlock(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String uid)?  subscribe,TResult Function( String chatId)?  init,TResult Function( String message)?  sendMessage,TResult Function( List<ChatMessage> messages)?  updateMessages,TResult Function( Chat chat)?  updateChat,TResult Function()?  startTyping,TResult Function()?  endTyping,TResult Function( UserData user)?  updateUserData,TResult Function( String targetUid,  bool blocked)?  toggleBlock,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String uid)?  subscribe,TResult Function( String chatId)?  init,TResult Function( String message)?  sendMessage,TResult Function( List<ChatMessage> messages)?  updateMessages,TResult Function( Chat chat)?  updateChat,TResult Function()?  startTyping,TResult Function()?  endTyping,TResult Function( UserData user)?  updateUserData,TResult Function( String targetUid,  bool blocked)?  toggleBlock,TResult Function()?  loadOlder,TResult Function( String message)?  messagesFailed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
 return subscribe(_that.uid);case _Init() when init != null:
@@ -151,7 +157,9 @@ return updateChat(_that.chat);case _StartTyping() when startTyping != null:
 return startTyping();case _EndTyping() when endTyping != null:
 return endTyping();case _UpdateUserData() when updateUserData != null:
 return updateUserData(_that.user);case _ToggleBlock() when toggleBlock != null:
-return toggleBlock(_that.targetUid,_that.blocked);case _:
+return toggleBlock(_that.targetUid,_that.blocked);case _LoadOlder() when loadOlder != null:
+return loadOlder();case _MessagesFailed() when messagesFailed != null:
+return messagesFailed(_that.message);case _:
   return orElse();
 
 }
@@ -169,7 +177,7 @@ return toggleBlock(_that.targetUid,_that.blocked);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String uid)  subscribe,required TResult Function( String chatId)  init,required TResult Function( String message)  sendMessage,required TResult Function( List<ChatMessage> messages)  updateMessages,required TResult Function( Chat chat)  updateChat,required TResult Function()  startTyping,required TResult Function()  endTyping,required TResult Function( UserData user)  updateUserData,required TResult Function( String targetUid,  bool blocked)  toggleBlock,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String uid)  subscribe,required TResult Function( String chatId)  init,required TResult Function( String message)  sendMessage,required TResult Function( List<ChatMessage> messages)  updateMessages,required TResult Function( Chat chat)  updateChat,required TResult Function()  startTyping,required TResult Function()  endTyping,required TResult Function( UserData user)  updateUserData,required TResult Function( String targetUid,  bool blocked)  toggleBlock,required TResult Function()  loadOlder,required TResult Function( String message)  messagesFailed,}) {final _that = this;
 switch (_that) {
 case _Subscribe():
 return subscribe(_that.uid);case _Init():
@@ -180,7 +188,9 @@ return updateChat(_that.chat);case _StartTyping():
 return startTyping();case _EndTyping():
 return endTyping();case _UpdateUserData():
 return updateUserData(_that.user);case _ToggleBlock():
-return toggleBlock(_that.targetUid,_that.blocked);}
+return toggleBlock(_that.targetUid,_that.blocked);case _LoadOlder():
+return loadOlder();case _MessagesFailed():
+return messagesFailed(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -194,7 +204,7 @@ return toggleBlock(_that.targetUid,_that.blocked);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String uid)?  subscribe,TResult? Function( String chatId)?  init,TResult? Function( String message)?  sendMessage,TResult? Function( List<ChatMessage> messages)?  updateMessages,TResult? Function( Chat chat)?  updateChat,TResult? Function()?  startTyping,TResult? Function()?  endTyping,TResult? Function( UserData user)?  updateUserData,TResult? Function( String targetUid,  bool blocked)?  toggleBlock,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String uid)?  subscribe,TResult? Function( String chatId)?  init,TResult? Function( String message)?  sendMessage,TResult? Function( List<ChatMessage> messages)?  updateMessages,TResult? Function( Chat chat)?  updateChat,TResult? Function()?  startTyping,TResult? Function()?  endTyping,TResult? Function( UserData user)?  updateUserData,TResult? Function( String targetUid,  bool blocked)?  toggleBlock,TResult? Function()?  loadOlder,TResult? Function( String message)?  messagesFailed,}) {final _that = this;
 switch (_that) {
 case _Subscribe() when subscribe != null:
 return subscribe(_that.uid);case _Init() when init != null:
@@ -205,7 +215,9 @@ return updateChat(_that.chat);case _StartTyping() when startTyping != null:
 return startTyping();case _EndTyping() when endTyping != null:
 return endTyping();case _UpdateUserData() when updateUserData != null:
 return updateUserData(_that.user);case _ToggleBlock() when toggleBlock != null:
-return toggleBlock(_that.targetUid,_that.blocked);case _:
+return toggleBlock(_that.targetUid,_that.blocked);case _LoadOlder() when loadOlder != null:
+return loadOlder();case _MessagesFailed() when messagesFailed != null:
+return messagesFailed(_that.message);case _:
   return null;
 
 }
@@ -766,11 +778,109 @@ as bool,
 }
 
 /// @nodoc
+
+
+class _LoadOlder implements ChatPageEvent {
+  const _LoadOlder();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadOlder);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ChatPageEvent.loadOlder()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _MessagesFailed implements ChatPageEvent {
+  const _MessagesFailed({required this.message});
+  
+
+ final  String message;
+
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$MessagesFailedCopyWith<_MessagesFailed> get copyWith => __$MessagesFailedCopyWithImpl<_MessagesFailed>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MessagesFailed&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'ChatPageEvent.messagesFailed(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$MessagesFailedCopyWith<$Res> implements $ChatPageEventCopyWith<$Res> {
+  factory _$MessagesFailedCopyWith(_MessagesFailed value, $Res Function(_MessagesFailed) _then) = __$MessagesFailedCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class __$MessagesFailedCopyWithImpl<$Res>
+    implements _$MessagesFailedCopyWith<$Res> {
+  __$MessagesFailedCopyWithImpl(this._self, this._then);
+
+  final _MessagesFailed _self;
+  final $Res Function(_MessagesFailed) _then;
+
+/// Create a copy of ChatPageEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(_MessagesFailed(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$ChatPageState {
 
  String get chatId; List<ChatMessage> get messages;/// True once the message stream delivered its first snapshot (even an
 /// empty one), so the UI can tell "still loading" from "no messages".
- bool get messagesLoaded; List<UserData> get users; UserData? get userData; Chat? get chat; ChatPageStatus get status; dynamic get errorMessage;
+ bool get messagesLoaded; bool get isLoadingOlder; List<UserData> get users; UserData? get userData; Chat? get chat; ChatPageStatus get status; dynamic get errorMessage;
 /// Create a copy of ChatPageState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -781,16 +891,16 @@ $ChatPageStateCopyWith<ChatPageState> get copyWith => _$ChatPageStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatPageState&&(identical(other.chatId, chatId) || other.chatId == chatId)&&const DeepCollectionEquality().equals(other.messages, messages)&&(identical(other.messagesLoaded, messagesLoaded) || other.messagesLoaded == messagesLoaded)&&const DeepCollectionEquality().equals(other.users, users)&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.chat, chat) || other.chat == chat)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatPageState&&(identical(other.chatId, chatId) || other.chatId == chatId)&&const DeepCollectionEquality().equals(other.messages, messages)&&(identical(other.messagesLoaded, messagesLoaded) || other.messagesLoaded == messagesLoaded)&&(identical(other.isLoadingOlder, isLoadingOlder) || other.isLoadingOlder == isLoadingOlder)&&const DeepCollectionEquality().equals(other.users, users)&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.chat, chat) || other.chat == chat)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,chatId,const DeepCollectionEquality().hash(messages),messagesLoaded,const DeepCollectionEquality().hash(users),userData,chat,status,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,chatId,const DeepCollectionEquality().hash(messages),messagesLoaded,isLoadingOlder,const DeepCollectionEquality().hash(users),userData,chat,status,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatPageState(chatId: $chatId, messages: $messages, messagesLoaded: $messagesLoaded, users: $users, userData: $userData, chat: $chat, status: $status, errorMessage: $errorMessage)';
+  return 'ChatPageState(chatId: $chatId, messages: $messages, messagesLoaded: $messagesLoaded, isLoadingOlder: $isLoadingOlder, users: $users, userData: $userData, chat: $chat, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -801,7 +911,7 @@ abstract mixin class $ChatPageStateCopyWith<$Res>  {
   factory $ChatPageStateCopyWith(ChatPageState value, $Res Function(ChatPageState) _then) = _$ChatPageStateCopyWithImpl;
 @useResult
 $Res call({
- String chatId, List<ChatMessage> messages, bool messagesLoaded, List<UserData> users, UserData? userData, Chat? chat, ChatPageStatus status, dynamic errorMessage
+ String chatId, List<ChatMessage> messages, bool messagesLoaded, bool isLoadingOlder, List<UserData> users, UserData? userData, Chat? chat, ChatPageStatus status, dynamic errorMessage
 });
 
 
@@ -818,11 +928,12 @@ class _$ChatPageStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatPageState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? chatId = null,Object? messages = null,Object? messagesLoaded = null,Object? users = null,Object? userData = freezed,Object? chat = freezed,Object? status = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? chatId = null,Object? messages = null,Object? messagesLoaded = null,Object? isLoadingOlder = null,Object? users = null,Object? userData = freezed,Object? chat = freezed,Object? status = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
 as String,messages: null == messages ? _self.messages : messages // ignore: cast_nullable_to_non_nullable
 as List<ChatMessage>,messagesLoaded: null == messagesLoaded ? _self.messagesLoaded : messagesLoaded // ignore: cast_nullable_to_non_nullable
+as bool,isLoadingOlder: null == isLoadingOlder ? _self.isLoadingOlder : isLoadingOlder // ignore: cast_nullable_to_non_nullable
 as bool,users: null == users ? _self.users : users // ignore: cast_nullable_to_non_nullable
 as List<UserData>,userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
 as UserData?,chat: freezed == chat ? _self.chat : chat // ignore: cast_nullable_to_non_nullable
@@ -934,10 +1045,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String chatId,  List<ChatMessage> messages,  bool messagesLoaded,  List<UserData> users,  UserData? userData,  Chat? chat,  ChatPageStatus status,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String chatId,  List<ChatMessage> messages,  bool messagesLoaded,  bool isLoadingOlder,  List<UserData> users,  UserData? userData,  Chat? chat,  ChatPageStatus status,  dynamic errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatPageState() when $default != null:
-return $default(_that.chatId,_that.messages,_that.messagesLoaded,_that.users,_that.userData,_that.chat,_that.status,_that.errorMessage);case _:
+return $default(_that.chatId,_that.messages,_that.messagesLoaded,_that.isLoadingOlder,_that.users,_that.userData,_that.chat,_that.status,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -955,10 +1066,10 @@ return $default(_that.chatId,_that.messages,_that.messagesLoaded,_that.users,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String chatId,  List<ChatMessage> messages,  bool messagesLoaded,  List<UserData> users,  UserData? userData,  Chat? chat,  ChatPageStatus status,  dynamic errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String chatId,  List<ChatMessage> messages,  bool messagesLoaded,  bool isLoadingOlder,  List<UserData> users,  UserData? userData,  Chat? chat,  ChatPageStatus status,  dynamic errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _ChatPageState():
-return $default(_that.chatId,_that.messages,_that.messagesLoaded,_that.users,_that.userData,_that.chat,_that.status,_that.errorMessage);}
+return $default(_that.chatId,_that.messages,_that.messagesLoaded,_that.isLoadingOlder,_that.users,_that.userData,_that.chat,_that.status,_that.errorMessage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -972,10 +1083,10 @@ return $default(_that.chatId,_that.messages,_that.messagesLoaded,_that.users,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String chatId,  List<ChatMessage> messages,  bool messagesLoaded,  List<UserData> users,  UserData? userData,  Chat? chat,  ChatPageStatus status,  dynamic errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String chatId,  List<ChatMessage> messages,  bool messagesLoaded,  bool isLoadingOlder,  List<UserData> users,  UserData? userData,  Chat? chat,  ChatPageStatus status,  dynamic errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatPageState() when $default != null:
-return $default(_that.chatId,_that.messages,_that.messagesLoaded,_that.users,_that.userData,_that.chat,_that.status,_that.errorMessage);case _:
+return $default(_that.chatId,_that.messages,_that.messagesLoaded,_that.isLoadingOlder,_that.users,_that.userData,_that.chat,_that.status,_that.errorMessage);case _:
   return null;
 
 }
@@ -987,7 +1098,7 @@ return $default(_that.chatId,_that.messages,_that.messagesLoaded,_that.users,_th
 
 
 class _ChatPageState implements ChatPageState {
-   _ChatPageState({this.chatId = '', final  List<ChatMessage> messages = const [], this.messagesLoaded = false, final  List<UserData> users = const [], this.userData, this.chat, this.status = ChatPageStatus.loading, this.errorMessage = ''}): _messages = messages,_users = users;
+   _ChatPageState({this.chatId = '', final  List<ChatMessage> messages = const [], this.messagesLoaded = false, this.isLoadingOlder = false, final  List<UserData> users = const [], this.userData, this.chat, this.status = ChatPageStatus.loading, this.errorMessage = ''}): _messages = messages,_users = users;
   
 
 @override@JsonKey() final  String chatId;
@@ -1001,6 +1112,7 @@ class _ChatPageState implements ChatPageState {
 /// True once the message stream delivered its first snapshot (even an
 /// empty one), so the UI can tell "still loading" from "no messages".
 @override@JsonKey() final  bool messagesLoaded;
+@override@JsonKey() final  bool isLoadingOlder;
  final  List<UserData> _users;
 @override@JsonKey() List<UserData> get users {
   if (_users is EqualUnmodifiableListView) return _users;
@@ -1023,16 +1135,16 @@ _$ChatPageStateCopyWith<_ChatPageState> get copyWith => __$ChatPageStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatPageState&&(identical(other.chatId, chatId) || other.chatId == chatId)&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.messagesLoaded, messagesLoaded) || other.messagesLoaded == messagesLoaded)&&const DeepCollectionEquality().equals(other._users, _users)&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.chat, chat) || other.chat == chat)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatPageState&&(identical(other.chatId, chatId) || other.chatId == chatId)&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.messagesLoaded, messagesLoaded) || other.messagesLoaded == messagesLoaded)&&(identical(other.isLoadingOlder, isLoadingOlder) || other.isLoadingOlder == isLoadingOlder)&&const DeepCollectionEquality().equals(other._users, _users)&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.chat, chat) || other.chat == chat)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.errorMessage, errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,chatId,const DeepCollectionEquality().hash(_messages),messagesLoaded,const DeepCollectionEquality().hash(_users),userData,chat,status,const DeepCollectionEquality().hash(errorMessage));
+int get hashCode => Object.hash(runtimeType,chatId,const DeepCollectionEquality().hash(_messages),messagesLoaded,isLoadingOlder,const DeepCollectionEquality().hash(_users),userData,chat,status,const DeepCollectionEquality().hash(errorMessage));
 
 @override
 String toString() {
-  return 'ChatPageState(chatId: $chatId, messages: $messages, messagesLoaded: $messagesLoaded, users: $users, userData: $userData, chat: $chat, status: $status, errorMessage: $errorMessage)';
+  return 'ChatPageState(chatId: $chatId, messages: $messages, messagesLoaded: $messagesLoaded, isLoadingOlder: $isLoadingOlder, users: $users, userData: $userData, chat: $chat, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -1043,7 +1155,7 @@ abstract mixin class _$ChatPageStateCopyWith<$Res> implements $ChatPageStateCopy
   factory _$ChatPageStateCopyWith(_ChatPageState value, $Res Function(_ChatPageState) _then) = __$ChatPageStateCopyWithImpl;
 @override @useResult
 $Res call({
- String chatId, List<ChatMessage> messages, bool messagesLoaded, List<UserData> users, UserData? userData, Chat? chat, ChatPageStatus status, dynamic errorMessage
+ String chatId, List<ChatMessage> messages, bool messagesLoaded, bool isLoadingOlder, List<UserData> users, UserData? userData, Chat? chat, ChatPageStatus status, dynamic errorMessage
 });
 
 
@@ -1060,11 +1172,12 @@ class __$ChatPageStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatPageState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? chatId = null,Object? messages = null,Object? messagesLoaded = null,Object? users = null,Object? userData = freezed,Object? chat = freezed,Object? status = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? chatId = null,Object? messages = null,Object? messagesLoaded = null,Object? isLoadingOlder = null,Object? users = null,Object? userData = freezed,Object? chat = freezed,Object? status = null,Object? errorMessage = freezed,}) {
   return _then(_ChatPageState(
 chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
 as String,messages: null == messages ? _self._messages : messages // ignore: cast_nullable_to_non_nullable
 as List<ChatMessage>,messagesLoaded: null == messagesLoaded ? _self.messagesLoaded : messagesLoaded // ignore: cast_nullable_to_non_nullable
+as bool,isLoadingOlder: null == isLoadingOlder ? _self.isLoadingOlder : isLoadingOlder // ignore: cast_nullable_to_non_nullable
 as bool,users: null == users ? _self._users : users // ignore: cast_nullable_to_non_nullable
 as List<UserData>,userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
 as UserData?,chat: freezed == chat ? _self.chat : chat // ignore: cast_nullable_to_non_nullable

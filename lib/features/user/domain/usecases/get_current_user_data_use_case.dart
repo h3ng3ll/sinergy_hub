@@ -13,11 +13,14 @@ class GetCurrentUserDataUseCase {
   }) : _userReadRepository = userReadRepository,
        _authRepository = authRepository;
 
-  Future<UserData> call() async {
+  Future<UserData> call({
+    bool preferCache = false,
+  }) async {
     final uid = await _authRepository.requireUserId();
 
     final user = await _userReadRepository.getUserById(
       id: uid,
+      preferCache: preferCache,
     );
     if (user == null) {
       throw NoFoundUserException();

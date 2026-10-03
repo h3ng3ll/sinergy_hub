@@ -1,3 +1,4 @@
+import '../../../../core/services/firebase/firestore_cache_first_ext.dart';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -70,10 +71,13 @@ class FakeUserFirebaseRepository implements IUserReadRepository {
   @override
   Future<UserData?> getUserById({
     required String id,
+    bool preferCache = false,
   }) async {
     final userRow = await _fakeUser(
       id,
-    ).get();
+    ).getCacheFirst(
+      preferCache: preferCache,
+    );
 
     final userData = userRow.data();
 
@@ -91,6 +95,7 @@ class FakeUserFirebaseRepository implements IUserReadRepository {
   @override
   Future<List<UserData>> getUsersById({
     required List<String> ids,
+    bool preferCache = false,
   }) async {
     if (ids.isEmpty) return [];
     final chunks = <List<String>>[];
@@ -112,7 +117,10 @@ class FakeUserFirebaseRepository implements IUserReadRepository {
             FieldPath.documentId,
             whereIn: chunk,
           )
-          .get();
+          .getCacheFirst(
+            expectedCount: chunk.length,
+            preferCache: preferCache,
+          );
 
       results.addAll(
         snap.docs.map(

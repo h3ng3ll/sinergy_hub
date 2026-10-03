@@ -1,3 +1,4 @@
+import '../../../../core/services/firebase/firestore_cache_first_ext.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/services/firebase/firebase_firestore_service.dart';
@@ -194,12 +195,15 @@ class ChatFirebaseRepository implements IChatRepository {
   Future<Chat> getById({
     required String chatId,
     required String uid,
+    bool preferCache = false,
   }) async {
     final chatRow = await _chats
         .doc(
           chatId,
         )
-        .get();
+        .getCacheFirst(
+          preferCache: preferCache,
+        );
 
     final chat = Chat.fromJson(
       chatRow.data()!,

@@ -3,9 +3,15 @@ import '../models/user_data/user_data.dart';
 import '../models/users_data_pg_state/users_data_pg_state.dart';
 
 abstract class IUserReadRepository {
-  Future<UserData?> getUserById({required String id});
+  Future<UserData?> getUserById({
+    required String id,
+    bool preferCache = false,
+  });
 
-  Future<List<UserData>> getUsersById({required List<String> ids});
+  Future<List<UserData>> getUsersById({
+    required List<String> ids,
+    bool preferCache = false,
+  });
 
   Stream<UserData?> userDataStream(String uid);
 

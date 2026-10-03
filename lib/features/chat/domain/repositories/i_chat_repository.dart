@@ -26,6 +26,7 @@ abstract class IChatRepository {
   Future<Chat> getById({
     required String uid,
     required String chatId,
+    bool preferCache = false,
   });
 
   Future<void> update({

@@ -38,21 +38,25 @@ class UserReadCompositeRepository implements IUserReadRepository {
   @override
   Future<UserData?> getUserById({
     required String id,
+    bool preferCache = false,
   }) async {
     final repo = await _repo();
     return repo.getUserById(
       id: id,
+      preferCache: preferCache,
     );
   }
 
   @override
   Future<List<UserData>> getUsersById({
     required List<String> ids,
+    bool preferCache = false,
   }) async {
     final repo = await _repo();
 
     return repo.getUsersById(
       ids: ids,
+      preferCache: preferCache,
     );
   }
 

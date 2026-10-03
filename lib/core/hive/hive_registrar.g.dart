@@ -8,11 +8,15 @@ import 'package:sinergy_hub/core/hive/hive_adapters.dart';
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(AuthTempCredentialsAdapter());
+    registerAdapter(ChatMessageAdapter());
+    registerAdapter(ChatMessagesCacheAdapter());
   }
 }
 
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(AuthTempCredentialsAdapter());
+    registerAdapter(ChatMessageAdapter());
+    registerAdapter(ChatMessagesCacheAdapter());
   }
 }

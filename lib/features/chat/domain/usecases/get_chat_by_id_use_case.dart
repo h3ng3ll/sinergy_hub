@@ -15,11 +15,13 @@ class GetChatByIdUseCase {
 
   Future<Chat> call({
     required String chatId,
+    bool preferCache = false,
   }) async {
     final uid = await _authRepository.requireUserId();
     final chat = await _chatRepository.getById(
       chatId: chatId,
       uid: uid,
+      preferCache: preferCache,
     );
     return chat;
   }

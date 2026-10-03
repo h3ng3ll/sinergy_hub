@@ -1,6 +1,7 @@
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
 import '../../features/auth/data/models/auth_temp_credentials/auth_temp_credentials.dart';
+import '../databases/hive_database.dart';
 import '../di/injection.dart';
 import 'hive_registrar.g.dart';
 
@@ -20,5 +21,9 @@ Future<void> initHive() async {
 
   getIt.registerSingleton<Box<AuthTempCredentials>>(
     authTempCredentialsBox,
+  );
+
+  getIt.registerLazySingleton<HiveDatabase>(
+    HiveDatabase.new,
   );
 }

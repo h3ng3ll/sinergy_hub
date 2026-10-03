@@ -5,12 +5,16 @@ import '../../domain/models/chat_message/chat_message.dart';
 import '../../domain/repositories/i_chat_message_repository.dart';
 import '../models/chat_message_dto/chat_message_dto.dart';
 
+/// Upper bound of messages delivered by one catch-up listener, so a user
+/// returning after a long absence never pulls an unbounded history at once.
+const int _kSinceSafetyLimit = 200;
+
 class ChatMessageFirebaseRepository extends IChatMessageRepository {
   final FirebaseFirestoreService _firebaseFirestoreService;
 
   ChatMessageFirebaseRepository({
-    required FirebaseFirestoreService firebaseFirestoreService,
-  }) : _firebaseFirestoreService = firebaseFirestoreService;
+    required this._firebaseFirestoreService,
+  });
 
   ColRef _messages(
     String chatId,
@@ -51,9 +55,9 @@ class ChatMessageFirebaseRepository extends IChatMessageRepository {
   Stream<List<ChatMessage>> getLastMessagesStream({
     required String uid,
     required String chatId,
-  }) =>
-      _firebaseFirestoreService.authGated(
-        (uid) => _messages(
+  }) => _firebaseFirestoreService.authGated(
+    (uid) =>
+        _messages(
               chatId,
             )
             .orderBy(
@@ -84,5 +88,74 @@ class ChatMessageFirebaseRepository extends IChatMessageRepository {
                     .toList();
               },
             ),
+  );
+
+  List<ChatMessage> _changedMessages(
+    QuerySnap snapshot,
+    String uid,
+  ) => snapshot.docChanges
+      .where(
+        (change) =>
+            change.type != DocumentChangeType.removed &&
+            change.doc['createdAt'] != null,
+      )
+      .map(
+        (change) =>
+            ChatMessageDto.fromJson(
+              change.doc.data()!,
+            ).toDomain(
+              uid: uid,
+            ),
+      )
+      .toList();
+
+  @override
+  Stream<List<ChatMessage>> listenMessagesSince({
+    required String chatId,
+    DateTime? after,
+  }) => _firebaseFirestoreService.authGated(
+    (uid) {
+      final Query<Map<String, dynamic>> query = after == null
+          ? _messages(chatId)
+                .orderBy('createdAt', descending: true)
+                .limit(kChatMessagesPageSize)
+          : _messages(chatId)
+                .where(
+                  'createdAt',
+                  isGreaterThanOrEqualTo: Timestamp.fromDate(after),
+                )
+                .orderBy('createdAt')
+                .limitToLast(_kSinceSafetyLimit);
+      return query.snapshots().map(
+        (snapshot) => _changedMessages(snapshot, uid),
       );
+    },
+  );
+
+  @override
+  Future<List<ChatMessage>> fetchMessagesBefore({
+    required String uid,
+    required String chatId,
+    required DateTime before,
+    int limit = kChatMessagesPageSize,
+  }) async {
+    final snapshot = await _messages(chatId)
+        .where(
+          'createdAt',
+          isLessThan: Timestamp.fromDate(before),
+        )
+        .orderBy('createdAt', descending: true)
+        .limit(limit)
+        .get();
+    return snapshot.docs
+        .map(
+          (doc) =>
+              ChatMessageDto.fromJson(
+                doc.data(),
+              ).toDomain(
+                uid: uid,
+              ),
+        )
+        .toList();
+  }
 }

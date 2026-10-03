@@ -88,7 +88,11 @@ class _ChatPageState extends State<ChatPage> {
 
   void onAttachMedia() {}
 
-  void onReachToEndMessages() {}
+  void onReachToEndMessages() {
+    _chatPageBloc.add(
+      const ChatPageEvent.loadOlder(),
+    );
+  }
 
   void onTapUser(String userId) {
     final route = UserProfilePageRoute(

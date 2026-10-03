@@ -14,6 +14,7 @@ class GetUsersUseCase {
 
   Future<List<UserData>> call({
     required List<String> ids,
+    bool preferCache = false,
   }) async {
     final uid = await _authRepository.requireUserId();
 
@@ -22,6 +23,7 @@ class GetUsersUseCase {
         ..remove(
           uid,
         ),
+      preferCache: preferCache,
     );
   }
 }

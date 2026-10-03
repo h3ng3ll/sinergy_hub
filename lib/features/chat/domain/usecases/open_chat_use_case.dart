@@ -30,13 +30,21 @@ class OpenChatUseCase {
         const ChatValidationFailure('Chat id is empty'),
       );
     }
-    final Chat chat = await _getChatByIdUseCase.call(
-      chatId: chatId,
-    );
+    /// Cache-first: a chat opened before renders from Firestore's on-device
+    /// cache; the chat page's live listeners refresh it from the server.
+    final (Chat chat, UserData currentUser) = await (
+      _getChatByIdUseCase.call(
+        chatId: chatId,
+        preferCache: true,
+      ),
+      _getCurrentUserDataUseCase.call(
+        preferCache: true,
+      ),
+    ).wait;
     final List<UserData> users = await _getUsersUseCase.call(
       ids: chat.participants,
+      preferCache: true,
     );
-    final UserData currentUser = await _getCurrentUserDataUseCase.call();
 
     final peer = users
         .where(

@@ -1,6 +1,8 @@
 import 'package:hive_ce/hive_ce.dart';
 
 import '../../features/auth/data/models/auth_temp_credentials/auth_temp_credentials.dart';
+import '../../features/chat/data/models/chat_messages_cache/chat_messages_cache.dart';
+import '../../features/chat/domain/models/chat_message/chat_message.dart';
 
 part 'hive_adapters.g.dart';
 
@@ -10,5 +12,7 @@ part 'hive_adapters.g.dart';
 /// and the `registerAdapters()` extension into `hive_registrar.g.dart`.
 @GenerateAdapters([
   AdapterSpec<AuthTempCredentials>(),
+  AdapterSpec<ChatMessage>(),
+  AdapterSpec<ChatMessagesCache>(),
 ])
 class HiveAdapters {}

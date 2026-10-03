@@ -1,18 +1,20 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../user/domain/usecases/listen_user_data_use_case.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/chat_message/chat_message.dart';
-import '../../../domain/usecases/get_last_messages_use_case.dart';
 import '../../../domain/usecases/listen_chat_by_id_use_case.dart';
+import '../../../domain/usecases/load_older_messages_use_case.dart';
 import '../../../domain/usecases/open_chat_use_case.dart';
 import '../../../domain/usecases/send_message_use_case.dart';
 import '../../../domain/usecases/toggle_block_user_use_case.dart';
 import '../../../domain/usecases/update_typing_info_use_case.dart';
+import '../../../domain/usecases/watch_chat_messages_use_case.dart';
 
 part 'chat_page_event.dart';
 
@@ -24,7 +26,8 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   final SendMessageUseCase _sendMessageUseCase;
 
   final ListenChatByIdUseCase _listenChatByIdUseCase;
-  final ListenLastMessagesUseCase _getLastMessagesUseCase;
+  final WatchChatMessagesUseCase _watchChatMessagesUseCase;
+  final LoadOlderMessagesUseCase _loadOlderMessagesUseCase;
 
   final OpenChatUseCase _openChatUseCase;
   final ListenUserDataUseCase _listenUserDataUseCase;
@@ -36,22 +39,15 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   StreamSubscription? _userDataSubscription;
 
   ChatPageBloc({
-    required SendMessageUseCase sendMessageUseCase,
-    required ListenLastMessagesUseCase getLastMessageUseCase,
-    required ListenChatByIdUseCase listenChatByIdUseCase,
-    required OpenChatUseCase openChatUseCase,
-    required UpdateTypingInfoUseCase updateTypingInfoUseCase,
-    required ListenUserDataUseCase listenUserDataUseCase,
-    required ToggleBlockUserUseCase toggleBlockUserUseCase,
-  }) : _sendMessageUseCase = sendMessageUseCase,
-       _openChatUseCase = openChatUseCase,
-       _getLastMessagesUseCase = getLastMessageUseCase,
-       _updateTypingInfoUseCase = updateTypingInfoUseCase,
-       _listenChatByIdUseCase = listenChatByIdUseCase,
-       _listenUserDataUseCase = listenUserDataUseCase,
-       _toggleBlockUserUseCase = toggleBlockUserUseCase,
-
-       super(
+    required this._sendMessageUseCase,
+    required this._watchChatMessagesUseCase,
+    required this._loadOlderMessagesUseCase,
+    required this._listenChatByIdUseCase,
+    required this._openChatUseCase,
+    required this._updateTypingInfoUseCase,
+    required this._listenUserDataUseCase,
+    required this._toggleBlockUserUseCase,
+  }) : super(
          ChatPageState(),
        ) {
     on<_Subscribe>(_subscribe);
@@ -65,6 +61,11 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     on<_UpdateChat>(_updateChat);
     on<_UpdateUserData>(_updateUserData);
     on<_ToggleBlock>(_toggleBlock);
+    on<_LoadOlder>(
+      _loadOlder,
+      transformer: droppable(),
+    );
+    on<_MessagesFailed>(_messagesFailed);
   }
 
   void _updateMessages(
@@ -73,13 +74,39 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   ) => emit(
     state.copyWith(
       messagesLoaded: true,
-      messages:
-          [
-            ...state.messages,
-            ...event.messages,
-          ]..sort(
-            (a, b) => a.createdAt.compareTo(b.createdAt),
-          ),
+
+      /// The cache snapshot is already sorted and unique by id.
+      messages: event.messages,
+    ),
+  );
+
+  Future<void> _loadOlder(
+    _LoadOlder event,
+    Emitter<ChatPageState> emit,
+  ) async {
+    if (!state.messagesLoaded) return;
+    emit(state.copyWith(isLoadingOlder: true));
+    final res = await _loadOlderMessagesUseCase.call(
+      chatId: state.chatId,
+    );
+    emit(
+      res.fold(
+        (_) => state.copyWith(isLoadingOlder: false),
+        (failure) => state.copyWith(
+          isLoadingOlder: false,
+          errorMessage: failure.message,
+        ),
+      ),
+    );
+  }
+
+  void _messagesFailed(
+    _MessagesFailed event,
+    Emitter<ChatPageState> emit,
+  ) => emit(
+    state.copyWith(
+      errorMessage: event.message,
+      status: ChatPageStatus.failed,
     ),
   );
 
@@ -121,25 +148,6 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     _Subscribe event,
     Emitter<ChatPageState> emit,
   ) async {
-    _lastMessageSubscription = _getLastMessagesUseCase
-        .call(
-          chatId: state.chatId,
-        )
-        .listen(
-          (List<ChatMessage> messages) => add(
-            ChatPageEvent.updateMessages(
-              messages: messages,
-            ),
-          ),
-          onError: (e) {
-            emit(
-              state.copyWith(
-                errorMessage: e.toString(),
-                status: ChatPageStatus.failed,
-              ),
-            );
-          },
-        );
     _updateChatSubscription = _listenChatByIdUseCase
         .call(
           chatId: state.chatId,
@@ -185,6 +193,25 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         status: ChatPageStatus.loading,
       ),
     );
+
+    /// Messages come from the local cache and need only the chat id, so they
+    /// start right away instead of waiting for the chat header below.
+    _lastMessageSubscription = _watchChatMessagesUseCase
+        .call(
+          chatId: chatId,
+        )
+        .listen(
+          (List<ChatMessage> messages) => add(
+            ChatPageEvent.updateMessages(
+              messages: messages,
+            ),
+          ),
+          onError: (e) => add(
+            ChatPageEvent.messagesFailed(
+              message: e.toString(),
+            ),
+          ),
+        );
 
     final result = await _openChatUseCase.call(
       chatId: chatId,
@@ -289,6 +316,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     if (chat == null) return;
     await _updateTypingInfoUseCase.call(
       chatId: chat.chatId,
+
       /// A blocked chat never advertises typing to either side; publishing
       /// false also clears a status that was set before the block landed.
       status: isTyping && !chat.anyBlocked,

@@ -34,4 +34,10 @@ sealed class ChatPageEvent with _$ChatPageEvent {
     required String targetUid,
     required bool blocked,
   }) = _ToggleBlock;
+
+  const factory ChatPageEvent.loadOlder() = _LoadOlder;
+
+  const factory ChatPageEvent.messagesFailed({
+    required String message,
+  }) = _MessagesFailed;
 }

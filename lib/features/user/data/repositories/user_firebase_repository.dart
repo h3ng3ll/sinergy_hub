@@ -1,3 +1,4 @@
+import '../../../../core/services/firebase/firestore_cache_first_ext.dart';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -53,6 +54,7 @@ class UserFirebaseRepository
   @override
   Future<List<UserData>> getUsersById({
     required List<String> ids,
+    bool preferCache = false,
   }) async {
     if (ids.isEmpty) return [];
     final chunks = <List<String>>[];
@@ -74,7 +76,10 @@ class UserFirebaseRepository
             FieldPath.documentId,
             whereIn: chunk,
           )
-          .get();
+          .getCacheFirst(
+            expectedCount: chunk.length,
+            preferCache: preferCache,
+          );
 
       results.addAll(
         snap.docs.map(
@@ -139,12 +144,15 @@ class UserFirebaseRepository
   @override
   Future<UserData?> getUserById({
     required String id,
+    bool preferCache = false,
   }) async {
     final userSnapshot = await _firebaseFirestoreService
         .userDocument(
           id,
         )
-        .get();
+        .getCacheFirst(
+          preferCache: preferCache,
+        );
     final UserData? user = UserDataMapper.fromDocSnapshot(
       userSnapshot,
     );

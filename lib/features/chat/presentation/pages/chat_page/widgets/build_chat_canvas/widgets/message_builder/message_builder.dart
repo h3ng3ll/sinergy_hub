@@ -100,41 +100,59 @@ class _MessageBuilderState extends State<MessageBuilder> {
       state.messages,
     );
 
-    return GroupedListView<ChatMessage, DateTime>(
-      elements: elements,
-      reverse: true,
-      order: GroupedListOrder.DESC,
-      groupBy: (message) => DateTime(
-        message.createdAt.year,
-        message.createdAt.month,
-        message.createdAt.day,
-      ),
-      controller: _scrollController,
-      groupSeparatorBuilder: (time) {
-        return BuildChatSeparator(
-          time: time,
-        );
-      },
-      indexedItemBuilder: (context, message, index) {
-        final isSentByCurUser = message.sentUid == uid;
-        final UserData? sender = isSentByCurUser
-            ? curUser
-            : state.users
-                  .where(
-                    (e) => e.uid == message.sentUid,
-                  )
-                  .firstOrNull;
-        if (sender == null) {
-          return const SizedBox.shrink();
-        }
-        return BuildMessage(
-          message: message,
-          user: sender,
-          isSentByCurUser: isSentByCurUser,
-          onTapUrl: widget.onTapUrl,
-          onTapEmail: widget.onTapEmail,
-        );
-      },
+    return Stack(
+      children: [
+        GroupedListView<ChatMessage, DateTime>(
+          elements: elements,
+          reverse: true,
+          order: GroupedListOrder.DESC,
+          groupBy: (message) => DateTime(
+            message.createdAt.year,
+            message.createdAt.month,
+            message.createdAt.day,
+          ),
+          controller: _scrollController,
+          groupSeparatorBuilder: (time) {
+            return BuildChatSeparator(
+              time: time,
+            );
+          },
+          indexedItemBuilder: (context, message, index) {
+            final isSentByCurUser = message.sentUid == uid;
+            final UserData? sender = isSentByCurUser
+                ? curUser
+                : state.users
+                      .where(
+                        (e) => e.uid == message.sentUid,
+                      )
+                      .firstOrNull;
+            if (sender == null) {
+              return const SizedBox.shrink();
+            }
+            return BuildMessage(
+              message: message,
+              user: sender,
+              isSentByCurUser: isSentByCurUser,
+              onTapUrl: widget.onTapUrl,
+              onTapEmail: widget.onTapEmail,
+            );
+          },
+        ),
+        if (state.isLoadingOlder)
+          const Positioned(
+            top: 12.0,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: SizedBox.square(
+                dimension: 22.0,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.0,
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
