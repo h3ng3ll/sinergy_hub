@@ -24,6 +24,10 @@ sealed class ChatPageState with _$ChatPageState {
   factory ChatPageState({
     @Default('') String chatId,
     @Default([]) List<ChatMessage> messages,
+
+    /// True once the message stream delivered its first snapshot (even an
+    /// empty one), so the UI can tell "still loading" from "no messages".
+    @Default(false) bool messagesLoaded,
     @Default([]) List<UserData> users,
     UserData? userData,
     Chat? chat,

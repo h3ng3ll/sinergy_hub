@@ -56,6 +56,7 @@ enum AppColors {
   statusGreen(Color(0xFF43A047)),
   statusBlue(Color(0xFF1E88E5)),
   greyLight(Color(0xFFBDBDBD)),
+  platinum(Color(0xffE5E7EB)),
   white(Color(0xFFFFFFFF));
 
   final Color value;

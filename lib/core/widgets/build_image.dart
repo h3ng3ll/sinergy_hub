@@ -75,7 +75,11 @@ class BuildImage extends StatelessWidget {
       width: width,
       height: height,
       child: Container(
-        decoration: BoxDecoration(border: border),
+        foregroundDecoration: BoxDecoration(
+          border: border,
+          shape: shape,
+          borderRadius: shape == BoxShape.circle ? null : borderRadius,
+        ),
         child: result,
       ),
     );

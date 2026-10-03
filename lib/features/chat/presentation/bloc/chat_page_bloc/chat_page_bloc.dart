@@ -72,6 +72,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     Emitter<ChatPageState> emit,
   ) => emit(
     state.copyWith(
+      messagesLoaded: true,
       messages:
           [
             ...state.messages,

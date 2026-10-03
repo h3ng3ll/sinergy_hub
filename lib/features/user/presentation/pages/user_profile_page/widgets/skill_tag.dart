@@ -2,62 +2,38 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
-import '../../../../../../core/utils/responsive_helper.dart';
 
 class SkillTag extends StatelessWidget {
   final String skillName;
-  final double fontSize;
-  final double screenWidth;
-  final AppTextTheme textTheme;
 
   const SkillTag({
     super.key,
     required this.skillName,
-    required this.fontSize,
-    required this.screenWidth,
-    required this.textTheme,
   });
 
   @override
   Widget build(BuildContext context) {
-    final skillColors = [
-      AppColors.darkOrchid.value,
-      AppColors.blueGray.value,
-      AppColors.apple.value,
-      AppColors.hotPink.value,
-      AppColors.royalBlue.value,
-    ];
-    final colorIndex = skillName.hashCode % skillColors.length;
-    final borderRadius = ResponsiveHelper.responsiveBorderRadius(
-      screenWidth,
-      20.0,
-      maxRadius: 28,
-    );
-    final horizontalPadding = ResponsiveHelper.responsivePadding(
-      screenWidth,
-      14.0,
-      maxPadding: 20,
-    );
-    final verticalPadding = ResponsiveHelper.responsivePadding(
-      screenWidth,
-      6.0,
-      maxPadding: 10,
-    );
+    final textTheme = AppTextTheme.of(context);
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: horizontalPadding,
-        vertical: verticalPadding,
-      ),
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: skillColors[colorIndex].withValues(alpha: 0.85),
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: BorderRadius.circular(16.0),
+        color: AppColors.white.value.withValues(alpha: 0.2),
+        border: Border.all(
+          width: 0.5,
+          color: AppColors.white.value.withValues(alpha: 0.3),
+        ),
       ),
-      child: Text(
-        skillName,
-        style: textTheme.medium12.copyWith(
-          color: AppColors.white.value,
-          fontSize: fontSize,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12.0,
+          vertical: 7.0,
+        ),
+        child: Text(
+          skillName,
+          style: textTheme.medium12.copyWith(
+            color: AppColors.white.value,
+          ),
         ),
       ),
     );

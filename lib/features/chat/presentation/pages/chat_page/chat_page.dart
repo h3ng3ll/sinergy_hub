@@ -6,7 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
-import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../domain/models/chat/chat.dart';
@@ -14,6 +13,9 @@ import '../../bloc/chat_page_bloc/chat_page_bloc.dart';
 import 'widgets/app_bar/chat_app_bar.dart';
 import 'widgets/build_chat_bottom/build_chat_bottom.dart';
 import 'widgets/build_chat_canvas/build_chat_canvas.dart';
+import 'widgets/skeleton/chat_page_skeleton.dart';
+
+const Duration _kPageFade = Duration(milliseconds: 300);
 
 class ChatPage extends StatefulWidget {
   final String chatId;
@@ -133,71 +135,82 @@ class _ChatPageState extends State<ChatPage> {
         top: false,
         child: BlocBuilder<ChatPageBloc, ChatPageState>(
           builder: (context, chatPageState) {
-            if (chatPageState.isLoading) {
-              return LoadingDataWidget();
-            }
-            if (chatPageState.isFailed) {
-              return Scaffold(
-                appBar: AppBar(),
-                body: Center(
-                  child: Text(
-                    chatPageState.errorMessage,
-                  ),
-                ),
-              );
-            }
-            final Chat chat = chatPageState.chat!;
-
-            /// Todo: refactor for grouped chats
-            final UserData chatterUser = chatPageState.users.first;
-            final UserData currentUser = chatPageState.userData!;
-
-            /// "I blocked them" → the peer's uid is flagged in `blocked`.
-            /// Drives the AppBar Block/Unblock toggle.
-            final bool isPeerBlockedByMe = chat.isBlockedBy(chatterUser.uid);
-
-            /// "They blocked me" → MY uid is flagged. Only this restricts the
-            /// current user's input — the blocker is never locked out by
-            /// their own action.
-            final bool amIBlocked = chat.isBlockedBy(currentUser.uid);
-
-            return Scaffold(
-              appBar: ChatAppBar(
-                onTapUser: () => onTapUser(
-                  chatterUser.uid,
-                ),
-                isBlocked: isPeerBlockedByMe,
-                onToggleBlock: () => _chatPageBloc.add(
-                  ChatPageEvent.toggleBlock(
-                    targetUid: chatterUser.uid,
-                    blocked: !isPeerBlockedByMe,
-                  ),
-                ),
-                user: chatterUser,
-              ),
-              body: Column(
-                children: [
-                  Expanded(
-                    child: BuildChatCanvas(
-                      currentUser: currentUser,
-                      onReachToEnd: onReachToEndMessages,
-                      chat: chat,
-                      users: [chatterUser],
-                      onTapUrl: onTapUrl,
-                      onTapEmail: onTapEmail,
-                    ),
-                  ),
-                  BuildChatBottom(
-                    onSendMessage: _onSendMessage,
-                    onAttachMedia: onAttachMedia,
-                    chatController: _textEditingController,
-                    isBlocked: amIBlocked,
-                  ),
-                ],
-              ),
+            return AnimatedSwitcher(
+              duration: _kPageFade,
+              child: _buildPhase(chatPageState),
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildPhase(ChatPageState chatPageState) {
+    if (chatPageState.isLoading) {
+      return const ChatPageSkeleton(
+        key: ValueKey('loading'),
+      );
+    }
+    if (chatPageState.isFailed) {
+      return Scaffold(
+        key: const ValueKey('failed'),
+        appBar: AppBar(),
+        body: Center(
+          child: Text(
+            chatPageState.errorMessage,
+          ),
+        ),
+      );
+    }
+    final Chat chat = chatPageState.chat!;
+
+    /// Todo: refactor for grouped chats
+    final UserData chatterUser = chatPageState.users.first;
+    final UserData currentUser = chatPageState.userData!;
+
+    /// "I blocked them" → the peer's uid is flagged in `blocked`.
+    /// Drives the AppBar Block/Unblock toggle.
+    final bool isPeerBlockedByMe = chat.isBlockedBy(chatterUser.uid);
+
+    /// "They blocked me" → MY uid is flagged. Only this restricts the
+    /// current user's input — the blocker is never locked out by
+    /// their own action.
+    final bool amIBlocked = chat.isBlockedBy(currentUser.uid);
+
+    return Scaffold(
+      key: const ValueKey('loaded'),
+      appBar: ChatAppBar(
+        onTapUser: () => onTapUser(
+          chatterUser.uid,
+        ),
+        isBlocked: isPeerBlockedByMe,
+        onToggleBlock: () => _chatPageBloc.add(
+          ChatPageEvent.toggleBlock(
+            targetUid: chatterUser.uid,
+            blocked: !isPeerBlockedByMe,
+          ),
+        ),
+        user: chatterUser,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: BuildChatCanvas(
+              currentUser: currentUser,
+              onReachToEnd: onReachToEndMessages,
+              chat: chat,
+              users: [chatterUser],
+              onTapUrl: onTapUrl,
+              onTapEmail: onTapEmail,
+            ),
+          ),
+          BuildChatBottom(
+            onSendMessage: _onSendMessage,
+            onAttachMedia: onAttachMedia,
+            chatController: _textEditingController,
+            isBlocked: amIBlocked,
+          ),
+        ],
       ),
     );
   }

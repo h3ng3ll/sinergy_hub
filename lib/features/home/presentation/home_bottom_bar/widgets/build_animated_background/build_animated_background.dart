@@ -1,7 +1,23 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 
 import '../../../../../../core/resources/app_shader.dart';
+
+/// Every `ve.frag` time frequency (0.5, 0.3, 0.4, 0.2) is a multiple of 0.1,
+/// so the gradient repeats exactly every 20π seconds. Wrapping time to this
+/// period keeps the loop seamless and the float small for mediump precision.
+const double _kShaderPeriod = 20 * pi;
+
+/// One clock for the whole app, so the gradient phase continues across pages
+/// instead of restarting from zero on each new background instance.
+final Stopwatch _clock = Stopwatch()..start();
+
+double _shaderTime() =>
+    (_clock.elapsedMicroseconds / Duration.microsecondsPerSecond) %
+    _kShaderPeriod;
 
 class BuildAnimatedBackground extends StatefulWidget {
   final Widget child;
@@ -20,26 +36,23 @@ class BuildAnimatedBackground extends StatefulWidget {
 
 class _BuildAnimatedBackgroundState extends State<BuildAnimatedBackground>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  final ValueNotifier<double> _time = ValueNotifier(_shaderTime());
+  late final Ticker _ticker;
 
   @override
   void initState() {
-    _controller =
-        AnimationController(
-          vsync: this,
-          duration: const Duration(
-            seconds: 5,
-          ),
-        )..repeat(
-          reverse: true,
-        );
-
+    _ticker = createTicker(_onTick)..start();
     super.initState();
+  }
+
+  void _onTick(Duration _) {
+    _time.value = _shaderTime();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _ticker.dispose();
+    _time.dispose();
     super.dispose();
   }
 
@@ -47,37 +60,40 @@ class _BuildAnimatedBackgroundState extends State<BuildAnimatedBackground>
   Widget build(BuildContext context) {
     return ShaderBuilder(
       (context, shader, child) {
-        return CustomPaint(
-          size: MediaQuery.of(context).size,
-          painter: _ShaderBackgroundPainter(
-            shader: shader,
-            controller: _controller,
+        return RepaintBoundary(
+          child: CustomPaint(
+            painter: _ShaderBackgroundPainter(
+              shader: shader,
+              time: _time,
+            ),
+            // painter: ShaderPainter(
+            //   repaint: _controller,
+            //   shader: shader,
+            //   parameters: [
+            //     ShaderType(
+            //       shaderType: EShaderDataType.floatShader,
+            //       value: _controller.lastElapsedDuration!.inMilliseconds / 1000,
+            //     ),
+            //     ShaderType(
+            //       shaderType: EShaderDataType.floatShader,
+            //       value: width,
+            //     ),
+            //     ShaderType(
+            //       shaderType: EShaderDataType.floatShader,
+            //       value: height,
+            //     ),
+            //   ],
+            // ),
+            child: child,
           ),
-          // painter: ShaderPainter(
-          //   repaint: _controller,
-          //   shader: shader,
-          //   parameters: [
-          //     ShaderType(
-          //       shaderType: EShaderDataType.floatShader,
-          //       value: _controller.lastElapsedDuration!.inMilliseconds / 1000,
-          //     ),
-          //     ShaderType(
-          //       shaderType: EShaderDataType.floatShader,
-          //       value: width,
-          //     ),
-          //     ShaderType(
-          //       shaderType: EShaderDataType.floatShader,
-          //       value: height,
-          //     ),
-          //   ],
-          // ),
-          child: child,
         );
       },
       assetKey: AppShaders.ve,
-      child: ClipRRect(
-        borderRadius: widget.clipper ?? BorderRadius.zero,
-        child: widget.child,
+      child: RepaintBoundary(
+        child: ClipRRect(
+          borderRadius: widget.clipper ?? BorderRadius.zero,
+          child: widget.child,
+        ),
       ),
     );
   }
@@ -85,19 +101,18 @@ class _BuildAnimatedBackgroundState extends State<BuildAnimatedBackground>
 
 class _ShaderBackgroundPainter extends CustomPainter {
   final FragmentShader shader;
-  final AnimationController controller;
+  final ValueNotifier<double> time;
 
-  const _ShaderBackgroundPainter({
-    super.repaint,
+  _ShaderBackgroundPainter({
     required this.shader,
-    required this.controller,
-  });
+    required this.time,
+  }) : super(repaint: time);
 
   @override
   void paint(Canvas canvas, Size size) {
     shader.setFloat(
       0,
-      controller.lastElapsedDuration!.inMilliseconds / 1000,
+      time.value,
     );
 
     shader.setFloat(
@@ -115,5 +130,6 @@ class _ShaderBackgroundPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _ShaderBackgroundPainter oldDelegate) =>
+      oldDelegate.shader != shader || oldDelegate.time != time;
 }

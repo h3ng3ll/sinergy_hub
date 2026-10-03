@@ -1,56 +1,30 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/resources/colors/app_color_scheme.dart';
+import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
-import '../../../../../../core/utils/responsive_helper.dart';
-import '../../../../domain/models/user_data/user_data.dart';
+import 'profile_section_card.dart';
 
 class AboutSection extends StatelessWidget {
-  final UserData userData;
-  final double screenWidth;
-  final AppColorScheme colorScheme;
-  final AppTextTheme textTheme;
+  final String aboutMe;
 
   const AboutSection({
     super.key,
-    required this.userData,
-    required this.screenWidth,
-    required this.colorScheme,
-    required this.textTheme,
+    required this.aboutMe,
   });
 
   @override
   Widget build(BuildContext context) {
-    final titleFontSize = ResponsiveHelper.responsiveFontSize(
-      screenWidth,
-      20.0,
-      maxFontSize: 28,
-    );
-    final contentFontSize = ResponsiveHelper.responsiveFontSize(
-      screenWidth,
-      15.0,
-      maxFontSize: 18,
-    );
+    final textTheme = AppTextTheme.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: ResponsiveHelper.responsiveSpacing(screenWidth, 10.0),
-      children: [
-        Text(
-          'About',
-          style: textTheme.bold20.copyWith(
-            color: colorScheme.onSurface,
-            fontSize: titleFontSize,
-          ),
+    return ProfileSectionCard(
+      title: 'About',
+      child: Text(
+        aboutMe,
+        style: textTheme.regular16.copyWith(
+          color: AppColors.white.value.withValues(alpha: 0.95),
+          height: 1.5,
         ),
-        Text(
-          userData.aboutMe!,
-          style: textTheme.regular14.copyWith(
-            color: colorScheme.onSurface.withValues(alpha: 0.8),
-            fontSize: contentFontSize,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
