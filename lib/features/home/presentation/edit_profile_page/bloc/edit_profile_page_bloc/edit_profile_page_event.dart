@@ -15,6 +15,7 @@ sealed class EditProfilePageEvent with _$EditProfilePageEvent {
   const factory EditProfilePageEvent.applyChanges({
     String? firstName,
     String? lastName,
+    int? age,
     String? aboutMe,
     String? country,
     String? city,

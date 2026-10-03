@@ -23,6 +23,11 @@ abstract class IChatRepository {
     required String uid,
   });
 
+  /// Every chat [uid] participates in, re-emitted in full on each change.
+  Stream<List<Chat>> chatsSnapshotStream({
+    required String uid,
+  });
+
   Future<Chat> getById({
     required String uid,
     required String chatId,

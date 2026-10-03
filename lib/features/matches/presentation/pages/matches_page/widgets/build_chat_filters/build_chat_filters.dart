@@ -39,7 +39,7 @@ class BuildChatFilters extends StatelessWidget {
     final textTheme = AppTextTheme.of(context);
 
     return SizedBox(
-      height: 70.0,
+      height: 80.0,
       child: ListView(
         // spacing: 10.0,
         scrollDirection: Axis.horizontal,

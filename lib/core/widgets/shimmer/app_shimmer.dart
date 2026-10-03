@@ -4,6 +4,10 @@ import '../../resources/colors/app_colors.dart';
 
 const Duration _kShimmerPeriod = Duration(milliseconds: 1400);
 
+/// How far past each edge (in [Alignment] units) the highlight centre
+/// travels: band half-width (0.2) + diagonal tilt (0.3) + margin.
+const double _kBandTravel = 1.8;
+
 class AppShimmer extends StatefulWidget {
   final Widget child;
 
@@ -41,7 +45,10 @@ class _AppShimmerState extends State<AppShimmer>
       animation: _controller,
       child: widget.child,
       builder: (context, child) {
-        final shift = _controller.value * 3.0 - 1.0;
+        /// The band travels from fully off the left edge to fully off the
+        /// right edge, so the loop restart is never visible as a cut.
+        final shift =
+            -_kBandTravel + _controller.value * (_kBandTravel * 2);
 
         return ShaderMask(
           blendMode: BlendMode.srcATop,
@@ -53,7 +60,7 @@ class _AppShimmerState extends State<AppShimmer>
               AppColors.ghostWhite.value,
               AppColors.platinum.value,
             ],
-            stops: const [0.35, 0.5, 0.65],
+            stops: const [0.4, 0.5, 0.6],
           ).createShader(bounds),
           child: child,
         );

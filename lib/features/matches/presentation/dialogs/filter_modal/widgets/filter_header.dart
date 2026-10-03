@@ -101,14 +101,22 @@ class ShaderBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (shader != null) {
-      return CustomPaint(
-        painter: _ShaderPainter(shader!),
-        child: child,
+      return ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(20.0),
+        ),
+        child: CustomPaint(
+          painter: _ShaderPainter(shader!),
+          child: child,
+        ),
       );
     }
     return child;
   }
 }
+
+/// Fixed phase of the header gradient (the header is static).
+const double _kHeaderShaderTime = 1.0;
 
 class _ShaderPainter extends CustomPainter {
   final ui.FragmentShader shader;
@@ -119,7 +127,11 @@ class _ShaderPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     shader.setFloat(0, size.width);
     shader.setFloat(1, size.height);
-    
+
+    /// `uTime` must always be set: an unset uniform is undefined on the GPU
+    /// and intermittently renders the header solid black.
+    shader.setFloat(2, _kHeaderShaderTime);
+
     final paint = Paint()..shader = shader;
     canvas.drawRect(
       Rect.fromLTWH(0, 0, size.width, size.height),

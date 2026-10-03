@@ -199,6 +199,7 @@ class EditProfilePageBloc
         userData.copyWith(
           firstName: event.firstName,
           lastName: event.lastName,
+          age: event.age,
           aboutMe: event.aboutMe,
           location: location,
           profiler: userData.profiler.copyWith(

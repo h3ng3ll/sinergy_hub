@@ -28,6 +28,7 @@ import 'bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import 'widgets/build_grouped_input.dart';
 import 'widgets/build_skills_section/build_skills_section.dart';
 import 'widgets/build_specialization_field.dart';
+import '../../../../core/widgets/inputs/age_input.dart';
 import '../../../../core/widgets/inputs/bio_input.dart';
 import '../../../../core/widgets/inputs/first_name_input.dart';
 import '../../../../core/widgets/inputs/last_name_input.dart';
@@ -42,6 +43,8 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _skillController = TextEditingController();
   final TextEditingController _countryController = TextEditingController();
@@ -62,6 +65,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         userCubit.state.userData?.firstName ?? _firstNameController.text;
     _lastNameController.text =
         userCubit.state.userData?.lastName ?? _lastNameController.text;
+    _ageController.text =
+        userCubit.state.userData?.age?.toString() ?? _ageController.text;
     _bioController.text =
         userCubit.state.userData?.aboutMe ?? _bioController.text;
     _countryController.text =
@@ -77,6 +82,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _editProfilePageBloc.close();
     _firstNameController.dispose();
     _lastNameController.dispose();
+    _ageController.dispose();
     _bioController.dispose();
     _skillController.dispose();
     _countryController.dispose();
@@ -103,10 +109,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void onSaveChanges() {
+    if (!_formKey.currentState!.validate()) return;
     _editProfilePageBloc.add(
       EditProfilePageEvent.applyChanges(
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
+        age: int.parse(_ageController.text),
         aboutMe: _bioController.text,
         country: _countryController.text,
         city: _cityController.text,
@@ -224,92 +232,101 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ],
                       ),
                       body: HorizontalPadding(
-                        child: ListView(
-                          children: [
-                            Column(
-                              spacing: 20,
+                        child: Form(
+                          key: _formKey,
+                          child: ListView(
+                            children: [
+                              Column(
+                                spacing: 20,
 
-                              children: [
-                                BuildUserAvatar(
-                                  width: 100.0,
-                                  height: 100.0,
-                                  onTap: onTapAvatar,
-                                  url: userData?.avatarUrl,
-                                  cacheImg: image,
-                                ),
-                                BuildGroupedInput(
-                                  title: 'FirstName',
-                                  child: FirstNameInput(
-                                    controller: _firstNameController,
+                                children: [
+                                  BuildUserAvatar(
+                                    width: 100.0,
+                                    height: 100.0,
+                                    onTap: onTapAvatar,
+                                    url: userData?.avatarUrl,
+                                    cacheImg: image,
                                   ),
-                                ),
-                                BuildGroupedInput(
-                                  title: 'LastName',
-                                  child: LastNameInput(
-                                    controller: _lastNameController,
+                                  BuildGroupedInput(
+                                    title: 'FirstName',
+                                    child: FirstNameInput(
+                                      controller: _firstNameController,
+                                    ),
                                   ),
-                                ),
-                                BuildGroupedInput(
-                                  title: 'Bio',
-                                  child: BioInput(
-                                    controller: _bioController,
+                                  BuildGroupedInput(
+                                    title: 'LastName',
+                                    child: LastNameInput(
+                                      controller: _lastNameController,
+                                    ),
                                   ),
-                                ),
-                                BuildGroupedInput(
-                                  title: 'Specialization',
-                                  child: BuildSpecializationField(
-                                    specialization:
-                                        userData?.profiler.specialization,
-                                    onTap: onTapSpecialization,
+                                  BuildGroupedInput(
+                                    title: 'Age',
+                                    child: AgeInput(
+                                      controller: _ageController,
+                                    ),
                                   ),
-                                ),
-                                BuildGroupedInput(
-                                  title: lo.location_group_title,
-                                  child: BuildLocationSection(
-                                    countryController: _countryController,
-                                    cityController: _cityController,
-                                    isDetecting: state.isDetectingLocation,
-                                    errorMessage: state.locationError,
-                                    settingsTarget:
-                                        state.locationSettingsTarget,
-                                    onUseMyLocation: onUseMyLocation,
-                                    onOpenSettings: onOpenLocationSettings,
+                                  BuildGroupedInput(
+                                    title: 'Bio',
+                                    child: BioInput(
+                                      controller: _bioController,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Gap(15.0),
-                            Text(
-                              'Skills',
-                              style: textTheme.regular14.copyWith(
-                                color: colorScheme.onPrimary,
+                                  BuildGroupedInput(
+                                    title: 'Specialization',
+                                    child: BuildSpecializationField(
+                                      specialization:
+                                          userData?.profiler.specialization,
+                                      onTap: onTapSpecialization,
+                                    ),
+                                  ),
+                                  BuildGroupedInput(
+                                    title: lo.location_group_title,
+                                    child: BuildLocationSection(
+                                      countryController: _countryController,
+                                      cityController: _cityController,
+                                      isDetecting: state.isDetectingLocation,
+                                      errorMessage: state.locationError,
+                                      settingsTarget:
+                                          state.locationSettingsTarget,
+                                      onUseMyLocation: onUseMyLocation,
+                                      onOpenSettings: onOpenLocationSettings,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Gap(15.0),
-                            BuildSkillsSection(
-                              onRemoveExistingSkill: onRemoveExistingSkill,
-                              onSubmitSkill: onSubmitSkill,
-                              skills: availableSkills,
-                              activeSkills: state.skills,
-                            ),
-                            Gap(15.0),
-                            Row(
-                              spacing: 20.0,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CustomTextBtn(
-                                  onPressed: onCancel,
-                                  text: 'Cancel',
+                              Gap(15.0),
+                              Text(
+                                'Skills',
+                                style: textTheme.regular14.copyWith(
+                                  color: colorScheme.onPrimary,
                                 ),
-                                TranslucentBtn(
-                                  onPressed: onSaveChanges,
-                                  child: Text(
-                                    'Save Changes',
+                              ),
+                              Gap(15.0),
+                              BuildSkillsSection(
+                                onRemoveExistingSkill: onRemoveExistingSkill,
+                                onSubmitSkill: onSubmitSkill,
+                                skills: availableSkills,
+                                activeSkills: state.skills,
+                              ),
+                              Gap(15.0),
+                              Row(
+                                spacing: 20.0,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CustomTextBtn(
+                                    onPressed: onCancel,
+                                    text: 'Cancel',
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                  TranslucentBtn(
+                                    onPressed: onSaveChanges,
+                                    child: Text(
+                                      'Save Changes',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

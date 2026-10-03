@@ -36,6 +36,13 @@ class LocationSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = AppTextTheme.of(context);
     final lo = AppLocalizations.of(context)!;
+    final fieldFill = AppColors.antiFlashWhite.value;
+    final fieldStyle = textTheme.medium14.copyWith(
+      color: AppColors.black.value.withValues(alpha: 0.85),
+    );
+    final fieldHintStyle = textTheme.regular14.copyWith(
+      color: AppColors.black.value.withValues(alpha: 0.4),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,9 +78,15 @@ class LocationSection extends StatelessWidget {
             children: [
               CountryInput(
                 controller: countryController,
+                fillColor: fieldFill,
+                style: fieldStyle,
+                hintStyle: fieldHintStyle,
               ),
               CityInput(
                 controller: cityController,
+                fillColor: fieldFill,
+                style: fieldStyle,
+                hintStyle: fieldHintStyle,
               ),
             ],
           ),

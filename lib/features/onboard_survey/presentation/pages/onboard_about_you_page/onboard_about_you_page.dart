@@ -15,6 +15,7 @@ import '../../../../../core/widgets/btn/custom_text_btn.dart';
 import '../../../../../core/widgets/btn/translucent_btn.dart';
 import '../../../../../core/widgets/build_user_avatar.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
+import '../../../../../core/widgets/inputs/age_input.dart';
 import '../../../../../core/widgets/inputs/bio_input.dart';
 import '../../../../../core/widgets/inputs/first_name_input.dart';
 import '../../../../../core/widgets/inputs/last_name_input.dart';
@@ -47,6 +48,7 @@ class OnboardAboutYouPage extends StatefulWidget {
 class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _skillController = TextEditingController();
   final TextEditingController _countryController = TextEditingController();
@@ -73,6 +75,8 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
         userCubit.state.userData?.firstName ?? _firstNameController.text;
     _lastNameController.text =
         userCubit.state.userData?.lastName ?? _lastNameController.text;
+    _ageController.text =
+        userCubit.state.userData?.age?.toString() ?? _ageController.text;
     _bioController.text =
         userCubit.state.userData?.aboutMe ?? _bioController.text;
     _countryController.text =
@@ -89,6 +93,7 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
     _onboardAboutYouBloc.close();
     _firstNameController.dispose();
     _lastNameController.dispose();
+    _ageController.dispose();
     _bioController.dispose();
     _skillController.dispose();
     _countryController.dispose();
@@ -149,6 +154,7 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
     final skills = _editProfilePageBloc.state.skills;
     final userData = context.read<UserBloc>().state.userData;
     final onboardBloc = context.read<OnboardBloc>();
+    final age = int.parse(_ageController.text);
 
     // location.hasCoordinates is backend-owned: always copy the existing
     // value forward, never force it true, even right after a detection.
@@ -164,6 +170,7 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
           ? userData.copyWith(
               firstName: _firstNameController.text,
               lastName: _lastNameController.text,
+              age: age,
               aboutMe: _bioController.text,
               location: location,
               profiler: userData.profiler.copyWith(
@@ -173,6 +180,7 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
           : UserData.none().copyWith(
               firstName: _firstNameController.text,
               lastName: _lastNameController.text,
+              age: age,
               aboutMe: _bioController.text,
               location: location,
               profiler: UserProfiler.none(),
@@ -310,6 +318,12 @@ class _OnboardAboutYouPageState extends State<OnboardAboutYouPage> {
                                 title: 'LastName',
                                 child: LastNameInput(
                                   controller: _lastNameController,
+                                ),
+                              ),
+                              BuildGroupedInput(
+                                title: 'Age',
+                                child: AgeInput(
+                                  controller: _ageController,
                                 ),
                               ),
                               BuildGroupedInput(

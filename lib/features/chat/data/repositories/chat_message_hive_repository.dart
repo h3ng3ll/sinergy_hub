@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../../../core/databases/hive_database.dart';
 import '../../domain/models/chat_message/chat_message.dart';
 import '../../domain/models/chat_messages_cache_info/chat_messages_cache_info.dart';
@@ -44,10 +46,20 @@ class ChatMessageHiveRepository implements IChatMessageLocalRepository {
   }) async* {
     final box = await _hiveDatabase.getBox<ChatMessagesCache>(_boxName);
     final key = _key(uid, chatId);
-    yield box.get(key)?.messages ?? const [];
-    yield* box
+
+    /// Subscribe to changes BEFORE reading the current value, so a write
+    /// landing in between is never lost.
+    final controller = StreamController<List<ChatMessage>>();
+    final subscription = box
         .watch(key: key)
-        .map((_) => box.get(key)?.messages ?? const <ChatMessage>[]);
+        .listen((_) => controller.add(box.get(key)?.messages ?? const []));
+    controller.add(box.get(key)?.messages ?? const []);
+    try {
+      yield* controller.stream;
+    } finally {
+      await subscription.cancel();
+      await controller.close();
+    }
   }
 
   @override

@@ -135,11 +135,11 @@ class _MatchesPageState extends State<MatchesPage> {
                   onChanged: onChangedQuery,
                 ),
               ),
-              Gap(20.0),
+              Gap(5.0),
               BuildChatFilters(
                 onTapChatFilter: onTapChatFilter,
               ),
-              Gap(20.0),
+              Gap(3.0),
               Expanded(
                 child: BlocBuilder<ChatsFilterBloc, ChatsFilterState>(
                   builder: (context, state) {

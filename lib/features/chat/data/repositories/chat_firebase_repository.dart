@@ -302,6 +302,27 @@ class ChatFirebaseRepository implements IChatRepository {
   }
 
   @override
+  Stream<List<Chat>> chatsSnapshotStream({
+    required String uid,
+  }) => _firebaseFirestoreService.authGated(
+    (uid) => _chats
+        .where(
+          'participants',
+          arrayContains: uid,
+        )
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map(
+                (doc) => Chat.fromJson(
+                  doc.data(),
+                ),
+              )
+              .toList(),
+        ),
+  );
+
+  @override
   Stream<Chat> chatUpdates({
     required String uid,
   }) {

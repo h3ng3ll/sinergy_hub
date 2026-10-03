@@ -128,13 +128,13 @@ return detectLocation(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name)?  addSkill,TResult Function()?  initialize,TResult Function( Skill skill)?  removeSkill,TResult Function( String? firstName,  String? lastName,  String? aboutMe,  String? country,  String? city,  Uint8List? img)?  applyChanges,TResult Function()?  detectLocation,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name)?  addSkill,TResult Function()?  initialize,TResult Function( Skill skill)?  removeSkill,TResult Function( String? firstName,  String? lastName,  int? age,  String? aboutMe,  String? country,  String? city,  Uint8List? img)?  applyChanges,TResult Function()?  detectLocation,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AddSkill() when addSkill != null:
 return addSkill(_that.name);case _Initialize() when initialize != null:
 return initialize();case _RemoveSkill() when removeSkill != null:
 return removeSkill(_that.skill);case _ApplyChanges() when applyChanges != null:
-return applyChanges(_that.firstName,_that.lastName,_that.aboutMe,_that.country,_that.city,_that.img);case _DetectLocation() when detectLocation != null:
+return applyChanges(_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.country,_that.city,_that.img);case _DetectLocation() when detectLocation != null:
 return detectLocation();case _:
   return orElse();
 
@@ -153,13 +153,13 @@ return detectLocation();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name)  addSkill,required TResult Function()  initialize,required TResult Function( Skill skill)  removeSkill,required TResult Function( String? firstName,  String? lastName,  String? aboutMe,  String? country,  String? city,  Uint8List? img)  applyChanges,required TResult Function()  detectLocation,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name)  addSkill,required TResult Function()  initialize,required TResult Function( Skill skill)  removeSkill,required TResult Function( String? firstName,  String? lastName,  int? age,  String? aboutMe,  String? country,  String? city,  Uint8List? img)  applyChanges,required TResult Function()  detectLocation,}) {final _that = this;
 switch (_that) {
 case _AddSkill():
 return addSkill(_that.name);case _Initialize():
 return initialize();case _RemoveSkill():
 return removeSkill(_that.skill);case _ApplyChanges():
-return applyChanges(_that.firstName,_that.lastName,_that.aboutMe,_that.country,_that.city,_that.img);case _DetectLocation():
+return applyChanges(_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.country,_that.city,_that.img);case _DetectLocation():
 return detectLocation();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -174,13 +174,13 @@ return detectLocation();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name)?  addSkill,TResult? Function()?  initialize,TResult? Function( Skill skill)?  removeSkill,TResult? Function( String? firstName,  String? lastName,  String? aboutMe,  String? country,  String? city,  Uint8List? img)?  applyChanges,TResult? Function()?  detectLocation,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name)?  addSkill,TResult? Function()?  initialize,TResult? Function( Skill skill)?  removeSkill,TResult? Function( String? firstName,  String? lastName,  int? age,  String? aboutMe,  String? country,  String? city,  Uint8List? img)?  applyChanges,TResult? Function()?  detectLocation,}) {final _that = this;
 switch (_that) {
 case _AddSkill() when addSkill != null:
 return addSkill(_that.name);case _Initialize() when initialize != null:
 return initialize();case _RemoveSkill() when removeSkill != null:
 return removeSkill(_that.skill);case _ApplyChanges() when applyChanges != null:
-return applyChanges(_that.firstName,_that.lastName,_that.aboutMe,_that.country,_that.city,_that.img);case _DetectLocation() when detectLocation != null:
+return applyChanges(_that.firstName,_that.lastName,_that.age,_that.aboutMe,_that.country,_that.city,_that.img);case _DetectLocation() when detectLocation != null:
 return detectLocation();case _:
   return null;
 
@@ -366,11 +366,12 @@ $SkillCopyWith<$Res> get skill {
 
 
 class _ApplyChanges implements EditProfilePageEvent {
-  const _ApplyChanges({this.firstName, this.lastName, this.aboutMe, this.country, this.city, this.img});
+  const _ApplyChanges({this.firstName, this.lastName, this.age, this.aboutMe, this.country, this.city, this.img});
   
 
  final  String? firstName;
  final  String? lastName;
+ final  int? age;
  final  String? aboutMe;
  final  String? country;
  final  String? city;
@@ -386,16 +387,16 @@ _$ApplyChangesCopyWith<_ApplyChanges> get copyWith => __$ApplyChangesCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ApplyChanges&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.country, country) || other.country == country)&&(identical(other.city, city) || other.city == city)&&const DeepCollectionEquality().equals(other.img, img));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ApplyChanges&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.age, age) || other.age == age)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.country, country) || other.country == country)&&(identical(other.city, city) || other.city == city)&&const DeepCollectionEquality().equals(other.img, img));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,firstName,lastName,aboutMe,country,city,const DeepCollectionEquality().hash(img));
+int get hashCode => Object.hash(runtimeType,firstName,lastName,age,aboutMe,country,city,const DeepCollectionEquality().hash(img));
 
 @override
 String toString() {
-  return 'EditProfilePageEvent.applyChanges(firstName: $firstName, lastName: $lastName, aboutMe: $aboutMe, country: $country, city: $city, img: $img)';
+  return 'EditProfilePageEvent.applyChanges(firstName: $firstName, lastName: $lastName, age: $age, aboutMe: $aboutMe, country: $country, city: $city, img: $img)';
 }
 
 
@@ -406,7 +407,7 @@ abstract mixin class _$ApplyChangesCopyWith<$Res> implements $EditProfilePageEve
   factory _$ApplyChangesCopyWith(_ApplyChanges value, $Res Function(_ApplyChanges) _then) = __$ApplyChangesCopyWithImpl;
 @useResult
 $Res call({
- String? firstName, String? lastName, String? aboutMe, String? country, String? city, Uint8List? img
+ String? firstName, String? lastName, int? age, String? aboutMe, String? country, String? city, Uint8List? img
 });
 
 
@@ -423,11 +424,12 @@ class __$ApplyChangesCopyWithImpl<$Res>
 
 /// Create a copy of EditProfilePageEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? firstName = freezed,Object? lastName = freezed,Object? aboutMe = freezed,Object? country = freezed,Object? city = freezed,Object? img = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? firstName = freezed,Object? lastName = freezed,Object? age = freezed,Object? aboutMe = freezed,Object? country = freezed,Object? city = freezed,Object? img = freezed,}) {
   return _then(_ApplyChanges(
 firstName: freezed == firstName ? _self.firstName : firstName // ignore: cast_nullable_to_non_nullable
 as String?,lastName: freezed == lastName ? _self.lastName : lastName // ignore: cast_nullable_to_non_nullable
-as String?,aboutMe: freezed == aboutMe ? _self.aboutMe : aboutMe // ignore: cast_nullable_to_non_nullable
+as String?,age: freezed == age ? _self.age : age // ignore: cast_nullable_to_non_nullable
+as int?,aboutMe: freezed == aboutMe ? _self.aboutMe : aboutMe // ignore: cast_nullable_to_non_nullable
 as String?,country: freezed == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
 as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String?,img: freezed == img ? _self.img : img // ignore: cast_nullable_to_non_nullable

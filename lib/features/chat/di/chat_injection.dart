@@ -7,11 +7,14 @@ import '../../user/domain/usecases/get_current_user_data_use_case.dart';
 import '../../user/domain/usecases/get_users_use_case.dart';
 import '../../user/domain/usecases/listen_user_data_use_case.dart';
 import '../data/repositories/chat_firebase_repository.dart';
+import '../data/repositories/chat_hive_repository.dart';
+import '../domain/repositories/i_chat_local_repository.dart';
 import '../data/repositories/chat_message_firebase_repository.dart';
 import '../data/repositories/chat_message_hive_repository.dart';
 import '../domain/repositories/i_chat_message_local_repository.dart';
 import '../domain/repositories/i_chat_message_repository.dart';
 import '../domain/repositories/i_chat_repository.dart';
+import '../domain/usecases/filter_chats_use_case.dart';
 import '../domain/usecases/get_chat_by_id_use_case.dart';
 import '../domain/usecases/get_chat_by_participants_case.dart';
 import '../domain/usecases/get_chat_config_use_case.dart';
@@ -29,6 +32,7 @@ import '../domain/usecases/toggle_favorite_chat_use_case.dart';
 import '../domain/usecases/update_chat_info_use_case.dart';
 import '../domain/usecases/update_typing_info_use_case.dart';
 import '../domain/usecases/watch_chat_messages_use_case.dart';
+import '../domain/usecases/watch_chats_use_case.dart';
 import '../presentation/bloc/chat_page_bloc/chat_page_bloc.dart';
 import '../presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 
@@ -49,6 +53,21 @@ void initChatFeature(GetIt getIt) {
       chatRepository: getIt<IChatRepository>(),
       authRepository: getIt<IAuthRepository>(),
     ),
+  );
+  getIt.registerLazySingleton<IChatLocalRepository>(
+    () => ChatHiveRepository(
+      hiveDatabase: getIt<HiveDatabase>(),
+    ),
+  );
+  getIt.registerLazySingleton<WatchChatsUseCase>(
+    () => WatchChatsUseCase(
+      localRepository: getIt<IChatLocalRepository>(),
+      remoteRepository: getIt<IChatRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<FilterChatsUseCase>(
+    FilterChatsUseCase.new,
   );
   getIt.registerLazySingleton<IChatMessageLocalRepository>(
     () => ChatMessageHiveRepository(
@@ -171,10 +190,10 @@ void initChatFeature(GetIt getIt) {
   );
   getIt.registerFactory<ChatsFilterBloc>(
     () => ChatsFilterBloc(
-      searchChatsUseCase: getIt<SearchChatsUseCase>(),
+      watchChatsUseCase: getIt<WatchChatsUseCase>(),
+      filterChatsUseCase: getIt<FilterChatsUseCase>(),
       toggleArchiveChatUseCase: getIt<ToggleArchiveChatUseCase>(),
       toggleFavoriteChatUseCase: getIt<ToggleFavoriteChatUseCase>(),
-      listenChatUpdatesUseCase: getIt<ListenChatUpdatesUseCase>(),
       getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
       listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
     ),

@@ -49,6 +49,9 @@ sealed class ChatsFilterState with _$ChatsFilterState {
   const factory ChatsFilterState({
     @Default(ChatsFilterStatus.loading) ChatsFilterStatus status,
     @Default(ChatPgState()) ChatPgState chatsState,
+
+    /// Every cached chat of the user; [chatsState] is its filtered view.
+    @Default([]) List<Chat> allChats,
     @Default({}) Map<String, bool> onlineStatuses,
     @Default(<String, StreamSubscription<UserData?>>{})
     Map<String, StreamSubscription<UserData?>> peerSubs,

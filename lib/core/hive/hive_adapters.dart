@@ -2,7 +2,11 @@ import 'package:hive_ce/hive_ce.dart';
 
 import '../../features/auth/data/models/auth_temp_credentials/auth_temp_credentials.dart';
 import '../../features/chat/data/models/chat_messages_cache/chat_messages_cache.dart';
+import '../../features/chat/data/models/chats_cache/chats_cache.dart';
+import '../../features/chat/domain/models/chat/chat.dart';
+import '../../features/chat/domain/models/chat_config/chat_config.dart';
 import '../../features/chat/domain/models/chat_message/chat_message.dart';
+import '../../features/chat/domain/models/participant_info/participant_info.dart';
 
 part 'hive_adapters.g.dart';
 
@@ -14,5 +18,9 @@ part 'hive_adapters.g.dart';
   AdapterSpec<AuthTempCredentials>(),
   AdapterSpec<ChatMessage>(),
   AdapterSpec<ChatMessagesCache>(),
+  AdapterSpec<ChatConfig>(),
+  AdapterSpec<ParticipantInfo>(),
+  AdapterSpec<Chat>(),
+  AdapterSpec<ChatsCache>(),
 ])
 class HiveAdapters {}

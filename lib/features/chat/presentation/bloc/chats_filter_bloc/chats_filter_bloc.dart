@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../../core/utils/extensions/bloc_ext.dart';
+import '../../../data/utils/extensions/chats_filter_state_ext.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../user/domain/usecases/get_current_user_data_use_case.dart';
 import '../../../../user/domain/usecases/listen_user_data_use_case.dart';
 import '../../../domain/models/chat/chat.dart';
 import '../../../domain/models/chat_pg_state.dart/chat_pg_state.dart';
 import '../../../domain/models/e_chat_filter.dart';
-import '../../../domain/usecases/listen_chat_updates_use_case.dart';
-import '../../../domain/usecases/search_chats_use_case.dart';
+import '../../../domain/usecases/filter_chats_use_case.dart';
 import '../../../domain/usecases/toggle_archive_chat_use_case.dart';
 import '../../../domain/usecases/toggle_favorite_chat_use_case.dart';
+import '../../../domain/usecases/watch_chats_use_case.dart';
 
 part 'chats_filter_event.dart';
 
@@ -22,39 +22,31 @@ part 'chats_filter_state.dart';
 part 'chats_filter_bloc.freezed.dart';
 
 class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
-  final SearchChatsUseCase _searchChatsUseCase;
+  final WatchChatsUseCase _watchChatsUseCase;
+  final FilterChatsUseCase _filterChatsUseCase;
   final ToggleArchiveChatUseCase _toggleArchiveChatUseCase;
   final ToggleFavoriteChatUseCase _toggleFavoriteChatUseCase;
-  final ListenChatUpdatesUseCase _listenChatUpdatesUseCase;
   final GetCurrentUserDataUseCase _getCurrentUserDataUseCase;
   final ListenUserDataUseCase _listenUserDataUseCase;
 
   ChatsFilterBloc({
-    required SearchChatsUseCase searchChatsUseCase,
+    required WatchChatsUseCase watchChatsUseCase,
+    required FilterChatsUseCase filterChatsUseCase,
     required ToggleArchiveChatUseCase toggleArchiveChatUseCase,
     required ToggleFavoriteChatUseCase toggleFavoriteChatUseCase,
-    required ListenChatUpdatesUseCase listenChatUpdatesUseCase,
     required GetCurrentUserDataUseCase getCurrentUserDataUseCase,
     required ListenUserDataUseCase listenUserDataUseCase,
-  }) : _searchChatsUseCase = searchChatsUseCase,
+  }) : _watchChatsUseCase = watchChatsUseCase,
+       _filterChatsUseCase = filterChatsUseCase,
        _toggleArchiveChatUseCase = toggleArchiveChatUseCase,
-       _listenChatUpdatesUseCase = listenChatUpdatesUseCase,
        _toggleFavoriteChatUseCase = toggleFavoriteChatUseCase,
        _getCurrentUserDataUseCase = getCurrentUserDataUseCase,
        _listenUserDataUseCase = listenUserDataUseCase,
        super(const ChatsFilterState()) {
     on<_ApplyFilter>(_applyFilter);
-    on<_Search>(
-      _search,
-      transformer: debounceTransformer(
-        Duration(
-          milliseconds: 500,
-        ),
-      ),
-    );
+    on<_Search>(_search);
     on<_ToggleArchived>(_toggleArchived);
     on<_ToggleFavorite>(_toggleFavorite);
-    on<_ListenChatsChanges>(_listenChatsChanges);
     on<_Init>(_init);
     on<_UpdateUserOnline>(_updateUserOnline);
     on<_SyncPeerSubs>(_onSyncPeerSubs);
@@ -126,41 +118,56 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     );
   }
 
+  /// The visible list for the current filter and query, computed locally
+  /// from the cached chats — no backend request.
+  ChatPgState _visible({
+    required List<Chat> allChats,
+    EChatFilter? filter,
+    String? query,
+    String? uid,
+  }) => ChatPgState(
+    hasMore: false,
+    chats: _filterChatsUseCase.call(
+      chats: allChats,
+      uid: uid ?? state.uid,
+      filter: filter ?? state.filter,
+      query: query ?? state.query,
+    ),
+  );
+
   void _applyFilter(
     _ApplyFilter event,
     Emitter<ChatsFilterState> emit,
-  ) async {
-    try {
-      emit(
-        state.copyWith(
-          filter: event.filter,
-          status: ChatsFilterStatus.searching,
-        ),
-      );
-      final ChatPgState chatsState = await _searchChatsUseCase.call(
-        chatState: ChatPgState(),
-        query: state.query,
+  ) {
+    emit(
+      state.copyWith(
         filter: event.filter,
-      );
-      emit(
-        state.copyWith(
+        chatsState: _visible(
+          allChats: state.allChats,
           filter: event.filter,
-          chatsState: chatsState,
-          status: ChatsFilterStatus.initial,
         ),
-      );
-      add(const ChatsFilterEvent.syncPeerSubs());
-    } catch (e) {
-      emit(
-        state.copyWith(
-          errorMessage: e.toString(),
-          status: ChatsFilterStatus.failed,
-        ),
-      );
-    }
+      ),
+    );
+    add(const ChatsFilterEvent.syncPeerSubs());
   }
 
-  void _init(
+  void _search(
+    _Search event,
+    Emitter<ChatsFilterState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        query: event.query,
+        chatsState: _visible(
+          allChats: state.allChats,
+          query: event.query,
+        ),
+      ),
+    );
+    add(const ChatsFilterEvent.syncPeerSubs());
+  }
+
+  Future<void> _init(
     _Init event,
     Emitter<ChatsFilterState> emit,
   ) async {
@@ -170,23 +177,31 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
           status: ChatsFilterStatus.loading,
         ),
       );
-      final user = await _getCurrentUserDataUseCase.call();
-
-      final ChatPgState chatsState = await _searchChatsUseCase.call(
-        chatState: ChatPgState(),
-        query: state.query,
+      final user = await _getCurrentUserDataUseCase.call(
+        preferCache: true,
       );
-
       emit(
         state.copyWith(
           uid: user.uid,
-          chatsState: chatsState,
-          status: ChatsFilterStatus.initial,
         ),
       );
-      add(const ChatsFilterEvent.syncPeerSubs());
-      add(
-        ChatsFilterEvent.listenChatsChanges(),
+
+      await emit.forEach(
+        _watchChatsUseCase.call(),
+        onData: (List<Chat> chats) {
+          final next = state.copyWith(
+            allChats: chats,
+            chatsState: _visible(allChats: chats),
+            status: _resolveToggleStatus(chats) ??
+                (state.isLoading ? ChatsFilterStatus.initial : state.status),
+          );
+          add(const ChatsFilterEvent.syncPeerSubs());
+          return next;
+        },
+        onError: (e, _) => state.copyWith(
+          errorMessage: e.toString(),
+          status: ChatsFilterStatus.failed,
+        ),
       );
     } catch (e) {
       emit(
@@ -198,114 +213,30 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     }
   }
 
-  void _listenChatsChanges(
-    _ListenChatsChanges event,
-    Emitter<ChatsFilterState> emit,
-  ) async {
-    await emit.forEach(
-      _listenChatUpdatesUseCase.call(),
-      onData: (Chat chat) {
-        final chats = [
-          ...state.chatsState.chats,
-        ];
-        final index = chats.indexWhere(
-          (e) => e.chatId == chat.chatId,
-        );
-
-        final ChatsFilterState next;
-
-        /// No found . New chat
-        if (index == -1) {
-          chats.add(
-            chat,
-          );
-          next = state.copyWith(
-            chatsState: state.chatsState.copyWith(
-              chats: chats,
-            ),
-          );
-        } else {
-          final uid = state.uid;
-
-          final status = state.resolveStatus(
-            chats[index],
-            chat,
-            uid,
-          );
-
-          chats[index] = chat;
-          next = state.copyWith(
-            status: status ?? state.status,
-            chatsState: state.chatsState.copyWith(
-              chats: chats,
-            ),
-          );
-        }
-        add(const ChatsFilterEvent.syncPeerSubs());
-        return next;
-      },
-      onError: (e, _) {
-        return state.copyWith(
-          errorMessage: e.toString(),
-          status: ChatsFilterStatus.failed,
-        );
-      },
-    );
-  }
-
-  void _search(
-    _Search event,
-    Emitter<ChatsFilterState> emit,
-  ) async {
-    try {
-      emit(
-        state.copyWith(
-          query: event.query,
-          status: ChatsFilterStatus.searching,
-        ),
-      );
-      final ChatPgState chatState = await _searchChatsUseCase.call(
-        chatState: state.chatsState,
-        query: event.query,
-        filter: state.filter,
-      );
-
-      emit(
-        state.copyWith(
-          query: event.query,
-          chatsState: chatState,
-          status: ChatsFilterStatus.initial,
-        ),
-      );
-      add(const ChatsFilterEvent.syncPeerSubs());
-    } catch (e) {
-      emit(
-        state.copyWith(
-          errorMessage: e.toString(),
-          status: ChatsFilterStatus.failed,
-        ),
-      );
+  /// Archive/favorite feedback for the first chat whose flag flipped.
+  ChatsFilterStatus? _resolveToggleStatus(List<Chat> chats) {
+    final previous = {
+      for (final chat in state.allChats) chat.chatId: chat,
+    };
+    for (final chat in chats) {
+      final old = previous[chat.chatId];
+      if (old == null) continue;
+      final status = state.resolveStatus(old, chat, state.uid);
+      if (status != null) return status;
     }
+    return null;
   }
 
-  void _toggleArchived(_ToggleArchived event, emit) async {
+  Future<void> _toggleArchived(
+    _ToggleArchived event,
+    Emitter<ChatsFilterState> emit,
+  ) async {
     try {
+      /// The live listener writes the change into the cache, which refreshes
+      /// the list — no re-query needed.
       await _toggleArchiveChatUseCase.call(
         chatId: event.chat.chatId,
       );
-
-      final ChatPgState chatState = await _searchChatsUseCase.call(
-        chatState: state.chatsState,
-        query: state.query,
-        filter: state.filter,
-      );
-
-      emit(
-        state.copyWith(
-          chatsState: chatState,
-        ),
-      );
-      add(const ChatsFilterEvent.syncPeerSubs());
     } catch (e) {
       emit(
         state.copyWith(
@@ -316,24 +247,14 @@ class ChatsFilterBloc extends Bloc<ChatsFilterEvent, ChatsFilterState> {
     }
   }
 
-  void _toggleFavorite(_ToggleFavorite event, emit) async {
+  Future<void> _toggleFavorite(
+    _ToggleFavorite event,
+    Emitter<ChatsFilterState> emit,
+  ) async {
     try {
       await _toggleFavoriteChatUseCase.call(
         chatId: event.chat.chatId,
       );
-
-      final ChatPgState chatsState = await _searchChatsUseCase.call(
-        chatState: ChatPgState(),
-        query: state.query,
-        filter: state.filter,
-      );
-
-      emit(
-        state.copyWith(
-          chatsState: chatsState,
-        ),
-      );
-      add(const ChatsFilterEvent.syncPeerSubs());
     } catch (e) {
       emit(
         state.copyWith(
