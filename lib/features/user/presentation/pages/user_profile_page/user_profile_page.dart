@@ -20,12 +20,14 @@ import 'widgets/skills_section.dart';
 
 class UserProfilePage extends StatefulWidget {
   final String userId;
-  final String chatId;
+  /// The chat this profile was opened from. `null` when opened from
+  /// Discovery — there is no chat yet, so the chat-scoped Report is hidden.
+  final String? chatId;
 
   const UserProfilePage({
     super.key,
     required this.userId,
-    required this.chatId,
+    this.chatId,
   });
 
   @override
@@ -56,12 +58,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
     context.pop();
   }
 
-  void _onReport() {
+  void _onReport(String chatId) {
     /// Always push (even on web) so the report page keeps a stack entry and
     /// can be popped — `.navigate`/`.go` would replace the route and trap the
     /// user on the report page with no way back.
     ReportUserPageRoute(
-      chatId: widget.chatId,
+      chatId: chatId,
       userId: widget.userId,
     ).push(context);
   }
@@ -76,13 +78,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
         child: BlocBuilder<UserProfileBloc, UserProfileState>(
           builder: (context, state) {
             final userData = state.userData;
+            final chatId = widget.chatId;
 
             return Scaffold(
               backgroundColor: Colors.transparent,
-              floatingActionButton: userData == null
+              floatingActionButton: userData == null || chatId == null
                   ? null
                   : AppFab(
-                      onPressed: _onReport,
+                      onPressed: () => _onReport(chatId),
                       child: const Icon(Icons.flag_outlined),
                     ),
               body: SafeArea(

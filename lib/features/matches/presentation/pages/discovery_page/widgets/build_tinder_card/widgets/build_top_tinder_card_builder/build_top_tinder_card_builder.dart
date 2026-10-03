@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
-import '../../../../../../../../../core/resources/colors/app_colors.dart';
-import '../../../../../../../../../gen/assets.gen.dart';
 import '../../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import '../../../../../../../../../core/widgets/build_user_avatar.dart';
 
 class BuildTopTinderCard extends StatelessWidget {
   final String? imgUrl;
   final double borderRadius;
-  final Color colorOfSpecialization;
   final Specialization specialization;
 
   const BuildTopTinderCard({
     super.key,
     required this.imgUrl,
     required this.borderRadius,
-    required this.colorOfSpecialization,
     required this.specialization,
   });
 
@@ -44,39 +39,12 @@ class BuildTopTinderCard extends StatelessWidget {
         ),
         // color: AppColors.pinkLace.value,
       ),
-      child: Stack(
-        children: [
-          Center(
-            child: BuildUserAvatar(
-              height: 120.0,
-              width: 120.0,
-              url: imgUrl,
-            ),
-          ),
-          Positioned(
-            right: 0,
-            bottom: 0,
-            // alignment: Alignment.bottomRight,
-            child: Container(
-              width: 35,
-              height: 35,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: colorOfSpecialization,
-              ),
-              padding: EdgeInsets.all(
-                7.0,
-              ),
-              child: SvgPicture.asset(
-                Assets.icons.check,
-                colorFilter: ColorFilter.mode(
-                  AppColors.white.value,
-                  BlendMode.srcIn,
-                ),
-              ),
-            ),
-          ),
-        ],
+      child: Center(
+        child: BuildUserAvatar(
+          height: 120.0,
+          width: 120.0,
+          url: imgUrl,
+        ),
       ),
     );
   }

@@ -258,7 +258,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get location_city_hint => 'City';
 
   @override
-  String get location_use_my_location => '📍 Use my location';
+  String get location_use_my_location => 'Use my location';
 
   @override
   String get location_open_settings => 'Open settings';

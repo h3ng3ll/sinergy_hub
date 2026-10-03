@@ -60,8 +60,19 @@ class BuildLocationSection extends StatelessWidget {
                     color: colorScheme.onPrimary,
                   ),
                 )
-              : Text(
-                  lo.location_use_my_location,
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 8.0,
+                  children: [
+                    Icon(
+                      Icons.my_location,
+                      size: 18.0,
+                      color: colorScheme.onPrimary,
+                    ),
+                    Text(
+                      lo.location_use_my_location,
+                    ),
+                  ],
                 ),
         ),
         if (errorMessage.isNotEmpty)

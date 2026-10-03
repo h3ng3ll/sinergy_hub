@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'format_distance_km.dart';
 
-/// "📍 City, Country · ~12 km" — every part is optional, and the whole line
+/// "[pin] City, Country · ~12 km" — every part is optional, and the whole line
 /// is hidden when city, country and distance are all empty. Shared by the
 /// Home swipe card and the Liked-you card.
 class LocationLine extends StatelessWidget {
@@ -45,11 +45,26 @@ class LocationLine extends StatelessWidget {
       distancePart,
     ].whereType<String>().join(' · ');
 
-    return Text(
-      '📍 $text',
-      style: style,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
+    final fontSize = style?.fontSize ?? 14.0;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 4.0,
+      children: [
+        Icon(
+          Icons.location_on,
+          size: fontSize * 1.2,
+          color: style?.color ?? DefaultTextStyle.of(context).style.color,
+        ),
+        Flexible(
+          child: Text(
+            text,
+            style: style,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }

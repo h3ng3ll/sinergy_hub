@@ -274,6 +274,9 @@ GoRouter initRouter({
             TypedGoRoute<ProfilePageRoute>(
               path: '/profile',
             ),
+            TypedGoRoute<DiscoveryUserProfilePageRoute>(
+              path: '/discovery-profile/:userId',
+            ),
             TypedGoRoute<NotificationPageRoute>(
               path: '/notification',
             ),
@@ -599,6 +602,25 @@ class UserProfilePageRoute extends GoRouteData with $UserProfilePageRoute {
       UserProfilePage(
         userId: userId,
         chatId: chatId,
+      ),
+    );
+  }
+}
+
+/// The User Profile page opened from a Discovery card — no chat exists yet.
+class DiscoveryUserProfilePageRoute extends GoRouteData
+    with $DiscoveryUserProfilePageRoute {
+  final String userId;
+
+  const DiscoveryUserProfilePageRoute({
+    required this.userId,
+  });
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      UserProfilePage(
+        userId: userId,
       ),
     );
   }

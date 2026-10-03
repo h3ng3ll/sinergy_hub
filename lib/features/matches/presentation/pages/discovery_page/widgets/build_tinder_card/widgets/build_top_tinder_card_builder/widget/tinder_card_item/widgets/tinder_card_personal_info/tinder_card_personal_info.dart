@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,7 +11,9 @@ import '../../../../../../../../../../../../onboard_survey/domain/models/experie
 import '../../../../../../../../../../../../onboard_survey/domain/models/specialization/specialization.dart';
 import '../../../../../../../../../../../../user/domain/models/user_data/user_data.dart';
 import '../../../../../../../../../../../../../features/matches/presentation/widgets/location_line/location_line.dart';
+import '../../../../../../../../../../../../../core/routes/init_router/init_router.dart';
 import 'widgets/build_specialization_names.dart';
+import 'widgets/more_info_btn.dart';
 import 'widgets/specialization_info_bar.dart';
 
 class TinderCardPersonalInfo extends StatelessWidget {
@@ -23,6 +27,12 @@ class TinderCardPersonalInfo extends StatelessWidget {
     required this.specialization,
     this.distanceKm,
   });
+
+  void _onMoreInfo(BuildContext context) {
+    DiscoveryUserProfilePageRoute(
+      userId: user.uid,
+    ).push(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +51,11 @@ class TinderCardPersonalInfo extends StatelessWidget {
           maxLines: 1,
         ),
 
-        Text(
-          user.age?.toString() ?? 'unknown age',
-          style: textTheme.regular16,
-        ),
+        if (user.age != null)
+          Text(
+            '${user.age}',
+            style: textTheme.regular16,
+          ),
         LocationLine(
           city: user.location?.city,
           country: user.location?.country,
@@ -102,11 +113,34 @@ class TinderCardPersonalInfo extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Expanded(
-                  child: Text(
-                    user.aboutMe?.toString() ??
-                        'No info . Know about user more by matched it',
-                    style: textTheme.regular16,
-                    overflow: TextOverflow.ellipsis,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final style = textTheme.regular16;
+                      final lineHeight =
+                          (style.fontSize ?? 16.0) * (style.height ?? 1.2);
+                      final maxLines = max(
+                        1,
+                        (constraints.maxHeight / lineHeight).floor(),
+                      );
+
+                      return Text(
+                        user.aboutMe?.toString() ??
+                            'No info . Know about user more by matched it',
+                        style: style,
+                        maxLines: maxLines,
+                        overflow: TextOverflow.ellipsis,
+                      );
+                    },
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: MoreInfoBtn(
+                      specialization: specialization,
+                      onTap: () => _onMoreInfo(context),
+                    ),
                   ),
                 ),
               ],

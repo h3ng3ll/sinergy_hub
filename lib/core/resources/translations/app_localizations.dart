@@ -559,7 +559,7 @@ abstract class AppLocalizations {
   /// No description provided for @location_use_my_location.
   ///
   /// In en, this message translates to:
-  /// **'📍 Use my location'**
+  /// **'Use my location'**
   String get location_use_my_location;
 
   /// No description provided for @location_open_settings.
