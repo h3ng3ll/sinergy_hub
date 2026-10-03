@@ -33,23 +33,24 @@ class BuildChatCanvas extends StatelessWidget {
             onReachToEnd: onReachToEnd,
             onTapUrl: onTapUrl,
             onTapEmail: onTapEmail,
-              currentUser: currentUser,
+            currentUser: currentUser,
           ),
         ),
-        ...chat.typingUsers.map(
-          (e) {
-            final user = users.firstWhereOrNull(
-              (u) => e == u.uid,
-            );
-            if (user == null) return Container();
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: BuildMessage.loading(
-                user: user,
-              ),
-            );
-          },
-        ),
+        if (!chat.anyBlocked)
+          ...chat.typingUsers.map(
+            (e) {
+              final user = users.firstWhereOrNull(
+                (u) => e == u.uid,
+              );
+              if (user == null) return Container();
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: BuildMessage.loading(
+                  user: user,
+                ),
+              );
+            },
+          ),
       ],
     );
   }

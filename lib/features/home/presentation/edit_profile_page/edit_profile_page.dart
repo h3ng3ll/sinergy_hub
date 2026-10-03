@@ -9,6 +9,7 @@ import '../../../../core/di/injection.dart';
 import '../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../core/resources/text/app_text_theme.dart';
 import '../../../../core/resources/translations/app_localizations.dart';
+import '../../../../core/routes/init_router/init_router.dart';
 import '../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../core/services/geolocation/i_geolocation_service.dart';
 import '../../../../core/services/ui_message_service.dart';
@@ -26,6 +27,7 @@ import '../home_bottom_bar/widgets/build_animated_background/build_animated_back
 import 'bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import 'widgets/build_grouped_input.dart';
 import 'widgets/build_skills_section/build_skills_section.dart';
+import 'widgets/build_specialization_field.dart';
 import '../../../../core/widgets/inputs/bio_input.dart';
 import '../../../../core/widgets/inputs/first_name_input.dart';
 import '../../../../core/widgets/inputs/last_name_input.dart';
@@ -139,6 +141,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
     setState(() {});
   }
 
+  void onTapSpecialization() {
+    EditSpecializationRoute().push(
+      context,
+    );
+  }
+
   void onCancel() {
     context.pop();
   }
@@ -245,6 +253,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   title: 'Bio',
                                   child: BioInput(
                                     controller: _bioController,
+                                  ),
+                                ),
+                                BuildGroupedInput(
+                                  title: 'Specialization',
+                                  child: BuildSpecializationField(
+                                    specialization:
+                                        userData?.profiler.specialization,
+                                    onTap: onTapSpecialization,
                                   ),
                                 ),
                                 BuildGroupedInput(

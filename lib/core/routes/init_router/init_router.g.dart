@@ -153,6 +153,11 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                   hasOverriddenOnExit: false,
                   factory: $EditExperienceRoute._fromState,
                 ),
+                GoRouteData.$route(
+                  path: 'specialization-edit',
+                  hasOverriddenOnExit: false,
+                  factory: $EditSpecializationRoute._fromState,
+                ),
               ],
             ),
             GoRouteData.$route(
@@ -628,6 +633,28 @@ mixin $EditExperienceRoute on GoRouteData {
   @override
   String get location =>
       GoRouteData.$location('/edit-profile-page/experience-edit');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $EditSpecializationRoute on GoRouteData {
+  static EditSpecializationRoute _fromState(GoRouterState state) =>
+      EditSpecializationRoute();
+
+  @override
+  String get location =>
+      GoRouteData.$location('/edit-profile-page/specialization-edit');
 
   @override
   void go(BuildContext context) => context.go(location);

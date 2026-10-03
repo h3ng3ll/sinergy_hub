@@ -107,7 +107,9 @@ class HeroSection extends StatelessWidget {
                   textTheme: textTheme,
                 ),
                 Text(
-                  '${userData.firstName}, ${userData.age}',
+                  userData.age == null
+                      ? userData.firstName ?? ''
+                      : '${userData.firstName ?? ''}, ${userData.age}',
                   style: textTheme.bold24.copyWith(
                     color: AppColors.white.value,
                     fontSize: nameFontSize,

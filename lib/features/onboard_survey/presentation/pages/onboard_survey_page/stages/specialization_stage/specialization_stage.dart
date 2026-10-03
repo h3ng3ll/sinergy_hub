@@ -7,8 +7,8 @@ import '../../../../../domain/models/specialization/specialization.dart';
 import '../../bloc/search_specialization_bloc/search_specialization_bloc.dart';
 import '../../widgets/build_onboard_bottom_actions.dart';
 import '../../widgets/onboard_survey_header.dart';
-import '../../widgets/survey_card/survey_card.dart';
 import 'widgets/search_input.dart';
+import 'widgets/specialization_list.dart';
 
 class SpecializationStage extends StatelessWidget {
   final Specialization? selectedSpecialization;
@@ -71,31 +71,11 @@ class SpecializationStage extends StatelessWidget {
                   hintText: 'Search your specialization...',
                 ),
                 Expanded(
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) {
-                      final e = specializations[index];
-
-                      return SurveyCard(
-                        isSelected: selectedSpecialization == e,
-                        colors: e.colors,
-                        icon: e.icon,
-                        title: e.name,
-                        description: e.particulars.join(
-                          ',',
-                        ),
-                        onTap: () => onSelectSpecialization(
-                          e,
-                        ),
-                        onLongPress: (renderBox) => onLongPressed(
-                          renderBox,
-                          e,
-                        ),
-                      );
-                    },
-                    itemBuilder: (BuildContext context, int index) => Gap(
-                      20.0,
-                    ),
-                    itemCount: specializations.length,
+                  child: SpecializationList(
+                    specializations: specializations,
+                    isSelected: (e) => selectedSpecialization == e,
+                    onSelect: onSelectSpecialization,
+                    onLongPress: onLongPressed,
                   ),
                 ),
                 BuildOnboardBottomActions(

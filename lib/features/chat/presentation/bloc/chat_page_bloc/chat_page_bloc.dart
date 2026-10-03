@@ -288,7 +288,9 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     if (chat == null) return;
     await _updateTypingInfoUseCase.call(
       chatId: chat.chatId,
-      status: isTyping,
+      /// A blocked chat never advertises typing to either side; publishing
+      /// false also clears a status that was set before the block landed.
+      status: isTyping && !chat.anyBlocked,
     );
   }
 

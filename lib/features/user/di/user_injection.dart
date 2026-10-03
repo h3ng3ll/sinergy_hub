@@ -39,6 +39,7 @@ import '../presentation/bloc/skills_bloc/skills_bloc.dart';
 import '../presentation/bloc/user_bloc/user_bloc.dart';
 import '../presentation/pages/edit_experience_page/bloc/edit_experience_bloc.dart';
 import '../presentation/pages/edit_looking_for_page/bloc/edit_looking_for_bloc.dart';
+import '../presentation/pages/edit_specialization_page/bloc/edit_specialization_bloc.dart';
 
 void initUserFeature(GetIt getIt) {
   getIt.registerLazySingleton<IAppModeService>(
@@ -144,6 +145,12 @@ void initUserFeature(GetIt getIt) {
   );
   getIt.registerFactory<EditExperienceBloc>(
     () => EditExperienceBloc(
+      getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
+      updateUserProfilerUseCase: getIt<UpdateUserProfilerUseCase>(),
+    ),
+  );
+  getIt.registerFactory<EditSpecializationBloc>(
+    () => EditSpecializationBloc(
       getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
       updateUserProfilerUseCase: getIt<UpdateUserProfilerUseCase>(),
     ),

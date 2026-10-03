@@ -34,6 +34,7 @@ import '../../../features/terms_of_use/presentation/pages/terms_of_use_page/term
 import '../../../features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../../features/user/presentation/pages/edit_experience_page/edit_experience_page.dart';
 import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
+import '../../../features/user/presentation/pages/edit_specialization_page/edit_specialization_page.dart';
 import '../../../features/user/presentation/pages/user_profile_page/user_profile_page.dart';
 import '../root_page/root_page.dart';
 
@@ -265,6 +266,9 @@ GoRouter initRouter({
                 TypedGoRoute<EditExperienceRoute>(
                   path: 'experience-edit',
                 ),
+                TypedGoRoute<EditSpecializationRoute>(
+                  path: 'specialization-edit',
+                ),
               ],
             ),
             TypedGoRoute<ProfilePageRoute>(
@@ -487,6 +491,16 @@ class EditExperienceRoute extends GoRouteData with $EditExperienceRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       EditExperiencePage(),
+    );
+  }
+}
+
+class EditSpecializationRoute extends GoRouteData
+    with $EditSpecializationRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      EditSpecializationPage(),
     );
   }
 }

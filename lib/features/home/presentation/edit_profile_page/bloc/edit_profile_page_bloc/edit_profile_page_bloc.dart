@@ -141,7 +141,12 @@ class EditProfilePageBloc
               userData,
             ) => state.copyWith(
               userData: userData,
-              skills: userData?.profiler.skills ?? state.skills,
+              // Seed skills from the first snapshot only, so later stream
+              // emissions (e.g. a specialization saved on a sub-page) do not
+              // wipe skill edits that are not saved yet.
+              skills: state.userData == null
+                  ? userData?.profiler.skills ?? state.skills
+                  : state.skills,
             ),
         onError: (e, _) => state.copyWith(
           errorMessage: e.toString(),
