@@ -7,6 +7,12 @@ import '../../features/chat/domain/models/chat/chat.dart';
 import '../../features/chat/domain/models/chat_config/chat_config.dart';
 import '../../features/chat/domain/models/chat_message/chat_message.dart';
 import '../../features/chat/domain/models/participant_info/participant_info.dart';
+import '../../features/matches/data/models/liked_you_cache/liked_you_cache.dart';
+import '../../features/matches/domain/models/liked_you/liked_you_item.dart';
+import '../../features/matches/domain/models/liked_you/liked_you_quota.dart';
+import '../../features/onboard_survey/domain/models/experience/experience.dart';
+import '../../features/onboard_survey/domain/models/skill/skill.dart';
+import '../../features/onboard_survey/domain/models/specialization/specialization.dart';
 
 part 'hive_adapters.g.dart';
 
@@ -22,5 +28,9 @@ part 'hive_adapters.g.dart';
   AdapterSpec<ParticipantInfo>(),
   AdapterSpec<Chat>(),
   AdapterSpec<ChatsCache>(),
+  AdapterSpec<Skill>(),
+  AdapterSpec<LikedYouQuota>(),
+  AdapterSpec<LikedYouItem>(),
+  AdapterSpec<LikedYouCache>(),
 ])
 class HiveAdapters {}

@@ -11,6 +11,7 @@ import '../../../../subscription/presentation/dialogs/paywall_modal_sheet/paywal
 import '../../../domain/models/liked_you/liked_you_item.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
 import '../../../domain/usecases/get_liked_you_use_case.dart';
+import '../../../domain/usecases/sync_liked_you_use_case.dart';
 import '../../../domain/usecases/watch_liked_you_use_case.dart';
 import '../../bloc/liked_you_bloc/liked_you_bloc.dart';
 import '../../bloc/tinder_card_cubit/tinder_card_cubit.dart';
@@ -34,6 +35,7 @@ class _LikedYouPageState extends State<LikedYouPage> {
     _likedYouBloc = LikedYouBloc(
       getLikedYouUseCase: getIt<GetLikedYouUseCase>(),
       watchLikedYouUseCase: getIt<WatchLikedYouUseCase>(),
+      syncLikedYouUseCase: getIt<SyncLikedYouUseCase>(),
       createUserMatchesUseCase: getIt<CreateUserMatchesUseCase>(),
     )..add(const LikedYouEvent.watch());
     super.initState();

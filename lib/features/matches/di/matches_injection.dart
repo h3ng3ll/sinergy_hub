@@ -15,6 +15,10 @@ import '../domain/repositories/i_candidate_distance_repository.dart';
 import '../domain/repositories/i_liked_you_meta_repository.dart';
 import '../domain/repositories/i_nearby_candidates_repository.dart';
 import '../../subscription/domain/repositories/i_premium_status_repository.dart';
+import '../../../core/databases/hive_database.dart';
+import '../data/repositories/liked_you_hive_repository.dart';
+import '../domain/repositories/i_liked_you_local_repository.dart';
+import '../domain/usecases/sync_liked_you_use_case.dart';
 import '../domain/usecases/watch_liked_you_use_case.dart';
 import '../data/repositories/liked_you_functions_repository.dart';
 import '../data/repositories/user_matches_firebase_repository.dart';
@@ -125,11 +129,25 @@ void initMatchingFeature(GetIt getIt) {
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
     ),
   );
+  getIt.registerLazySingleton<ILikedYouLocalRepository>(
+    () => LikedYouHiveRepository(
+      hiveDatabase: getIt<HiveDatabase>(),
+    ),
+  );
+  getIt.registerLazySingleton<SyncLikedYouUseCase>(
+    () => SyncLikedYouUseCase(
+      likedYouRepository: getIt<ILikedYouRepository>(),
+      localRepository: getIt<ILikedYouLocalRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
   getIt.registerLazySingleton<WatchLikedYouUseCase>(
     () => WatchLikedYouUseCase(
+      localRepository: getIt<ILikedYouLocalRepository>(),
       premiumStatusRepository: getIt<IPremiumStatusRepository>(),
       likedYouMetaRepository: getIt<ILikedYouMetaRepository>(),
-      likedYouRepository: getIt<ILikedYouRepository>(),
+      syncLikedYouUseCase: getIt<SyncLikedYouUseCase>(),
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
 }

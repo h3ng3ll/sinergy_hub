@@ -6,9 +6,11 @@ import '../../../domain/exception/daily_match_limit_exceeded_exception.dart';
 import '../../../domain/exception/liked_you_failures.dart';
 import '../../../domain/models/liked_you/liked_you_item.dart';
 import '../../../domain/models/liked_you/liked_you_quota.dart';
+import '../../../domain/models/liked_you_feed_update/liked_you_feed_update.dart';
 import '../../../domain/models/liked_you_pg_state/liked_you_pg_state.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
 import '../../../domain/usecases/get_liked_you_use_case.dart';
+import '../../../domain/usecases/sync_liked_you_use_case.dart';
 import '../../../domain/usecases/watch_liked_you_use_case.dart';
 import '../tinder_card_cubit/tinder_card_cubit.dart';
 
@@ -23,11 +25,13 @@ part 'liked_you_bloc.freezed.dart';
 class LikedYouBloc extends Bloc<LikedYouEvent, LikedYouState> {
   final GetLikedYouUseCase _getLikedYouUseCase;
   final WatchLikedYouUseCase _watchLikedYouUseCase;
+  final SyncLikedYouUseCase _syncLikedYouUseCase;
   final CreateUserMatchesUseCase _createUserMatchesUseCase;
 
   LikedYouBloc({
     required this._getLikedYouUseCase,
     required this._watchLikedYouUseCase,
+    required this._syncLikedYouUseCase,
     required this._createUserMatchesUseCase,
   }) : super(const LikedYouState()) {
     on<_LoadMore>(
@@ -109,55 +113,22 @@ class LikedYouBloc extends Bloc<LikedYouEvent, LikedYouState> {
     );
   }
 
-  Future<void> _refresh(_Refresh event, Emitter<LikedYouState> emit) =>
-      _reloadFirstPage(emit);
-
-  /// Live feed: a fresh first page for every `subscriptions/{uid}` state
-  /// (purchase, renewal, expiry, deletion) and every `likedYouMeta/{uid}`
-  /// change. Dispatching it again (Retry) re-attaches the listeners.
-  Future<void> _watch(_Watch event, Emitter<LikedYouState> emit) async {
-    emit(
-      state.copyWith(
-        status: ELikedYouStatus.loading,
-      ),
-    );
-
-    await emit.forEach(
-      _watchLikedYouUseCase.call(),
-      onData: (result) => result.fold(
-        (likesState) => state.copyWith(
-          status: ELikedYouStatus.initial,
-          likesState: likesState,
-          errorMessage: '',
-        ),
-        (failure) => state.copyWith(
-          status: ELikedYouStatus.failed,
-          errorMessage: failure.message,
-        ),
-      ),
-      onError: (error, _) => state.copyWith(
-        status: ELikedYouStatus.failed,
-        errorMessage: error.toString(),
-      ),
-    );
-  }
-
-  Future<void> _reloadFirstPage(Emitter<LikedYouState> emit) async {
+  /// Pull-to-refresh: one backend sync. A changed first page reaches the
+  /// list through the cache watch; an identical one changes nothing.
+  Future<void> _refresh(_Refresh event, Emitter<LikedYouState> emit) async {
     emit(
       state.copyWith(
         status: ELikedYouStatus.refreshing,
       ),
     );
 
-    final result = await _getLikedYouUseCase.call(
-      state: const LikedYouPgState(),
-    );
+    final result = await _syncLikedYouUseCase.call();
 
     result.fold(
-      (likesState) => emit(
+      (_) => emit(
         state.copyWith(
           status: ELikedYouStatus.initial,
-          likesState: likesState,
+          isSynced: true,
           errorMessage: '',
         ),
       ),
@@ -166,6 +137,46 @@ class LikedYouBloc extends Bloc<LikedYouEvent, LikedYouState> {
           status: ELikedYouStatus.failed,
           errorMessage: failure.message,
         ),
+      ),
+    );
+  }
+
+  /// Cache-first feed: the cached first page shows right away, and every
+  /// subscription / likes change syncs with the backend in the background.
+  /// Dispatching it again (Retry) re-attaches the listeners.
+  Future<void> _watch(_Watch event, Emitter<LikedYouState> emit) async {
+    emit(
+      state.copyWith(
+        status: ELikedYouStatus.loading,
+        isSynced: false,
+      ),
+    );
+
+    await emit.forEach<LikedYouFeedUpdate>(
+      _watchLikedYouUseCase.call(),
+      onData: (update) => switch (update) {
+        LikedYouFeedPage(:final page) => state.copyWith(
+          status: ELikedYouStatus.initial,
+          likesState: page,
+          errorMessage: '',
+        ),
+        LikedYouFeedSynced() => state.copyWith(
+          /// With nothing cached the first page arrives right after this
+          /// event, through the cache watch — keep the spinner until then.
+          status: state.isLoading
+              ? ELikedYouStatus.loading
+              : ELikedYouStatus.initial,
+          isSynced: true,
+          errorMessage: '',
+        ),
+        LikedYouFeedFailed(:final failure) => state.copyWith(
+          status: ELikedYouStatus.failed,
+          errorMessage: failure.message,
+        ),
+      },
+      onError: (error, _) => state.copyWith(
+        status: ELikedYouStatus.failed,
+        errorMessage: error.toString(),
       ),
     );
   }

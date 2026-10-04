@@ -25,5 +25,8 @@ sealed class LikedYouState with _$LikedYouState {
     @Default('') String errorMessage,
     @Default(ELikedYouActionStatus.idle) ELikedYouActionStatus actionStatus,
     @Default(<String>{}) Set<String> respondingIds,
+
+    /// `true` once a backend sync confirmed (or replaced) the cached page.
+    @Default(false) bool isSynced,
   }) = _LikedYouState;
 }

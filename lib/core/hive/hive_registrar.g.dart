@@ -13,7 +13,11 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(ChatMessageAdapter());
     registerAdapter(ChatMessagesCacheAdapter());
     registerAdapter(ChatsCacheAdapter());
+    registerAdapter(LikedYouCacheAdapter());
+    registerAdapter(LikedYouItemAdapter());
+    registerAdapter(LikedYouQuotaAdapter());
     registerAdapter(ParticipantInfoAdapter());
+    registerAdapter(SkillAdapter());
   }
 }
 
@@ -25,6 +29,10 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(ChatMessageAdapter());
     registerAdapter(ChatMessagesCacheAdapter());
     registerAdapter(ChatsCacheAdapter());
+    registerAdapter(LikedYouCacheAdapter());
+    registerAdapter(LikedYouItemAdapter());
+    registerAdapter(LikedYouQuotaAdapter());
     registerAdapter(ParticipantInfoAdapter());
+    registerAdapter(SkillAdapter());
   }
 }

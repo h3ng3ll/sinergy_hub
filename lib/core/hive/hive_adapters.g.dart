@@ -318,3 +318,207 @@ class ChatsCacheAdapter extends TypeAdapter<ChatsCache> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+class SkillAdapter extends TypeAdapter<Skill> {
+  @override
+  final typeId = 7;
+
+  @override
+  Skill read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Skill(name: fields[0] as String);
+  }
+
+  @override
+  void write(BinaryWriter writer, Skill obj) {
+    writer
+      ..writeByte(1)
+      ..writeByte(0)
+      ..write(obj.name);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SkillAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class LikedYouQuotaAdapter extends TypeAdapter<LikedYouQuota> {
+  @override
+  final typeId = 8;
+
+  @override
+  LikedYouQuota read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return LikedYouQuota(
+      period: fields[0] == null
+          ? ELikedYouQuotaPeriod.weekly
+          : fields[0] as ELikedYouQuotaPeriod,
+      limit: fields[1] == null ? 0 : (fields[1] as num).toInt(),
+      used: fields[2] == null ? 0 : (fields[2] as num).toInt(),
+      remaining: fields[3] == null ? 0 : (fields[3] as num).toInt(),
+      resetsAt: fields[4] as DateTime?,
+      isUnlimited: fields[5] == null ? false : fields[5] as bool,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, LikedYouQuota obj) {
+    writer
+      ..writeByte(6)
+      ..writeByte(0)
+      ..write(obj.period)
+      ..writeByte(1)
+      ..write(obj.limit)
+      ..writeByte(2)
+      ..write(obj.used)
+      ..writeByte(3)
+      ..write(obj.remaining)
+      ..writeByte(4)
+      ..write(obj.resetsAt)
+      ..writeByte(5)
+      ..write(obj.isUnlimited);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LikedYouQuotaAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class LikedYouItemAdapter extends TypeAdapter<LikedYouItem> {
+  @override
+  final typeId = 9;
+
+  @override
+  LikedYouItem read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return LikedYouItem(
+      likeId: fields[0] as String,
+      likedAt: fields[1] as DateTime,
+      isLocked: fields[2] as bool,
+      imageState: fields[3] == null
+          ? EImageState.none
+          : fields[3] as EImageState,
+      imageUrl: fields[4] as String?,
+      uid: fields[5] as String?,
+      firstName: fields[6] as String?,
+      age: (fields[7] as num?)?.toInt(),
+      specialization: fields[8] as ESpecialization?,
+      experience: fields[9] as EExperience?,
+      skills: fields[10] == null ? [] : (fields[10] as List).cast<Skill>(),
+      city: fields[11] as String?,
+      country: fields[12] as String?,
+      distanceKm: (fields[13] as num?)?.toDouble(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, LikedYouItem obj) {
+    writer
+      ..writeByte(14)
+      ..writeByte(0)
+      ..write(obj.likeId)
+      ..writeByte(1)
+      ..write(obj.likedAt)
+      ..writeByte(2)
+      ..write(obj.isLocked)
+      ..writeByte(3)
+      ..write(obj.imageState)
+      ..writeByte(4)
+      ..write(obj.imageUrl)
+      ..writeByte(5)
+      ..write(obj.uid)
+      ..writeByte(6)
+      ..write(obj.firstName)
+      ..writeByte(7)
+      ..write(obj.age)
+      ..writeByte(8)
+      ..write(obj.specialization)
+      ..writeByte(9)
+      ..write(obj.experience)
+      ..writeByte(10)
+      ..write(obj.skills)
+      ..writeByte(11)
+      ..write(obj.city)
+      ..writeByte(12)
+      ..write(obj.country)
+      ..writeByte(13)
+      ..write(obj.distanceKm);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LikedYouItemAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class LikedYouCacheAdapter extends TypeAdapter<LikedYouCache> {
+  @override
+  final typeId = 10;
+
+  @override
+  LikedYouCache read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return LikedYouCache(
+      items: fields[0] == null ? [] : (fields[0] as List).cast<LikedYouItem>(),
+      nextCursor: fields[1] as String?,
+      hasMore: fields[2] == null ? true : fields[2] as bool,
+      totalCount: fields[3] == null ? 0 : (fields[3] as num).toInt(),
+      quota: fields[4] as LikedYouQuota?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, LikedYouCache obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.items)
+      ..writeByte(1)
+      ..write(obj.nextCursor)
+      ..writeByte(2)
+      ..write(obj.hasMore)
+      ..writeByte(3)
+      ..write(obj.totalCount)
+      ..writeByte(4)
+      ..write(obj.quota);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LikedYouCacheAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

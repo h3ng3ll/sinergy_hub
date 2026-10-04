@@ -365,7 +365,8 @@ $LikedYouItemCopyWith<$Res> get item {
 /// @nodoc
 mixin _$LikedYouState {
 
- LikedYouPgState get likesState; ELikedYouStatus get status; String get errorMessage; ELikedYouActionStatus get actionStatus; Set<String> get respondingIds;
+ LikedYouPgState get likesState; ELikedYouStatus get status; String get errorMessage; ELikedYouActionStatus get actionStatus; Set<String> get respondingIds;/// `true` once a backend sync confirmed (or replaced) the cached page.
+ bool get isSynced;
 /// Create a copy of LikedYouState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -376,16 +377,16 @@ $LikedYouStateCopyWith<LikedYouState> get copyWith => _$LikedYouStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LikedYouState&&(identical(other.likesState, likesState) || other.likesState == likesState)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.actionStatus, actionStatus) || other.actionStatus == actionStatus)&&const DeepCollectionEquality().equals(other.respondingIds, respondingIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LikedYouState&&(identical(other.likesState, likesState) || other.likesState == likesState)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.actionStatus, actionStatus) || other.actionStatus == actionStatus)&&const DeepCollectionEquality().equals(other.respondingIds, respondingIds)&&(identical(other.isSynced, isSynced) || other.isSynced == isSynced));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,likesState,status,errorMessage,actionStatus,const DeepCollectionEquality().hash(respondingIds));
+int get hashCode => Object.hash(runtimeType,likesState,status,errorMessage,actionStatus,const DeepCollectionEquality().hash(respondingIds),isSynced);
 
 @override
 String toString() {
-  return 'LikedYouState(likesState: $likesState, status: $status, errorMessage: $errorMessage, actionStatus: $actionStatus, respondingIds: $respondingIds)';
+  return 'LikedYouState(likesState: $likesState, status: $status, errorMessage: $errorMessage, actionStatus: $actionStatus, respondingIds: $respondingIds, isSynced: $isSynced)';
 }
 
 
@@ -396,7 +397,7 @@ abstract mixin class $LikedYouStateCopyWith<$Res>  {
   factory $LikedYouStateCopyWith(LikedYouState value, $Res Function(LikedYouState) _then) = _$LikedYouStateCopyWithImpl;
 @useResult
 $Res call({
- LikedYouPgState likesState, ELikedYouStatus status, String errorMessage, ELikedYouActionStatus actionStatus, Set<String> respondingIds
+ LikedYouPgState likesState, ELikedYouStatus status, String errorMessage, ELikedYouActionStatus actionStatus, Set<String> respondingIds, bool isSynced
 });
 
 
@@ -413,14 +414,15 @@ class _$LikedYouStateCopyWithImpl<$Res>
 
 /// Create a copy of LikedYouState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? likesState = null,Object? status = null,Object? errorMessage = null,Object? actionStatus = null,Object? respondingIds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? likesState = null,Object? status = null,Object? errorMessage = null,Object? actionStatus = null,Object? respondingIds = null,Object? isSynced = null,}) {
   return _then(_self.copyWith(
 likesState: null == likesState ? _self.likesState : likesState // ignore: cast_nullable_to_non_nullable
 as LikedYouPgState,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ELikedYouStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,actionStatus: null == actionStatus ? _self.actionStatus : actionStatus // ignore: cast_nullable_to_non_nullable
 as ELikedYouActionStatus,respondingIds: null == respondingIds ? _self.respondingIds : respondingIds // ignore: cast_nullable_to_non_nullable
-as Set<String>,
+as Set<String>,isSynced: null == isSynced ? _self.isSynced : isSynced // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 /// Create a copy of LikedYouState
@@ -511,10 +513,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage,  ELikedYouActionStatus actionStatus,  Set<String> respondingIds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage,  ELikedYouActionStatus actionStatus,  Set<String> respondingIds,  bool isSynced)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LikedYouState() when $default != null:
-return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionStatus,_that.respondingIds);case _:
+return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionStatus,_that.respondingIds,_that.isSynced);case _:
   return orElse();
 
 }
@@ -532,10 +534,10 @@ return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionSta
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage,  ELikedYouActionStatus actionStatus,  Set<String> respondingIds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage,  ELikedYouActionStatus actionStatus,  Set<String> respondingIds,  bool isSynced)  $default,) {final _that = this;
 switch (_that) {
 case _LikedYouState():
-return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionStatus,_that.respondingIds);}
+return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionStatus,_that.respondingIds,_that.isSynced);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -549,10 +551,10 @@ return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionSta
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage,  ELikedYouActionStatus actionStatus,  Set<String> respondingIds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LikedYouPgState likesState,  ELikedYouStatus status,  String errorMessage,  ELikedYouActionStatus actionStatus,  Set<String> respondingIds,  bool isSynced)?  $default,) {final _that = this;
 switch (_that) {
 case _LikedYouState() when $default != null:
-return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionStatus,_that.respondingIds);case _:
+return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionStatus,_that.respondingIds,_that.isSynced);case _:
   return null;
 
 }
@@ -564,7 +566,7 @@ return $default(_that.likesState,_that.status,_that.errorMessage,_that.actionSta
 
 
 class _LikedYouState implements LikedYouState {
-  const _LikedYouState({this.likesState = const LikedYouPgState(), this.status = ELikedYouStatus.loading, this.errorMessage = '', this.actionStatus = ELikedYouActionStatus.idle, final  Set<String> respondingIds = const <String>{}}): _respondingIds = respondingIds;
+  const _LikedYouState({this.likesState = const LikedYouPgState(), this.status = ELikedYouStatus.loading, this.errorMessage = '', this.actionStatus = ELikedYouActionStatus.idle, final  Set<String> respondingIds = const <String>{}, this.isSynced = false}): _respondingIds = respondingIds;
   
 
 @override@JsonKey() final  LikedYouPgState likesState;
@@ -578,6 +580,8 @@ class _LikedYouState implements LikedYouState {
   return EqualUnmodifiableSetView(_respondingIds);
 }
 
+/// `true` once a backend sync confirmed (or replaced) the cached page.
+@override@JsonKey() final  bool isSynced;
 
 /// Create a copy of LikedYouState
 /// with the given fields replaced by the non-null parameter values.
@@ -589,16 +593,16 @@ _$LikedYouStateCopyWith<_LikedYouState> get copyWith => __$LikedYouStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LikedYouState&&(identical(other.likesState, likesState) || other.likesState == likesState)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.actionStatus, actionStatus) || other.actionStatus == actionStatus)&&const DeepCollectionEquality().equals(other._respondingIds, _respondingIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LikedYouState&&(identical(other.likesState, likesState) || other.likesState == likesState)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.actionStatus, actionStatus) || other.actionStatus == actionStatus)&&const DeepCollectionEquality().equals(other._respondingIds, _respondingIds)&&(identical(other.isSynced, isSynced) || other.isSynced == isSynced));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,likesState,status,errorMessage,actionStatus,const DeepCollectionEquality().hash(_respondingIds));
+int get hashCode => Object.hash(runtimeType,likesState,status,errorMessage,actionStatus,const DeepCollectionEquality().hash(_respondingIds),isSynced);
 
 @override
 String toString() {
-  return 'LikedYouState(likesState: $likesState, status: $status, errorMessage: $errorMessage, actionStatus: $actionStatus, respondingIds: $respondingIds)';
+  return 'LikedYouState(likesState: $likesState, status: $status, errorMessage: $errorMessage, actionStatus: $actionStatus, respondingIds: $respondingIds, isSynced: $isSynced)';
 }
 
 
@@ -609,7 +613,7 @@ abstract mixin class _$LikedYouStateCopyWith<$Res> implements $LikedYouStateCopy
   factory _$LikedYouStateCopyWith(_LikedYouState value, $Res Function(_LikedYouState) _then) = __$LikedYouStateCopyWithImpl;
 @override @useResult
 $Res call({
- LikedYouPgState likesState, ELikedYouStatus status, String errorMessage, ELikedYouActionStatus actionStatus, Set<String> respondingIds
+ LikedYouPgState likesState, ELikedYouStatus status, String errorMessage, ELikedYouActionStatus actionStatus, Set<String> respondingIds, bool isSynced
 });
 
 
@@ -626,14 +630,15 @@ class __$LikedYouStateCopyWithImpl<$Res>
 
 /// Create a copy of LikedYouState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? likesState = null,Object? status = null,Object? errorMessage = null,Object? actionStatus = null,Object? respondingIds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? likesState = null,Object? status = null,Object? errorMessage = null,Object? actionStatus = null,Object? respondingIds = null,Object? isSynced = null,}) {
   return _then(_LikedYouState(
 likesState: null == likesState ? _self.likesState : likesState // ignore: cast_nullable_to_non_nullable
 as LikedYouPgState,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ELikedYouStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,actionStatus: null == actionStatus ? _self.actionStatus : actionStatus // ignore: cast_nullable_to_non_nullable
 as ELikedYouActionStatus,respondingIds: null == respondingIds ? _self._respondingIds : respondingIds // ignore: cast_nullable_to_non_nullable
-as Set<String>,
+as Set<String>,isSynced: null == isSynced ? _self.isSynced : isSynced // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
