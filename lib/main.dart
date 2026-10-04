@@ -62,14 +62,14 @@ void main() async {
 
   if (!kIsWeb) {
     /// Firebase doesn't support web
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+    await getIt<FirebaseCrashlytics>().setCrashlyticsCollectionEnabled(
       true,
     );
     FlutterError.onError =
         (
           FlutterErrorDetails details,
         ) {
-          FirebaseCrashlytics.instance.recordFlutterFatalError(
+          getIt<FirebaseCrashlytics>().recordFlutterFatalError(
             details,
           );
         };
@@ -79,7 +79,7 @@ void main() async {
           error,
           stack,
         ) {
-          FirebaseCrashlytics.instance.recordError(
+          getIt<FirebaseCrashlytics>().recordError(
             error,
             stack,
             fatal: true,

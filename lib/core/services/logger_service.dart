@@ -1,5 +1,7 @@
 import 'dart:developer' as developer;
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
 /// Application-wide logger.
 ///
 /// Backed by `dart:developer`'s [developer.log], consistent with the bloc
@@ -8,6 +10,11 @@ import 'dart:developer' as developer;
 /// DEBUG=500, INFO=800, WARNING=900, ERROR=1000.
 class LoggerService {
   static const String _defaultName = 'App';
+  final FirebaseCrashlytics _crashlytics;
+
+  LoggerService({
+    required this._crashlytics,
+  });
 
   void debug(
     String message, {
@@ -52,6 +59,7 @@ class LoggerService {
     StackTrace? stackTrace,
     String name = _defaultName,
   }) {
+    _crashlytics.log('[ERROR] $message');
     developer.log(
       message,
       level: 1000,
