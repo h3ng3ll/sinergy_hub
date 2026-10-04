@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 mixin _$SubscriptionPlan {
 
 /// The store package/product identifier — used to start a purchase.
- String get id; String get title; String get priceString; EPlanPeriod get period; String? get introOffer;
+ String get id; String get title; String get priceString; String get description; EPlanPeriod get period; String? get introOffer;
 /// Create a copy of SubscriptionPlan
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $SubscriptionPlanCopyWith<SubscriptionPlan> get copyWith => _$SubscriptionPlanCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SubscriptionPlan&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.priceString, priceString) || other.priceString == priceString)&&(identical(other.period, period) || other.period == period)&&(identical(other.introOffer, introOffer) || other.introOffer == introOffer));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SubscriptionPlan&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.priceString, priceString) || other.priceString == priceString)&&(identical(other.description, description) || other.description == description)&&(identical(other.period, period) || other.period == period)&&(identical(other.introOffer, introOffer) || other.introOffer == introOffer));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,title,priceString,period,introOffer);
+int get hashCode => Object.hash(runtimeType,id,title,priceString,description,period,introOffer);
 
 @override
 String toString() {
-  return 'SubscriptionPlan(id: $id, title: $title, priceString: $priceString, period: $period, introOffer: $introOffer)';
+  return 'SubscriptionPlan(id: $id, title: $title, priceString: $priceString, description: $description, period: $period, introOffer: $introOffer)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $SubscriptionPlanCopyWith<$Res>  {
   factory $SubscriptionPlanCopyWith(SubscriptionPlan value, $Res Function(SubscriptionPlan) _then) = _$SubscriptionPlanCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String priceString, EPlanPeriod period, String? introOffer
+ String id, String title, String priceString, String description, EPlanPeriod period, String? introOffer
 });
 
 
@@ -63,11 +63,12 @@ class _$SubscriptionPlanCopyWithImpl<$Res>
 
 /// Create a copy of SubscriptionPlan
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? priceString = null,Object? period = null,Object? introOffer = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? priceString = null,Object? description = null,Object? period = null,Object? introOffer = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,priceString: null == priceString ? _self.priceString : priceString // ignore: cast_nullable_to_non_nullable
+as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,period: null == period ? _self.period : period // ignore: cast_nullable_to_non_nullable
 as EPlanPeriod,introOffer: freezed == introOffer ? _self.introOffer : introOffer // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -152,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String priceString,  EPlanPeriod period,  String? introOffer)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String priceString,  String description,  EPlanPeriod period,  String? introOffer)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SubscriptionPlan() when $default != null:
-return $default(_that.id,_that.title,_that.priceString,_that.period,_that.introOffer);case _:
+return $default(_that.id,_that.title,_that.priceString,_that.description,_that.period,_that.introOffer);case _:
   return orElse();
 
 }
@@ -173,10 +174,10 @@ return $default(_that.id,_that.title,_that.priceString,_that.period,_that.introO
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String priceString,  EPlanPeriod period,  String? introOffer)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String priceString,  String description,  EPlanPeriod period,  String? introOffer)  $default,) {final _that = this;
 switch (_that) {
 case _SubscriptionPlan():
-return $default(_that.id,_that.title,_that.priceString,_that.period,_that.introOffer);}
+return $default(_that.id,_that.title,_that.priceString,_that.description,_that.period,_that.introOffer);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -190,10 +191,10 @@ return $default(_that.id,_that.title,_that.priceString,_that.period,_that.introO
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String priceString,  EPlanPeriod period,  String? introOffer)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String priceString,  String description,  EPlanPeriod period,  String? introOffer)?  $default,) {final _that = this;
 switch (_that) {
 case _SubscriptionPlan() when $default != null:
-return $default(_that.id,_that.title,_that.priceString,_that.period,_that.introOffer);case _:
+return $default(_that.id,_that.title,_that.priceString,_that.description,_that.period,_that.introOffer);case _:
   return null;
 
 }
@@ -205,13 +206,14 @@ return $default(_that.id,_that.title,_that.priceString,_that.period,_that.introO
 
 
 class _SubscriptionPlan implements SubscriptionPlan {
-  const _SubscriptionPlan({required this.id, required this.title, required this.priceString, required this.period, this.introOffer});
+  const _SubscriptionPlan({required this.id, required this.title, required this.priceString, required this.description, required this.period, this.introOffer});
   
 
 /// The store package/product identifier — used to start a purchase.
 @override final  String id;
 @override final  String title;
 @override final  String priceString;
+@override final  String description;
 @override final  EPlanPeriod period;
 @override final  String? introOffer;
 
@@ -225,16 +227,16 @@ _$SubscriptionPlanCopyWith<_SubscriptionPlan> get copyWith => __$SubscriptionPla
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SubscriptionPlan&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.priceString, priceString) || other.priceString == priceString)&&(identical(other.period, period) || other.period == period)&&(identical(other.introOffer, introOffer) || other.introOffer == introOffer));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SubscriptionPlan&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.priceString, priceString) || other.priceString == priceString)&&(identical(other.description, description) || other.description == description)&&(identical(other.period, period) || other.period == period)&&(identical(other.introOffer, introOffer) || other.introOffer == introOffer));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,title,priceString,period,introOffer);
+int get hashCode => Object.hash(runtimeType,id,title,priceString,description,period,introOffer);
 
 @override
 String toString() {
-  return 'SubscriptionPlan(id: $id, title: $title, priceString: $priceString, period: $period, introOffer: $introOffer)';
+  return 'SubscriptionPlan(id: $id, title: $title, priceString: $priceString, description: $description, period: $period, introOffer: $introOffer)';
 }
 
 
@@ -245,7 +247,7 @@ abstract mixin class _$SubscriptionPlanCopyWith<$Res> implements $SubscriptionPl
   factory _$SubscriptionPlanCopyWith(_SubscriptionPlan value, $Res Function(_SubscriptionPlan) _then) = __$SubscriptionPlanCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String priceString, EPlanPeriod period, String? introOffer
+ String id, String title, String priceString, String description, EPlanPeriod period, String? introOffer
 });
 
 
@@ -262,11 +264,12 @@ class __$SubscriptionPlanCopyWithImpl<$Res>
 
 /// Create a copy of SubscriptionPlan
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? priceString = null,Object? period = null,Object? introOffer = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? priceString = null,Object? description = null,Object? period = null,Object? introOffer = freezed,}) {
   return _then(_SubscriptionPlan(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,priceString: null == priceString ? _self.priceString : priceString // ignore: cast_nullable_to_non_nullable
+as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,period: null == period ? _self.period : period // ignore: cast_nullable_to_non_nullable
 as EPlanPeriod,introOffer: freezed == introOffer ? _self.introOffer : introOffer // ignore: cast_nullable_to_non_nullable
 as String?,

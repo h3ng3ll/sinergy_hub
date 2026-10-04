@@ -74,15 +74,27 @@ class RevenueCatSubscriptionRepository implements ISubscriptionRepository {
 
   @override
   Future<Either<List<SubscriptionPlan>, Exceptions>> getPlans() async {
-    if (!isAvailable) return Right(PurchasesUnavailableFailure());
+    if (!isAvailable) {
+      return Right(
+        PurchasesUnavailableFailure(),
+      );
+    }
     try {
       final offerings = await Purchases.getOfferings();
       final current = offerings.all[_offerName];
       if (current == null || current.availablePackages.isEmpty) {
         return Right(NoPlansFoundFailure());
       }
+      final meta = current.metadata;
       return Left(
-        current.availablePackages.map(_toSubscriptionPlan).toList(),
+        current.availablePackages
+            .map(
+              (e) => _toSubscriptionPlan(
+                e,
+                meta,
+              ),
+            )
+            .toList(),
       );
     } catch (e) {
       _loggerService.error(
@@ -176,13 +188,24 @@ class RevenueCatSubscriptionRepository implements ISubscriptionRepository {
     return null;
   }
 
-  SubscriptionPlan _toSubscriptionPlan(Package package) {
+  SubscriptionPlan _toSubscriptionPlan(
+    Package package,
+    Map<String, dynamic>? meta,
+  ) {
     return SubscriptionPlan(
       id: package.identifier,
-      title: package.storeProduct.title,
+
+      /// Unfortunately. Play market not provide correct name
+      /// place name into metadata , so configured it via revenue cat
+      /// for both platforms
+      title:
+          meta?['products']?[package.identifier]?['title'] ??
+          package.storeProduct.title,
+      // title: package.storeProduct.title,
       priceString: package.storeProduct.priceString,
       period: _periodFromPackageType(package.packageType),
       introOffer: package.storeProduct.introductoryPrice?.priceString,
+      description: package.storeProduct.description,
     );
   }
 

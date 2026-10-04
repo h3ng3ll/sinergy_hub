@@ -17,6 +17,7 @@ sealed class SubscriptionPlan with _$SubscriptionPlan {
     required String id,
     required String title,
     required String priceString,
+    required String description,
     required EPlanPeriod period,
     String? introOffer,
   }) = _SubscriptionPlan;

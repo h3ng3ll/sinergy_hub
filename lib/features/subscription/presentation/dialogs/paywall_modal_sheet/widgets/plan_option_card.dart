@@ -39,52 +39,60 @@ class PlanOptionCard extends StatelessWidget {
             width: isSelected ? 2.0 : 1.0,
           ),
         ),
-        child: Row(
+        child: Column(
           children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 4.0,
-                children: [
-                  Wrap(
-                    spacing: 8.0,
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 4.0,
                     children: [
-                      Text(
-                        plan.title,
-                        style: textTheme.medium16,
-                      ),
-                      if (isBestValue)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 2.0,
+                      Wrap(
+                        spacing: 8.0,
+                        children: [
+                          Text(
+                            plan.title,
+                            style: textTheme.medium16,
                           ),
-                          decoration: BoxDecoration(
-                            color: AppColors.majorelleBlue.value,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Text(
-                            l10n.paywall_best_value,
-                            style: textTheme.regular10.copyWith(
-                              color: AppColors.white.value,
+                          if (isBestValue)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 2.0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.majorelleBlue.value,
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Text(
+                                l10n.paywall_best_value,
+                                style: textTheme.regular10.copyWith(
+                                  color: AppColors.white.value,
+                                ),
+                              ),
                             ),
-                          ),
+                        ],
+                      ),
+                      if (plan.introOffer != null)
+                        Text(
+                          plan.introOffer!,
+                          style: textTheme.regular12,
                         ),
                     ],
                   ),
-                  if (plan.introOffer != null)
-                    Text(
-                      plan.introOffer!,
-                      style: textTheme.regular12,
-                    ),
-                ],
-              ),
+                ),
+                Text(
+                  plan.priceString,
+                  style: textTheme.medium18,
+                ),
+              ],
             ),
-            Text(
-              plan.priceString,
-              style: textTheme.medium18,
-            ),
+            // Text(
+            //   plan.description,
+            //   style: textTheme.medium18,
+            // ),
           ],
         ),
       ),
