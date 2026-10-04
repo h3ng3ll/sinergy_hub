@@ -11,6 +11,7 @@ import '../data/repositories/unavailable_subscription_repository.dart';
 import '../domain/repositories/i_premium_status_repository.dart';
 import '../domain/repositories/i_subscription_repository.dart';
 import '../domain/usecases/get_plans_use_case.dart';
+import '../domain/usecases/get_subscription_management_url_use_case.dart';
 import '../domain/usecases/identify_subscriber_use_case.dart';
 import '../domain/usecases/purchase_plan_use_case.dart';
 import '../domain/usecases/restore_purchases_use_case.dart';
@@ -61,6 +62,11 @@ void initSubscriptionFeature(GetIt getIt) {
     ),
   );
 
+  getIt.registerLazySingleton<GetSubscriptionManagementUrlUseCase>(
+    () => GetSubscriptionManagementUrlUseCase(
+      subscriptionRepository: getIt<ISubscriptionRepository>(),
+    ),
+  );
   getIt.registerLazySingleton<WatchCurrentPremiumStatusUseCase>(
     () => WatchCurrentPremiumStatusUseCase(
       premiumStatusRepository: getIt<IPremiumStatusRepository>(),

@@ -1,4 +1,4 @@
-**Last updated May 25, 2026**
+**Last updated October 4, 2026**
 
 This Privacy Notice for Sinergy Hub ("**we**," "**us**," or "**our**"), describes how and why we might access, collect, store, use, and/or share ("**process**") your personal information when you use our services ("**Services**"), including when you:
 
@@ -20,6 +20,10 @@ This Privacy Notice for Sinergy Hub ("**we**," "**us**," or "**our**"), describe
 **How do we process your information?** We process your information to provide, improve, and administer our Services, communicate with you, for security and fraud prevention, and to comply with law. We may also process your information for other purposes with your consent. We process your information only when we have a valid legal reason to do so.
 
 **In what situations and with which parties do we share personal information?** We may share information in specific situations and with specific third parties.
+
+**Do we use your location?** Only if you choose to. When you tap "Use my location", we use your device's location to fill in your city and to show approximate distances between members. Your exact location is stored privately on our servers and is never shown to anyone.
+
+**Do we process payment information?** No. Premium subscriptions are purchased and billed through the Apple App Store or Google Play. We only receive the status of your subscription (for example, whether it is active and when it renews or expires), never your payment card details.
 
 **How do we keep your information safe?** We have adequate organizational and technical processes and procedures in place to protect your personal information. However, no electronic transmission over the internet or information storage technology can be guaranteed to be 100% secure, so we cannot promise or guarantee that hackers, cybercriminals, or other unauthorized third parties will not be able to defeat our security and improperly collect, access, steal, or modify your information.
 
@@ -57,6 +61,14 @@ We collect personal information that you voluntarily provide to us when you regi
 
 - names
 - email addresses
+- profile photo
+- age (you must be at least 18)
+- the "about me" text you write
+- your professional profile: specialization, experience level, skills, and the specializations you are looking for
+- country and city
+- messages you send to other members in chat
+- reports you submit about other members
+- app preferences, such as notification settings and, for Premium members, custom background colors
 
 **Sensitive Information.** We do not process sensitive information.
 
@@ -64,11 +76,25 @@ We collect personal information that you voluntarily provide to us when you regi
 
 **Application Data.** If you use our application(s), we also may collect the following information if you choose to provide us with access or permission:
 
-- *Mobile Device Access.* We may request access or permission to certain features from your mobile device, including your mobile device's camera, gallery, and other features. If you wish to change our access or permissions, you may do so in your device's settings.
+- *Mobile Device Access.* We may request access or permission to certain features from your mobile device, including your mobile device's camera, gallery, location, and other features. If you wish to change our access or permissions, you may do so in your device's settings.
 - *Mobile Device Data.* We automatically collect device information (such as your mobile device ID, model, and manufacturer), operating system, version information and system configuration information, device and application identification numbers, browser type and version, hardware model Internet service provider and/or mobile carrier, and Internet Protocol (IP) address (or proxy server). If you are using our application(s), we may also collect information about the phone network associated with your mobile device, your mobile device's operating system or platform, the type of mobile device you use, your mobile device's unique device ID, and information about the features of our application(s) you accessed.
 - *Push Notifications.* We may request to send you push notifications regarding your account or certain features of the application(s). If you wish to opt out from receiving these types of communications, you may turn them off in your device's settings.
 
 This information is primarily needed to maintain the security and operation of our application(s), for troubleshooting, and for our internal analytics and reporting purposes.
+
+**Location Information.** Location is optional. We access your device's location only when you tap "Use my location" while editing your profile or during sign-up, and only with your permission.
+
+- We use it to fill in your country and city automatically. You can edit them, or type them yourself without sharing your location at all.
+- Your exact coordinates are sent to our servers and kept private. They are never shown to other members, and the app itself cannot read them back.
+- We use them only to calculate approximate distances between you and other members. Distances are rounded (for example, anything under 1 km is shown as "less than 1 km"), and they are used for the "within X km" search filter.
+- Your country and city are part of your public profile and are visible to other members.
+- You can stop sharing location at any time by turning off location permission in your device settings. Coordinates already shared are deleted when you delete your account.
+
+**Purchase and Subscription Information.** If you buy a Premium subscription, the purchase is processed by the Apple App Store or Google Play and managed through our subscription provider, RevenueCat. We do not receive or store your payment card details. We receive and keep the status of your subscription: whether it is active, the product purchased, the store used, its expiry date, and whether it is set to renew. We use this to unlock Premium features and to verify, on our servers, that you are entitled to them.
+
+**Activity and Presence Information.** To run the matching features, we process the likes and passes you give and receive, your matches, and the list of members who liked you. We also record whether you are online and when you were last active. Other members may see this.
+
+**Information Stored on Your Device.** To make the app faster and reduce network use, we keep copies of some information on your device: your chats and messages, the "Liked you" list, the profiles in your discovery deck, and your background color preferences. These copies are stored per account. They stay on the device after you sign out, so that they are available when you sign back in. They are removed when you uninstall the app or clear its data.
 
 All personal information that you provide to us must be true, complete, and accurate, and you must notify us of any changes to such personal information.
 
@@ -96,6 +122,10 @@ Our use of information received from Google APIs will adhere to Google API Servi
 - **To facilitate account creation and authentication and otherwise manage user accounts.** We may process your information so you can create and log in to your account, as well as keep your account in working order.
 - **To send administrative information to you.** We may process your information to send you details about our products and services, changes to our terms and policies, and other similar information.
 - **To enable user-to-user communications.** We may process your information if you choose to use any of our offerings that allow for communication with another user.
+- **To match you with other members.** We process your profile, filters, likes, and location (if you shared it) to suggest relevant members, show approximate distances, and form matches.
+- **To provide Premium features.** We process your subscription status to unlock Premium features (such as unlimited likes, the full "Liked you" list, and custom background colors) and to check on our servers that you are entitled to them.
+- **To send you notifications.** If you allow it, we send push notifications about new messages, matches, and your subscription. You can turn them off in the app settings or your device settings.
+- **To keep the community safe.** We process reports and blocks to investigate misuse, enforce our Terms of Use, and protect our members.
 - **To save or protect an individual's vital interest.** We may process your information when necessary to save or protect an individual's vital interest, such as to prevent harm.
 
 ## 3. WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR INFORMATION?
@@ -136,8 +166,11 @@ In some exceptional cases, we may be legally permitted under applicable law to p
 
 We may need to share your personal information in the following situations:
 
+- **Service Providers.** We use third-party service providers to run the Services, and they process your information on our behalf: Google Firebase (account sign-in, database, file storage, server functions, and push notifications), RevenueCat (subscription management), and Apple and Google (app distribution and in-app purchases).
 - **Business Transfers.** We may share or transfer your information in connection with, or during negotiations of, any merger, sale of company assets, financing, or acquisition of all or a portion of our business to another company.
 - **Other Users.** When you share personal information (for example, by posting comments, contributions, or other content to the Services) or otherwise interact with public areas of the Services, such personal information may be viewed by all users and may be publicly made available outside the Services in perpetuity. If you interact with other users of our Services and register for our Services through a social network (such as Facebook), your contacts on the social network will see your name, profile photo, and descriptions of your activity. Similarly, other users will be able to view descriptions of your activity, communicate with you within our Services, and view your profile.
+
+Other members can see your profile (photo, name, age, about-me text, specialization, experience level, and skills), your country and city, your online status, and an approximate distance to you if you both shared your location. **Your exact location is never shared with other members.**
 
 ## 5. HOW DO WE HANDLE YOUR SOCIAL LOGINS?
 
@@ -164,6 +197,12 @@ We have implemented measures to protect your personal information, including by 
 ***In Short:** We keep your information for as long as necessary to fulfill the purposes outlined in this Privacy Notice unless otherwise required by law.*
 
 We will only keep your personal information for as long as it is necessary for the purposes set out in this Privacy Notice, unless a longer retention period is required or permitted by law (such as tax, accounting, or other legal requirements). No purpose in this notice will require us keeping your personal information for longer than the period of time in which users have an account with us.
+
+In particular:
+
+- **Location coordinates** are kept while your account exists and are deleted when you delete your account.
+- **Subscription records** are kept for as long as needed to provide Premium features and to meet our legal, accounting, and tax obligations.
+- **Information stored on your device** remains there until you uninstall the app or clear its data.
 
 When we have no ongoing legitimate business need to process your personal information, we will either delete or anonymize such information, or, if this is not possible (for example, because your personal information has been stored in backup archives), then we will securely store your personal information and isolate it from any further processing until deletion is possible.
 
@@ -200,7 +239,14 @@ However, please note that this will not affect the lawfulness of the processing 
 If you would at any time like to review or change the information in your account or terminate your account, you can:
 
 - Log in to your account settings and update your user account.
+- Delete your account directly in the app from your profile.
 - Contact us using the contact information provided.
+
+**Location:** You can stop sharing your location at any time by turning off location permission in your device settings, or simply by not using "Use my location".
+
+**Notifications:** You can turn off push notifications in the app settings or your device settings.
+
+**Subscriptions:** You can manage or cancel a Premium subscription at any time in your Apple App Store or Google Play account settings. Deleting the app or your account does not automatically cancel a subscription that was purchased through the store.
 
 Upon your request to terminate your account, we will deactivate or delete your account and information from our active databases. However, we may retain some information in our files to prevent fraud, troubleshoot problems, assist with any investigations, enforce our legal terms and/or comply with applicable legal requirements.
 
@@ -220,11 +266,11 @@ The table below shows the categories of personal information we have collected i
 
 - **A. Identifiers** — Contact details, such as real name, alias, postal address, telephone or mobile contact number, unique personal identifier, online identifier, Internet Protocol address, email address, and account name. **Collected: YES**
 - **B. Personal information as defined in the California Customer Records statute** — Name, contact information, education, employment, employment history, and financial information. **Collected: YES**
-- **C. Protected classification characteristics under state or federal law** — Gender, age, date of birth, race and ethnicity, national origin, marital status, and other demographic data. **Collected: NO**
-- **D. Commercial information** — Transaction information, purchase history, financial details, and payment information. **Collected: NO**
+- **C. Protected classification characteristics under state or federal law** — Gender, age, date of birth, race and ethnicity, national origin, marital status, and other demographic data. **Collected: YES** (age only)
+- **D. Commercial information** — Transaction information, purchase history, financial details, and payment information. **Collected: YES** (subscription status only — no payment card details)
 - **E. Biometric information** — Fingerprints and voiceprints. **Collected: NO**
 - **F. Internet or other similar network activity** — Browsing history, search history, online behavior, interest data, and interactions with our and other websites, applications, systems, and advertisements. **Collected: NO**
-- **G. Geolocation data** — Device location. **Collected: NO**
+- **G. Geolocation data** — Device location. **Collected: YES** (only if you choose to share it; never shown to other members)
 - **H. Audio, electronic, sensory, or similar information** — Images and audio, video or call recordings created in connection with our business activities. **Collected: NO**
 - **I. Professional or employment-related information** — Business contact details in order to provide you our Services at a business level or job title, work history, and professional qualifications if you apply for a job with us. **Collected: NO**
 - **J. Education Information** — Student records and directory information. **Collected: NO**
@@ -241,6 +287,9 @@ We will use and retain the collected personal information as needed to provide t
 
 - Category A - As long as the user has an account with us
 - Category B - As long as the user has an account with us
+- Category C - As long as the user has an account with us
+- Category D - As long as needed to provide Premium features and to meet legal, accounting, and tax obligations
+- Category G - As long as the user has an account with us
 
 ### Sources of Personal Information
 
@@ -312,4 +361,4 @@ If you have questions or comments about this notice, you may contact us by email
 
 ## 15. HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT FROM YOU?
 
-Based on the applicable laws of your country or state of residence in the US, you may have the right to request access to the personal information we collect from you, details about how we have processed it, correct inaccuracies, or delete your personal information. You may also have the right to withdraw your consent to our processing of your personal information. These rights may be limited in some circumstances by applicable law. To request to review, update, or delete your personal information, please contact us at alexandr132135@gmail.com.
+Based on the applicable laws of your country or state of residence in the US, you may have the right to request access to the personal information we collect from you, details about how we have processed it, correct inaccuracies, or delete your personal information. You may also have the right to withdraw your consent to our processing of your personal information. These rights may be limited in some circumstances by applicable law. To request to review, update, or delete your personal information, please contact us at alexandr132135@gmail.com. You can also delete your account and its data directly in the app from your profile.

@@ -147,6 +147,27 @@ class RevenueCatSubscriptionRepository implements ISubscriptionRepository {
     }
   }
 
+  @override
+  Future<Either<Uri, Exceptions>> getManagementUrl() async {
+    if (!isAvailable) return Right(PurchasesUnavailableFailure());
+    try {
+      final customerInfo = await Purchases.getCustomerInfo();
+      final url = customerInfo.managementURL;
+      return Left(url != null ? Uri.parse(url) : _storeSubscriptionsUrl);
+    } catch (_) {
+      // The store page works without RevenueCat — never strand the user.
+      return Left(_storeSubscriptionsUrl);
+    }
+  }
+
+  /// The store's generic subscriptions page, used when RevenueCat has no
+  /// subscription-specific management URL.
+  Uri get _storeSubscriptionsUrl => Uri.parse(
+    Platform.isIOS
+        ? 'https://apps.apple.com/account/subscriptions'
+        : 'https://play.google.com/store/account/subscriptions',
+  );
+
   Package? _findPackage(Offerings offerings, String planId) {
     for (final package
         in offerings.all[_offerName]?.availablePackages ?? const <Package>[]) {

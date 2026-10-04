@@ -35,9 +35,13 @@ class BackgroundPaletteBloc
       _start,
       transformer: restartable(),
     );
+    /// Droppable, not restartable: AuthBloc emits "authorized" several times
+    /// in a row on startup (three merged auth streams). Restarting would
+    /// cancel the in-flight load, and the duplicate would then be skipped by
+    /// the same-uid guard — leaving the palette unloaded.
     on<_Init>(
       _init,
-      transformer: restartable(),
+      transformer: droppable(),
     );
     on<_Reset>(_reset);
     on<_SetPrimary>(
@@ -68,12 +72,12 @@ class BackgroundPaletteBloc
   }
 
   /// AuthBloc re-emits on every token refresh, so the same uid arrives
-  /// repeatedly — load only once per signed-in user.
+  /// repeatedly — once loaded, the palette is not reloaded for that user.
   Future<void> _init(
     _Init event,
     Emitter<BackgroundPaletteState> emit,
   ) async {
-    if (state.uid == event.uid && !state.isInitial) return;
+    if (state.uid == event.uid && state.isReady) return;
 
     emit(
       state.copyWith(
@@ -84,6 +88,10 @@ class BackgroundPaletteBloc
     );
 
     final result = await _getBackgroundPaletteUseCase.call();
+
+    /// A sign-out (`reset`) during the load — never apply this user's
+    /// palette to the next session.
+    if (state.uid != event.uid) return;
 
     result.fold(
       (palette) => emit(

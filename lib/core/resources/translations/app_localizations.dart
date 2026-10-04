@@ -502,11 +502,41 @@ abstract class AppLocalizations {
   /// **'Upgrade to Premium'**
   String get premium_upgrade;
 
-  /// No description provided for @premium_active.
+  /// No description provided for @premium_card_title.
   ///
   /// In en, this message translates to:
-  /// **'Premium active'**
-  String get premium_active;
+  /// **'Premium'**
+  String get premium_card_title;
+
+  /// No description provided for @premium_renews_on.
+  ///
+  /// In en, this message translates to:
+  /// **'Renews on {date}'**
+  String premium_renews_on(String date);
+
+  /// No description provided for @premium_active_until.
+  ///
+  /// In en, this message translates to:
+  /// **'Active until {date}'**
+  String premium_active_until(String date);
+
+  /// No description provided for @premium_active_status.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get premium_active_status;
+
+  /// No description provided for @premium_cancel_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can cancel anytime in your store account. Premium stays active until the end of the paid period.'**
+  String get premium_cancel_hint;
+
+  /// No description provided for @premium_manage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage subscription'**
+  String get premium_manage;
 
   /// No description provided for @liked_you_tab_label.
   ///

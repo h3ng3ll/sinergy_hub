@@ -227,7 +227,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premium_upgrade => 'Upgrade to Premium';
 
   @override
-  String get premium_active => 'Premium active';
+  String get premium_card_title => 'Premium';
+
+  @override
+  String premium_renews_on(String date) {
+    return 'Renews on $date';
+  }
+
+  @override
+  String premium_active_until(String date) {
+    return 'Active until $date';
+  }
+
+  @override
+  String get premium_active_status => 'Active';
+
+  @override
+  String get premium_cancel_hint =>
+      'You can cancel anytime in your store account. Premium stays active until the end of the paid period.';
+
+  @override
+  String get premium_manage => 'Manage subscription';
 
   @override
   String get liked_you_tab_label => 'Liked you';

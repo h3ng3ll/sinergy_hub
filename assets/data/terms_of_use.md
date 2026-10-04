@@ -1,4 +1,4 @@
-**Last updated May 25, 2026**
+**Last updated October 4, 2026**
 
 These Terms of Use ("**Terms**") govern your access to and use of the Sinergy Hub mobile application and related services (collectively, the "**Services**") provided by Sinergy Hub ("**we**," "**us**," or "**our**"). By creating an account, signing in, or otherwise using the Services, you agree to be bound by these Terms. If you do not agree with these Terms, please do not use the Services.
 
@@ -14,6 +14,9 @@ To use certain features of the Services, you must register for an account. You a
 - Keep your account credentials confidential and secure.
 - Be responsible for all activity that occurs under your account.
 - Notify us promptly of any unauthorized use of your account.
+- Provide your real age. You must be at least 18 years old to use the Services.
+
+You may delete your account at any time directly in the app from your profile.
 
 We reserve the right to suspend or terminate your account if any information provided is inaccurate, outdated, or incomplete, or if you violate these Terms.
 
@@ -39,7 +42,7 @@ The Services, including all software, design, text, graphics, and other material
 
 ## 6. THIRD-PARTY SERVICES
 
-The Services may integrate with or rely on third-party services, including authentication providers such as Google and Apple. Your use of those services is subject to their respective terms and privacy policies. We are not responsible for the practices of any third-party service.
+The Services may integrate with or rely on third-party services, including authentication providers such as Google and Apple, Google Firebase (hosting, data storage, and notifications), the Apple App Store and Google Play (app distribution and in-app purchases), and RevenueCat (subscription management). Your use of those services is subject to their respective terms and privacy policies. We are not responsible for the practices of any third-party service.
 
 ## 7. DISCLAIMERS
 
@@ -92,3 +95,24 @@ Your obligations:
 How we handle reports:
 - Reports are processed by the platform. We may, at our discretion, review the reported account and content and take action, including warning, restricting, suspending, or permanently terminating accounts that violate these Terms.
 - Blocking is applied to the relevant chat and does not by itself constitute a report; you may both block a user and submit a separate report.
+
+## 15. SUBSCRIPTIONS AND PURCHASES
+
+The Services are free to use, with optional paid features offered as a Premium subscription.
+
+- **What Premium includes.** Premium currently unlocks unlimited likes, the full list of members who liked you, and custom background colors. Free accounts have limits, such as a daily number of likes and a limited number of "Liked you" profiles revealed per period. We may change which features are included in Premium and Free, or the limits that apply.
+- **Price and billing.** The price and billing period are shown in the store before you confirm a purchase. Payment is charged to your Apple App Store or Google Play account. We do not process or store your payment card details.
+- **Automatic renewal.** Subscriptions renew automatically at the end of each billing period unless you cancel at least 24 hours before the current period ends. Your account is charged for renewal within 24 hours before the current period ends.
+- **Cancellation.** You can manage or cancel your subscription in your Apple App Store or Google Play account settings. If you cancel, Premium stays active until the end of the period you already paid for. Deleting the app or your account does not cancel a subscription.
+- **Refunds.** Refunds are handled by Apple or Google under their refund policies. We cannot issue refunds for purchases made through their stores.
+- **Restoring purchases.** If you reinstall the app or use a new device, you can restore an active subscription with "Restore purchases".
+- **When Premium ends.** Premium features stop when your subscription expires. Premium-only customizations, such as background colors, are kept and apply again if you subscribe again.
+
+## 16. LOCATION FEATURES
+
+Some features use your location. They are optional.
+
+- **Permission.** We use your device's location only when you tap "Use my location" and grant permission. You can turn this off at any time in your device settings and enter your country and city yourself instead.
+- **Distances are approximate.** Distances between members are calculated on our servers and rounded. They are provided for convenience only, and we do not guarantee their accuracy.
+- **No tracking.** You must not use distances, location information, or the "within X km" search to find, track, follow, or harass any member. Doing so is a serious violation of these Terms and may lead to immediate termination of your account.
+- **Your entries.** You are responsible for the country and city you enter. They must be accurate and must not be used to mislead other members.

@@ -33,4 +33,9 @@ abstract class ISubscriptionRepository {
   Future<Either<EPurchaseOutcome, Exceptions>> purchase(String planId);
 
   Future<Either<ERestoreOutcome, Exceptions>> restore();
+
+  /// Where the user manages or cancels their subscription. Store
+  /// subscriptions can only be cancelled in the App Store / Google Play, so
+  /// this is the store's own management page.
+  Future<Either<Uri, Exceptions>> getManagementUrl();
 }

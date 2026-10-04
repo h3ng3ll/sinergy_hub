@@ -71,7 +71,26 @@
   "terms_of_use": "Terms of Use",
   "privacy_policy": "Privacy Policy",
   "premium_upgrade": "Upgrade to Premium",
-  "premium_active": "Premium active",
+  "premium_card_title": "Premium",
+  "premium_renews_on": "Renews on {date}",
+  "@premium_renews_on": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "premium_active_until": "Active until {date}",
+  "@premium_active_until": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "premium_active_status": "Active",
+  "premium_cancel_hint": "You can cancel anytime in your store account. Premium stays active until the end of the paid period.",
+  "premium_manage": "Manage subscription",
   "liked_you_tab_label": "Liked you",
   "liked_you_title": "Liked you",
   "liked_you_quota_banner": "{remaining} of {limit} reveals left · resets {resetTime}",

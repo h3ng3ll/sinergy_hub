@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 
+import '../../subscription/domain/usecases/get_subscription_management_url_use_case.dart';
 import '../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../core/services/firebase/firebase_functions_service.dart';
@@ -189,6 +190,8 @@ void initUserFeature(GetIt getIt) {
   getIt.registerFactory<ProfileBloc>(
     () => ProfileBloc(
       deleteAccountUseCase: getIt<DeleteAccountUseCase>(),
+      getSubscriptionManagementUrlUseCase:
+          getIt<GetSubscriptionManagementUrlUseCase>(),
     ),
   );
 }

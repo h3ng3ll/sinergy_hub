@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
-import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
@@ -22,6 +22,7 @@ import 'widgets/build_looking_for/build_looking_for.dart';
 import 'widgets/build_profile_header.dart';
 import 'widgets/build_skills_n_expertise/build_skills_n_expertise.dart';
 import 'widgets/delete_account_dialog.dart';
+import 'widgets/premium_status_card.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
@@ -61,6 +62,24 @@ class _ProfileTabState extends State<ProfileTab> {
     await PaywallModalSheet.show(context);
   }
 
+  void _onManageSubscription(BuildContext context) {
+    context.read<ProfileBloc>().add(
+      const ProfileEvent.manageSubscription(),
+    );
+  }
+
+  Future<void> _openSubscriptionManagement(Uri url) async {
+    final opened = await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    );
+    if (!opened) {
+      await UiMessageService.showError(
+        "Couldn't open subscription settings. Manage it in your store account.",
+      );
+    }
+  }
+
   Future<void> _onDeletePressed(BuildContext context) async {
     final confirmed = await DeleteAccountDialog.show(context);
     if (confirmed && context.mounted) {
@@ -79,8 +98,11 @@ class _ProfileTabState extends State<ProfileTab> {
         listener: (context, state) {
           if (state.isDeleted) {
             UiMessageService.showSuccess('Account deleted');
-          } else if (state.isDeleteFailed) {
+          } else if (state.isDeleteFailed || state.isSubscriptionUrlFailed) {
             UiMessageService.showError(state.errorMessage);
+          } else if (state.isSubscriptionUrlReady) {
+            final url = state.subscriptionManagementUrl;
+            if (url != null) _openSubscriptionManagement(url);
           }
         },
         child: BlocBuilder<UserBloc, UserState>(
@@ -128,15 +150,24 @@ class _ProfileTabState extends State<ProfileTab> {
                               BlocBuilder<PremiumBloc, PremiumState>(
                                 builder: (context, premiumState) {
                                   if (premiumState.isPremium) {
-                                    return Text(
-                                      AppLocalizations.of(
-                                        context,
-                                      )!.premium_active,
-                                      style: AppTextTheme.of(
-                                        context,
-                                      ).medium14.copyWith(
-                                        color: AppColors.majorelleBlue.value,
-                                      ),
+                                    return BlocBuilder<ProfileBloc,
+                                        ProfileState>(
+                                      builder: (context, profileState) {
+                                        return PremiumStatusCard(
+                                          expiresAt: premiumState
+                                              .premiumStatus
+                                              ?.expiresAt,
+                                          willRenew:
+                                              premiumState
+                                                  .premiumStatus
+                                                  ?.willRenew ??
+                                              false,
+                                          isOpeningManagement: profileState
+                                              .isOpeningSubscription,
+                                          onManage: () =>
+                                              _onManageSubscription(context),
+                                        );
+                                      },
                                     );
                                   }
                                   return SizedBox(

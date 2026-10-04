@@ -33,4 +33,8 @@ class UnavailableSubscriptionRepository implements ISubscriptionRepository {
   @override
   Future<Either<ERestoreOutcome, Exceptions>> restore() async =>
       Right(PurchasesUnavailableFailure());
+
+  @override
+  Future<Either<Uri, Exceptions>> getManagementUrl() async =>
+      Right(PurchasesUnavailableFailure());
 }

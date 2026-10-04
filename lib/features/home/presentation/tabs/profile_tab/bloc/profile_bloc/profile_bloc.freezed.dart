@@ -55,11 +55,12 @@ extension ProfileEventPatterns on ProfileEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _DeleteAccount value)?  deleteAccount,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _DeleteAccount value)?  deleteAccount,TResult Function( _ManageSubscription value)?  manageSubscription,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _DeleteAccount() when deleteAccount != null:
-return deleteAccount(_that);case _:
+return deleteAccount(_that);case _ManageSubscription() when manageSubscription != null:
+return manageSubscription(_that);case _:
   return orElse();
 
 }
@@ -77,11 +78,12 @@ return deleteAccount(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _DeleteAccount value)  deleteAccount,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _DeleteAccount value)  deleteAccount,required TResult Function( _ManageSubscription value)  manageSubscription,}){
 final _that = this;
 switch (_that) {
 case _DeleteAccount():
-return deleteAccount(_that);}
+return deleteAccount(_that);case _ManageSubscription():
+return manageSubscription(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -95,11 +97,12 @@ return deleteAccount(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _DeleteAccount value)?  deleteAccount,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _DeleteAccount value)?  deleteAccount,TResult? Function( _ManageSubscription value)?  manageSubscription,}){
 final _that = this;
 switch (_that) {
 case _DeleteAccount() when deleteAccount != null:
-return deleteAccount(_that);case _:
+return deleteAccount(_that);case _ManageSubscription() when manageSubscription != null:
+return manageSubscription(_that);case _:
   return null;
 
 }
@@ -116,10 +119,11 @@ return deleteAccount(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  deleteAccount,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  deleteAccount,TResult Function()?  manageSubscription,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DeleteAccount() when deleteAccount != null:
-return deleteAccount();case _:
+return deleteAccount();case _ManageSubscription() when manageSubscription != null:
+return manageSubscription();case _:
   return orElse();
 
 }
@@ -137,10 +141,11 @@ return deleteAccount();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  deleteAccount,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  deleteAccount,required TResult Function()  manageSubscription,}) {final _that = this;
 switch (_that) {
 case _DeleteAccount():
-return deleteAccount();}
+return deleteAccount();case _ManageSubscription():
+return manageSubscription();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -154,10 +159,11 @@ return deleteAccount();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  deleteAccount,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  deleteAccount,TResult? Function()?  manageSubscription,}) {final _that = this;
 switch (_that) {
 case _DeleteAccount() when deleteAccount != null:
-return deleteAccount();case _:
+return deleteAccount();case _ManageSubscription() when manageSubscription != null:
+return manageSubscription();case _:
   return null;
 
 }
@@ -198,9 +204,42 @@ String toString() {
 
 
 /// @nodoc
+
+
+class _ManageSubscription implements ProfileEvent {
+  const _ManageSubscription();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ManageSubscription);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ProfileEvent.manageSubscription()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$ProfileState {
 
- EProfileStatus get status; String get errorMessage;
+ EProfileStatus get status; String get errorMessage;/// Set with [EProfileStatus.subscriptionUrlReady]; the page opens it.
+ Uri? get subscriptionManagementUrl;
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -211,16 +250,16 @@ $ProfileStateCopyWith<ProfileState> get copyWith => _$ProfileStateCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.subscriptionManagementUrl, subscriptionManagementUrl) || other.subscriptionManagementUrl == subscriptionManagementUrl));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,errorMessage,subscriptionManagementUrl);
 
 @override
 String toString() {
-  return 'ProfileState(status: $status, errorMessage: $errorMessage)';
+  return 'ProfileState(status: $status, errorMessage: $errorMessage, subscriptionManagementUrl: $subscriptionManagementUrl)';
 }
 
 
@@ -231,7 +270,7 @@ abstract mixin class $ProfileStateCopyWith<$Res>  {
   factory $ProfileStateCopyWith(ProfileState value, $Res Function(ProfileState) _then) = _$ProfileStateCopyWithImpl;
 @useResult
 $Res call({
- EProfileStatus status, String errorMessage
+ EProfileStatus status, String errorMessage, Uri? subscriptionManagementUrl
 });
 
 
@@ -248,11 +287,12 @@ class _$ProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? errorMessage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? errorMessage = null,Object? subscriptionManagementUrl = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EProfileStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,
+as String,subscriptionManagementUrl: freezed == subscriptionManagementUrl ? _self.subscriptionManagementUrl : subscriptionManagementUrl // ignore: cast_nullable_to_non_nullable
+as Uri?,
   ));
 }
 
@@ -334,10 +374,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( EProfileStatus status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( EProfileStatus status,  String errorMessage,  Uri? subscriptionManagementUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileState() when $default != null:
-return $default(_that.status,_that.errorMessage);case _:
+return $default(_that.status,_that.errorMessage,_that.subscriptionManagementUrl);case _:
   return orElse();
 
 }
@@ -355,10 +395,10 @@ return $default(_that.status,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( EProfileStatus status,  String errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( EProfileStatus status,  String errorMessage,  Uri? subscriptionManagementUrl)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileState():
-return $default(_that.status,_that.errorMessage);}
+return $default(_that.status,_that.errorMessage,_that.subscriptionManagementUrl);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -372,10 +412,10 @@ return $default(_that.status,_that.errorMessage);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( EProfileStatus status,  String errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( EProfileStatus status,  String errorMessage,  Uri? subscriptionManagementUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileState() when $default != null:
-return $default(_that.status,_that.errorMessage);case _:
+return $default(_that.status,_that.errorMessage,_that.subscriptionManagementUrl);case _:
   return null;
 
 }
@@ -387,11 +427,13 @@ return $default(_that.status,_that.errorMessage);case _:
 
 
 class _ProfileState implements ProfileState {
-  const _ProfileState({this.status = EProfileStatus.initial, this.errorMessage = ''});
+  const _ProfileState({this.status = EProfileStatus.initial, this.errorMessage = '', this.subscriptionManagementUrl});
   
 
 @override@JsonKey() final  EProfileStatus status;
 @override@JsonKey() final  String errorMessage;
+/// Set with [EProfileStatus.subscriptionUrlReady]; the page opens it.
+@override final  Uri? subscriptionManagementUrl;
 
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
@@ -403,16 +445,16 @@ _$ProfileStateCopyWith<_ProfileState> get copyWith => __$ProfileStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.subscriptionManagementUrl, subscriptionManagementUrl) || other.subscriptionManagementUrl == subscriptionManagementUrl));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,errorMessage,subscriptionManagementUrl);
 
 @override
 String toString() {
-  return 'ProfileState(status: $status, errorMessage: $errorMessage)';
+  return 'ProfileState(status: $status, errorMessage: $errorMessage, subscriptionManagementUrl: $subscriptionManagementUrl)';
 }
 
 
@@ -423,7 +465,7 @@ abstract mixin class _$ProfileStateCopyWith<$Res> implements $ProfileStateCopyWi
   factory _$ProfileStateCopyWith(_ProfileState value, $Res Function(_ProfileState) _then) = __$ProfileStateCopyWithImpl;
 @override @useResult
 $Res call({
- EProfileStatus status, String errorMessage
+ EProfileStatus status, String errorMessage, Uri? subscriptionManagementUrl
 });
 
 
@@ -440,11 +482,12 @@ class __$ProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? errorMessage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? errorMessage = null,Object? subscriptionManagementUrl = freezed,}) {
   return _then(_ProfileState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EProfileStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,
+as String,subscriptionManagementUrl: freezed == subscriptionManagementUrl ? _self.subscriptionManagementUrl : subscriptionManagementUrl // ignore: cast_nullable_to_non_nullable
+as Uri?,
   ));
 }
 
