@@ -122,9 +122,15 @@ class FirebaseAuthRepository extends IAuthRepository {
       return Right(
         MaxTriesExceededException(),
       );
-    } catch (_) {
+    } catch (e) {
+      _loggerService.error(
+        'Failed sign with google',
+        error: e,
+      );
       return Right(
-        FailedSignWithGoogle(),
+        FailedSignWithGoogle(
+          message: e.toString(),
+        ),
       );
     }
   }
@@ -152,7 +158,11 @@ class FirebaseAuthRepository extends IAuthRepository {
         'Failed sign in ${e.toString()}',
         error: e,
       );
-      return Right(FailedSignWithGoogle());
+      return Right(
+        FailedSignWithGoogle(
+          message: e.toString(),
+        ),
+      );
     }
   }
 
@@ -382,7 +392,9 @@ class FirebaseAuthRepository extends IAuthRepository {
         error: e,
       );
       return Right(
-        FailedSignInWithApple(),
+        FailedSignInWithApple(
+          message: e.toString(),
+        ),
       );
     }
   }
@@ -435,7 +447,9 @@ class FirebaseAuthRepository extends IAuthRepository {
         error: e,
       );
       return Right(
-        FailedSignInWithApple(),
+        FailedSignInWithApple(
+          message: e.toString(),
+        ),
       );
     }
   }
