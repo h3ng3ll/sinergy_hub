@@ -152,6 +152,10 @@ class FirebaseAuthRepository extends IAuthRepository {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         return Right(UserCanceledSignInException());
       }
+      _loggerService.error(
+        'Failed sign in with google Exception ${e.toString()}',
+        error: e,
+      );
       return Right(FailedSignWithGoogle());
     } catch (e) {
       _loggerService.error(

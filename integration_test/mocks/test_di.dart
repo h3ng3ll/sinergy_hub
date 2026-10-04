@@ -4,6 +4,7 @@
 
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart' show Size;
 import 'package:google_sign_in/google_sign_in.dart';
@@ -70,6 +71,7 @@ import 'package:sinergy_hub/features/chat/presentation/bloc/chat_page_bloc/chat_
 import 'package:sinergy_hub/features/chat/presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 import 'package:sinergy_hub/features/home/presentation/edit_profile_page/bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import 'package:sinergy_hub/features/home/presentation/tabs/profile_tab/bloc/profile_bloc/profile_bloc.dart';
+import 'package:sinergy_hub/features/matches/domain/repositories/i_candidate_distance_repository.dart';
 import 'package:sinergy_hub/features/user/data/services/user_service.dart';
 import 'package:sinergy_hub/features/user/domain/usecases/delete_account_use_case.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/use_cases/get_cached_auth_credentials_use_case.dart';
@@ -141,8 +143,7 @@ class _FakeFirebaseMessagingService extends Mock
   String get fcmToken => 'mock-fcm-token';
 
   @override
-  Future<String?> get fcmTokenReady =>
-      Future<String?>.value('mock-fcm-token');
+  Future<String?> get fcmTokenReady => Future<String?>.value('mock-fcm-token');
 
   @override
   Stream<String> get onTokenRefresh => const Stream<String>.empty();
@@ -182,8 +183,9 @@ Future<void> setupTestDI() async {
     Hive.init(Directory.systemTemp.createTempSync('test_hive').path);
     Hive.registerAdapters();
   }
-  final authTempCredentialsBox =
-      await Hive.openBox<AuthTempCredentials>('auth_temp_credentials_test');
+  final authTempCredentialsBox = await Hive.openBox<AuthTempCredentials>(
+    'auth_temp_credentials_test',
+  );
   getIt.registerSingleton<IAuthTempCredentialsRepository>(
     AuthTempCredentialsLocalRepository(box: authTempCredentialsBox),
   );
@@ -280,9 +282,7 @@ Future<void> setupTestDI() async {
     ),
   );
   getIt.registerFactory<RegisterUseCase>(
-    () => RegisterUseCase(
-      authRepository: getIt<IAuthRepository>(),
-    ),
+    () => RegisterUseCase(authRepository: getIt<IAuthRepository>()),
   );
   getIt.registerFactory<CompleteRegistrationUseCase>(
     () => CompleteRegistrationUseCase(
@@ -407,6 +407,7 @@ Future<void> setupTestDI() async {
       authRepository: getIt<IAuthRepository>(),
       getExcludedMatchesUseCase: getIt<GetExcludedMatchesUseCase>(),
       userReadRepository: getIt<IUserReadRepository>(),
+      candidateDistanceRepository: getIt<ICandidateDistanceRepository>(),
     ),
   );
   getIt.registerLazySingleton<GetAUserMatchIncomeUseCase>(
@@ -458,12 +459,7 @@ Future<void> setupTestDI() async {
       authRepository: getIt<IAuthRepository>(),
     ),
   );
-  getIt.registerLazySingleton<ListenLastMessagesUseCase>(
-    () => ListenLastMessagesUseCase(
-      chatMessageRepository: getIt<IChatMessageRepository>(),
-      authRepository: getIt<IAuthRepository>(),
-    ),
-  );
+
   getIt.registerLazySingleton<SendMessageUseCase>(
     () => SendMessageUseCase(
       chatMessageRepository: getIt<IChatMessageRepository>(),
@@ -569,7 +565,7 @@ Future<void> setupTestDI() async {
       notificationConfigRepository: getIt<INotificationConfigRepository>(),
       authRepository: getIt<IAuthRepository>(),
       firebaseMessagingService: getIt<FirebaseMessagingService>(),
-      logger: LoggerService(),
+      logger: LoggerService(crashlytics: getIt<FirebaseCrashlytics>()),
     ),
   );
 
@@ -591,9 +587,7 @@ Future<void> setupTestDI() async {
     ),
   );
   getIt.registerFactory<ProfileBloc>(
-    () => ProfileBloc(
-      deleteAccountUseCase: getIt<DeleteAccountUseCase>(),
-    ),
+    () => ProfileBloc(deleteAccountUseCase: getIt<DeleteAccountUseCase>()),
   );
   getIt.registerFactory<EditProfilePageBloc>(
     () => EditProfilePageBloc(
@@ -616,9 +610,7 @@ Future<void> setupTestDI() async {
     ),
   );
   getIt.registerLazySingleton<ToggleBlockUserUseCase>(
-    () => ToggleBlockUserUseCase(
-      chatRepository: getIt<IChatRepository>(),
-    ),
+    () => ToggleBlockUserUseCase(chatRepository: getIt<IChatRepository>()),
   );
   getIt.registerLazySingleton<ChatPageBloc>(
     () => ChatPageBloc(

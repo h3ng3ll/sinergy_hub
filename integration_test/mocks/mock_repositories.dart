@@ -67,11 +67,11 @@ class MockAuthRepository implements IAuthRepository {
 
   @override
   Future<Either<AppleSignInResult, Failure>> signInWithApple() async => left(
-        const AppleSignInResult(
-          userCredential: null,
-          credentials: AppleCredentials(),
-        ),
-      );
+    const AppleSignInResult(
+      userCredential: null,
+      credentials: AppleCredentials(),
+    ),
+  );
 
   @override
   Future<void> signOut() async {}
@@ -111,7 +111,10 @@ class MockAuthRepository implements IAuthRepository {
 
 class MockUserReadRepository implements IUserReadRepository {
   @override
-  Future<UserData?> getUserById({required String id}) async {
+  Future<UserData?> getUserById({
+    required String id,
+    bool preferCache = false,
+  }) async {
     if (id == ShowcaseData.heroUid) return ShowcaseData.hero();
     if (id == ShowcaseData.partnerUid) return ShowcaseData.partner();
     return ShowcaseData.discoveryCandidates()
@@ -120,7 +123,10 @@ class MockUserReadRepository implements IUserReadRepository {
   }
 
   @override
-  Future<List<UserData>> getUsersById({required List<String> ids}) async {
+  Future<List<UserData>> getUsersById({
+    required List<String> ids,
+    bool preferCache = false,
+  }) async {
     final all = [
       ShowcaseData.hero(),
       ShowcaseData.partner(),
@@ -281,6 +287,11 @@ class MockChatRepository implements IChatRepository {
     required String uid,
     required String chatId,
   }) async => const ChatConfig();
+
+  @override
+  Stream<List<Chat>> chatsSnapshotStream({required String uid}) async* {
+    yield* Stream.fromIterable([]);
+  }
 }
 
 class MockChatMessageRepository implements IChatMessageRepository {
