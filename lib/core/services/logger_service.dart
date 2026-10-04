@@ -58,8 +58,17 @@ class LoggerService {
     Object? error,
     StackTrace? stackTrace,
     String name = _defaultName,
-  }) {
+  }) async {
     _crashlytics.log('[ERROR] $message');
+
+    if (error != null) {
+      await _crashlytics.recordError(
+        error,
+        stackTrace ?? StackTrace.current,
+        reason: message,
+        fatal: false,
+      );
+    }
     developer.log(
       message,
       level: 1000,

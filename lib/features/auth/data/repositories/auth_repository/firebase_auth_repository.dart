@@ -156,15 +156,15 @@ class FirebaseAuthRepository extends IAuthRepository {
         'Failed sign in with google Exception ${e.toString()}',
         error: e,
       );
-      return Right(FailedSignWithGoogle(message: e.toString()));
+      return Right(FailedSignWithGoogle(message: e.toString() + _env.webPushCertificate()));
     } catch (e) {
       _loggerService.error(
-        'Failed sign in ${e.toString()}',
+        'Failed sign in ${e.toString()} ',
         error: e,
       );
       return Right(
         FailedSignWithGoogle(
-          message: e.toString(),
+          message: e.toString()  + _env.webPushCertificate(),
         ),
       );
     }
