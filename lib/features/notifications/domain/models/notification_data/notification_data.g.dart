@@ -34,3 +34,22 @@ Map<String, dynamic> _$ChatNotificationDataToJson(
   'senderAvatar': instance.senderAvatar,
   'type': instance.$type,
 };
+
+PremiumNotificationData _$PremiumNotificationDataFromJson(
+  Map<String, dynamic> json,
+) => PremiumNotificationData(
+  productId: json['productId'] as String?,
+  $type: json['type'] as String?,
+);
+
+Map<String, dynamic> _$PremiumNotificationDataToJson(
+  PremiumNotificationData instance,
+) => <String, dynamic>{'productId': instance.productId, 'type': instance.$type};
+
+UnknownNotificationData _$UnknownNotificationDataFromJson(
+  Map<String, dynamic> json,
+) => UnknownNotificationData($type: json['type'] as String?);
+
+Map<String, dynamic> _$UnknownNotificationDataToJson(
+  UnknownNotificationData instance,
+) => <String, dynamic>{'type': instance.$type};

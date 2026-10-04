@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../core/services/logger_service.dart';
 import '../../../core/utils/env/env.dart';
 import '../data/repositories/premium_status_firestore_repository.dart';
@@ -29,6 +30,7 @@ void initSubscriptionFeature(GetIt getIt) {
   getIt.registerLazySingleton<IPremiumStatusRepository>(
     () => PremiumStatusFirestoreRepository(
       firestore: getIt<FirebaseFirestore>(),
+      firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
     ),
   );
 

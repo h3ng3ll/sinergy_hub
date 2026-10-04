@@ -10,6 +10,8 @@ class NotificationTapProcessor {
   ) async {
     data.map(
       match: (_) {},
+      premium: (_) {},
+      unknown: (_) {},
       chat: (chatData) {
         ChatPageRoute(
           chatId: chatData.chatId,

@@ -14,62 +14,30 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LoginEvent {
 
- String get email; String get password;
-/// Create a copy of LoginEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$LoginEventCopyWith<LoginEvent> get copyWith => _$LoginEventCopyWithImpl<LoginEvent>(this as LoginEvent, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginEvent&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginEvent);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,password);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LoginEvent(email: $email, password: $password)';
+  return 'LoginEvent()';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $LoginEventCopyWith<$Res>  {
-  factory $LoginEventCopyWith(LoginEvent value, $Res Function(LoginEvent) _then) = _$LoginEventCopyWithImpl;
-@useResult
-$Res call({
- String email, String password
-});
-
-
-
-
-}
-/// @nodoc
-class _$LoginEventCopyWithImpl<$Res>
-    implements $LoginEventCopyWith<$Res> {
-  _$LoginEventCopyWithImpl(this._self, this._then);
-
-  final LoginEvent _self;
-  final $Res Function(LoginEvent) _then;
-
-/// Create a copy of LoginEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,}) {
-  return _then(_self.copyWith(
-email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
+class $LoginEventCopyWith<$Res>  {
+$LoginEventCopyWith(LoginEvent _, $Res Function(LoginEvent) __);
 }
 
 
@@ -87,11 +55,14 @@ extension LoginEventPatterns on LoginEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Login value)?  login,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Login value)?  login,TResult Function( _CheckVerification value)?  checkVerification,TResult Function( _ResendVerification value)?  resendVerification,TResult Function( _TickCountdown value)?  tickCountdown,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Login() when login != null:
-return login(_that);case _:
+return login(_that);case _CheckVerification() when checkVerification != null:
+return checkVerification(_that);case _ResendVerification() when resendVerification != null:
+return resendVerification(_that);case _TickCountdown() when tickCountdown != null:
+return tickCountdown(_that);case _:
   return orElse();
 
 }
@@ -109,11 +80,14 @@ return login(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Login value)  login,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Login value)  login,required TResult Function( _CheckVerification value)  checkVerification,required TResult Function( _ResendVerification value)  resendVerification,required TResult Function( _TickCountdown value)  tickCountdown,}){
 final _that = this;
 switch (_that) {
 case _Login():
-return login(_that);}
+return login(_that);case _CheckVerification():
+return checkVerification(_that);case _ResendVerification():
+return resendVerification(_that);case _TickCountdown():
+return tickCountdown(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -127,11 +101,14 @@ return login(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Login value)?  login,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Login value)?  login,TResult? Function( _CheckVerification value)?  checkVerification,TResult? Function( _ResendVerification value)?  resendVerification,TResult? Function( _TickCountdown value)?  tickCountdown,}){
 final _that = this;
 switch (_that) {
 case _Login() when login != null:
-return login(_that);case _:
+return login(_that);case _CheckVerification() when checkVerification != null:
+return checkVerification(_that);case _ResendVerification() when resendVerification != null:
+return resendVerification(_that);case _TickCountdown() when tickCountdown != null:
+return tickCountdown(_that);case _:
   return null;
 
 }
@@ -148,10 +125,13 @@ return login(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String email,  String password)?  login,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String email,  String password)?  login,TResult Function()?  checkVerification,TResult Function()?  resendVerification,TResult Function()?  tickCountdown,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Login() when login != null:
-return login(_that.email,_that.password);case _:
+return login(_that.email,_that.password);case _CheckVerification() when checkVerification != null:
+return checkVerification();case _ResendVerification() when resendVerification != null:
+return resendVerification();case _TickCountdown() when tickCountdown != null:
+return tickCountdown();case _:
   return orElse();
 
 }
@@ -169,10 +149,13 @@ return login(_that.email,_that.password);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String email,  String password)  login,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String email,  String password)  login,required TResult Function()  checkVerification,required TResult Function()  resendVerification,required TResult Function()  tickCountdown,}) {final _that = this;
 switch (_that) {
 case _Login():
-return login(_that.email,_that.password);}
+return login(_that.email,_that.password);case _CheckVerification():
+return checkVerification();case _ResendVerification():
+return resendVerification();case _TickCountdown():
+return tickCountdown();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -186,10 +169,13 @@ return login(_that.email,_that.password);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String email,  String password)?  login,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String email,  String password)?  login,TResult? Function()?  checkVerification,TResult? Function()?  resendVerification,TResult? Function()?  tickCountdown,}) {final _that = this;
 switch (_that) {
 case _Login() when login != null:
-return login(_that.email,_that.password);case _:
+return login(_that.email,_that.password);case _CheckVerification() when checkVerification != null:
+return checkVerification();case _ResendVerification() when resendVerification != null:
+return resendVerification();case _TickCountdown() when tickCountdown != null:
+return tickCountdown();case _:
   return null;
 
 }
@@ -204,12 +190,12 @@ class _Login implements LoginEvent {
   const _Login({required this.email, required this.password});
   
 
-@override final  String email;
-@override final  String password;
+ final  String email;
+ final  String password;
 
 /// Create a copy of LoginEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 _$LoginCopyWith<_Login> get copyWith => __$LoginCopyWithImpl<_Login>(this, _$identity);
 
@@ -235,7 +221,7 @@ String toString() {
 /// @nodoc
 abstract mixin class _$LoginCopyWith<$Res> implements $LoginEventCopyWith<$Res> {
   factory _$LoginCopyWith(_Login value, $Res Function(_Login) _then) = __$LoginCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String email, String password
 });
@@ -254,7 +240,7 @@ class __$LoginCopyWithImpl<$Res>
 
 /// Create a copy of LoginEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,}) {
   return _then(_Login(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
@@ -266,9 +252,105 @@ as String,
 }
 
 /// @nodoc
+
+
+class _CheckVerification implements LoginEvent {
+  const _CheckVerification();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CheckVerification);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LoginEvent.checkVerification()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _ResendVerification implements LoginEvent {
+  const _ResendVerification();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ResendVerification);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LoginEvent.resendVerification()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _TickCountdown implements LoginEvent {
+  const _TickCountdown();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TickCountdown);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LoginEvent.tickCountdown()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$LoginState {
 
- LoginStatus get status; String get errorMessage;
+ LoginStatus get status; String get errorMessage; int get resendCountdown;
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -279,16 +361,16 @@ $LoginStateCopyWith<LoginState> get copyWith => _$LoginStateCopyWithImpl<LoginSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.resendCountdown, resendCountdown) || other.resendCountdown == resendCountdown));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,errorMessage,resendCountdown);
 
 @override
 String toString() {
-  return 'LoginState(status: $status, errorMessage: $errorMessage)';
+  return 'LoginState(status: $status, errorMessage: $errorMessage, resendCountdown: $resendCountdown)';
 }
 
 
@@ -299,7 +381,7 @@ abstract mixin class $LoginStateCopyWith<$Res>  {
   factory $LoginStateCopyWith(LoginState value, $Res Function(LoginState) _then) = _$LoginStateCopyWithImpl;
 @useResult
 $Res call({
- LoginStatus status, String errorMessage
+ LoginStatus status, String errorMessage, int resendCountdown
 });
 
 
@@ -316,11 +398,12 @@ class _$LoginStateCopyWithImpl<$Res>
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? errorMessage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? errorMessage = null,Object? resendCountdown = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as LoginStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,
+as String,resendCountdown: null == resendCountdown ? _self.resendCountdown : resendCountdown // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
@@ -402,10 +485,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoginStatus status,  String errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoginStatus status,  String errorMessage,  int resendCountdown)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoginState() when $default != null:
-return $default(_that.status,_that.errorMessage);case _:
+return $default(_that.status,_that.errorMessage,_that.resendCountdown);case _:
   return orElse();
 
 }
@@ -423,10 +506,10 @@ return $default(_that.status,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoginStatus status,  String errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoginStatus status,  String errorMessage,  int resendCountdown)  $default,) {final _that = this;
 switch (_that) {
 case _LoginState():
-return $default(_that.status,_that.errorMessage);}
+return $default(_that.status,_that.errorMessage,_that.resendCountdown);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -440,10 +523,10 @@ return $default(_that.status,_that.errorMessage);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoginStatus status,  String errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoginStatus status,  String errorMessage,  int resendCountdown)?  $default,) {final _that = this;
 switch (_that) {
 case _LoginState() when $default != null:
-return $default(_that.status,_that.errorMessage);case _:
+return $default(_that.status,_that.errorMessage,_that.resendCountdown);case _:
   return null;
 
 }
@@ -455,11 +538,12 @@ return $default(_that.status,_that.errorMessage);case _:
 
 
 class _LoginState implements LoginState {
-  const _LoginState({this.status = LoginStatus.initial, this.errorMessage = ''});
+  const _LoginState({this.status = LoginStatus.initial, this.errorMessage = '', this.resendCountdown = 0});
   
 
 @override@JsonKey() final  LoginStatus status;
 @override@JsonKey() final  String errorMessage;
+@override@JsonKey() final  int resendCountdown;
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
@@ -471,16 +555,16 @@ _$LoginStateCopyWith<_LoginState> get copyWith => __$LoginStateCopyWithImpl<_Log
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginState&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.resendCountdown, resendCountdown) || other.resendCountdown == resendCountdown));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,errorMessage,resendCountdown);
 
 @override
 String toString() {
-  return 'LoginState(status: $status, errorMessage: $errorMessage)';
+  return 'LoginState(status: $status, errorMessage: $errorMessage, resendCountdown: $resendCountdown)';
 }
 
 
@@ -491,7 +575,7 @@ abstract mixin class _$LoginStateCopyWith<$Res> implements $LoginStateCopyWith<$
   factory _$LoginStateCopyWith(_LoginState value, $Res Function(_LoginState) _then) = __$LoginStateCopyWithImpl;
 @override @useResult
 $Res call({
- LoginStatus status, String errorMessage
+ LoginStatus status, String errorMessage, int resendCountdown
 });
 
 
@@ -508,11 +592,12 @@ class __$LoginStateCopyWithImpl<$Res>
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? errorMessage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? errorMessage = null,Object? resendCountdown = null,}) {
   return _then(_LoginState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as LoginStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,
+as String,resendCountdown: null == resendCountdown ? _self.resendCountdown : resendCountdown // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

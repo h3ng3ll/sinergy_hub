@@ -14,7 +14,8 @@ import '../data/repositories/nearby_candidates_functions_repository.dart';
 import '../domain/repositories/i_candidate_distance_repository.dart';
 import '../domain/repositories/i_liked_you_meta_repository.dart';
 import '../domain/repositories/i_nearby_candidates_repository.dart';
-import '../domain/usecases/watch_liked_you_changes_use_case.dart';
+import '../../subscription/domain/repositories/i_premium_status_repository.dart';
+import '../domain/usecases/watch_liked_you_use_case.dart';
 import '../data/repositories/liked_you_functions_repository.dart';
 import '../data/repositories/user_matches_firebase_repository.dart';
 import '../domain/repositories/i_liked_you_repository.dart';
@@ -124,9 +125,11 @@ void initMatchingFeature(GetIt getIt) {
       firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
     ),
   );
-  getIt.registerLazySingleton<WatchLikedYouChangesUseCase>(
-    () => WatchLikedYouChangesUseCase(
+  getIt.registerLazySingleton<WatchLikedYouUseCase>(
+    () => WatchLikedYouUseCase(
+      premiumStatusRepository: getIt<IPremiumStatusRepository>(),
       likedYouMetaRepository: getIt<ILikedYouMetaRepository>(),
+      likedYouRepository: getIt<ILikedYouRepository>(),
     ),
   );
 }

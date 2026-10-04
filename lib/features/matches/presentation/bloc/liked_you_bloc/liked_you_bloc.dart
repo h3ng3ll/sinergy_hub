@@ -9,7 +9,7 @@ import '../../../domain/models/liked_you/liked_you_quota.dart';
 import '../../../domain/models/liked_you_pg_state/liked_you_pg_state.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
 import '../../../domain/usecases/get_liked_you_use_case.dart';
-import '../../../domain/usecases/watch_liked_you_changes_use_case.dart';
+import '../../../domain/usecases/watch_liked_you_use_case.dart';
 import '../tinder_card_cubit/tinder_card_cubit.dart';
 
 part 'liked_you_event.dart';
@@ -22,25 +22,27 @@ part 'liked_you_bloc.freezed.dart';
 
 class LikedYouBloc extends Bloc<LikedYouEvent, LikedYouState> {
   final GetLikedYouUseCase _getLikedYouUseCase;
-  final WatchLikedYouChangesUseCase _watchLikedYouChangesUseCase;
+  final WatchLikedYouUseCase _watchLikedYouUseCase;
   final CreateUserMatchesUseCase _createUserMatchesUseCase;
 
   LikedYouBloc({
     required this._getLikedYouUseCase,
-    required this._watchLikedYouChangesUseCase,
+    required this._watchLikedYouUseCase,
     required this._createUserMatchesUseCase,
   }) : super(const LikedYouState()) {
-    on<_Load>(_load);
     on<_LoadMore>(
-      _loadMore,
+  _loadMore,
       transformer: droppable(),
     );
+
+    /// Restartable, not droppable: a newer refresh (e.g. after a purchase)
+    /// must win over a stale in-flight one answered before the change.
     on<_Refresh>(
       _refresh,
-      transformer: droppable(),
+      transformer: restartable(),
     );
-    on<_WatchChanges>(
-      _watchChanges,
+    on<_Watch>(
+      _watch,
       transformer: restartable(),
     );
     on<_Respond>(_respond);
@@ -107,53 +109,37 @@ class LikedYouBloc extends Bloc<LikedYouEvent, LikedYouState> {
     );
   }
 
-  Future<void> _load(_Load event, Emitter<LikedYouState> emit) async {
+  Future<void> _refresh(_Refresh event, Emitter<LikedYouState> emit) =>
+      _reloadFirstPage(emit);
+
+  /// Live feed: a fresh first page for every `subscriptions/{uid}` state
+  /// (purchase, renewal, expiry, deletion) and every `likedYouMeta/{uid}`
+  /// change. Dispatching it again (Retry) re-attaches the listeners.
+  Future<void> _watch(_Watch event, Emitter<LikedYouState> emit) async {
     emit(
       state.copyWith(
         status: ELikedYouStatus.loading,
       ),
     );
 
-    final result = await _getLikedYouUseCase.call(
-      state: const LikedYouPgState(),
-    );
-
-    result.fold(
-      (likesState) => emit(
-        state.copyWith(
+    await emit.forEach(
+      _watchLikedYouUseCase.call(),
+      onData: (result) => result.fold(
+        (likesState) => state.copyWith(
           status: ELikedYouStatus.initial,
           likesState: likesState,
           errorMessage: '',
         ),
-      ),
-      (failure) => emit(
-        state.copyWith(
+        (failure) => state.copyWith(
           status: ELikedYouStatus.failed,
           errorMessage: failure.message,
         ),
       ),
+      onError: (error, _) => state.copyWith(
+        status: ELikedYouStatus.failed,
+        errorMessage: error.toString(),
+      ),
     );
-  }
-
-  Future<void> _refresh(_Refresh event, Emitter<LikedYouState> emit) =>
-      _reloadFirstPage(emit);
-
-  /// Re-fetches the first page whenever the backend's `likedYouMeta/{uid}`
-  /// signal changes (a new like arrived, or one left the feed). The feed data
-  /// itself still comes from the gated `getLikedYou` callable.
-  Future<void> _watchChanges(
-    _WatchChanges event,
-    Emitter<LikedYouState> emit,
-  ) async {
-    try {
-      await for (final _ in _watchLikedYouChangesUseCase.call()) {
-        if (emit.isDone) return;
-        await _reloadFirstPage(emit);
-      }
-    } catch (_) {
-      // A broken signal stream only loses live updates; pull-to-refresh
-      // and Retry still work, so the feed state is left untouched.
-    }
   }
 
   Future<void> _reloadFirstPage(Emitter<LikedYouState> emit) async {

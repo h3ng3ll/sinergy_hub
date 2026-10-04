@@ -23,13 +23,14 @@ NotificationData _$NotificationDataFromJson(
           return ChatNotificationData.fromJson(
             json
           );
+                case 'premium':
+          return PremiumNotificationData.fromJson(
+            json
+          );
         
           default:
-            throw CheckedFromJsonException(
-  json,
-  'type',
-  'NotificationData',
-  'Invalid union type "${json['type']}"!'
+            return UnknownNotificationData.fromJson(
+  json
 );
         }
       
@@ -81,12 +82,14 @@ extension NotificationDataPatterns on NotificationData {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( MatchNotificationData value)?  match,TResult Function( ChatNotificationData value)?  chat,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( MatchNotificationData value)?  match,TResult Function( ChatNotificationData value)?  chat,TResult Function( PremiumNotificationData value)?  premium,TResult Function( UnknownNotificationData value)?  unknown,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case MatchNotificationData() when match != null:
 return match(_that);case ChatNotificationData() when chat != null:
-return chat(_that);case _:
+return chat(_that);case PremiumNotificationData() when premium != null:
+return premium(_that);case UnknownNotificationData() when unknown != null:
+return unknown(_that);case _:
   return orElse();
 
 }
@@ -104,12 +107,14 @@ return chat(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( MatchNotificationData value)  match,required TResult Function( ChatNotificationData value)  chat,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( MatchNotificationData value)  match,required TResult Function( ChatNotificationData value)  chat,required TResult Function( PremiumNotificationData value)  premium,required TResult Function( UnknownNotificationData value)  unknown,}){
 final _that = this;
 switch (_that) {
 case MatchNotificationData():
 return match(_that);case ChatNotificationData():
-return chat(_that);}
+return chat(_that);case PremiumNotificationData():
+return premium(_that);case UnknownNotificationData():
+return unknown(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -123,12 +128,14 @@ return chat(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( MatchNotificationData value)?  match,TResult? Function( ChatNotificationData value)?  chat,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( MatchNotificationData value)?  match,TResult? Function( ChatNotificationData value)?  chat,TResult? Function( PremiumNotificationData value)?  premium,TResult? Function( UnknownNotificationData value)?  unknown,}){
 final _that = this;
 switch (_that) {
 case MatchNotificationData() when match != null:
 return match(_that);case ChatNotificationData() when chat != null:
-return chat(_that);case _:
+return chat(_that);case PremiumNotificationData() when premium != null:
+return premium(_that);case UnknownNotificationData() when unknown != null:
+return unknown(_that);case _:
   return null;
 
 }
@@ -145,11 +152,13 @@ return chat(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String matchId)?  match,TResult Function( String chatId,  String sentUid,  String? senderAvatar)?  chat,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String matchId)?  match,TResult Function( String chatId,  String sentUid,  String? senderAvatar)?  chat,TResult Function( String? productId)?  premium,TResult Function()?  unknown,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case MatchNotificationData() when match != null:
 return match(_that.matchId);case ChatNotificationData() when chat != null:
-return chat(_that.chatId,_that.sentUid,_that.senderAvatar);case _:
+return chat(_that.chatId,_that.sentUid,_that.senderAvatar);case PremiumNotificationData() when premium != null:
+return premium(_that.productId);case UnknownNotificationData() when unknown != null:
+return unknown();case _:
   return orElse();
 
 }
@@ -167,11 +176,13 @@ return chat(_that.chatId,_that.sentUid,_that.senderAvatar);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String matchId)  match,required TResult Function( String chatId,  String sentUid,  String? senderAvatar)  chat,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String matchId)  match,required TResult Function( String chatId,  String sentUid,  String? senderAvatar)  chat,required TResult Function( String? productId)  premium,required TResult Function()  unknown,}) {final _that = this;
 switch (_that) {
 case MatchNotificationData():
 return match(_that.matchId);case ChatNotificationData():
-return chat(_that.chatId,_that.sentUid,_that.senderAvatar);}
+return chat(_that.chatId,_that.sentUid,_that.senderAvatar);case PremiumNotificationData():
+return premium(_that.productId);case UnknownNotificationData():
+return unknown();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -185,11 +196,13 @@ return chat(_that.chatId,_that.sentUid,_that.senderAvatar);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String matchId)?  match,TResult? Function( String chatId,  String sentUid,  String? senderAvatar)?  chat,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String matchId)?  match,TResult? Function( String chatId,  String sentUid,  String? senderAvatar)?  chat,TResult? Function( String? productId)?  premium,TResult? Function()?  unknown,}) {final _that = this;
 switch (_that) {
 case MatchNotificationData() when match != null:
 return match(_that.matchId);case ChatNotificationData() when chat != null:
-return chat(_that.chatId,_that.sentUid,_that.senderAvatar);case _:
+return chat(_that.chatId,_that.sentUid,_that.senderAvatar);case PremiumNotificationData() when premium != null:
+return premium(_that.productId);case UnknownNotificationData() when unknown != null:
+return unknown();case _:
   return null;
 
 }
@@ -346,5 +359,117 @@ as String?,
 
 
 }
+
+/// @nodoc
+@JsonSerializable()
+
+class PremiumNotificationData implements NotificationData {
+  const PremiumNotificationData({this.productId, final  String? $type}): $type = $type ?? 'premium';
+  factory PremiumNotificationData.fromJson(Map<String, dynamic> json) => _$PremiumNotificationDataFromJson(json);
+
+ final  String? productId;
+
+@JsonKey(name: 'type')
+final String $type;
+
+
+/// Create a copy of NotificationData
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PremiumNotificationDataCopyWith<PremiumNotificationData> get copyWith => _$PremiumNotificationDataCopyWithImpl<PremiumNotificationData>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$PremiumNotificationDataToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PremiumNotificationData&&(identical(other.productId, productId) || other.productId == productId));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,productId);
+
+@override
+String toString() {
+  return 'NotificationData.premium(productId: $productId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PremiumNotificationDataCopyWith<$Res> implements $NotificationDataCopyWith<$Res> {
+  factory $PremiumNotificationDataCopyWith(PremiumNotificationData value, $Res Function(PremiumNotificationData) _then) = _$PremiumNotificationDataCopyWithImpl;
+@useResult
+$Res call({
+ String? productId
+});
+
+
+
+
+}
+/// @nodoc
+class _$PremiumNotificationDataCopyWithImpl<$Res>
+    implements $PremiumNotificationDataCopyWith<$Res> {
+  _$PremiumNotificationDataCopyWithImpl(this._self, this._then);
+
+  final PremiumNotificationData _self;
+  final $Res Function(PremiumNotificationData) _then;
+
+/// Create a copy of NotificationData
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? productId = freezed,}) {
+  return _then(PremiumNotificationData(
+productId: freezed == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class UnknownNotificationData implements NotificationData {
+  const UnknownNotificationData({final  String? $type}): $type = $type ?? 'unknown';
+  factory UnknownNotificationData.fromJson(Map<String, dynamic> json) => _$UnknownNotificationDataFromJson(json);
+
+
+
+@JsonKey(name: 'type')
+final String $type;
+
+
+
+@override
+Map<String, dynamic> toJson() {
+  return _$UnknownNotificationDataToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UnknownNotificationData);
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'NotificationData.unknown()';
+}
+
+
+}
+
+
+
 
 // dart format on

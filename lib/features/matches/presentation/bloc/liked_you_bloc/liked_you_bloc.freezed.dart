@@ -55,14 +55,13 @@ extension LikedYouEventPatterns on LikedYouEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Load value)?  load,TResult Function( _LoadMore value)?  loadMore,TResult Function( _Refresh value)?  refresh,TResult Function( _WatchChanges value)?  watchChanges,TResult Function( _Respond value)?  respond,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _LoadMore value)?  loadMore,TResult Function( _Refresh value)?  refresh,TResult Function( _Watch value)?  watch,TResult Function( _Respond value)?  respond,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Load() when load != null:
-return load(_that);case _LoadMore() when loadMore != null:
+case _LoadMore() when loadMore != null:
 return loadMore(_that);case _Refresh() when refresh != null:
-return refresh(_that);case _WatchChanges() when watchChanges != null:
-return watchChanges(_that);case _Respond() when respond != null:
+return refresh(_that);case _Watch() when watch != null:
+return watch(_that);case _Respond() when respond != null:
 return respond(_that);case _:
   return orElse();
 
@@ -81,14 +80,13 @@ return respond(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Load value)  load,required TResult Function( _LoadMore value)  loadMore,required TResult Function( _Refresh value)  refresh,required TResult Function( _WatchChanges value)  watchChanges,required TResult Function( _Respond value)  respond,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _LoadMore value)  loadMore,required TResult Function( _Refresh value)  refresh,required TResult Function( _Watch value)  watch,required TResult Function( _Respond value)  respond,}){
 final _that = this;
 switch (_that) {
-case _Load():
-return load(_that);case _LoadMore():
+case _LoadMore():
 return loadMore(_that);case _Refresh():
-return refresh(_that);case _WatchChanges():
-return watchChanges(_that);case _Respond():
+return refresh(_that);case _Watch():
+return watch(_that);case _Respond():
 return respond(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -106,14 +104,13 @@ return respond(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Load value)?  load,TResult? Function( _LoadMore value)?  loadMore,TResult? Function( _Refresh value)?  refresh,TResult? Function( _WatchChanges value)?  watchChanges,TResult? Function( _Respond value)?  respond,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _LoadMore value)?  loadMore,TResult? Function( _Refresh value)?  refresh,TResult? Function( _Watch value)?  watch,TResult? Function( _Respond value)?  respond,}){
 final _that = this;
 switch (_that) {
-case _Load() when load != null:
-return load(_that);case _LoadMore() when loadMore != null:
+case _LoadMore() when loadMore != null:
 return loadMore(_that);case _Refresh() when refresh != null:
-return refresh(_that);case _WatchChanges() when watchChanges != null:
-return watchChanges(_that);case _Respond() when respond != null:
+return refresh(_that);case _Watch() when watch != null:
+return watch(_that);case _Respond() when respond != null:
 return respond(_that);case _:
   return null;
 
@@ -131,13 +128,12 @@ return respond(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  load,TResult Function()?  loadMore,TResult Function()?  refresh,TResult Function()?  watchChanges,TResult Function( LikedYouItem item,  TinderCardStatus status)?  respond,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadMore,TResult Function()?  refresh,TResult Function()?  watch,TResult Function( LikedYouItem item,  TinderCardStatus status)?  respond,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Load() when load != null:
-return load();case _LoadMore() when loadMore != null:
+case _LoadMore() when loadMore != null:
 return loadMore();case _Refresh() when refresh != null:
-return refresh();case _WatchChanges() when watchChanges != null:
-return watchChanges();case _Respond() when respond != null:
+return refresh();case _Watch() when watch != null:
+return watch();case _Respond() when respond != null:
 return respond(_that.item,_that.status);case _:
   return orElse();
 
@@ -156,13 +152,12 @@ return respond(_that.item,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  load,required TResult Function()  loadMore,required TResult Function()  refresh,required TResult Function()  watchChanges,required TResult Function( LikedYouItem item,  TinderCardStatus status)  respond,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadMore,required TResult Function()  refresh,required TResult Function()  watch,required TResult Function( LikedYouItem item,  TinderCardStatus status)  respond,}) {final _that = this;
 switch (_that) {
-case _Load():
-return load();case _LoadMore():
+case _LoadMore():
 return loadMore();case _Refresh():
-return refresh();case _WatchChanges():
-return watchChanges();case _Respond():
+return refresh();case _Watch():
+return watch();case _Respond():
 return respond(_that.item,_that.status);case _:
   throw StateError('Unexpected subclass');
 
@@ -180,13 +175,12 @@ return respond(_that.item,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  load,TResult? Function()?  loadMore,TResult? Function()?  refresh,TResult? Function()?  watchChanges,TResult? Function( LikedYouItem item,  TinderCardStatus status)?  respond,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadMore,TResult? Function()?  refresh,TResult? Function()?  watch,TResult? Function( LikedYouItem item,  TinderCardStatus status)?  respond,}) {final _that = this;
 switch (_that) {
-case _Load() when load != null:
-return load();case _LoadMore() when loadMore != null:
+case _LoadMore() when loadMore != null:
 return loadMore();case _Refresh() when refresh != null:
-return refresh();case _WatchChanges() when watchChanges != null:
-return watchChanges();case _Respond() when respond != null:
+return refresh();case _Watch() when watch != null:
+return watch();case _Respond() when respond != null:
 return respond(_that.item,_that.status);case _:
   return null;
 
@@ -194,38 +188,6 @@ return respond(_that.item,_that.status);case _:
 }
 
 }
-
-/// @nodoc
-
-
-class _Load implements LikedYouEvent {
-  const _Load();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Load);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'LikedYouEvent.load()';
-}
-
-
-}
-
-
-
 
 /// @nodoc
 
@@ -294,8 +256,8 @@ String toString() {
 /// @nodoc
 
 
-class _WatchChanges implements LikedYouEvent {
-  const _WatchChanges();
+class _Watch implements LikedYouEvent {
+  const _Watch();
   
 
 
@@ -305,7 +267,7 @@ class _WatchChanges implements LikedYouEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WatchChanges);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Watch);
 }
 
 
@@ -314,7 +276,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LikedYouEvent.watchChanges()';
+  return 'LikedYouEvent.watch()';
 }
 
 

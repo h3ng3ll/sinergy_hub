@@ -148,6 +148,8 @@ class LocalNotificationService {
           if (isOnCurrentChat) return;
 
         case MatchNotificationData():
+        case PremiumNotificationData():
+        case UnknownNotificationData():
           break;
       }
     }
@@ -212,6 +214,8 @@ class LocalNotificationService {
     final imageUrl = switch (notificationData) {
       ChatNotificationData(senderAvatar: final avatar) => avatar,
       MatchNotificationData() => null,
+      PremiumNotificationData() => null,
+      UnknownNotificationData() => null,
       null => null,
     };
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -18,6 +20,10 @@ import '../register_page/widgets/inputs/email_input.dart';
 import '../register_page/widgets/inputs/password_input.dart';
 import 'bloc/login_bloc/login_bloc.dart';
 
+/// Poll Firebase every [_kVerificationPollInterval] while the user is on the
+/// verify-email step. Only runs on this screen, so the cost is bounded.
+const Duration _kVerificationPollInterval = Duration(seconds: 3);
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -31,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   final GlobalKey<FormState> _formKey = GlobalKey();
+  Timer? _verificationPollTimer;
 
   @override
   void initState() {
@@ -41,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    _stopPolling();
     _emailController.dispose();
     _passwordController.dispose();
     _loginBloc.close();
@@ -65,6 +73,27 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  void onResendVerification() {
+    _loginBloc.add(
+      const LoginEvent.resendVerification(),
+    );
+  }
+
+  void _startPolling() {
+    _verificationPollTimer?.cancel();
+    _verificationPollTimer = Timer.periodic(
+      _kVerificationPollInterval,
+      (_) => _loginBloc.add(
+        const LoginEvent.checkVerification(),
+      ),
+    );
+  }
+
+  void _stopPolling() {
+    _verificationPollTimer?.cancel();
+    _verificationPollTimer = null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = AppColorScheme.of(context);
@@ -74,15 +103,42 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         appBar: CustomAppBar(),
         backgroundColor: Colors.transparent,
-        body: BlocListener<LoginBloc, LoginState>(
-          bloc: _loginBloc,
-          listener: (context, state) {
-            if (state.status == LoginStatus.failed) {
-              UiMessageService.showError(
-                state.errorMessage,
-              );
-            }
-          },
+        body: MultiBlocListener(
+          listeners: [
+            BlocListener<LoginBloc, LoginState>(
+              bloc: _loginBloc,
+              listener: (context, state) {
+                if (state.status == LoginStatus.failed) {
+                  UiMessageService.showError(
+                    state.errorMessage,
+                  );
+                }
+              },
+            ),
+            BlocListener<LoginBloc, LoginState>(
+              bloc: _loginBloc,
+              listenWhen: (p, n) =>
+                  !p.isPendingVerification && n.isPendingVerification,
+              listener: (context, state) {
+                UiMessageService.showInfo(
+                  'Your email is not verified yet. A verification link has '
+                  'been sent to ${_emailController.text}',
+                  timeInSecondsDuration: 10,
+                );
+                _startPolling();
+              },
+            ),
+            BlocListener<LoginBloc, LoginState>(
+              bloc: _loginBloc,
+              listenWhen: (p, n) =>
+                  p.isPendingVerification && (n.isAuthorized || n.isFailed),
+
+              /// AuthBloc's watchUser fires after the reload inside
+              /// CompleteRegistrationUseCase, so isEmailVerified flips and the
+              /// router redirect leaves this page on its own.
+              listener: (context, state) => _stopPolling(),
+            ),
+          ],
           child: BlocBuilder<LoginBloc, LoginState>(
             bloc: _loginBloc,
             builder: (context, state) {
@@ -127,6 +183,38 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
+                              if (state.isPendingVerification) ...[
+                                Gap(24.0),
+                                Text(
+                                  'Check your email for the verification link.',
+                                  textAlign: TextAlign.center,
+                                  style: textTheme.medium16.copyWith(
+                                    color: AppColors.white.value,
+                                  ),
+                                ),
+                                Gap(12.0),
+                                CircularProgressIndicator(
+                                  color: AppColors.white.value,
+                                ),
+                                Gap(16.0),
+                                ActionBtn(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 12.0,
+                                    horizontal: 20.0,
+                                  ),
+                                  onPressed: state.canResend
+                                      ? onResendVerification
+                                      : null,
+                                  child: Text(
+                                    state.isCounting
+                                        ? 'Resend in ${state.resendCountdown}s'
+                                        : 'Resend verification email',
+                                    style: textTheme.medium16.copyWith(
+                                      color: colorScheme.onSecondary,
+                                    ),
+                                  ),
+                                ),
+                              ],
                               Gap(30.0),
                               Align(
                                 alignment: Alignment.topRight,

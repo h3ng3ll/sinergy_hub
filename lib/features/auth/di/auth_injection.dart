@@ -124,6 +124,8 @@ void initAuthFeature(GetIt getIt) {
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       loginUseCase: getIt<LoginUseCase>(),
+      completeRegistrationUseCase: getIt<CompleteRegistrationUseCase>(),
+      sendEmailVerificationUseCase: getIt<SendEmailVerificationUseCase>(),
     ),
   );
 
