@@ -35,6 +35,10 @@ precision mediump float;
 // Uniforms от Flutter
 uniform float iTime;       // Время для анимации
 uniform vec2 uSize;        // Размер виджета
+uniform vec3 uColor1;      // Gradient colors — set by BuildAnimatedBackground
+uniform vec3 uColor2;      // from the user's background palette, or the
+uniform vec3 uColor3;      // original defaults (#9966FF, #D959BF, #F093FB,
+uniform vec3 uColor4;      // #6680EA) when none is applied.
 
 // Output
 out vec4 fragColor;
@@ -46,11 +50,10 @@ vec3 getGradientColor(vec2 uv, float time) {
     float wave2 = cos(uv.y * 2.0 + time * 0.3) * 0.5 + 0.5;
     float wave3 = sin((uv.x + uv.y) * 1.5 + time * 0.4) * 0.5 + 0.5;
 
-    // Цвета градиента (как на изображениях)
-    vec3 color1 = vec3(0.6, 0.4, 0.95);  // Фиолетовый #9966FF
-    vec3 color2 = vec3(0.85, 0.35, 0.75); // Розово-фиолетовый #D959BF
-    vec3 color3 = vec3(0.95, 0.58, 0.98); // Светло-розовый #F093FB
-    vec3 color4 = vec3(0.4, 0.5, 0.92);   // Синий #6680EA
+    vec3 color1 = uColor1;
+    vec3 color2 = uColor2;
+    vec3 color3 = uColor3;
+    vec3 color4 = uColor4;
 
     // Смешиваем цвета с анимацией
     vec3 mixColor1 = mix(color1, color2, wave1);

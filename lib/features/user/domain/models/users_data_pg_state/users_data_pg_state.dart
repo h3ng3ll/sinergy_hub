@@ -15,6 +15,10 @@ sealed class UserDataPgState with _$UserDataPgState {
     /// Firebase field
     DocumentSnapshot? lastDocument,
 
+    /// Id of [lastDocument]. A snapshot can't be persisted, so a deck
+    /// restored from the local cache resumes pagination from this id.
+    String? lastDocumentId,
+
     /// Opaque backend cursor, used when the page comes from a callable
     /// (`searchNearbyCandidates`, radius mode) instead of a Firestore query.
     String? cursor,

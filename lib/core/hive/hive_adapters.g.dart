@@ -522,3 +522,254 @@ class LikedYouCacheAdapter extends TypeAdapter<LikedYouCache> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+class UserLocationAdapter extends TypeAdapter<UserLocation> {
+  @override
+  final typeId = 11;
+
+  @override
+  UserLocation read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return UserLocation(
+      country: fields[0] as String?,
+      city: fields[1] as String?,
+      countryCode: fields[2] as String?,
+      countryKey: fields[3] as String?,
+      cityKey: fields[4] as String?,
+      hasCoordinates: fields[5] == null ? false : fields[5] as bool,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, UserLocation obj) {
+    writer
+      ..writeByte(6)
+      ..writeByte(0)
+      ..write(obj.country)
+      ..writeByte(1)
+      ..write(obj.city)
+      ..writeByte(2)
+      ..write(obj.countryCode)
+      ..writeByte(3)
+      ..write(obj.countryKey)
+      ..writeByte(4)
+      ..write(obj.cityKey)
+      ..writeByte(5)
+      ..write(obj.hasCoordinates);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserLocationAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class UserProfilerAdapter extends TypeAdapter<UserProfiler> {
+  @override
+  final typeId = 12;
+
+  @override
+  UserProfiler read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return UserProfiler(
+      specialization: fields[0] as ESpecialization,
+      role: fields[1] as ERole,
+      experience: fields[2] as EExperience,
+      searchingSpecializations: (fields[3] as List).cast<ESpecialization>(),
+      skills: fields[4] == null ? [] : (fields[4] as List).cast<Skill>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, UserProfiler obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.specialization)
+      ..writeByte(1)
+      ..write(obj.role)
+      ..writeByte(2)
+      ..write(obj.experience)
+      ..writeByte(3)
+      ..write(obj.searchingSpecializations)
+      ..writeByte(4)
+      ..write(obj.skills);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserProfilerAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class UserDataAdapter extends TypeAdapter<UserData> {
+  @override
+  final typeId = 13;
+
+  @override
+  UserData read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return UserData(
+      uid: fields[0] as String,
+      avatarUrl: fields[1] as String?,
+      avatarPath: fields[2] as String?,
+      firstName: fields[3] as String?,
+      lastName: fields[4] as String?,
+      age: (fields[5] as num?)?.toInt(),
+      aboutMe: fields[6] as String?,
+      profiler: fields[7] as UserProfiler,
+      location: fields[8] as UserLocation?,
+      createdAt: fields[9] as DateTime,
+      isOnline: fields[10] == null ? false : fields[10] as bool,
+      isDeleted: fields[11] == null ? false : fields[11] as bool,
+      lastSeen: fields[12] as DateTime,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, UserData obj) {
+    writer
+      ..writeByte(13)
+      ..writeByte(0)
+      ..write(obj.uid)
+      ..writeByte(1)
+      ..write(obj.avatarUrl)
+      ..writeByte(2)
+      ..write(obj.avatarPath)
+      ..writeByte(3)
+      ..write(obj.firstName)
+      ..writeByte(4)
+      ..write(obj.lastName)
+      ..writeByte(5)
+      ..write(obj.age)
+      ..writeByte(6)
+      ..write(obj.aboutMe)
+      ..writeByte(7)
+      ..write(obj.profiler)
+      ..writeByte(8)
+      ..write(obj.location)
+      ..writeByte(9)
+      ..write(obj.createdAt)
+      ..writeByte(10)
+      ..write(obj.isOnline)
+      ..writeByte(11)
+      ..write(obj.isDeleted)
+      ..writeByte(12)
+      ..write(obj.lastSeen);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserDataAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DiscoveryDeckCacheAdapter extends TypeAdapter<DiscoveryDeckCache> {
+  @override
+  final typeId = 14;
+
+  @override
+  DiscoveryDeckCache read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return DiscoveryDeckCache(
+      items: fields[0] == null ? [] : (fields[0] as List).cast<UserData>(),
+      hasMore: fields[1] == null ? true : fields[1] as bool,
+      lastDocumentId: fields[2] as String?,
+      cursor: fields[3] as String?,
+      distancesKm: fields[4] == null
+          ? {}
+          : (fields[4] as Map).cast<String, double>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, DiscoveryDeckCache obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.items)
+      ..writeByte(1)
+      ..write(obj.hasMore)
+      ..writeByte(2)
+      ..write(obj.lastDocumentId)
+      ..writeByte(3)
+      ..write(obj.cursor)
+      ..writeByte(4)
+      ..write(obj.distancesKm);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DiscoveryDeckCacheAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class BackgroundPaletteCacheAdapter
+    extends TypeAdapter<BackgroundPaletteCache> {
+  @override
+  final typeId = 15;
+
+  @override
+  BackgroundPaletteCache read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return BackgroundPaletteCache(
+      primary: (fields[0] as num?)?.toInt(),
+      secondary: (fields[1] as num?)?.toInt(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, BackgroundPaletteCache obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.primary)
+      ..writeByte(1)
+      ..write(obj.secondary);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BackgroundPaletteCacheAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

@@ -7,7 +7,10 @@ import '../../../../../core/services/ui_message_service.dart';
 import '../../../../chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import '../../../domain/models/matches_filter/matches_filter.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
+import '../../../domain/usecases/get_cached_discovery_deck_use_case.dart';
 import '../../../domain/usecases/look_for_matches_use_case.dart';
+import '../../../domain/usecases/remove_from_discovery_deck_use_case.dart';
+import '../../../domain/usecases/save_discovery_deck_use_case.dart';
 import '../../../domain/usecases/listen_two_way_match_use_case.dart';
 import '../../bloc/people_data_bloc/people_data_bloc.dart';
 import '../../bloc/tinder_card_cubit/tinder_card_cubit.dart';
@@ -38,6 +41,10 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
     _peopleDataBloc =
         PeopleDataBloc(
           lookForMatchesUseCase: getIt<LookForMatchesUseCase>(),
+          getCachedDiscoveryDeckUseCase: getIt<GetCachedDiscoveryDeckUseCase>(),
+          saveDiscoveryDeckUseCase: getIt<SaveDiscoveryDeckUseCase>(),
+          removeFromDiscoveryDeckUseCase:
+              getIt<RemoveFromDiscoveryDeckUseCase>(),
         )..add(
           PeopleDataEvent.loadPeoples(),
         );

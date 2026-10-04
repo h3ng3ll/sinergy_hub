@@ -9,6 +9,28 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get settings_background_title => 'Background colors';
+
+  @override
+  String get settings_background_primary => 'Primary';
+
+  @override
+  String get settings_background_secondary => 'Secondary';
+
+  @override
+  String get settings_background_reset => 'Reset to default';
+
+  @override
+  String get settings_background_premium_hint =>
+      'Premium feature — upgrade to paint the app in your own colors.';
+
+  @override
+  String get settings_background_picker_cancel => 'Cancel';
+
+  @override
+  String get settings_background_picker_save => 'Save';
+
+  @override
   String get year => 'year';
 
   @override

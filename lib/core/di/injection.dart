@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../features/appearance/di/appearance_injection.dart';
 import '../../features/auth/di/auth_injection.dart';
 import '../../features/chat/di/chat_injection.dart';
 import '../../features/home/domain/di/home_injection.dart';
@@ -143,6 +144,10 @@ Future<void> initDependencies() async {
   );
 
   initSettingsFeature(
+    getIt,
+  );
+
+  initAppearanceFeature(
     getIt,
   );
 

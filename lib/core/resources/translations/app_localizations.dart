@@ -94,6 +94,48 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[Locale('en')];
 
+  /// No description provided for @settings_background_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Background colors'**
+  String get settings_background_title;
+
+  /// No description provided for @settings_background_primary.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary'**
+  String get settings_background_primary;
+
+  /// No description provided for @settings_background_secondary.
+  ///
+  /// In en, this message translates to:
+  /// **'Secondary'**
+  String get settings_background_secondary;
+
+  /// No description provided for @settings_background_reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to default'**
+  String get settings_background_reset;
+
+  /// No description provided for @settings_background_premium_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium feature — upgrade to paint the app in your own colors.'**
+  String get settings_background_premium_hint;
+
+  /// No description provided for @settings_background_picker_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get settings_background_picker_cancel;
+
+  /// No description provided for @settings_background_picker_save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get settings_background_picker_save;
+
   /// No description provided for @year.
   ///
   /// In en, this message translates to:

@@ -8,31 +8,41 @@ import 'package:sinergy_hub/core/hive/hive_adapters.dart';
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(AuthTempCredentialsAdapter());
+    registerAdapter(BackgroundPaletteCacheAdapter());
     registerAdapter(ChatAdapter());
     registerAdapter(ChatConfigAdapter());
     registerAdapter(ChatMessageAdapter());
     registerAdapter(ChatMessagesCacheAdapter());
     registerAdapter(ChatsCacheAdapter());
+    registerAdapter(DiscoveryDeckCacheAdapter());
     registerAdapter(LikedYouCacheAdapter());
     registerAdapter(LikedYouItemAdapter());
     registerAdapter(LikedYouQuotaAdapter());
     registerAdapter(ParticipantInfoAdapter());
     registerAdapter(SkillAdapter());
+    registerAdapter(UserDataAdapter());
+    registerAdapter(UserLocationAdapter());
+    registerAdapter(UserProfilerAdapter());
   }
 }
 
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(AuthTempCredentialsAdapter());
+    registerAdapter(BackgroundPaletteCacheAdapter());
     registerAdapter(ChatAdapter());
     registerAdapter(ChatConfigAdapter());
     registerAdapter(ChatMessageAdapter());
     registerAdapter(ChatMessagesCacheAdapter());
     registerAdapter(ChatsCacheAdapter());
+    registerAdapter(DiscoveryDeckCacheAdapter());
     registerAdapter(LikedYouCacheAdapter());
     registerAdapter(LikedYouItemAdapter());
     registerAdapter(LikedYouQuotaAdapter());
     registerAdapter(ParticipantInfoAdapter());
     registerAdapter(SkillAdapter());
+    registerAdapter(UserDataAdapter());
+    registerAdapter(UserLocationAdapter());
+    registerAdapter(UserProfilerAdapter());
   }
 }

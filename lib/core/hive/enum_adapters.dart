@@ -3,6 +3,7 @@ import 'package:hive_ce/hive_ce.dart';
 import '../../features/matches/domain/models/liked_you/liked_you_item.dart';
 import '../../features/matches/domain/models/liked_you/liked_you_quota.dart';
 import '../../features/onboard_survey/domain/models/experience/experience.dart';
+import '../../features/onboard_survey/domain/models/role/role.dart';
 import '../../features/onboard_survey/domain/models/specialization/specialization.dart';
 
 /// Hand-written enum adapters. They use typeIds ≥ 100 so they never collide
@@ -67,6 +68,18 @@ class ELikedYouQuotaPeriodAdapter extends TypeAdapter<ELikedYouQuotaPeriod> {
   @override
   void write(BinaryWriter writer, ELikedYouQuotaPeriod obj) =>
       writer.writeByte(obj.index);
+}
+
+class ERoleAdapter extends TypeAdapter<ERole> {
+  @override
+  final int typeId = 104;
+
+  @override
+  ERole read(BinaryReader reader) =>
+      _byIndex(ERole.values, reader.readByte(), ERole.other);
+
+  @override
+  void write(BinaryWriter writer, ERole obj) => writer.writeByte(obj.index);
 }
 
 T _byIndex<T>(List<T> values, int index, T fallback) =>

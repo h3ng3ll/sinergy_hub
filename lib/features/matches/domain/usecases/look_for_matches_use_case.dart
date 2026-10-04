@@ -14,14 +14,11 @@ class LookForMatchesUseCase {
   final ICandidateDistanceRepository _candidateDistanceRepository;
 
   LookForMatchesUseCase({
-    required IUserReadRepository userReadRepository,
-    required IAuthRepository authRepository,
-    required GetExcludedMatchesUseCase getExcludedMatchesUseCase,
-    required ICandidateDistanceRepository candidateDistanceRepository,
-  }) : _userReadRepository = userReadRepository,
-       _authRepository = authRepository,
-       _getExcludedMatchesUseCase = getExcludedMatchesUseCase,
-       _candidateDistanceRepository = candidateDistanceRepository;
+    required this._userReadRepository,
+    required this._authRepository,
+    required this._getExcludedMatchesUseCase,
+    required this._candidateDistanceRepository,
+  });
 
   /// fetch users and exclude already matched people if it
   /// found include current user

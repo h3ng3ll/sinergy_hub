@@ -1,10 +1,14 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 
 import '../../../../../../core/resources/app_shader.dart';
+import '../../../../../appearance/domain/models/background_palette/background_palette.dart';
+import '../../../../../appearance/presentation/bloc/background_palette_bloc/background_palette_bloc.dart';
 
 /// Every `ve.frag` time frequency (0.5, 0.3, 0.4, 0.2) is a multiple of 0.1,
 /// so the gradient repeats exactly every 20π seconds. Wrapping time to this
@@ -58,6 +62,13 @@ class _BuildAnimatedBackgroundState extends State<BuildAnimatedBackground>
 
   @override
   Widget build(BuildContext context) {
+    /// Only the applied palette is selected (freezed equality), so unrelated
+    /// palette-bloc emissions never rebuild the background.
+    final palette = context.select<BackgroundPaletteBloc, BackgroundPalette?>(
+      (bloc) => bloc.state.effectivePalette,
+    );
+    final colors = palette?.shaderColors ?? kDefaultBackgroundShaderColors;
+
     return ShaderBuilder(
       (context, shader, child) {
         return RepaintBoundary(
@@ -65,6 +76,7 @@ class _BuildAnimatedBackgroundState extends State<BuildAnimatedBackground>
             painter: _ShaderBackgroundPainter(
               shader: shader,
               time: _time,
+              colors: colors,
             ),
             // painter: ShaderPainter(
             //   repaint: _controller,
@@ -103,9 +115,13 @@ class _ShaderBackgroundPainter extends CustomPainter {
   final FragmentShader shader;
   final ValueNotifier<double> time;
 
+  /// The 4 `uColor1..4` uniforms, in order.
+  final List<Color> colors;
+
   _ShaderBackgroundPainter({
     required this.shader,
     required this.time,
+    required this.colors,
   }) : super(repaint: time);
 
   @override
@@ -123,6 +139,15 @@ class _ShaderBackgroundPainter extends CustomPainter {
       2,
       size.height,
     );
+
+    /// Floats 3..14: `uColor1..uColor4` as normalized r, g, b.
+    var index = 3;
+    for (final color in colors) {
+      shader
+        ..setFloat(index++, color.r)
+        ..setFloat(index++, color.g)
+        ..setFloat(index++, color.b);
+    }
     canvas.drawRect(
       Offset.zero & size,
       Paint()..shader = shader,
@@ -131,5 +156,7 @@ class _ShaderBackgroundPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _ShaderBackgroundPainter oldDelegate) =>
-      oldDelegate.shader != shader || oldDelegate.time != time;
+      oldDelegate.shader != shader ||
+      oldDelegate.time != time ||
+      !listEquals(oldDelegate.colors, colors);
 }

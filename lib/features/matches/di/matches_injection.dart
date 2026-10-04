@@ -16,7 +16,12 @@ import '../domain/repositories/i_liked_you_meta_repository.dart';
 import '../domain/repositories/i_nearby_candidates_repository.dart';
 import '../../subscription/domain/repositories/i_premium_status_repository.dart';
 import '../../../core/databases/hive_database.dart';
+import '../data/repositories/discovery_deck_hive_repository.dart';
 import '../data/repositories/liked_you_hive_repository.dart';
+import '../domain/repositories/i_discovery_deck_local_repository.dart';
+import '../domain/usecases/get_cached_discovery_deck_use_case.dart';
+import '../domain/usecases/remove_from_discovery_deck_use_case.dart';
+import '../domain/usecases/save_discovery_deck_use_case.dart';
 import '../domain/repositories/i_liked_you_local_repository.dart';
 import '../domain/usecases/sync_liked_you_use_case.dart';
 import '../domain/usecases/watch_liked_you_use_case.dart';
@@ -147,6 +152,31 @@ void initMatchingFeature(GetIt getIt) {
       premiumStatusRepository: getIt<IPremiumStatusRepository>(),
       likedYouMetaRepository: getIt<ILikedYouMetaRepository>(),
       syncLikedYouUseCase: getIt<SyncLikedYouUseCase>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<IDiscoveryDeckLocalRepository>(
+    () => DiscoveryDeckHiveRepository(
+      hiveDatabase: getIt<HiveDatabase>(),
+    ),
+  );
+  getIt.registerLazySingleton<GetCachedDiscoveryDeckUseCase>(
+    () => GetCachedDiscoveryDeckUseCase(
+      localRepository: getIt<IDiscoveryDeckLocalRepository>(),
+      getExcludedMatchesUseCase: getIt<GetExcludedMatchesUseCase>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<SaveDiscoveryDeckUseCase>(
+    () => SaveDiscoveryDeckUseCase(
+      localRepository: getIt<IDiscoveryDeckLocalRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<RemoveFromDiscoveryDeckUseCase>(
+    () => RemoveFromDiscoveryDeckUseCase(
+      localRepository: getIt<IDiscoveryDeckLocalRepository>(),
       authRepository: getIt<IAuthRepository>(),
     ),
   );

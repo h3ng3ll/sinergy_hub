@@ -14,6 +14,7 @@ import '../domain/usecases/get_plans_use_case.dart';
 import '../domain/usecases/identify_subscriber_use_case.dart';
 import '../domain/usecases/purchase_plan_use_case.dart';
 import '../domain/usecases/restore_purchases_use_case.dart';
+import '../domain/usecases/watch_current_premium_status_use_case.dart';
 import '../domain/usecases/watch_premium_status_use_case.dart';
 import '../presentation/bloc/premium_bloc/premium_bloc.dart';
 
@@ -56,6 +57,12 @@ void initSubscriptionFeature(GetIt getIt) {
   );
   getIt.registerLazySingleton<WatchPremiumStatusUseCase>(
     () => WatchPremiumStatusUseCase(
+      premiumStatusRepository: getIt<IPremiumStatusRepository>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<WatchCurrentPremiumStatusUseCase>(
+    () => WatchCurrentPremiumStatusUseCase(
       premiumStatusRepository: getIt<IPremiumStatusRepository>(),
     ),
   );

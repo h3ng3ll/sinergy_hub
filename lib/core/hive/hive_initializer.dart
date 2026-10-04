@@ -19,6 +19,7 @@ Future<void> initHive() async {
   Hive.registerAdapter(ESpecializationAdapter());
   Hive.registerAdapter(EExperienceAdapter());
   Hive.registerAdapter(ELikedYouQuotaPeriodAdapter());
+  Hive.registerAdapter(ERoleAdapter());
 
   final authTempCredentialsBox = await Hive.openBox<AuthTempCredentials>(
     authTempCredentialsBoxName,

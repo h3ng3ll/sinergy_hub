@@ -43,10 +43,15 @@ class FakeUserFirebaseRepository implements IUserReadRepository {
 
     query = UserQueryBuilder.applyFilters(query, filter);
 
-    if (userDataState.lastDocument != null) {
+    final pageCursor = await _firebaseFirestoreService.resolvePageCursor(
+      _fakeUsers,
+      lastDocument: userDataState.lastDocument,
+      lastDocumentId: userDataState.lastDocumentId,
+    );
+    if (pageCursor != null) {
       query = _firebaseFirestoreService.applyPagination(
         query,
-        userDataState.lastDocument!,
+        pageCursor,
       );
     }
 
@@ -62,9 +67,10 @@ class FakeUserFirebaseRepository implements IUserReadRepository {
         ...userData,
       ],
       hasMore: res.docs.isNotEmpty,
-      lastDocument: res.docs.isNotEmpty
-          ? res.docs.last
-          : userDataState.lastDocument,
+      lastDocument: res.docs.isNotEmpty ? res.docs.last : pageCursor,
+      lastDocumentId: res.docs.isNotEmpty
+          ? res.docs.last.id
+          : userDataState.lastDocumentId,
     );
   }
 

@@ -31,6 +31,7 @@ import 'features/connectivity/presentation/bloc/connectivity_bloc/connectivity_b
 import 'features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
 import 'features/onboard_survey/presentation/bloc/onboard_bloc/onboard_bloc.dart';
 import 'features/subscription/domain/repositories/i_subscription_repository.dart';
+import 'features/appearance/presentation/bloc/background_palette_bloc/background_palette_bloc.dart';
 import 'features/subscription/presentation/bloc/premium_bloc/premium_bloc.dart';
 import 'features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import 'features/user/presentation/bloc/user_bloc/user_bloc.dart';
@@ -146,6 +147,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     getIt<AuthBloc>()
       ..add(AuthEvent.init())
       ..add(AuthEvent.listen());
+
+    getIt<BackgroundPaletteBloc>().add(
+      const BackgroundPaletteEvent.start(),
+    );
   }
 
   void _maybeRemoveSplash() {
@@ -201,6 +206,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         BlocProvider<PremiumBloc>.value(
           value: getIt<PremiumBloc>(),
+        ),
+        BlocProvider<BackgroundPaletteBloc>.value(
+          value: getIt<BackgroundPaletteBloc>(),
         ),
       ],
       child: ResponsiveBreakpoints(
@@ -258,6 +266,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       getIt<PremiumBloc>().add(
                         PremiumEvent.init(uid: state.uid!),
                       );
+                      getIt<BackgroundPaletteBloc>().add(
+                        BackgroundPaletteEvent.init(uid: state.uid!),
+                      );
                     }
                     if (state.isLogout) {
                       getIt<UserBloc>().add(
@@ -268,6 +279,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       );
                       getIt<PremiumBloc>().add(
                         const PremiumEvent.reset(),
+                      );
+                      getIt<BackgroundPaletteBloc>().add(
+                        const BackgroundPaletteEvent.reset(),
                       );
                     }
                     _maybeRemoveSplash();

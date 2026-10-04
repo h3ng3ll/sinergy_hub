@@ -1,5 +1,6 @@
 import 'package:hive_ce/hive_ce.dart';
 
+import '../../features/appearance/data/models/background_palette_cache/background_palette_cache.dart';
 import '../../features/auth/data/models/auth_temp_credentials/auth_temp_credentials.dart';
 import '../../features/chat/data/models/chat_messages_cache/chat_messages_cache.dart';
 import '../../features/chat/data/models/chats_cache/chats_cache.dart';
@@ -7,12 +8,17 @@ import '../../features/chat/domain/models/chat/chat.dart';
 import '../../features/chat/domain/models/chat_config/chat_config.dart';
 import '../../features/chat/domain/models/chat_message/chat_message.dart';
 import '../../features/chat/domain/models/participant_info/participant_info.dart';
+import '../../features/matches/data/models/discovery_deck_cache/discovery_deck_cache.dart';
 import '../../features/matches/data/models/liked_you_cache/liked_you_cache.dart';
 import '../../features/matches/domain/models/liked_you/liked_you_item.dart';
 import '../../features/matches/domain/models/liked_you/liked_you_quota.dart';
 import '../../features/onboard_survey/domain/models/experience/experience.dart';
+import '../../features/onboard_survey/domain/models/role/role.dart';
 import '../../features/onboard_survey/domain/models/skill/skill.dart';
 import '../../features/onboard_survey/domain/models/specialization/specialization.dart';
+import '../../features/onboard_survey/domain/models/user_profiler/user_profiler.dart';
+import '../../features/user/domain/models/user_data/user_data.dart';
+import '../../features/user/domain/models/user_location/user_location.dart';
 
 part 'hive_adapters.g.dart';
 
@@ -32,5 +38,10 @@ part 'hive_adapters.g.dart';
   AdapterSpec<LikedYouQuota>(),
   AdapterSpec<LikedYouItem>(),
   AdapterSpec<LikedYouCache>(),
+  AdapterSpec<UserLocation>(),
+  AdapterSpec<UserProfiler>(),
+  AdapterSpec<UserData>(),
+  AdapterSpec<DiscoveryDeckCache>(),
+  AdapterSpec<BackgroundPaletteCache>(),
 ])
 class HiveAdapters {}

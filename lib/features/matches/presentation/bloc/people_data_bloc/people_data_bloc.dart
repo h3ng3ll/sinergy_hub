@@ -8,7 +8,10 @@ import '../../../../user/domain/models/users_data_pg_state/users_data_pg_state.d
 import '../../../domain/models/e_people_data_status.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
 import '../../../domain/models/matches_filter/matches_filter.dart';
+import '../../../domain/usecases/get_cached_discovery_deck_use_case.dart';
 import '../../../domain/usecases/look_for_matches_use_case.dart';
+import '../../../domain/usecases/remove_from_discovery_deck_use_case.dart';
+import '../../../domain/usecases/save_discovery_deck_use_case.dart';
 
 part 'people_data_event.dart';
 
@@ -18,9 +21,15 @@ part 'people_data_bloc.freezed.dart';
 
 class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
   final LookForMatchesUseCase _lookForMatchesUseCase;
+  final GetCachedDiscoveryDeckUseCase _getCachedDiscoveryDeckUseCase;
+  final SaveDiscoveryDeckUseCase _saveDiscoveryDeckUseCase;
+  final RemoveFromDiscoveryDeckUseCase _removeFromDiscoveryDeckUseCase;
 
   PeopleDataBloc({
     required LookForMatchesUseCase lookForMatchesUseCase,
+    required this._getCachedDiscoveryDeckUseCase,
+    required this._saveDiscoveryDeckUseCase,
+    required this._removeFromDiscoveryDeckUseCase,
   }) : _lookForMatchesUseCase = lookForMatchesUseCase,
        super(const PeopleDataState()) {
     on<_LoadPeoples>(_loadPeoples);
@@ -62,6 +71,13 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
   Future<void> _loadPeoples(
     _LoadPeoples event,
     Emitter<PeopleDataState> emit,
+  ) => _loadDeck(state.filter, emit);
+
+  /// Cache-first deck for [filter]: a cached, not-yet-swiped deck is shown
+  /// with no backend request; otherwise the deck is fetched and cached.
+  Future<void> _loadDeck(
+    MatchesFilter filter,
+    Emitter<PeopleDataState> emit,
   ) async {
     try {
       emit(
@@ -69,16 +85,33 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
           status: EPeopleDataStatus.loading,
         ),
       );
+
+      final cached = await _readCachedDeck(filter);
+      if (cached != null) {
+        emit(
+          state.copyWith(
+            initialized: true,
+            status: EPeopleDataStatus.initial,
+            filter: filter,
+            usersState: cached,
+          ),
+        );
+        return;
+      }
+
       final UserDataPgState usersState = await _lookForMatchesUseCase.call(
         userDataState: UserDataPgState(),
+        filter: filter,
       );
       emit(
         state.copyWith(
           initialized: true,
           status: EPeopleDataStatus.initial,
+          filter: filter,
           usersState: usersState,
         ),
       );
+      await _persistDeck();
     } catch (e) {
       emit(
         state.copyWith(
@@ -89,6 +122,27 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
       );
       rethrow;
     }
+  }
+
+  /// A broken cache read only costs the instant start — fall back to a fetch.
+  Future<UserDataPgState?> _readCachedDeck(MatchesFilter filter) async {
+    try {
+      return await _getCachedDiscoveryDeckUseCase.call(filter: filter);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Mirrors the current deck into the cache under the current filter. A
+  /// failed write only loses the instant start of the next open, so it never
+  /// fails the deck itself.
+  Future<void> _persistDeck() async {
+    try {
+      await _saveDiscoveryDeckUseCase.call(
+        filter: state.filter,
+        deck: state.usersState,
+      );
+    } catch (_) {}
   }
 
   Future<void> _loadMorePeoples(
@@ -126,6 +180,7 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
           usersState: usersState.copyWith(items: mergedItems),
         ),
       );
+      await _persistDeck();
     } catch (e) {
       emit(
         state.copyWith(
@@ -142,72 +197,14 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
     _ApplyFilter event,
     Emitter<PeopleDataState> emit,
   ) async {
-    try {
-      final filter = event.filter;
-      if (filter == state.filter) return;
-      emit(
-        state.copyWith(
-          status: EPeopleDataStatus.loading,
-        ),
-      );
-      final UserDataPgState usersState = await _lookForMatchesUseCase.call(
-        userDataState: UserDataPgState(),
-        filter: event.filter,
-      );
-      emit(
-        state.copyWith(
-          initialized: true,
-          status: EPeopleDataStatus.initial,
-          filter: filter,
-          usersState: usersState,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          initialized: true,
-          status: EPeopleDataStatus.failed,
-          errorMessage: e.toString(),
-        ),
-      );
-      rethrow;
-    }
+    if (event.filter == state.filter) return;
+    await _loadDeck(event.filter, emit);
   }
 
   Future<void> _removeFilter(
     _RemoveFilter event,
     Emitter<PeopleDataState> emit,
-  ) async {
-    try {
-      emit(
-        state.copyWith(
-          status: EPeopleDataStatus.loading,
-        ),
-      );
-      final filter = MatchesFilter();
-      final UserDataPgState usersState = await _lookForMatchesUseCase.call(
-        userDataState: UserDataPgState(),
-        filter: filter,
-      );
-      emit(
-        state.copyWith(
-          initialized: true,
-          status: EPeopleDataStatus.initial,
-          usersState: usersState,
-          filter: filter,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          initialized: true,
-          status: EPeopleDataStatus.failed,
-          errorMessage: e.toString(),
-        ),
-      );
-      rethrow;
-    }
-  }
+  ) => _loadDeck(MatchesFilter(), emit);
 
   Future<void> _restoreVisible(
     _RestoreVisible event,
@@ -229,6 +226,7 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
         ),
       ),
     );
+    await _persistDeck();
   }
 
   Future<void> _removeVisible(_RemoveVisible event, emit) async {
@@ -248,9 +246,7 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
         ...state.usersState.items,
       ];
 
-      if (items.isNotEmpty) {
-        items.removeLast();
-      }
+      final swiped = items.isNotEmpty ? items.removeLast() : null;
       emit(
         state.copyWith(
           status: EPeopleDataStatus.initial,
@@ -259,6 +255,8 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
           ),
         ),
       );
+      await _persistDeck();
+      if (swiped != null) await _forgetSwiped(swiped.uid);
     } catch (e) {
       emit(
         state.copyWith(
@@ -268,5 +266,12 @@ class PeopleDataBloc extends Bloc<PeopleDataEvent, PeopleDataState> {
       );
       rethrow;
     }
+  }
+
+  /// A swiped user must never come back — under this or any other filter.
+  Future<void> _forgetSwiped(String userUid) async {
+    try {
+      await _removeFromDiscoveryDeckUseCase.call(userUid: userUid);
+    } catch (_) {}
   }
 }

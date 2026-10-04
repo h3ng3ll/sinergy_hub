@@ -166,6 +166,13 @@ class FirebaseFirestoreService {
             'config',
           );
 
+  /// The user's background palette — see the appearance feature.
+  DocRef appearancePalette({
+    required String uid,
+  }) => userDocument(
+    uid,
+  ).collection('appearance').doc('palette');
+
   Future<bool> isExistsDocument(DocRef document) async {
     final col = await document.get();
     return col.exists;
@@ -184,6 +191,21 @@ class FirebaseFirestoreService {
     await document.update(
       data,
     );
+  }
+
+  /// The document a page query continues after: the live [lastDocument]
+  /// when the deck was fetched in this session, otherwise the snapshot
+  /// re-read by [lastDocumentId] (a deck restored from the local cache).
+  /// `null` — start from the top — when neither exists any more.
+  Future<DocumentSnapshot?> resolvePageCursor(
+    ColRef collection, {
+    DocumentSnapshot? lastDocument,
+    String? lastDocumentId,
+  }) async {
+    if (lastDocument != null) return lastDocument;
+    if (lastDocumentId == null) return null;
+    final snapshot = await collection.doc(lastDocumentId).get();
+    return snapshot.exists ? snapshot : null;
   }
 
   Query applyPagination(
