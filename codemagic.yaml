@@ -337,7 +337,10 @@ workflows:
           flutter pub get
       - name: Flutter build appbundle
         script: |
-          flutter build appbundle --release --flavor prod
+          flutter build appbundle --release --flavor prod \
+            --dart-define=DARTENV=prod \
+            --dart-define=PROD_SERVER_CLIENT_ID="$PROD_SERVER_CLIENT_ID" \
+            --dart-define=PROD_FIREBASE_WEB_PUSH_CERTIFICATE="$PROD_FIREBASE_WEB_PUSH_CERTIFICATE"
     artifacts:
       - build/app/outputs/bundle/prodRelease/*.aab
     publishing:
