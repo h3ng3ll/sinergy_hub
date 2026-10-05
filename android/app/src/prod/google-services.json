@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "758987089244-1ic98fn279rehetjpsa6i4gv061fpnss.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hengell.synergyhub",
+            "certificate_hash": "7fe667b99f8fbc48f9877983fac259d2a31e40f1"
+          }
+        },
+        {
+          "client_id": "758987089244-240qijq1qa7n1opkt43ar6b9jhtao7qd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hengell.synergyhub",
+            "certificate_hash": "f2a7477d2f62948e1f397da13bec338525a0416a"
+          }
+        },
+        {
           "client_id": "758987089244-8eigagseed3tqa4v4td41bvq3q8hmg00.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -28,6 +44,22 @@
           "android_info": {
             "package_name": "com.hengell.synergyhub",
             "certificate_hash": "82450f0bdf633356dce0e0da7775e47b9b9b6fed"
+          }
+        },
+        {
+          "client_id": "758987089244-j8uv4t4ig1qfmraptat82sbd3q7do1ut.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hengell.synergyhub",
+            "certificate_hash": "f1b41a1b608f59f0f162c05b97c56cbeac81c33f"
+          }
+        },
+        {
+          "client_id": "758987089244-mof3k48t91lhqb6jd9roovag0uj6eurr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hengell.synergyhub",
+            "certificate_hash": "58919cb7647561b56b3efcf929d8a8166a38c315"
           }
         },
         {
