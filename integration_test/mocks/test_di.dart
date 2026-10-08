@@ -127,6 +127,34 @@ import 'package:sinergy_hub/features/user/presentation/pages/edit_looking_for_pa
 import 'package:sinergy_hub/features/user_chat/domain/repositories/i_user_chat_repository.dart';
 import 'package:sinergy_hub/features/user_chat/domain/use_cases/create_user_chat_use_case.dart';
 import 'package:sinergy_hub/features/user_chat/domain/use_cases/get_user_chats_use_case.dart';
+import 'package:sinergy_hub/features/appearance/domain/repositories/i_background_palette_local_repository.dart';
+import 'package:sinergy_hub/features/appearance/domain/repositories/i_background_palette_repository.dart';
+import 'package:sinergy_hub/features/appearance/domain/usecases/get_background_palette_use_case.dart';
+import 'package:sinergy_hub/features/appearance/domain/usecases/save_background_palette_use_case.dart';
+import 'package:sinergy_hub/features/appearance/presentation/bloc/background_palette_bloc/background_palette_bloc.dart';
+import 'package:sinergy_hub/features/matches/domain/repositories/i_discovery_deck_local_repository.dart';
+import 'package:sinergy_hub/features/matches/domain/repositories/i_liked_you_local_repository.dart';
+import 'package:sinergy_hub/features/matches/domain/repositories/i_liked_you_meta_repository.dart';
+import 'package:sinergy_hub/features/matches/domain/repositories/i_liked_you_repository.dart';
+import 'package:sinergy_hub/features/matches/domain/usecases/get_cached_discovery_deck_use_case.dart';
+import 'package:sinergy_hub/features/matches/domain/usecases/get_liked_you_use_case.dart';
+import 'package:sinergy_hub/features/matches/domain/usecases/remove_from_discovery_deck_use_case.dart';
+import 'package:sinergy_hub/features/matches/domain/usecases/save_discovery_deck_use_case.dart';
+import 'package:sinergy_hub/features/matches/domain/usecases/sync_liked_you_use_case.dart';
+import 'package:sinergy_hub/features/matches/domain/usecases/watch_liked_you_use_case.dart';
+import 'package:sinergy_hub/features/report/domain/repositories/i_report_repository.dart';
+import 'package:sinergy_hub/features/report/domain/usecases/report_use_case.dart';
+import 'package:sinergy_hub/features/settings/presentation/bloc/settings_notification_bloc/settings_notification_bloc.dart';
+import 'package:sinergy_hub/features/subscription/domain/repositories/i_premium_status_repository.dart';
+import 'package:sinergy_hub/features/subscription/domain/usecases/get_plans_use_case.dart';
+import 'package:sinergy_hub/features/subscription/domain/usecases/identify_subscriber_use_case.dart';
+import 'package:sinergy_hub/features/subscription/domain/usecases/purchase_plan_use_case.dart';
+import 'package:sinergy_hub/features/subscription/domain/usecases/restore_purchases_use_case.dart';
+import 'package:sinergy_hub/features/subscription/domain/usecases/watch_current_premium_status_use_case.dart';
+import 'package:sinergy_hub/features/subscription/domain/usecases/watch_premium_status_use_case.dart';
+import 'package:sinergy_hub/features/subscription/presentation/bloc/premium_bloc/premium_bloc.dart';
+import 'package:sinergy_hub/features/user/presentation/pages/edit_experience_page/bloc/edit_experience_bloc.dart';
+import 'package:sinergy_hub/features/user/presentation/pages/edit_specialization_page/bloc/edit_specialization_bloc.dart';
 
 import 'mock_blocs.dart';
 import 'mock_repositories.dart';
@@ -176,6 +204,21 @@ class _FakeCryptoService extends Mock implements CryptoService {}
 class _FakeImageService extends Mock implements ImageService {}
 
 class _FakeGoogleSignInService extends Mock implements GoogleSignInService {}
+
+class _FakeFirebaseCrashlytics extends Mock implements FirebaseCrashlytics {
+  @override
+  Future<void> log(String message) async {}
+
+  @override
+  Future<void> recordError(
+    dynamic exception,
+    StackTrace? stack, {
+    dynamic reason,
+    Iterable<Object> information = const [],
+    bool? printDetails,
+    bool fatal = false,
+  }) async {}
+}
 
 late MockAuthBloc testAuthBloc;
 late MockUserBloc testUserBloc;
@@ -238,6 +281,13 @@ Future<void> setupTestDI() async {
   getIt.registerLazySingleton<GoogleSignInService>(
     () => _FakeGoogleSignInService(),
   );
+  getIt.registerLazySingleton<FirebaseCrashlytics>(
+    () => _FakeFirebaseCrashlytics(),
+  );
+  getIt.registerLazySingleton<LoggerService>(
+    () => LoggerService(crashlytics: getIt<FirebaseCrashlytics>()),
+  );
+  getIt.registerLazySingleton<UserService>(() => UserService());
 
   // Interfaces (real mock impls)
   getIt.registerLazySingleton<IAuthRepository>(() => MockAuthRepository());
@@ -271,6 +321,31 @@ Future<void> setupTestDI() async {
   );
   getIt.registerLazySingleton<ISubscriptionRepository>(
     () => UnavailableSubscriptionRepository(),
+  );
+  getIt.registerLazySingleton<IPremiumStatusRepository>(
+    () => MockPremiumStatusRepository(),
+  );
+  getIt.registerLazySingleton<ICandidateDistanceRepository>(
+    () => MockCandidateDistanceRepository(),
+  );
+  getIt.registerLazySingleton<IDiscoveryDeckLocalRepository>(
+    () => MockDiscoveryDeckLocalRepository(),
+  );
+  getIt.registerLazySingleton<ILikedYouRepository>(
+    () => MockLikedYouRepository(),
+  );
+  getIt.registerLazySingleton<ILikedYouMetaRepository>(
+    () => MockLikedYouMetaRepository(),
+  );
+  getIt.registerLazySingleton<ILikedYouLocalRepository>(
+    () => MockLikedYouLocalRepository(),
+  );
+  getIt.registerLazySingleton<IReportRepository>(() => MockReportRepository());
+  getIt.registerLazySingleton<IBackgroundPaletteRepository>(
+    () => MockBackgroundPaletteRepository(),
+  );
+  getIt.registerLazySingleton<IBackgroundPaletteLocalRepository>(
+    () => MockBackgroundPaletteLocalRepository(),
   );
   getIt.registerLazySingleton<IMatchesRepository>(
     () => MockMatchesRepository(),
@@ -475,6 +550,111 @@ Future<void> setupTestDI() async {
       subscriptionRepository: getIt<ISubscriptionRepository>(),
     ),
   );
+  getIt.registerLazySingleton<GetPlansUseCase>(
+    () => GetPlansUseCase(
+      subscriptionRepository: getIt<ISubscriptionRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<PurchasePlanUseCase>(
+    () => PurchasePlanUseCase(
+      subscriptionRepository: getIt<ISubscriptionRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<RestorePurchasesUseCase>(
+    () => RestorePurchasesUseCase(
+      subscriptionRepository: getIt<ISubscriptionRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<IdentifySubscriberUseCase>(
+    () => IdentifySubscriberUseCase(
+      subscriptionRepository: getIt<ISubscriptionRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<WatchPremiumStatusUseCase>(
+    () => WatchPremiumStatusUseCase(
+      premiumStatusRepository: getIt<IPremiumStatusRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<WatchCurrentPremiumStatusUseCase>(
+    () => WatchCurrentPremiumStatusUseCase(
+      premiumStatusRepository: getIt<IPremiumStatusRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<PremiumBloc>(
+    () => PremiumBloc(
+      identifySubscriberUseCase: getIt<IdentifySubscriberUseCase>(),
+      watchPremiumStatusUseCase: getIt<WatchPremiumStatusUseCase>(),
+    ),
+  );
+
+  // Appearance
+  getIt.registerLazySingleton<GetBackgroundPaletteUseCase>(
+    () => GetBackgroundPaletteUseCase(
+      localRepository: getIt<IBackgroundPaletteLocalRepository>(),
+      remoteRepository: getIt<IBackgroundPaletteRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<SaveBackgroundPaletteUseCase>(
+    () => SaveBackgroundPaletteUseCase(
+      localRepository: getIt<IBackgroundPaletteLocalRepository>(),
+      remoteRepository: getIt<IBackgroundPaletteRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<BackgroundPaletteBloc>(
+    () => BackgroundPaletteBloc(
+      getBackgroundPaletteUseCase: getIt<GetBackgroundPaletteUseCase>(),
+      saveBackgroundPaletteUseCase: getIt<SaveBackgroundPaletteUseCase>(),
+      watchCurrentPremiumStatusUseCase:
+          getIt<WatchCurrentPremiumStatusUseCase>(),
+    ),
+  );
+
+  // Report
+  getIt.registerLazySingleton<ReportUserUseCase>(
+    () => ReportUserUseCase(reportRepository: getIt<IReportRepository>()),
+  );
+
+  // Liked you + discovery deck
+  getIt.registerLazySingleton<GetLikedYouUseCase>(
+    () => GetLikedYouUseCase(likedYouRepository: getIt<ILikedYouRepository>()),
+  );
+  getIt.registerLazySingleton<SyncLikedYouUseCase>(
+    () => SyncLikedYouUseCase(
+      likedYouRepository: getIt<ILikedYouRepository>(),
+      localRepository: getIt<ILikedYouLocalRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<WatchLikedYouUseCase>(
+    () => WatchLikedYouUseCase(
+      localRepository: getIt<ILikedYouLocalRepository>(),
+      premiumStatusRepository: getIt<IPremiumStatusRepository>(),
+      likedYouMetaRepository: getIt<ILikedYouMetaRepository>(),
+      syncLikedYouUseCase: getIt<SyncLikedYouUseCase>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<GetCachedDiscoveryDeckUseCase>(
+    () => GetCachedDiscoveryDeckUseCase(
+      localRepository: getIt<IDiscoveryDeckLocalRepository>(),
+      getExcludedMatchesUseCase: getIt<GetExcludedMatchesUseCase>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<SaveDiscoveryDeckUseCase>(
+    () => SaveDiscoveryDeckUseCase(
+      localRepository: getIt<IDiscoveryDeckLocalRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<RemoveFromDiscoveryDeckUseCase>(
+    () => RemoveFromDiscoveryDeckUseCase(
+      localRepository: getIt<IDiscoveryDeckLocalRepository>(),
+      authRepository: getIt<IAuthRepository>(),
+    ),
+  );
   getIt.registerLazySingleton<FindMatchChatIdUseCase>(
     () => FindMatchChatIdUseCase(
       authRepository: getIt<IAuthRepository>(),
@@ -607,7 +787,7 @@ Future<void> setupTestDI() async {
       notificationConfigRepository: getIt<INotificationConfigRepository>(),
       authRepository: getIt<IAuthRepository>(),
       firebaseMessagingService: getIt<FirebaseMessagingService>(),
-      logger: LoggerService(crashlytics: getIt<FirebaseCrashlytics>()),
+      logger: getIt<LoggerService>(),
     ),
   );
 
@@ -645,6 +825,24 @@ Future<void> setupTestDI() async {
       updateUserUseCase: getIt<UpdateUserUseCase>(),
       detectCurrentLocationUseCase: getIt<DetectCurrentLocationUseCase>(),
       updateUserCoordinatesUseCase: getIt<UpdateUserCoordinatesUseCase>(),
+    ),
+  );
+  getIt.registerFactory<EditExperienceBloc>(
+    () => EditExperienceBloc(
+      getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
+      updateUserProfilerUseCase: getIt<UpdateUserProfilerUseCase>(),
+    ),
+  );
+  getIt.registerFactory<EditSpecializationBloc>(
+    () => EditSpecializationBloc(
+      getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
+      updateUserProfilerUseCase: getIt<UpdateUserProfilerUseCase>(),
+    ),
+  );
+  getIt.registerFactory<SettingsNotificationBloc>(
+    () => SettingsNotificationBloc(
+      getNotificationsConfigUseCase: getIt<GetNotificationsConfigUseCase>(),
+      saveNotificationsConfigUseCase: getIt<SaveNotificationsConfigUseCase>(),
     ),
   );
   getIt.registerFactory<EditLookingForBloc>(

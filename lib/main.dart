@@ -8,6 +8,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 import 'core/bloc/app_observer.dart';
 import 'core/di/injection.dart';
@@ -179,6 +180,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  void watchLogs () {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => TalkerScreen(
+          talker: getIt<Talker>(),
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -249,58 +259,71 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             AppLocalizations.delegate,
           ],
           builder: (context, child) {
-            return MultiBlocListener(
-              listeners: [
-                BlocListener<AuthBloc, AuthState>(
-                  listener: (context, state) {
-                    if (state.isAuthorized && state.uid != null) {
-                      getIt<UserBloc>().add(
-                        UserEvent.init(uid: state.uid!),
-                      );
-                      context.read<NotificationConfigBloc>().add(
-                        NotificationConfigEvent.init(),
-                      );
-                      getIt<OnboardBloc>().add(
-                        OnboardEvent.load(),
-                      );
-                      getIt<PremiumBloc>().add(
-                        PremiumEvent.init(uid: state.uid!),
-                      );
-                      getIt<BackgroundPaletteBloc>().add(
-                        BackgroundPaletteEvent.init(uid: state.uid!),
-                      );
-                    }
-                    if (state.isLogout) {
-                      getIt<UserBloc>().add(
-                        UserEvent.reset(),
-                      );
-                      getIt<OnboardBloc>().add(
-                        OnboardEvent.reset(),
-                      );
-                      getIt<PremiumBloc>().add(
-                        const PremiumEvent.reset(),
-                      );
-                      getIt<BackgroundPaletteBloc>().add(
-                        const BackgroundPaletteEvent.reset(),
-                      );
-                    }
-                    _maybeRemoveSplash();
-                  },
+            return Stack(
+              children: [
+                Align(
+                  alignment: .topCenter,
+                  child: IconButton(
+                    onPressed: watchLogs,
+                    icon: Icon(
+                      Icons.bug_report,
+                    ),
+                  ),
                 ),
-                BlocListener<OnboardBloc, OnboardState>(
-                  listenWhen: (p, c) => p.status != c.status,
-                  listener: (context, _) => _maybeRemoveSplash(),
-                ),
-                BlocListener<ConnectivityBloc, ConnectivityState>(
-                  listenWhen: (p, c) => p.isOffline && c.isOnline,
-                  listener: (context, _) {
-                    UiMessageService.showSuccess(
-                      AppLocalizations.of(context)!.connection_restored,
-                    );
-                  },
+                MultiBlocListener(
+                  listeners: [
+                    BlocListener<AuthBloc, AuthState>(
+                      listener: (context, state) {
+                        if (state.isAuthorized && state.uid != null) {
+                          getIt<UserBloc>().add(
+                            UserEvent.init(uid: state.uid!),
+                          );
+                          context.read<NotificationConfigBloc>().add(
+                            NotificationConfigEvent.init(),
+                          );
+                          getIt<OnboardBloc>().add(
+                            OnboardEvent.load(),
+                          );
+                          getIt<PremiumBloc>().add(
+                            PremiumEvent.init(uid: state.uid!),
+                          );
+                          getIt<BackgroundPaletteBloc>().add(
+                            BackgroundPaletteEvent.init(uid: state.uid!),
+                          );
+                        }
+                        if (state.isLogout) {
+                          getIt<UserBloc>().add(
+                            UserEvent.reset(),
+                          );
+                          getIt<OnboardBloc>().add(
+                            OnboardEvent.reset(),
+                          );
+                          getIt<PremiumBloc>().add(
+                            const PremiumEvent.reset(),
+                          );
+                          getIt<BackgroundPaletteBloc>().add(
+                            const BackgroundPaletteEvent.reset(),
+                          );
+                        }
+                        _maybeRemoveSplash();
+                      },
+                    ),
+                    BlocListener<OnboardBloc, OnboardState>(
+                      listenWhen: (p, c) => p.status != c.status,
+                      listener: (context, _) => _maybeRemoveSplash(),
+                    ),
+                    BlocListener<ConnectivityBloc, ConnectivityState>(
+                      listenWhen: (p, c) => p.isOffline && c.isOnline,
+                      listener: (context, _) {
+                        UiMessageService.showSuccess(
+                          AppLocalizations.of(context)!.connection_restored,
+                        );
+                      },
+                    ),
+                  ],
+                  child: child ?? SizedBox(),
                 ),
               ],
-              child: child ?? SizedBox(),
             );
           },
         ),

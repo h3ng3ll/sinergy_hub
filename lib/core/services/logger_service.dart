@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 /// Application-wide logger.
 ///
@@ -11,19 +12,19 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 class LoggerService {
   static const String _defaultName = 'App';
   final FirebaseCrashlytics _crashlytics;
+  final Talker _talker;
 
   LoggerService({
     required this._crashlytics,
+    required this._talker,
   });
 
   void debug(
     String message, {
     String name = _defaultName,
   }) {
-    developer.log(
+    _talker.debug(
       message,
-      level: 500,
-      name: name,
     );
   }
 
@@ -31,10 +32,8 @@ class LoggerService {
     String message, {
     String name = _defaultName,
   }) {
-    developer.log(
+    _talker.info(
       message,
-      level: 800,
-      name: name,
     );
   }
 
@@ -44,12 +43,10 @@ class LoggerService {
     StackTrace? stackTrace,
     String name = _defaultName,
   }) {
-    developer.log(
+    _talker.warning(
       message,
-      level: 900,
-      name: name,
-      error: error,
-      stackTrace: stackTrace,
+      error,
+      stackTrace,
     );
   }
 
@@ -69,12 +66,10 @@ class LoggerService {
         fatal: false,
       );
     }
-    developer.log(
+    _talker.error(
       message,
-      level: 1000,
-      name: name,
-      error: error,
-      stackTrace: stackTrace,
+      error,
+      stackTrace,
     );
   }
 }

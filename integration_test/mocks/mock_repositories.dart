@@ -17,6 +17,9 @@ import 'package:sinergy_hub/core/services/geolocation/models/e_geo_settings_targ
 import 'package:sinergy_hub/core/services/geolocation/models/geo_place.dart';
 import 'package:sinergy_hub/core/services/geolocation/models/geo_position.dart';
 
+import 'package:sinergy_hub/features/appearance/domain/models/background_palette/background_palette.dart';
+import 'package:sinergy_hub/features/appearance/domain/repositories/i_background_palette_local_repository.dart';
+import 'package:sinergy_hub/features/appearance/domain/repositories/i_background_palette_repository.dart';
 import 'package:sinergy_hub/features/auth/data/models/apple_credentials/apple_credentials.dart';
 import 'package:sinergy_hub/features/auth/domain/failures/auth_failures.dart';
 import 'package:sinergy_hub/features/auth/domain/models/apple_sign_in_result/apple_sign_in_result.dart';
@@ -34,12 +37,22 @@ import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_repository.
 import 'package:sinergy_hub/features/chat/domain/services/i_presence_service.dart';
 import 'package:sinergy_hub/features/matches/data/models/matches_dto/matches_dto.dart';
 import 'package:sinergy_hub/features/matches/domain/models/matches_filter/matches_filter.dart';
+import 'package:sinergy_hub/features/matches/domain/models/liked_you_meta/liked_you_meta.dart';
+import 'package:sinergy_hub/features/matches/domain/models/liked_you_pg_state/liked_you_pg_state.dart';
+import 'package:sinergy_hub/features/matches/domain/repositories/i_candidate_distance_repository.dart';
+import 'package:sinergy_hub/features/matches/domain/repositories/i_discovery_deck_local_repository.dart';
+import 'package:sinergy_hub/features/matches/domain/repositories/i_liked_you_local_repository.dart';
+import 'package:sinergy_hub/features/matches/domain/repositories/i_liked_you_meta_repository.dart';
+import 'package:sinergy_hub/features/matches/domain/repositories/i_liked_you_repository.dart';
 import 'package:sinergy_hub/features/matches/domain/repositories/i_matches_repository.dart';
 import 'package:sinergy_hub/features/notifications/domain/models/notification/notification.dart';
 import 'package:sinergy_hub/features/notifications/domain/models/notification_config/notification_config.dart';
 import 'package:sinergy_hub/features/notifications/domain/repositories/i_notification_config_repository.dart';
 import 'package:sinergy_hub/features/notifications/domain/repositories/i_notification_repository.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/models/onboard_status/onboard_status.dart';
+import 'package:sinergy_hub/features/report/domain/repositories/i_report_repository.dart';
+import 'package:sinergy_hub/features/subscription/domain/models/premium_status/premium_status.dart';
+import 'package:sinergy_hub/features/subscription/domain/repositories/i_premium_status_repository.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/models/user_profiler/user_profiler.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/repositories/i_onboard_survey_repository.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/repositories/i_skill_repository.dart';
@@ -578,4 +591,146 @@ class MockPresenceService implements IPresenceService {
 
   @override
   Future<void> setOffline() async {}
+}
+
+/// Straight-line distances for the showcase candidates, so discovery cards
+/// render their "km away" line.
+class MockCandidateDistanceRepository implements ICandidateDistanceRepository {
+  static const _distancesKm = <String, double>{
+    ShowcaseData.partnerUid: 2.4,
+    'cand-2': 5.8,
+    'cand-3': 12.1,
+    'cand-4': 3.6,
+    'cand-5': 27.3,
+    'cand-6': 8.9,
+  };
+
+  @override
+  Future<Map<String, double?>> getDistances({
+    required List<String> uids,
+  }) async => {for (final uid in uids) uid: _distancesKm[uid]};
+}
+
+/// In-memory discovery deck cache, empty on start like a fresh install.
+class MockDiscoveryDeckLocalRepository
+    implements IDiscoveryDeckLocalRepository {
+  final _decks = <String, Map<MatchesFilter, UserDataPgState>>{};
+
+  @override
+  Future<UserDataPgState?> get({
+    required String uid,
+    required MatchesFilter filter,
+  }) async => _decks[uid]?[filter];
+
+  @override
+  Future<void> save({
+    required String uid,
+    required MatchesFilter filter,
+    required UserDataPgState deck,
+  }) async {
+    (_decks[uid] ??= {})[filter] = deck;
+  }
+
+  @override
+  Future<void> removeUser({
+    required String uid,
+    required String userUid,
+  }) async {
+    final decks = _decks[uid];
+    if (decks == null) return;
+    for (final entry in decks.entries.toList()) {
+      decks[entry.key] = entry.value.copyWith(
+        items: entry.value.items.where((u) => u.uid != userUid).toList(),
+      );
+    }
+  }
+}
+
+class MockLikedYouRepository implements ILikedYouRepository {
+  @override
+  Future<Either<LikedYouPgState, Exceptions>> get({
+    required LikedYouPgState state,
+  }) async => const Left(LikedYouPgState(hasMore: false));
+}
+
+class MockLikedYouMetaRepository implements ILikedYouMetaRepository {
+  @override
+  Stream<LikedYouMeta?> watch() =>
+      Stream.value(LikedYouMeta(updatedAt: DateTime(2026, 5, 16, 14, 30)));
+}
+
+/// In-memory liked-you cache.
+class MockLikedYouLocalRepository implements ILikedYouLocalRepository {
+  final _pages = <String, LikedYouPgState>{};
+  final _changes = StreamController<String>.broadcast();
+
+  @override
+  Stream<LikedYouPgState?> watch({required String uid}) async* {
+    yield _pages[uid];
+    yield* _changes.stream.where((key) => key == uid).map((_) => _pages[uid]);
+  }
+
+  @override
+  Future<LikedYouPgState?> get({required String uid}) async => _pages[uid];
+
+  @override
+  Future<void> replace({
+    required String uid,
+    required LikedYouPgState page,
+  }) async {
+    _pages[uid] = page;
+    _changes.add(uid);
+  }
+}
+
+/// The hero is on the free tier — the premium status never comes from
+/// Firestore here.
+class MockPremiumStatusRepository implements IPremiumStatusRepository {
+  @override
+  Stream<PremiumStatus?> watch(String uid) =>
+      Stream.value(const PremiumStatus());
+
+  @override
+  Stream<PremiumStatus?> watchCurrent() => Stream.value(const PremiumStatus());
+}
+
+class MockReportRepository implements IReportRepository {
+  @override
+  Future<void> report({
+    required String reportedUserId,
+    required String reason,
+    required String details,
+  }) async {}
+}
+
+/// No custom palette saved, so the app renders its default background.
+class MockBackgroundPaletteRepository implements IBackgroundPaletteRepository {
+  @override
+  Future<BackgroundPalette?> get({required String uid}) async => null;
+
+  @override
+  Future<BackgroundPalette?> set({
+    required BackgroundPalette? palette,
+  }) async => palette;
+}
+
+/// In-memory background palette cache.
+class MockBackgroundPaletteLocalRepository
+    implements IBackgroundPaletteLocalRepository {
+  final _palettes = <String, BackgroundPalette?>{};
+
+  @override
+  Future<bool> has({required String uid}) async => _palettes.containsKey(uid);
+
+  @override
+  Future<BackgroundPalette?> get({required String uid}) async =>
+      _palettes[uid];
+
+  @override
+  Future<void> save({
+    required String uid,
+    required BackgroundPalette? palette,
+  }) async {
+    _palettes[uid] = palette;
+  }
 }

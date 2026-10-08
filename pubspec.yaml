@@ -100,6 +100,7 @@ dependencies:
   geolocator: ^14.1.0
   geocoding: ^5.0.0
   flutter_colorpicker: ^1.1.0
+  talker_flutter: ^5.1.20
 
 dev_dependencies:
   flutter_test:

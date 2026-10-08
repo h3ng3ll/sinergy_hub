@@ -14,6 +14,7 @@ import 'package:sinergy_hub/core/resources/app_locale.dart';
 import 'package:sinergy_hub/core/resources/app_theme.dart';
 import 'package:sinergy_hub/core/resources/translations/app_localizations.dart';
 import 'package:sinergy_hub/core/routes/init_router/init_router.dart';
+import 'package:sinergy_hub/features/appearance/presentation/bloc/background_palette_bloc/background_palette_bloc.dart';
 import 'package:sinergy_hub/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import 'package:sinergy_hub/features/connectivity/presentation/bloc/connectivity_bloc/connectivity_bloc.dart';
@@ -22,9 +23,12 @@ import 'package:sinergy_hub/features/matches/presentation/bloc/tinder_card_cubit
 import 'package:sinergy_hub/features/matches/presentation/dialogs/filter_modal/matches_filters_modal_sheet.dart';
 import 'package:sinergy_hub/features/matches/presentation/pages/discovery_page/widgets/build_tinder_card/build_tinder_card.dart';
 import 'package:sinergy_hub/features/notifications/presentation/bloc/notification_config_bloc/notification_config_bloc.dart';
+import 'package:sinergy_hub/features/onboard_survey/presentation/bloc/onboard_bloc/onboard_bloc.dart';
+import 'package:sinergy_hub/features/subscription/presentation/bloc/premium_bloc/premium_bloc.dart';
 import 'package:sinergy_hub/features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
 import 'package:sinergy_hub/features/user/presentation/bloc/user_bloc/user_bloc.dart';
 
+import 'mocks/showcase_data.dart';
 import 'mocks/test_di.dart';
 
 final Set<String> _failedCaptures = <String>{};
@@ -141,8 +145,14 @@ class _TestApp extends StatelessWidget {
         BlocProvider<AuthBloc>.value(value: testAuthBloc),
         BlocProvider<SkillsBloc>(create: (_) => getIt<SkillsBloc>()),
         BlocProvider<ChatBloc>.value(value: getIt<ChatBloc>()),
+        BlocProvider<OnboardBloc>.value(value: testOnboardBloc),
+        BlocProvider<ConnectivityBloc>.value(value: getIt<ConnectivityBloc>()),
         BlocProvider<NotificationConfigBloc>.value(
           value: getIt<NotificationConfigBloc>(),
+        ),
+        BlocProvider<PremiumBloc>.value(value: getIt<PremiumBloc>()),
+        BlocProvider<BackgroundPaletteBloc>.value(
+          value: getIt<BackgroundPaletteBloc>(),
         ),
       ],
       child: ResponsiveBreakpoints(
@@ -183,6 +193,10 @@ void main() {
       onboardBloc: testOnboardBloc,
       connectivityBloc: getIt<ConnectivityBloc>(),
     );
+    getIt<PremiumBloc>().add(PremiumEvent.init(uid: ShowcaseData.heroUid));
+    getIt<BackgroundPaletteBloc>()
+      ..add(const BackgroundPaletteEvent.start())
+      ..add(BackgroundPaletteEvent.init(uid: ShowcaseData.heroUid));
   });
 
   testWidgets('sinergy_hub screenshots', (tester) async {

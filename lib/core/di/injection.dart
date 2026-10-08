@@ -6,6 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 import '../../features/appearance/di/appearance_injection.dart';
 import '../../features/auth/di/auth_injection.dart';
@@ -47,6 +48,9 @@ final getIt = GetIt.instance;
 Future<void> initDependencies() async {
   // Firebase services (core)
 
+  getIt.registerLazySingleton(
+        () => Talker(),
+  );
   getIt.registerLazySingleton(() => FirebaseFirestore.instance);
   getIt.registerLazySingleton(() => FirebaseAuth.instance);
   getIt.registerLazySingleton(() => FirebaseMessaging.instance);
@@ -55,6 +59,7 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(
     () => LoggerService(
       crashlytics: getIt<FirebaseCrashlytics>(),
+      talker: getIt<Talker>(),
     ),
   );
   getIt.registerLazySingleton(
