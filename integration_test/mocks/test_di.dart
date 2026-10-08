@@ -155,6 +155,7 @@ import 'package:sinergy_hub/features/subscription/domain/usecases/watch_premium_
 import 'package:sinergy_hub/features/subscription/presentation/bloc/premium_bloc/premium_bloc.dart';
 import 'package:sinergy_hub/features/user/presentation/pages/edit_experience_page/bloc/edit_experience_bloc.dart';
 import 'package:sinergy_hub/features/user/presentation/pages/edit_specialization_page/bloc/edit_specialization_bloc.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 import 'mock_blocs.dart';
 import 'mock_repositories.dart';
@@ -285,7 +286,10 @@ Future<void> setupTestDI() async {
     () => _FakeFirebaseCrashlytics(),
   );
   getIt.registerLazySingleton<LoggerService>(
-    () => LoggerService(crashlytics: getIt<FirebaseCrashlytics>()),
+    () => LoggerService(
+      crashlytics: getIt<FirebaseCrashlytics>(),
+      talker: getIt<Talker>(),
+    ),
   );
   getIt.registerLazySingleton<UserService>(() => UserService());
 

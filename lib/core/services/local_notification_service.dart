@@ -28,8 +28,8 @@ class LocalNotificationService {
   final NotificationTapProcessor _notificationTapProcessor;
 
   LocalNotificationService({
-    required NotificationTapProcessor notificationTapProcessor,
-  }) : _notificationTapProcessor = notificationTapProcessor;
+    required this._notificationTapProcessor,
+  });
 
   Future<void> init() async {
     await _checkPermissions();
@@ -63,7 +63,8 @@ class LocalNotificationService {
             AndroidFlutterLocalNotificationsPlugin
           >();
 
-      await androidImpl?.requestFullScreenIntentPermission();
+      /// No need fullScreen
+      // await androidImpl?.requestFullScreenIntentPermission();
       await androidImpl?.requestNotificationsPermission();
     } else if (Platform.isIOS) {
       final iosImpl = _flutterLocalNotificationsPlugin

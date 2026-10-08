@@ -34,9 +34,13 @@ analyzer:
     - custom_lint
 
   exclude:
-    -"**/*.g.dart"
-    -"**/*.freezed.dart"
-    - lib/generated/**
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
   errors:
     invalid_annotation_target: ignore
 # Additional information about this file can be found at

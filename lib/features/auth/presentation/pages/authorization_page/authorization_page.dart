@@ -15,6 +15,7 @@ import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/error_message_widget.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/services/google_sign_in_service/google_sign_in_service.dart';
+import '../../../../../core/utils/platform_helper.dart';
 import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../../gen/assets.gen.dart';
@@ -251,6 +252,13 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                           ),
                           textAlign: TextAlign.center,
                         ),
+                        Gap(24.0),
+                        // FutureBuilder(
+                        //   future: PlatformHelper.getAppVersion(),
+                        //   builder: (context, asyncSnapshot) {
+                        //     return Text('Version ${asyncSnapshot.data ?? 1}');
+                        //   },
+                        // ),
                       ],
                     ),
                   ),

@@ -3,6 +3,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/resources/colors/app_colors.dart';
 import '../../../../core/resources/text/app_text_theme.dart';
+import '../../../../core/utils/platform_helper.dart';
 import '../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../gen/assets.gen.dart';
 import 'widgets/build_menu_item.dart';
@@ -25,10 +26,6 @@ class HomeDrawer extends StatelessWidget {
     required this.onTapLogOut,
   });
 
-  Future<String> getAppVersion() async {
-    final info = await PackageInfo.fromPlatform();
-    return '${info.version}  +${info.buildNumber}';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +76,7 @@ class HomeDrawer extends StatelessWidget {
               ),
 
               FutureBuilder(
-                future: getAppVersion(),
+                future: PlatformHelper.getAppVersion(),
                 builder: (context, asyncSnapshot) {
                   return Text('Version ${asyncSnapshot.data ?? 1}');
                 },
