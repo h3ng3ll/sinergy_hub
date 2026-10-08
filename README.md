@@ -208,7 +208,54 @@ cd android && ./gradlew signingReport && cd ..
 gcloud storage buckets update gs://synergyhub-a3e1b.firebasestorage.app --cors-file=cors.json
 ```
 
-### 6. Run
+### 6. Sign in with Apple
+
+![Complexity](https://img.shields.io/badge/complexity-high-EF4444?style=flat-square) ![Time](https://img.shields.io/badge/setup-~1–2h-F59E0B?style=flat-square)
+
+| Platform | How it works in the app | What it needs |
+|---|---|---|
+| 🍎 iOS | Native `SignInWithApple.getAppleIDCredential` → Firebase `OAuthProvider('apple.com')` | App ID capability + entitlement |
+| 🤖 Android | Firebase `signInWithProvider(AppleAuthProvider())` (web OAuth flow) | Services ID + private key + return URL |
+
+<details>
+<summary><b>Setup checklist</b></summary>
+
+1. **Apple Developer → Identifiers → App ID** (`com.hengell.synergyhub` and `.dev`): enable **Sign in with Apple**. Regenerate the provisioning profiles.
+2. **Xcode → Runner → Signing & Capabilities**: add **Sign in with Apple**. This is already in `ios/Runner/Runner.entitlements`.
+3. **Apple Developer → Identifiers → Services IDs** (needed for Android): create one, enable Sign in with Apple, and set:
+   - Domain: `<firebase-project>.firebaseapp.com`
+   - Return URL: `https://<firebase-project>.firebaseapp.com/__/auth/handler`
+4. **Apple Developer → Keys**: create a key with **Sign in with Apple** enabled and download the `.p8`. You can only download it once.
+5. **Firebase → Authentication → Sign-in method → Apple**: enable it and fill in the Services ID, Team ID, Key ID and `.p8` private key. Do this in **both** Firebase projects (dev and prod).
+
+</details>
+
+📖 Full walkthrough (iOS + Android): [Implement Sign in with Apple on iOS & Android using Flutter — complete guide](https://medium.com/@mhmd.abdelrazk/implement-sign-in-with-apple-on-ios-android-using-flutter-complete-guide-ff66e8db6d5a) · [`sign_in_with_apple` package docs](https://pub.dev/packages/sign_in_with_apple) · [Firebase: Apple on Android](https://firebase.google.com/docs/auth/android/apple)
+
+### 7. Push notifications
+
+![Complexity](https://img.shields.io/badge/complexity-medium-F59E0B?style=flat-square) ![Time](https://img.shields.io/badge/setup-~30–60m-F59E0B?style=flat-square)
+
+| Platform | Transport | What it needs |
+|---|---|---|
+| 🍎 iOS | APNs → FCM | APNs auth key uploaded to Firebase + Push capability + background mode |
+| 🤖 Android | FCM | `google-services.json` (nothing extra) |
+| 🌐 Web | FCM Web Push | VAPID key (`*_FIREBASE_WEB_PUSH_CERTIFICATE`) + `web/firebase-messaging-sw.js` |
+
+<details>
+<summary><b>Setup checklist</b></summary>
+
+1. **Apple Developer → Keys**: create an **APNs** key and download the `.p8`.
+2. **Firebase → Project Settings → Cloud Messaging → Apple app configuration**: upload the APNs key with its Key ID and Team ID. Do this in **both** projects.
+3. **Xcode → Signing & Capabilities**: add **Push Notifications**, and add **Background Modes** with *Remote notifications*. The `aps-environment` entitlement and `UIBackgroundModes` are already set.
+4. **Web**: generate a key pair under *Web Push certificates* and put it in `.env` as `DEV_/PROD_FIREBASE_WEB_PUSH_CERTIFICATE`.
+5. Test it from **Firebase → Messaging → Send test message** with the FCM token from the app log. On iOS, test on a real device or an Apple-silicon simulator (Xcode 14+).
+
+</details>
+
+📖 References: [FlutterFire Cloud Messaging setup](https://firebase.flutter.dev/docs/messaging/overview) · [Apple push notifications (APNs) for FCM](https://firebase.google.com/docs/cloud-messaging/ios/certs) · [Web Push / VAPID](https://firebase.google.com/docs/cloud-messaging/js/client)
+
+### 8. Run
 
 | Target | Command |
 |---|---|
