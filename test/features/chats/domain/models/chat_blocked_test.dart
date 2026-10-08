@@ -5,13 +5,13 @@ import 'package:sinergy_hub/features/chat/domain/models/chat_config/chat_config.
 
 void main() {
   Chat buildChat({Map<String, bool> blocked = const {}}) => Chat(
-        chatId: 'chat-1',
-        participants: const ['me', 'other'],
-        lastMessageSent: DateTime(2026),
-        createdAt: DateTime(2026),
-        config: ChatConfig(),
-        blocked: blocked,
-      );
+    chatId: 'chat-1',
+    participants: const ['me', 'other'],
+    lastMessageSent: DateTime(2026),
+    createdAt: DateTime(2026),
+    config: ChatConfig(),
+    blocked: blocked,
+  );
 
   group('ChatX block helpers', () {
     test('isBlockedBy is true only for a user whose key is true', () {

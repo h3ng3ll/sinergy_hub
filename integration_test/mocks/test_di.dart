@@ -25,6 +25,7 @@ import 'package:sinergy_hub/core/services/firebase/firebase_messaging_service.da
 import 'package:sinergy_hub/core/services/logger_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_realtime_db_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_storage_service.dart';
+import 'package:sinergy_hub/core/services/geolocation/i_geolocation_service.dart';
 import 'package:sinergy_hub/core/services/google_sign_in_service/google_sign_in_service.dart';
 import 'package:sinergy_hub/core/services/image_service.dart';
 import 'package:sinergy_hub/core/services/local_notification_service.dart';
@@ -50,22 +51,24 @@ import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_repository.
 import 'package:sinergy_hub/features/chat/domain/services/i_presence_service.dart';
 import 'package:sinergy_hub/core/services/connectivity_service.dart';
 import 'package:sinergy_hub/features/connectivity/presentation/bloc/connectivity_bloc/connectivity_bloc.dart';
+import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_local_repository.dart';
+import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_message_local_repository.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/filter_chats_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/get_chat_by_id_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/open_chat_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/get_chat_by_participants_case.dart';
-import 'package:sinergy_hub/features/chat/domain/usecases/get_chat_config_use_case.dart';
-import 'package:sinergy_hub/features/chat/domain/usecases/get_last_messages_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/listen_chat_by_id_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/listen_chat_messages_use_case.dart';
-import 'package:sinergy_hub/features/chat/domain/usecases/listen_chat_updates_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/load_older_messages_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/listen_chats_use_case.dart';
-import 'package:sinergy_hub/features/chat/domain/usecases/search_chats_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/toggle_archive_chat_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/toggle_block_user_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/toggle_favorite_chat_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/update_chat_info_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/update_typing_info_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/watch_chat_messages_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/watch_chats_use_case.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chat_page_bloc/chat_page_bloc.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
@@ -74,6 +77,7 @@ import 'package:sinergy_hub/features/home/presentation/tabs/profile_tab/bloc/pro
 import 'package:sinergy_hub/features/matches/domain/repositories/i_candidate_distance_repository.dart';
 import 'package:sinergy_hub/features/user/data/services/user_service.dart';
 import 'package:sinergy_hub/features/user/domain/usecases/delete_account_use_case.dart';
+import 'package:sinergy_hub/features/user/domain/usecases/detect_current_location_use_case.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/use_cases/get_cached_auth_credentials_use_case.dart';
 import 'package:sinergy_hub/features/onboard_survey/presentation/pages/onboard_about_you_page/bloc/onboard_about_you_bloc/onboard_about_you_bloc.dart';
 import 'package:sinergy_hub/features/matches/domain/repositories/i_matches_repository.dart';
@@ -100,7 +104,11 @@ import 'package:sinergy_hub/features/onboard_survey/domain/use_cases/get_complet
 import 'package:sinergy_hub/features/onboard_survey/domain/use_cases/get_skills_use_case.dart';
 import 'package:sinergy_hub/features/onboard_survey/domain/use_cases/set_completion_status_use_case.dart';
 import 'package:sinergy_hub/features/onboard_survey/presentation/bloc/onboard_bloc/onboard_bloc.dart';
+import 'package:sinergy_hub/features/subscription/data/repositories/unavailable_subscription_repository.dart';
+import 'package:sinergy_hub/features/subscription/domain/repositories/i_subscription_repository.dart';
+import 'package:sinergy_hub/features/subscription/domain/usecases/get_subscription_management_url_use_case.dart';
 import 'package:sinergy_hub/features/user/domain/repositories/i_user_auth_repository.dart';
+import 'package:sinergy_hub/features/user/domain/repositories/i_user_coordinates_repository.dart';
 import 'package:sinergy_hub/features/user/domain/repositories/i_user_read_repository.dart';
 import 'package:sinergy_hub/features/user/domain/repositories/i_user_storage_repository.dart';
 import 'package:sinergy_hub/features/user/domain/repositories/i_user_write_repository.dart';
@@ -110,6 +118,7 @@ import 'package:sinergy_hub/features/user/domain/usecases/get_user_data_use_case
 import 'package:sinergy_hub/features/user/domain/usecases/get_users_use_case.dart';
 import 'package:sinergy_hub/features/user/domain/usecases/listen_current_user_data_use_case.dart';
 import 'package:sinergy_hub/features/user/domain/usecases/listen_user_data_use_case.dart';
+import 'package:sinergy_hub/features/user/domain/usecases/update_user_coordinates_use_case.dart';
 import 'package:sinergy_hub/features/user/domain/usecases/update_user_profiler_use_case.dart';
 import 'package:sinergy_hub/features/user/domain/usecases/update_user_usecase.dart';
 import 'package:sinergy_hub/features/user/presentation/bloc/skills_bloc/skills_bloc.dart';
@@ -248,6 +257,21 @@ Future<void> setupTestDI() async {
   getIt.registerLazySingleton<IChatMessageRepository>(
     () => MockChatMessageRepository(),
   );
+  getIt.registerLazySingleton<IChatLocalRepository>(
+    () => MockChatLocalRepository(),
+  );
+  getIt.registerLazySingleton<IChatMessageLocalRepository>(
+    () => MockChatMessageLocalRepository(),
+  );
+  getIt.registerLazySingleton<IGeolocationService>(
+    () => MockGeolocationService(),
+  );
+  getIt.registerLazySingleton<IUserCoordinatesRepository>(
+    () => MockUserCoordinatesRepository(),
+  );
+  getIt.registerLazySingleton<ISubscriptionRepository>(
+    () => UnavailableSubscriptionRepository(),
+  );
   getIt.registerLazySingleton<IMatchesRepository>(
     () => MockMatchesRepository(),
   );
@@ -353,6 +377,16 @@ Future<void> setupTestDI() async {
     () =>
         ListenUserDataUseCase(userReadRepository: getIt<IUserReadRepository>()),
   );
+  getIt.registerFactory<DetectCurrentLocationUseCase>(
+    () => DetectCurrentLocationUseCase(
+      geolocationService: getIt<IGeolocationService>(),
+    ),
+  );
+  getIt.registerFactory<UpdateUserCoordinatesUseCase>(
+    () => UpdateUserCoordinatesUseCase(
+      userCoordinatesRepository: getIt<IUserCoordinatesRepository>(),
+    ),
+  );
 
   // Onboard use cases
   getIt.registerFactory<SetCompletionStatusUseCase>(
@@ -436,6 +470,11 @@ Future<void> setupTestDI() async {
       authRepository: getIt<IAuthRepository>(),
     ),
   );
+  getIt.registerLazySingleton<GetSubscriptionManagementUrlUseCase>(
+    () => GetSubscriptionManagementUrlUseCase(
+      subscriptionRepository: getIt<ISubscriptionRepository>(),
+    ),
+  );
   getIt.registerLazySingleton<FindMatchChatIdUseCase>(
     () => FindMatchChatIdUseCase(
       authRepository: getIt<IAuthRepository>(),
@@ -497,17 +536,26 @@ Future<void> setupTestDI() async {
       authRepository: getIt<IAuthRepository>(),
     ),
   );
-  getIt.registerLazySingleton<SearchChatsUseCase>(
-    () => SearchChatsUseCase(
-      chatRepository: getIt<IChatRepository>(),
+  getIt.registerLazySingleton<WatchChatsUseCase>(
+    () => WatchChatsUseCase(
+      localRepository: getIt<IChatLocalRepository>(),
+      remoteRepository: getIt<IChatRepository>(),
       authRepository: getIt<IAuthRepository>(),
-      getChatConfigsUseCase: getIt<GetChatConfigUseCase>(),
     ),
   );
-  getIt.registerLazySingleton<GetChatConfigUseCase>(
-    () => GetChatConfigUseCase(
+  getIt.registerLazySingleton<FilterChatsUseCase>(FilterChatsUseCase.new);
+  getIt.registerLazySingleton<WatchChatMessagesUseCase>(
+    () => WatchChatMessagesUseCase(
+      localRepository: getIt<IChatMessageLocalRepository>(),
+      remoteRepository: getIt<IChatMessageRepository>(),
       authRepository: getIt<IAuthRepository>(),
-      chatRepository: getIt<IChatRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<LoadOlderMessagesUseCase>(
+    () => LoadOlderMessagesUseCase(
+      localRepository: getIt<IChatMessageLocalRepository>(),
+      remoteRepository: getIt<IChatMessageRepository>(),
+      authRepository: getIt<IAuthRepository>(),
     ),
   );
   getIt.registerLazySingleton<ToggleArchiveChatUseCase>(
@@ -518,12 +566,6 @@ Future<void> setupTestDI() async {
   );
   getIt.registerLazySingleton<ToggleFavoriteChatUseCase>(
     () => ToggleFavoriteChatUseCase(
-      authRepository: getIt<IAuthRepository>(),
-      chatRepository: getIt<IChatRepository>(),
-    ),
-  );
-  getIt.registerLazySingleton<ListenChatUpdatesUseCase>(
-    () => ListenChatUpdatesUseCase(
       authRepository: getIt<IAuthRepository>(),
       chatRepository: getIt<IChatRepository>(),
     ),
@@ -579,7 +621,11 @@ Future<void> setupTestDI() async {
 
   // Per-screen blocs constructed via getIt
   getIt.registerFactory<LoginBloc>(
-    () => LoginBloc(loginUseCase: getIt<LoginUseCase>()),
+    () => LoginBloc(
+      loginUseCase: getIt<LoginUseCase>(),
+      completeRegistrationUseCase: getIt<CompleteRegistrationUseCase>(),
+      sendEmailVerificationUseCase: getIt<SendEmailVerificationUseCase>(),
+    ),
   );
   getIt.registerFactory<ResetPasswordPageBloc>(
     () => ResetPasswordPageBloc(
@@ -587,12 +633,18 @@ Future<void> setupTestDI() async {
     ),
   );
   getIt.registerFactory<ProfileBloc>(
-    () => ProfileBloc(deleteAccountUseCase: getIt<DeleteAccountUseCase>()),
+    () => ProfileBloc(
+      deleteAccountUseCase: getIt<DeleteAccountUseCase>(),
+      getSubscriptionManagementUrlUseCase:
+          getIt<GetSubscriptionManagementUrlUseCase>(),
+    ),
   );
   getIt.registerFactory<EditProfilePageBloc>(
     () => EditProfilePageBloc(
       listenCurrentUserDataUseCase: getIt<ListenCurrentUserDataUseCase>(),
       updateUserUseCase: getIt<UpdateUserUseCase>(),
+      detectCurrentLocationUseCase: getIt<DetectCurrentLocationUseCase>(),
+      updateUserCoordinatesUseCase: getIt<UpdateUserCoordinatesUseCase>(),
     ),
   );
   getIt.registerFactory<EditLookingForBloc>(
@@ -615,9 +667,10 @@ Future<void> setupTestDI() async {
   getIt.registerLazySingleton<ChatPageBloc>(
     () => ChatPageBloc(
       sendMessageUseCase: getIt<SendMessageUseCase>(),
+      watchChatMessagesUseCase: getIt<WatchChatMessagesUseCase>(),
+      loadOlderMessagesUseCase: getIt<LoadOlderMessagesUseCase>(),
       openChatUseCase: getIt<OpenChatUseCase>(),
       listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
-      getLastMessageUseCase: getIt<ListenLastMessagesUseCase>(),
       updateTypingInfoUseCase: getIt<UpdateTypingInfoUseCase>(),
       listenChatByIdUseCase: getIt<ListenChatByIdUseCase>(),
       toggleBlockUserUseCase: getIt<ToggleBlockUserUseCase>(),
@@ -625,10 +678,10 @@ Future<void> setupTestDI() async {
   );
   getIt.registerFactory<ChatsFilterBloc>(
     () => ChatsFilterBloc(
-      searchChatsUseCase: getIt<SearchChatsUseCase>(),
+      watchChatsUseCase: getIt<WatchChatsUseCase>(),
+      filterChatsUseCase: getIt<FilterChatsUseCase>(),
       toggleArchiveChatUseCase: getIt<ToggleArchiveChatUseCase>(),
       toggleFavoriteChatUseCase: getIt<ToggleFavoriteChatUseCase>(),
-      listenChatUpdatesUseCase: getIt<ListenChatUpdatesUseCase>(),
       getCurrentUserDataUseCase: getIt<GetCurrentUserDataUseCase>(),
       listenUserDataUseCase: getIt<ListenUserDataUseCase>(),
     ),

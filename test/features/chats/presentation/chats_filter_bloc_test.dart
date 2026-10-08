@@ -4,18 +4,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_config/chat_config.dart';
-import 'package:sinergy_hub/features/chat/domain/models/chat_pg_state.dart/chat_pg_state.dart';
 import 'package:sinergy_hub/features/chat/domain/models/e_chat_filter.dart';
-import 'package:sinergy_hub/features/chat/domain/usecases/listen_chat_updates_use_case.dart';
-import 'package:sinergy_hub/features/chat/domain/usecases/search_chats_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/filter_chats_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/toggle_archive_chat_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/toggle_favorite_chat_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/watch_chats_use_case.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chats_filter_bloc/chats_filter_bloc.dart';
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
 import 'package:sinergy_hub/features/user/domain/usecases/get_current_user_data_use_case.dart';
 import 'package:sinergy_hub/features/user/domain/usecases/listen_user_data_use_case.dart';
 
-class MockSearchChatsUseCase extends Mock implements SearchChatsUseCase {}
+class MockWatchChatsUseCase extends Mock implements WatchChatsUseCase {}
+
+class MockFilterChatsUseCase extends Mock implements FilterChatsUseCase {}
 
 class MockToggleArchiveChatUseCase extends Mock
     implements ToggleArchiveChatUseCase {}
@@ -23,21 +24,22 @@ class MockToggleArchiveChatUseCase extends Mock
 class MockToggleFavoriteChatUseCase extends Mock
     implements ToggleFavoriteChatUseCase {}
 
-class MockListenChatUpdatesUseCase extends Mock
-    implements ListenChatUpdatesUseCase {}
-
 class MockGetCurrentUserDataUseCase extends Mock
     implements GetCurrentUserDataUseCase {}
 
 class MockListenUserDataUseCase extends Mock implements ListenUserDataUseCase {}
 
 void main() {
-  late MockSearchChatsUseCase searchChatsUseCase;
+  late MockWatchChatsUseCase watchChatsUseCase;
+  late MockFilterChatsUseCase filterChatsUseCase;
   late MockToggleArchiveChatUseCase toggleArchiveChatUseCase;
   late MockToggleFavoriteChatUseCase toggleFavoriteChatUseCase;
-  late MockListenChatUpdatesUseCase listenChatUpdatesUseCase;
   late MockGetCurrentUserDataUseCase getCurrentUserDataUseCase;
   late MockListenUserDataUseCase listenUserDataUseCase;
+
+  /// Cache-backed chat list stream handed out by the mocked watch use case;
+  /// each test pushes the cached chats through it.
+  late StreamController<List<Chat>> chatsController;
 
   /// Per-uid stream controllers handed out by the mocked use case so
   /// each test can push presence updates per user independently.
@@ -59,35 +61,52 @@ void main() {
   );
 
   ChatsFilterBloc buildBloc() => ChatsFilterBloc(
-    searchChatsUseCase: searchChatsUseCase,
+    watchChatsUseCase: watchChatsUseCase,
+    filterChatsUseCase: filterChatsUseCase,
     toggleArchiveChatUseCase: toggleArchiveChatUseCase,
     toggleFavoriteChatUseCase: toggleFavoriteChatUseCase,
-    listenChatUpdatesUseCase: listenChatUpdatesUseCase,
     getCurrentUserDataUseCase: getCurrentUserDataUseCase,
     listenUserDataUseCase: listenUserDataUseCase,
   );
 
   setUpAll(() {
-    registerFallbackValue(const ChatPgState());
     registerFallbackValue(EChatFilter.all);
+    registerFallbackValue(<Chat>[]);
   });
 
   setUp(() {
-    searchChatsUseCase = MockSearchChatsUseCase();
+    watchChatsUseCase = MockWatchChatsUseCase();
+    filterChatsUseCase = MockFilterChatsUseCase();
     toggleArchiveChatUseCase = MockToggleArchiveChatUseCase();
     toggleFavoriteChatUseCase = MockToggleFavoriteChatUseCase();
-    listenChatUpdatesUseCase = MockListenChatUpdatesUseCase();
     getCurrentUserDataUseCase = MockGetCurrentUserDataUseCase();
     listenUserDataUseCase = MockListenUserDataUseCase();
 
+    chatsController = StreamController<List<Chat>>.broadcast();
     peerControllers = {};
 
-    when(() => getCurrentUserDataUseCase.call())
-        .thenAnswer((_) async => currentUser);
-
     when(
-      () => listenChatUpdatesUseCase.call(),
-    ).thenAnswer((_) => const Stream<Chat>.empty());
+      () => getCurrentUserDataUseCase.call(
+        preferCache: any(named: 'preferCache'),
+      ),
+    ).thenAnswer((_) async => currentUser);
+
+    when(() => watchChatsUseCase.call()).thenAnswer(
+      (_) => chatsController.stream,
+    );
+
+    /// By default the filter passes the cached chats straight through, so
+    /// the visible list equals what the cache emitted.
+    when(
+      () => filterChatsUseCase.call(
+        chats: any(named: 'chats'),
+        uid: any(named: 'uid'),
+        filter: any(named: 'filter'),
+        query: any(named: 'query'),
+      ),
+    ).thenAnswer(
+      (invocation) => invocation.namedArguments[#chats] as List<Chat>,
+    );
 
     when(() => listenUserDataUseCase.call(any())).thenAnswer((invocation) {
       final uid = invocation.positionalArguments.first as String;
@@ -100,6 +119,7 @@ void main() {
   });
 
   tearDown(() async {
+    if (!chatsController.isClosed) await chatsController.close();
     for (final c in peerControllers.values) {
       if (!c.isClosed) await c.close();
     }
@@ -112,34 +132,36 @@ void main() {
     }).timeout(const Duration(seconds: 2));
   }
 
+  /// Starts the bloc and pushes [chats] once the cache stream is listened to.
+  Future<ChatsFilterBloc> initWith(List<Chat> chats) async {
+    final bloc = buildBloc();
+    bloc.add(const ChatsFilterEvent.init());
+    await waitUntil(() => chatsController.hasListener);
+    chatsController.add(chats);
+    return bloc;
+  }
+
   group('ChatsFilterBloc presence subscriptions', () {
     test(
       '_init subscribes to peer of every visible chat (excluding current user)',
       () async {
-        final chats = [
+        final bloc = await initWith([
           chatWithPeers('c1', [currentUid, peerA]),
           chatWithPeers('c2', [currentUid, peerB]),
-        ];
-        when(
-          () => searchChatsUseCase.call(
-            chatState: any(named: 'chatState'),
-            query: any(named: 'query'),
-          ),
-        ).thenAnswer(
-          (_) async => ChatPgState(chats: chats),
-        );
-
-        final bloc = buildBloc();
-        bloc.add(const ChatsFilterEvent.init());
+        ]);
 
         await waitUntil(
           () => bloc.state.peerSubs.length == 2,
         );
 
+        expect(bloc.state.uid, currentUid);
         expect(bloc.state.peerSubs.keys, containsAll([peerA, peerB]));
         expect(bloc.state.peerSubs.containsKey(currentUid), isFalse);
         verify(() => listenUserDataUseCase.call(peerA)).called(1);
         verify(() => listenUserDataUseCase.call(peerB)).called(1);
+        verify(
+          () => getCurrentUserDataUseCase.call(preferCache: true),
+        ).called(1);
 
         await bloc.close();
       },
@@ -148,20 +170,9 @@ void main() {
     test(
       'presence emission updates onlineStatuses for the matching peer',
       () async {
-        final chats = [
+        final bloc = await initWith([
           chatWithPeers('c1', [currentUid, peerA]),
-        ];
-        when(
-          () => searchChatsUseCase.call(
-            chatState: any(named: 'chatState'),
-            query: any(named: 'query'),
-          ),
-        ).thenAnswer(
-          (_) async => ChatPgState(chats: chats),
-        );
-
-        final bloc = buildBloc();
-        bloc.add(const ChatsFilterEvent.init());
+        ]);
 
         await waitUntil(() => bloc.state.peerSubs.containsKey(peerA));
 
@@ -174,7 +185,7 @@ void main() {
         );
         expect(bloc.state.onlineStatuses[peerA], isTrue);
 
-        // Re-emit identical value → equality guard, no spurious state churn.
+        /// Re-emit identical value: the equality guard prevents state churn.
         var emissionsAfter = 0;
         final sub = bloc.stream.listen((_) => emissionsAfter++);
         peerControllers[peerA]!.add(
@@ -191,37 +202,24 @@ void main() {
     test(
       'applyFilter swap cancels orphaned subs and opens new ones',
       () async {
-        final initial = [chatWithPeers('c1', [currentUid, peerA])];
-        final filtered = [chatWithPeers('c2', [currentUid, peerB])];
+        final initial = chatWithPeers('c1', [currentUid, peerA]);
+        final archived = chatWithPeers('c2', [currentUid, peerB]);
 
-        var callIndex = 0;
         when(
-          () => searchChatsUseCase.call(
-            chatState: any(named: 'chatState'),
-            query: any(named: 'query'),
+          () => filterChatsUseCase.call(
+            chats: any(named: 'chats'),
+            uid: any(named: 'uid'),
             filter: any(named: 'filter'),
-          ),
-        ).thenAnswer((_) async {
-          final result =
-              callIndex == 0 ? initial : filtered;
-          callIndex++;
-          return ChatPgState(chats: result);
-        });
-        when(
-          () => searchChatsUseCase.call(
-            chatState: any(named: 'chatState'),
             query: any(named: 'query'),
           ),
-        ).thenAnswer((_) async {
-          final result =
-              callIndex == 0 ? initial : filtered;
-          callIndex++;
-          return ChatPgState(chats: result);
+        ).thenAnswer((invocation) {
+          final filter = invocation.namedArguments[#filter] as EChatFilter;
+          return filter == EChatFilter.archived ? [archived] : [initial];
         });
 
-        final bloc = buildBloc();
-        bloc.add(const ChatsFilterEvent.init());
+        final bloc = await initWith([initial, archived]);
         await waitUntil(() => bloc.state.peerSubs.containsKey(peerA));
+        expect(bloc.state.peerSubs.containsKey(peerB), isFalse);
 
         bloc.add(
           const ChatsFilterEvent.applyFilter(filter: EChatFilter.archived),
@@ -233,6 +231,8 @@ void main() {
               !bloc.state.peerSubs.containsKey(peerA),
         );
 
+        expect(bloc.state.filter, EChatFilter.archived);
+        expect(bloc.state.chatsState.chats, [archived]);
         expect(peerControllers[peerA]!.hasListener, isFalse);
         expect(peerControllers[peerB]!.hasListener, isTrue);
 
@@ -243,19 +243,10 @@ void main() {
     test(
       'duplicate peer across chats subscribes only once',
       () async {
-        final chats = [
+        final bloc = await initWith([
           chatWithPeers('c1', [currentUid, peerA]),
           chatWithPeers('c2', [currentUid, peerA]),
-        ];
-        when(
-          () => searchChatsUseCase.call(
-            chatState: any(named: 'chatState'),
-            query: any(named: 'query'),
-          ),
-        ).thenAnswer((_) async => ChatPgState(chats: chats));
-
-        final bloc = buildBloc();
-        bloc.add(const ChatsFilterEvent.init());
+        ]);
 
         await waitUntil(() => bloc.state.peerSubs.containsKey(peerA));
         expect(bloc.state.peerSubs.length, 1);
@@ -266,35 +257,20 @@ void main() {
     );
 
     test(
-      'listenChatsChanges delivering a brand new chat opens a sub for its peer',
+      'cache stream delivering a brand new chat opens a sub for its peer',
       () async {
-        final controller = StreamController<Chat>.broadcast();
-        addTearDown(() async {
-          if (!controller.isClosed) await controller.close();
-        });
-
-        when(() => listenChatUpdatesUseCase.call())
-            .thenAnswer((_) => controller.stream);
-
-        when(
-          () => searchChatsUseCase.call(
-            chatState: any(named: 'chatState'),
-            query: any(named: 'query'),
-          ),
-        ).thenAnswer(
-          (_) async => ChatPgState(
-            chats: [chatWithPeers('c1', [currentUid, peerA])],
-          ),
-        );
-
-        final bloc = buildBloc();
-        bloc.add(const ChatsFilterEvent.init());
+        final existing = chatWithPeers('c1', [currentUid, peerA]);
+        final bloc = await initWith([existing]);
         await waitUntil(() => bloc.state.peerSubs.containsKey(peerA));
 
-        controller.add(chatWithPeers('c-new', [currentUid, peerC]));
+        chatsController.add([
+          existing,
+          chatWithPeers('c-new', [currentUid, peerC]),
+        ]);
 
         await waitUntil(() => bloc.state.peerSubs.containsKey(peerC));
         expect(bloc.state.peerSubs.keys, containsAll([peerA, peerC]));
+        expect(bloc.state.allChats, hasLength(2));
 
         await bloc.close();
       },
@@ -303,19 +279,10 @@ void main() {
     test(
       'bloc.close() cancels all remaining peer subscriptions',
       () async {
-        final chats = [
+        final bloc = await initWith([
           chatWithPeers('c1', [currentUid, peerA]),
           chatWithPeers('c2', [currentUid, peerB]),
-        ];
-        when(
-          () => searchChatsUseCase.call(
-            chatState: any(named: 'chatState'),
-            query: any(named: 'query'),
-          ),
-        ).thenAnswer((_) async => ChatPgState(chats: chats));
-
-        final bloc = buildBloc();
-        bloc.add(const ChatsFilterEvent.init());
+        ]);
         await waitUntil(
           () => bloc.state.peerSubs.length == 2,
         );
@@ -324,6 +291,7 @@ void main() {
 
         expect(peerControllers[peerA]!.hasListener, isFalse);
         expect(peerControllers[peerB]!.hasListener, isFalse);
+        expect(chatsController.hasListener, isFalse);
       },
     );
   });

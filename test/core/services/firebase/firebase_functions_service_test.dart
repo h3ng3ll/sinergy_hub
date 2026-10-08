@@ -117,7 +117,6 @@ void main() {
 
     test('should create service for custom region', () async {
       // Arrange
-      const region = 'europe-west1';
       final mockRegionalFunctions = FirebaseFunctionsTestUtils.createMockFunctions();
 
       // Act

@@ -20,7 +20,9 @@ class MockAuthRepository extends Mock implements IAuthRepository {}
 class MockUpdateChatInfoUseCase extends Mock implements UpdateChatInfoUseCase {}
 
 class MockGetChatByIdUseCase extends Mock implements GetChatByIdUseCase {}
+
 class ChatMessageFake extends Fake implements ChatMessage {}
+
 class ChatFake extends Fake implements Chat {}
 
 void main() {
@@ -90,7 +92,7 @@ void main() {
       when(
         () => updateChatInfoUseCase(
           chatId: any(named: 'chatId'),
-            chat: any(named: 'chat', that: isA<Chat>())
+          chat: any(named: 'chat', that: isA<Chat>()),
         ),
       ).thenAnswer((_) async {});
 
@@ -146,13 +148,16 @@ void main() {
             message: any(named: 'message'),
             chatId: any(named: 'chatId'),
           ),
-        ).thenAnswer((_) async => ChatMessage(
-              message: '',
-              sentUid: uid,
-              createdAt: DateTime.now(),
-            ));
-        when(() => getChatByIdUseCase.call(chatId: any(named: 'chatId')))
-            .thenAnswer((_) async => chat);
+        ).thenAnswer(
+          (_) async => ChatMessage(
+            message: '',
+            sentUid: uid,
+            createdAt: DateTime.now(),
+          ),
+        );
+        when(
+          () => getChatByIdUseCase.call(chatId: any(named: 'chatId')),
+        ).thenAnswer((_) async => chat);
         when(
           () => updateChatInfoUseCase(
             chatId: any(named: 'chatId'),
@@ -163,31 +168,37 @@ void main() {
 
       Future<ChatMessage> captureMessage(String input) async {
         await useCase.call(message: input, chatId: chatId);
-        final captured = verify(
-          () => chatMessageRepo.create(
-            chatId: chatId,
-            message: captureAny(named: 'message'),
-          ),
-        ).captured.last as ChatMessage;
+        final captured =
+            verify(
+                  () => chatMessageRepo.create(
+                    chatId: chatId,
+                    message: captureAny(named: 'message'),
+                  ),
+                ).captured.last
+                as ChatMessage;
         return captured;
       }
 
       Future<Chat> captureChat(String input) async {
         await useCase.call(message: input, chatId: chatId);
-        final captured = verify(
-          () => updateChatInfoUseCase(
-            chatId: chatId,
-            chat: captureAny(named: 'chat'),
-          ),
-        ).captured.last as Chat;
+        final captured =
+            verify(
+                  () => updateChatInfoUseCase(
+                    chatId: chatId,
+                    chat: captureAny(named: 'chat'),
+                  ),
+                ).captured.last
+                as Chat;
         return captured;
       }
 
-      test('collapses 2+ consecutive blank lines into a single line break',
-          () async {
-        final captured = await captureMessage('a\n\n\nb\n\n\n\nc');
-        expect(captured.message, 'a\nb\nc');
-      });
+      test(
+        'collapses 2+ consecutive blank lines into a single line break',
+        () async {
+          final captured = await captureMessage('a\n\n\nb\n\n\n\nc');
+          expect(captured.message, 'a\nb\nc');
+        },
+      );
 
       test('preserves intentional single line breaks', () async {
         final captured = await captureMessage('a\nb\nc');
@@ -217,19 +228,25 @@ void main() {
         expect(captured.message, 'a\nb');
       });
 
-      test('returns MessageNotSentFailure for whitespace-only input',
-          () async {
-        final res = await useCase.call(message: '   \n\n  \t  ', chatId: chatId);
+      test('returns MessageNotSentFailure for whitespace-only input', () async {
+        final res = await useCase.call(
+          message: '   \n\n  \t  ',
+          chatId: chatId,
+        );
 
         expect(res.isRight(), isTrue);
-        verifyNever(() => chatMessageRepo.create(
-              message: any(named: 'message'),
-              chatId: any(named: 'chatId'),
-            ));
-        verifyNever(() => updateChatInfoUseCase(
-              chatId: any(named: 'chatId'),
-              chat: any(named: 'chat'),
-            ));
+        verifyNever(
+          () => chatMessageRepo.create(
+            message: any(named: 'message'),
+            chatId: any(named: 'chatId'),
+          ),
+        );
+        verifyNever(
+          () => updateChatInfoUseCase(
+            chatId: any(named: 'chatId'),
+            chat: any(named: 'chat'),
+          ),
+        );
       });
 
       test('lastMessage on the Chat doc uses the normalised text', () async {

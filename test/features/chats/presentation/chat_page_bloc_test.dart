@@ -10,20 +10,25 @@ import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_config/chat_config.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_message/chat_message.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_page_data/chat_page_data.dart';
-import 'package:sinergy_hub/features/chat/domain/usecases/get_last_messages_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/failures/load_messages_failure.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/listen_chat_by_id_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/load_older_messages_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/open_chat_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/toggle_block_user_use_case.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/update_typing_info_use_case.dart';
+import 'package:sinergy_hub/features/chat/domain/usecases/watch_chat_messages_use_case.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chat_page_bloc/chat_page_bloc.dart';
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
 import 'package:sinergy_hub/features/user/domain/usecases/listen_user_data_use_case.dart';
 
 class MockSendMessageUseCase extends Mock implements SendMessageUseCase {}
 
-class MockListenLastMessagesUseCase extends Mock
-    implements ListenLastMessagesUseCase {}
+class MockWatchChatMessagesUseCase extends Mock
+    implements WatchChatMessagesUseCase {}
+
+class MockLoadOlderMessagesUseCase extends Mock
+    implements LoadOlderMessagesUseCase {}
 
 class MockListenChatByIdUseCase extends Mock implements ListenChatByIdUseCase {}
 
@@ -39,7 +44,8 @@ class MockToggleBlockUserUseCase extends Mock
 
 void main() {
   late MockSendMessageUseCase sendMessageUseCase;
-  late MockListenLastMessagesUseCase listenLastMessagesUseCase;
+  late MockWatchChatMessagesUseCase watchChatMessagesUseCase;
+  late MockLoadOlderMessagesUseCase loadOlderMessagesUseCase;
   late MockListenChatByIdUseCase listenChatByIdUseCase;
   late MockUpdateTypingInfoUseCase updateTypingInfoUseCase;
   late MockOpenChatUseCase openChatUseCase;
@@ -74,7 +80,8 @@ void main() {
 
   ChatPageBloc buildBloc() => ChatPageBloc(
     sendMessageUseCase: sendMessageUseCase,
-    getLastMessageUseCase: listenLastMessagesUseCase,
+    watchChatMessagesUseCase: watchChatMessagesUseCase,
+    loadOlderMessagesUseCase: loadOlderMessagesUseCase,
     listenChatByIdUseCase: listenChatByIdUseCase,
     openChatUseCase: openChatUseCase,
     updateTypingInfoUseCase: updateTypingInfoUseCase,
@@ -84,7 +91,8 @@ void main() {
 
   setUp(() {
     sendMessageUseCase = MockSendMessageUseCase();
-    listenLastMessagesUseCase = MockListenLastMessagesUseCase();
+    watchChatMessagesUseCase = MockWatchChatMessagesUseCase();
+    loadOlderMessagesUseCase = MockLoadOlderMessagesUseCase();
     listenChatByIdUseCase = MockListenChatByIdUseCase();
     updateTypingInfoUseCase = MockUpdateTypingInfoUseCase();
     openChatUseCase = MockOpenChatUseCase();
@@ -99,7 +107,7 @@ void main() {
       () => openChatUseCase.call(chatId: any(named: 'chatId')),
     ).thenAnswer((_) async => Left(chatPageData));
     when(
-      () => listenLastMessagesUseCase.call(chatId: any(named: 'chatId')),
+      () => watchChatMessagesUseCase.call(chatId: any(named: 'chatId')),
     ).thenAnswer((_) => messagesController.stream);
     when(
       () => listenChatByIdUseCase.call(chatId: any(named: 'chatId')),
@@ -120,6 +128,9 @@ void main() {
         blocked: any(named: 'blocked'),
       ),
     ).thenAnswer((_) async => Left(null));
+    when(
+      () => loadOlderMessagesUseCase.call(chatId: any(named: 'chatId')),
+    ).thenAnswer((_) async => const Left(null));
   });
 
   tearDown(() async {
@@ -157,7 +168,8 @@ void main() {
     );
 
     test(
-      'emits failed state and skips subscriptions when use case returns ChatValidationFailure',
+      'emits failed state and skips chat/user subscriptions when use case '
+      'returns ChatValidationFailure (cache-backed messages start up-front)',
       () async {
         when(
           () => openChatUseCase.call(chatId: any(named: 'chatId')),
@@ -181,11 +193,13 @@ void main() {
         expect(bloc.state.chat, isNull);
         expect(bloc.state.userData, isNull);
         expect(bloc.state.users, isEmpty);
-        expect(messagesController.hasListener, isFalse);
+        expect(messagesController.hasListener, isTrue);
         expect(chatController.hasListener, isFalse);
         expect(userDataController.hasListener, isFalse);
 
         await bloc.close();
+
+        expect(messagesController.hasListener, isFalse);
       },
     );
 
@@ -218,7 +232,7 @@ void main() {
         });
 
         when(
-          () => listenLastMessagesUseCase.call(chatId: any(named: 'chatId')),
+          () => watchChatMessagesUseCase.call(chatId: any(named: 'chatId')),
         ).thenAnswer((_) => newMessagesController.stream);
         when(
           () => listenChatByIdUseCase.call(chatId: any(named: 'chatId')),
@@ -518,6 +532,136 @@ void main() {
         }).timeout(const Duration(seconds: 2));
 
         expect(bloc.state.status, ChatPageStatus.failed);
+
+        await bloc.close();
+      },
+    );
+  });
+
+  group('ChatPageBloc messages', () {
+    Future<ChatPageBloc> initialisedBloc() async {
+      final bloc = buildBloc();
+      bloc.add(const ChatPageEvent.init(chatId: chatId));
+      await Future.doWhile(() async {
+        await Future<void>.delayed(Duration.zero);
+        return bloc.state.status != ChatPageStatus.initial ||
+            !messagesController.hasListener;
+      }).timeout(const Duration(seconds: 2));
+      return bloc;
+    }
+
+    final message = ChatMessage(
+      id: 'm1',
+      sentUid: otherUid,
+      message: 'hi',
+      createdAt: DateTime(2026),
+    );
+
+    test(
+      'watches cached messages for the opened chat and marks them loaded',
+      () async {
+        final bloc = await initialisedBloc();
+
+        expect(bloc.state.messagesLoaded, isFalse);
+        verify(
+          () => watchChatMessagesUseCase.call(chatId: chatId),
+        ).called(1);
+
+        messagesController.add([message]);
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return !bloc.state.messagesLoaded;
+        }).timeout(const Duration(seconds: 2));
+
+        expect(bloc.state.messages, [message]);
+
+        await bloc.close();
+      },
+    );
+
+    test(
+      'message stream error surfaces a failed status',
+      () async {
+        final bloc = await initialisedBloc();
+
+        messagesController.addError(Exception('boom'));
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return bloc.state.status != ChatPageStatus.failed;
+        }).timeout(const Duration(seconds: 2));
+
+        expect(bloc.state.errorMessage, contains('boom'));
+
+        await bloc.close();
+      },
+    );
+
+    test(
+      'loadOlder is ignored until the first message snapshot arrives',
+      () async {
+        final bloc = await initialisedBloc();
+
+        bloc.add(const ChatPageEvent.loadOlder());
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+
+        verifyNever(
+          () => loadOlderMessagesUseCase.call(chatId: any(named: 'chatId')),
+        );
+
+        await bloc.close();
+      },
+    );
+
+    test(
+      'loadOlder calls LoadOlderMessagesUseCase and clears the loading flag',
+      () async {
+        final bloc = await initialisedBloc();
+        messagesController.add([message]);
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return !bloc.state.messagesLoaded;
+        }).timeout(const Duration(seconds: 2));
+
+        final loadingFlags = <bool>[];
+        final sub = bloc.stream.listen(
+          (s) => loadingFlags.add(s.isLoadingOlder),
+        );
+
+        bloc.add(const ChatPageEvent.loadOlder());
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+
+        verify(() => loadOlderMessagesUseCase.call(chatId: chatId)).called(1);
+        expect(loadingFlags, [true, false]);
+        expect(bloc.state.errorMessage, isEmpty);
+
+        await sub.cancel();
+        await bloc.close();
+      },
+    );
+
+    test(
+      'loadOlder failure surfaces the failure message without failing the chat',
+      () async {
+        when(
+          () => loadOlderMessagesUseCase.call(chatId: any(named: 'chatId')),
+        ).thenAnswer((_) async => const Right(LoadMessagesFailure()));
+
+        final bloc = await initialisedBloc();
+        messagesController.add([message]);
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return !bloc.state.messagesLoaded;
+        }).timeout(const Duration(seconds: 2));
+
+        bloc.add(const ChatPageEvent.loadOlder());
+        await Future.doWhile(() async {
+          await Future<void>.delayed(Duration.zero);
+          return bloc.state.errorMessage.isEmpty;
+        }).timeout(const Duration(seconds: 2));
+
+        expect(bloc.state.isLoadingOlder, isFalse);
+        expect(bloc.state.errorMessage, const LoadMessagesFailure().message);
+        expect(bloc.state.status, ChatPageStatus.initial);
 
         await bloc.close();
       },

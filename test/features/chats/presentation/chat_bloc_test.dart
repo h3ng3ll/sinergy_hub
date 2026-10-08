@@ -5,10 +5,8 @@ import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_config/chat_config.dart';
 import 'package:sinergy_hub/features/chat/domain/usecases/listen_chats_use_case.dart';
 import 'package:sinergy_hub/features/chat/presentation/bloc/chat_bloc/chat_bloc.dart';
-import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
 
-class MockListenChatsUseCase extends Mock
-    implements ListenChatsUseCase {}
+class MockListenChatsUseCase extends Mock implements ListenChatsUseCase {}
 
 void main() {
   late MockListenChatsUseCase mockListenChatsUseCase;
@@ -28,9 +26,8 @@ void main() {
     blocTest<ChatBloc, ChatState>(
       'emits updated chats when stream returns data',
       setUp: () {
-        when(() => mockListenChatsUseCase.call())
-            .thenAnswer(
-              (_) => Stream.value([chat]),
+        when(() => mockListenChatsUseCase.call()).thenAnswer(
+          (_) => Stream.value([chat]),
         );
       },
       build: () => ChatBloc(

@@ -31,12 +31,14 @@ void main() {
     id: 'weekly',
     title: 'Weekly',
     priceString: r'$4.99',
+    description: 'Billed every week',
     period: EPlanPeriod.weekly,
   );
   const annualPlan = SubscriptionPlan(
     id: 'annual',
     title: 'Annual',
     priceString: r'$39.99',
+    description: 'Billed once a year',
     period: EPlanPeriod.annual,
   );
 

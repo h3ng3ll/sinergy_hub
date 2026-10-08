@@ -10,6 +10,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:sinergy_hub/core/failures/failure.dart';
 import 'package:sinergy_hub/core/models/exceptions.dart';
+import 'package:sinergy_hub/core/services/geolocation/failures/geo_failures.dart';
+import 'package:sinergy_hub/core/services/geolocation/i_geolocation_service.dart';
+import 'package:sinergy_hub/core/services/geolocation/models/e_geo_permission.dart';
+import 'package:sinergy_hub/core/services/geolocation/models/e_geo_settings_target.dart';
+import 'package:sinergy_hub/core/services/geolocation/models/geo_place.dart';
+import 'package:sinergy_hub/core/services/geolocation/models/geo_position.dart';
 
 import 'package:sinergy_hub/features/auth/data/models/apple_credentials/apple_credentials.dart';
 import 'package:sinergy_hub/features/auth/domain/failures/auth_failures.dart';
@@ -18,8 +24,11 @@ import 'package:sinergy_hub/features/auth/domain/repostories/i_auth_repository.d
 import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_config/chat_config.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_message/chat_message.dart';
+import 'package:sinergy_hub/features/chat/domain/models/chat_messages_cache_info/chat_messages_cache_info.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_pg_state.dart/chat_pg_state.dart';
 import 'package:sinergy_hub/features/chat/domain/models/e_chat_filter.dart';
+import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_local_repository.dart';
+import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_message_local_repository.dart';
 import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_message_repository.dart';
 import 'package:sinergy_hub/features/chat/domain/repositories/i_chat_repository.dart';
 import 'package:sinergy_hub/features/chat/domain/services/i_presence_service.dart';
@@ -37,6 +46,7 @@ import 'package:sinergy_hub/features/onboard_survey/domain/repositories/i_skill_
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
 import 'package:sinergy_hub/features/user/domain/models/users_data_pg_state/users_data_pg_state.dart';
 import 'package:sinergy_hub/features/user/domain/repositories/i_user_auth_repository.dart';
+import 'package:sinergy_hub/features/user/domain/repositories/i_user_coordinates_repository.dart';
 import 'package:sinergy_hub/features/user/domain/repositories/i_user_read_repository.dart';
 import 'package:sinergy_hub/features/user/domain/repositories/i_user_storage_repository.dart';
 import 'package:sinergy_hub/features/user/domain/repositories/i_user_write_repository.dart';
@@ -217,7 +227,11 @@ class MockChatRepository implements IChatRepository {
   Stream<Chat> chatUpdates({required String uid}) => const Stream<Chat>.empty();
 
   @override
-  Future<Chat> getById({required String uid, required String chatId}) async {
+  Future<Chat> getById({
+    required String uid,
+    required String chatId,
+    bool preferCache = false,
+  }) async {
     final chat = ShowcaseData.chats()
         .where((c) => c.chatId == chatId)
         .firstOrNull;
@@ -289,9 +303,8 @@ class MockChatRepository implements IChatRepository {
   }) async => const ChatConfig();
 
   @override
-  Stream<List<Chat>> chatsSnapshotStream({required String uid}) async* {
-    yield* Stream.fromIterable([]);
-  }
+  Stream<List<Chat>> chatsSnapshotStream({required String uid}) =>
+      Stream.value(ShowcaseData.chats());
 }
 
 class MockChatMessageRepository implements IChatMessageRepository {
@@ -306,6 +319,147 @@ class MockChatMessageRepository implements IChatMessageRepository {
     required String uid,
     required String chatId,
   }) => Stream.value(ShowcaseData.messages());
+
+  @override
+  Stream<List<ChatMessage>> listenMessagesSince({
+    required String chatId,
+    DateTime? after,
+  }) {
+    final messages = ShowcaseData.messages();
+    if (after == null) return Stream.value(messages);
+    return Stream.value(
+      messages.where((m) => !m.createdAt.isBefore(after)).toList(),
+    );
+  }
+
+  @override
+  Future<List<ChatMessage>> fetchMessagesBefore({
+    required String uid,
+    required String chatId,
+    required DateTime before,
+    int limit = kChatMessagesPageSize,
+  }) async => ShowcaseData.messages().reversed
+      .where((m) => m.createdAt.isBefore(before))
+      .take(limit)
+      .toList();
+}
+
+/// In-memory chat-list cache. Starts empty (`null`) exactly like a fresh
+/// install; the remote snapshot stream fills it.
+class MockChatLocalRepository implements IChatLocalRepository {
+  final _chats = <String, List<Chat>>{};
+  final _changes = StreamController<String>.broadcast();
+
+  @override
+  Stream<List<Chat>?> watch({required String uid}) async* {
+    yield _chats[uid];
+    yield* _changes.stream.where((key) => key == uid).map((_) => _chats[uid]);
+  }
+
+  @override
+  Future<void> replaceAll({
+    required String uid,
+    required List<Chat> chats,
+  }) async {
+    _chats[uid] = chats;
+    _changes.add(uid);
+  }
+}
+
+/// In-memory message cache keyed `'<uid>|<chatId>'`, sorted by `createdAt`.
+class MockChatMessageLocalRepository implements IChatMessageLocalRepository {
+  final _messages = <String, List<ChatMessage>>{};
+  final _reachedStart = <String>{};
+  final _changes = StreamController<String>.broadcast();
+
+  String _key(String uid, String chatId) => '$uid|$chatId';
+
+  @override
+  Stream<List<ChatMessage>> watch({
+    required String uid,
+    required String chatId,
+  }) async* {
+    final key = _key(uid, chatId);
+    yield _messages[key] ?? const [];
+    yield* _changes.stream
+        .where((changed) => changed == key)
+        .map((_) => _messages[key] ?? const []);
+  }
+
+  @override
+  Future<ChatMessagesCacheInfo> info({
+    required String uid,
+    required String chatId,
+  }) async {
+    final key = _key(uid, chatId);
+    final messages = _messages[key] ?? const <ChatMessage>[];
+    return ChatMessagesCacheInfo(
+      oldestCreatedAt: messages.firstOrNull?.createdAt,
+      latestCreatedAt: messages.lastOrNull?.createdAt,
+      reachedStart: _reachedStart.contains(key),
+    );
+  }
+
+  @override
+  Future<void> upsert({
+    required String uid,
+    required String chatId,
+    required List<ChatMessage> messages,
+  }) async {
+    if (messages.isEmpty) return;
+    final key = _key(uid, chatId);
+    final byId = {
+      for (final message in _messages[key] ?? const <ChatMessage>[])
+        message.id: message,
+      for (final message in messages) message.id: message,
+    };
+    _messages[key] = byId.values.toList()
+      ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    _changes.add(key);
+  }
+
+  @override
+  Future<void> markReachedStart({
+    required String uid,
+    required String chatId,
+  }) async {
+    _reachedStart.add(_key(uid, chatId));
+  }
+}
+
+/// Never touches GPS: always grants permission and reports a fixed
+/// position.
+class MockGeolocationService implements IGeolocationService {
+  @override
+  Future<Either<EGeoPermission, GeoFailure>> requestPermission() async =>
+      const Left(EGeoPermission.whileInUse);
+
+  @override
+  Future<GeoPosition> currentPosition() async => GeoPosition(
+    latitude: 37.7749,
+    longitude: -122.4194,
+    accuracyMeters: 10.0,
+    capturedAt: DateTime.now(),
+  );
+
+  @override
+  Future<GeoPlace?> reverseGeocode(GeoPosition position) async =>
+      const GeoPlace(
+        country: 'United States',
+        countryCode: 'US',
+        city: 'San Francisco',
+      );
+
+  @override
+  Future<void> openSettings(EGeoSettingsTarget target) async {}
+}
+
+class MockUserCoordinatesRepository implements IUserCoordinatesRepository {
+  @override
+  Future<Either<void, Exceptions>> updateCoordinates({
+    required GeoPosition position,
+    GeoPlace? place,
+  }) async => const Left(null);
 }
 
 class MockMatchesRepository implements IMatchesRepository {

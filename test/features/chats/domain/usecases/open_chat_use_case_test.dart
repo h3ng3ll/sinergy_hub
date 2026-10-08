@@ -1,7 +1,5 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:sinergy_hub/core/failures/failure.dart';
 import 'package:sinergy_hub/features/chat/domain/failures/chat_validation_failure.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat/chat.dart';
 import 'package:sinergy_hub/features/chat/domain/models/chat_config/chat_config.dart';
@@ -52,30 +50,54 @@ void main() {
   });
 
   group('OpenChatUseCase', () {
-    test('returns Left(ChatPageData) when chat has a resolvable peer', () async {
-      when(
-        () => getChatByIdUseCase.call(chatId: any(named: 'chatId')),
-      ).thenAnswer((_) async => chat);
-      when(
-        () => getUsersUseCase.call(ids: any(named: 'ids')),
-      ).thenAnswer((_) async => [currentUser, otherUser]);
-      when(
-        () => getCurrentUserDataUseCase.call(),
-      ).thenAnswer((_) async => currentUser);
+    test(
+      'returns Left(ChatPageData) when chat has a resolvable peer',
+      () async {
+        when(
+          () => getChatByIdUseCase.call(
+            chatId: any(named: 'chatId'),
+            preferCache: any(named: 'preferCache'),
+          ),
+        ).thenAnswer((_) async => chat);
+        when(
+          () => getUsersUseCase.call(
+            ids: any(named: 'ids'),
+            preferCache: any(named: 'preferCache'),
+          ),
+        ).thenAnswer((_) async => [currentUser, otherUser]);
+        when(
+          () => getCurrentUserDataUseCase.call(
+            preferCache: any(named: 'preferCache'),
+          ),
+        ).thenAnswer((_) async => currentUser);
 
-      final result = await useCase.call(chatId: chatId);
+        final result = await useCase.call(chatId: chatId);
 
-      expect(result.isLeft(), isTrue);
-      final data = result.fold(
-        (l) => l,
-        (_) => throw StateError('expected Left'),
-      );
-      expect(data, isA<ChatPageData>());
-      expect(data.peerUid, otherUid);
-      expect(data.chat, chat);
-      expect(data.currentUser, currentUser);
-      expect(data.users, [currentUser, otherUser]);
-    });
+        expect(result.isLeft(), isTrue);
+        final data = result.fold(
+          (l) => l,
+          (_) => throw StateError('expected Left'),
+        );
+        expect(data, isA<ChatPageData>());
+        expect(data.peerUid, otherUid);
+        expect(data.chat, chat);
+        expect(data.currentUser, currentUser);
+        expect(data.users, [currentUser, otherUser]);
+
+        verify(
+          () => getChatByIdUseCase.call(chatId: chatId, preferCache: true),
+        ).called(1);
+        verify(
+          () => getCurrentUserDataUseCase.call(preferCache: true),
+        ).called(1);
+        verify(
+          () => getUsersUseCase.call(
+            ids: [currentUid, otherUid],
+            preferCache: true,
+          ),
+        ).called(1);
+      },
+    );
 
     test('returns ChatValidationFailure when chatId is empty', () async {
       final result = await useCase.call(chatId: '');
@@ -88,22 +110,44 @@ void main() {
       expect(failure, isA<ChatValidationFailure>());
       expect((failure).message, 'Chat id is empty');
 
-      verifyNever(() => getChatByIdUseCase.call(chatId: any(named: 'chatId')));
-      verifyNever(() => getUsersUseCase.call(ids: any(named: 'ids')));
-      verifyNever(() => getCurrentUserDataUseCase.call());
+      verifyNever(
+        () => getChatByIdUseCase.call(
+          chatId: any(named: 'chatId'),
+          preferCache: any(named: 'preferCache'),
+        ),
+      );
+      verifyNever(
+        () => getUsersUseCase.call(
+          ids: any(named: 'ids'),
+          preferCache: any(named: 'preferCache'),
+        ),
+      );
+      verifyNever(
+        () => getCurrentUserDataUseCase.call(
+          preferCache: any(named: 'preferCache'),
+        ),
+      );
     });
 
     test(
       'returns ChatValidationFailure when chat has no resolvable peer',
       () async {
         when(
-          () => getChatByIdUseCase.call(chatId: any(named: 'chatId')),
+          () => getChatByIdUseCase.call(
+            chatId: any(named: 'chatId'),
+            preferCache: any(named: 'preferCache'),
+          ),
         ).thenAnswer((_) async => chat);
         when(
-          () => getUsersUseCase.call(ids: any(named: 'ids')),
+          () => getUsersUseCase.call(
+            ids: any(named: 'ids'),
+            preferCache: any(named: 'preferCache'),
+          ),
         ).thenAnswer((_) async => <UserData>[]);
         when(
-          () => getCurrentUserDataUseCase.call(),
+          () => getCurrentUserDataUseCase.call(
+            preferCache: any(named: 'preferCache'),
+          ),
         ).thenAnswer((_) async => currentUser);
 
         final result = await useCase.call(chatId: chatId);

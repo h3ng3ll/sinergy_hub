@@ -20,31 +20,33 @@ void main() {
   });
 
   group('ToggleBlockUserUseCase', () {
-    test('writes the TARGET (peer) uid block flag and returns Left on success',
-        () async {
-      when(
-        () => chatRepo.setBlocked(
-          uid: any(named: 'uid'),
-          chatId: any(named: 'chatId'),
-          blocked: any(named: 'blocked'),
-        ),
-      ).thenAnswer((_) async {});
+    test(
+      'writes the TARGET (peer) uid block flag and returns Left on success',
+      () async {
+        when(
+          () => chatRepo.setBlocked(
+            uid: any(named: 'uid'),
+            chatId: any(named: 'chatId'),
+            blocked: any(named: 'blocked'),
+          ),
+        ).thenAnswer((_) async {});
 
-      final res = await useCase.call(
-        chatId: chatId,
-        targetUid: targetUid,
-        blocked: true,
-      );
-
-      expect(res.isLeft(), isTrue);
-      verify(
-        () => chatRepo.setBlocked(
-          uid: targetUid,
+        final res = await useCase.call(
           chatId: chatId,
+          targetUid: targetUid,
           blocked: true,
-        ),
-      ).called(1);
-    });
+        );
+
+        expect(res.isLeft(), isTrue);
+        verify(
+          () => chatRepo.setBlocked(
+            uid: targetUid,
+            chatId: chatId,
+            blocked: true,
+          ),
+        ).called(1);
+      },
+    );
 
     test('passes blocked=false through when unblocking', () async {
       when(
@@ -70,23 +72,25 @@ void main() {
       ).called(1);
     });
 
-    test('returns Right(BlockUserFailure) when the repository throws',
-        () async {
-      when(
-        () => chatRepo.setBlocked(
-          uid: any(named: 'uid'),
-          chatId: any(named: 'chatId'),
-          blocked: any(named: 'blocked'),
-        ),
-      ).thenThrow(Exception('firestore down'));
+    test(
+      'returns Right(BlockUserFailure) when the repository throws',
+      () async {
+        when(
+          () => chatRepo.setBlocked(
+            uid: any(named: 'uid'),
+            chatId: any(named: 'chatId'),
+            blocked: any(named: 'blocked'),
+          ),
+        ).thenThrow(Exception('firestore down'));
 
-      final res = await useCase.call(
-        chatId: chatId,
-        targetUid: targetUid,
-        blocked: true,
-      );
+        final res = await useCase.call(
+          chatId: chatId,
+          targetUid: targetUid,
+          blocked: true,
+        );
 
-      expect(res.isRight(), isTrue);
-    });
+        expect(res.isRight(), isTrue);
+      },
+    );
   });
 }

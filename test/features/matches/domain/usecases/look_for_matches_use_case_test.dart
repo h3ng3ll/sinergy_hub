@@ -51,6 +51,11 @@ void main() {
     );
 
     when(() => authRepository.requireUserId()).thenAnswer((_) async => currentUid);
+    when(
+      () => candidateDistanceRepository.getDistances(
+        uids: any(named: 'uids'),
+      ),
+    ).thenAnswer((_) async => <String, double?>{});
   });
 
   group('LookForMatchesUseCase', () {
@@ -109,5 +114,35 @@ void main() {
 
       expect(result.items.map((u) => u.uid).toList(), ['A', 'C']);
     });
+  });
+  group('LookForMatchesUseCase distances', () {
+    test(
+      'fetches distances only for the surviving candidates and keeps known values',
+      () async {
+        when(() => getExcludedMatchesUseCase.call()).thenAnswer((_) async => []);
+        when(
+          () => userReadRepository.get(
+            userDataState: any(named: 'userDataState'),
+            filter: any(named: 'filter'),
+          ),
+        ).thenAnswer(
+          (_) async => UserDataPgState(items: [active1, deleted, active2]),
+        );
+        when(
+          () => candidateDistanceRepository.getDistances(
+            uids: any(named: 'uids'),
+          ),
+        ).thenAnswer((_) async => <String, double?>{'A': 1.5, 'C': null});
+
+        final result = await useCase.call(
+          userDataState: const UserDataPgState(),
+        );
+
+        verify(
+          () => candidateDistanceRepository.getDistances(uids: ['A', 'C']),
+        ).called(1);
+        expect(result.distancesKm, {'A': 1.5});
+      },
+    );
   });
 }

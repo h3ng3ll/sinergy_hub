@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_messaging_service.dart';
@@ -12,23 +13,40 @@ import '../../../auth/data/repositories/auth_repository_mock.dart';
 class _FirebaseMessagingServiceMock extends Mock
     implements FirebaseMessagingService {}
 
+class _FirebaseCrashlyticsMock extends Mock implements FirebaseCrashlytics {}
+
 void main() {
   late NotificationConfigRepositoryMock repo;
   late AuthRepositoryMock authRepo;
   late _FirebaseMessagingServiceMock messaging;
+  late _FirebaseCrashlyticsMock crashlytics;
   late RegisterCurrentDeviceTokenUseCase useCase;
 
   const uid = 'uid-1';
+
+  setUpAll(() {
+    registerFallbackValue(StackTrace.empty);
+  });
 
   setUp(() {
     repo = NotificationConfigRepositoryMock();
     authRepo = AuthRepositoryMock();
     messaging = _FirebaseMessagingServiceMock();
+    crashlytics = _FirebaseCrashlyticsMock();
+    when(() => crashlytics.log(any())).thenAnswer((_) async {});
+    when(
+      () => crashlytics.recordError(
+        any<dynamic>(),
+        any(),
+        reason: any<dynamic>(named: 'reason'),
+        fatal: any(named: 'fatal'),
+      ),
+    ).thenAnswer((_) async {});
     useCase = RegisterCurrentDeviceTokenUseCase(
       notificationConfigRepository: repo,
       authRepository: authRepo,
       firebaseMessagingService: messaging,
-      logger: LoggerService(),
+      logger: LoggerService(crashlytics: crashlytics),
     );
   });
 

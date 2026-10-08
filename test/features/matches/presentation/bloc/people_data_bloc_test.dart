@@ -4,7 +4,11 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/features/matches/domain/models/e_people_data_status.dart';
+import 'package:sinergy_hub/features/matches/domain/models/matches_filter/matches_filter.dart';
+import 'package:sinergy_hub/features/matches/domain/usecases/get_cached_discovery_deck_use_case.dart';
 import 'package:sinergy_hub/features/matches/domain/usecases/look_for_matches_use_case.dart';
+import 'package:sinergy_hub/features/matches/domain/usecases/remove_from_discovery_deck_use_case.dart';
+import 'package:sinergy_hub/features/matches/domain/usecases/save_discovery_deck_use_case.dart';
 import 'package:sinergy_hub/features/matches/presentation/bloc/people_data_bloc/people_data_bloc.dart';
 import 'package:sinergy_hub/features/user/domain/models/user_data/user_data.dart';
 import 'package:sinergy_hub/features/user/domain/models/users_data_pg_state/users_data_pg_state.dart';
@@ -12,19 +16,53 @@ import 'package:sinergy_hub/features/user/domain/models/users_data_pg_state/user
 class _MockLookForMatchesUseCase extends Mock
     implements LookForMatchesUseCase {}
 
+class _MockGetCachedDiscoveryDeckUseCase extends Mock
+    implements GetCachedDiscoveryDeckUseCase {}
+
+class _MockSaveDiscoveryDeckUseCase extends Mock
+    implements SaveDiscoveryDeckUseCase {}
+
+class _MockRemoveFromDiscoveryDeckUseCase extends Mock
+    implements RemoveFromDiscoveryDeckUseCase {}
+
 void main() {
   late _MockLookForMatchesUseCase lookForMatchesUseCase;
+  late _MockGetCachedDiscoveryDeckUseCase getCachedDiscoveryDeckUseCase;
+  late _MockSaveDiscoveryDeckUseCase saveDiscoveryDeckUseCase;
+  late _MockRemoveFromDiscoveryDeckUseCase removeFromDiscoveryDeckUseCase;
 
   setUpAll(() {
     registerFallbackValue(const UserDataPgState());
+    registerFallbackValue(const MatchesFilter());
   });
 
   setUp(() {
     lookForMatchesUseCase = _MockLookForMatchesUseCase();
+    getCachedDiscoveryDeckUseCase = _MockGetCachedDiscoveryDeckUseCase();
+    saveDiscoveryDeckUseCase = _MockSaveDiscoveryDeckUseCase();
+    removeFromDiscoveryDeckUseCase = _MockRemoveFromDiscoveryDeckUseCase();
+
+    when(
+      () => getCachedDiscoveryDeckUseCase.call(filter: any(named: 'filter')),
+    ).thenAnswer((_) async => null);
+    when(
+      () => saveDiscoveryDeckUseCase.call(
+        filter: any(named: 'filter'),
+        deck: any(named: 'deck'),
+      ),
+    ).thenAnswer((_) async {});
+    when(
+      () => removeFromDiscoveryDeckUseCase.call(
+        userUid: any(named: 'userUid'),
+      ),
+    ).thenAnswer((_) async {});
   });
 
   PeopleDataBloc buildBloc() => PeopleDataBloc(
     lookForMatchesUseCase: lookForMatchesUseCase,
+    getCachedDiscoveryDeckUseCase: getCachedDiscoveryDeckUseCase,
+    saveDiscoveryDeckUseCase: saveDiscoveryDeckUseCase,
+    removeFromDiscoveryDeckUseCase: removeFromDiscoveryDeckUseCase,
   );
 
   final userA = UserData.none().copyWith(uid: 'A');
@@ -56,6 +94,15 @@ void main() {
           ['A', 'B', 'C'],
         );
         expect(bloc.state.usersState.items.last.uid, 'C');
+        verify(
+          () => removeFromDiscoveryDeckUseCase.call(userUid: 'C'),
+        ).called(1);
+        verify(
+          () => saveDiscoveryDeckUseCase.call(
+            filter: any(named: 'filter'),
+            deck: any(named: 'deck'),
+          ),
+        ).called(2);
       },
     );
 
@@ -133,6 +180,116 @@ void main() {
           ['C'],
           reason:
               'loadMorePeoples must not overwrite the restored user with its empty fetch result',
+        );
+      },
+    );
+  });
+  group('PeopleDataBloc.loadPeoples (cache-first deck)', () {
+    blocTest<PeopleDataBloc, PeopleDataState>(
+      'empty cache: fetches the deck and saves it to the cache',
+      setUp: () {
+        when(
+          () => lookForMatchesUseCase.call(
+            userDataState: any(named: 'userDataState'),
+            filter: any(named: 'filter'),
+          ),
+        ).thenAnswer(
+          (_) async => UserDataPgState(items: [userA, userB], hasMore: false),
+        );
+      },
+      build: buildBloc,
+      act: (bloc) => bloc.add(const PeopleDataEvent.loadPeoples()),
+      verify: (bloc) {
+        expect(bloc.state.initialized, isTrue);
+        expect(bloc.state.status, EPeopleDataStatus.initial);
+        expect(
+          bloc.state.usersState.items.map((u) => u.uid).toList(),
+          ['A', 'B'],
+        );
+        verify(
+          () => getCachedDiscoveryDeckUseCase.call(
+            filter: const MatchesFilter(),
+          ),
+        ).called(1);
+        verify(
+          () => lookForMatchesUseCase.call(
+            userDataState: any(named: 'userDataState'),
+            filter: any(named: 'filter'),
+          ),
+        ).called(1);
+        final saved = verify(
+          () => saveDiscoveryDeckUseCase.call(
+            filter: const MatchesFilter(),
+            deck: captureAny(named: 'deck'),
+          ),
+        ).captured;
+        expect(saved, hasLength(1));
+        expect(
+          (saved.single as UserDataPgState).items.map((u) => u.uid).toList(),
+          ['A', 'B'],
+        );
+      },
+    );
+
+    blocTest<PeopleDataBloc, PeopleDataState>(
+      'cached deck: shown without a backend fetch or a cache write',
+      setUp: () {
+        when(
+          () => getCachedDiscoveryDeckUseCase.call(
+            filter: any(named: 'filter'),
+          ),
+        ).thenAnswer(
+          (_) async => UserDataPgState(items: [userC], hasMore: true),
+        );
+      },
+      build: buildBloc,
+      act: (bloc) => bloc.add(const PeopleDataEvent.loadPeoples()),
+      verify: (bloc) {
+        expect(bloc.state.initialized, isTrue);
+        expect(bloc.state.status, EPeopleDataStatus.initial);
+        expect(
+          bloc.state.usersState.items.map((u) => u.uid).toList(),
+          ['C'],
+        );
+        verifyNever(
+          () => lookForMatchesUseCase.call(
+            userDataState: any(named: 'userDataState'),
+            filter: any(named: 'filter'),
+          ),
+        );
+        verifyNever(
+          () => saveDiscoveryDeckUseCase.call(
+            filter: any(named: 'filter'),
+            deck: any(named: 'deck'),
+          ),
+        );
+      },
+    );
+
+    blocTest<PeopleDataBloc, PeopleDataState>(
+      'a failing cache read falls back to a fresh fetch',
+      setUp: () {
+        when(
+          () => getCachedDiscoveryDeckUseCase.call(
+            filter: any(named: 'filter'),
+          ),
+        ).thenThrow(StateError('corrupt cache'));
+        when(
+          () => lookForMatchesUseCase.call(
+            userDataState: any(named: 'userDataState'),
+            filter: any(named: 'filter'),
+          ),
+        ).thenAnswer(
+          (_) async => UserDataPgState(items: [userA], hasMore: false),
+        );
+      },
+      build: buildBloc,
+      act: (bloc) => bloc.add(const PeopleDataEvent.loadPeoples()),
+      verify: (bloc) {
+        expect(bloc.state.status, EPeopleDataStatus.initial);
+        expect(
+          bloc.state.usersState.items.map((u) => u.uid).toList(),
+          ['A'],
         );
       },
     );
