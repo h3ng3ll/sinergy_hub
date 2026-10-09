@@ -37,7 +37,6 @@ class FirebaseAuthRepository extends IAuthRepository {
   final GoogleSignInService _googleSignInService;
   final CryptoService _cryptoService;
   final FirebaseFunctionsService _firebaseFunctionsService;
-  final FirebaseFirestoreService _firebaseFirestoreService;
   final LoggerService _loggerService;
   final Env _env;
 
@@ -45,7 +44,6 @@ class FirebaseAuthRepository extends IAuthRepository {
     required this._loggerService,
     required this._auth,
     required this._googleSignIn,
-    required this._firebaseFirestoreService,
     required this._googleSignInService,
     required this._env,
     required this._cryptoService,
@@ -128,9 +126,7 @@ class FirebaseAuthRepository extends IAuthRepository {
         error: e,
       );
       return Right(
-        FailedSignWithGoogle(
-          message: e.toString(),
-        ),
+        FailedSignWithGoogle(),
       );
     }
   }
@@ -163,13 +159,13 @@ class FirebaseAuthRepository extends IAuthRepository {
         _env.webPushCertificate(),
       );
       return Right(
-        FailedSignWithGoogle(message: e.toString() + _env.webPushCertificate()),
+        FailedSignWithGoogle(),
       );
     } catch (e) {
       _loggerService.debug(
         _env.serverClientId(),
       );
-     _loggerService.debug(
+      _loggerService.debug(
         _env.webPushCertificate(),
       );
       _loggerService.error(
@@ -177,9 +173,7 @@ class FirebaseAuthRepository extends IAuthRepository {
         error: e,
       );
       return Right(
-        FailedSignWithGoogle(
-          message: '$e ${_env.webPushCertificate()} ${_env.serverClientId()}',
-        ),
+        FailedSignWithGoogle(),
       );
     }
   }
@@ -196,8 +190,12 @@ class FirebaseAuthRepository extends IAuthRepository {
   Future<void> _signOutGoogleSafely() async {
     try {
       await _googleSignInService.signOut();
-    } catch (e) {
-      debugPrint('Google sign-out skipped: $e');
+    } catch (e, st) {
+      _loggerService.error(
+        'Google sign-out skipped:',
+        error: e,
+        stackTrace: st,
+      );
     }
   }
 
@@ -233,7 +231,11 @@ class FirebaseAuthRepository extends IAuthRepository {
         return Right(UserExistsWithSuchEmailFailure());
       }
       rethrow;
-    } on FirebaseException catch (_) {
+    } on Exception catch (e) {
+      _loggerService.error(
+        'Failed register',
+        error: e,
+      );
       rethrow;
     }
   }
@@ -264,7 +266,11 @@ class FirebaseAuthRepository extends IAuthRepository {
       return Right(
         SomethingWentWrongSignInFailure(),
       );
-    } catch (_) {
+    } catch (e) {
+      _loggerService.error(
+        'Failed sign in with email and password',
+        error: e,
+      );
       return Right(
         SomethingWentWrongSignInFailure(),
       );

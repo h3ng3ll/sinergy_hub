@@ -49,7 +49,6 @@ void initAuthFeature(GetIt getIt) {
     () => FirebaseAuthRepository(
       auth: getIt<FirebaseAuth>(),
       googleSignIn: getIt<GoogleSignIn>(),
-      firebaseFirestoreService: getIt<FirebaseFirestoreService>(),
       googleSignInService: getIt<GoogleSignInService>(),
       env: getIt<Env>(),
       cryptoService: getIt<CryptoService>(),

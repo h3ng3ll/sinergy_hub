@@ -259,71 +259,58 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             AppLocalizations.delegate,
           ],
           builder: (context, child) {
-            return Stack(
-              children: [
-                Align(
-                  alignment: .topCenter,
-                  child: IconButton(
-                    onPressed: watchLogs,
-                    icon: Icon(
-                      Icons.bug_report,
-                    ),
-                  ),
+            return  MultiBlocListener(
+              listeners: [
+                BlocListener<AuthBloc, AuthState>(
+                  listener: (context, state) {
+                    if (state.isAuthorized && state.uid != null) {
+                      getIt<UserBloc>().add(
+                        UserEvent.init(uid: state.uid!),
+                      );
+                      context.read<NotificationConfigBloc>().add(
+                        NotificationConfigEvent.init(),
+                      );
+                      getIt<OnboardBloc>().add(
+                        OnboardEvent.load(),
+                      );
+                      getIt<PremiumBloc>().add(
+                        PremiumEvent.init(uid: state.uid!),
+                      );
+                      getIt<BackgroundPaletteBloc>().add(
+                        BackgroundPaletteEvent.init(uid: state.uid!),
+                      );
+                    }
+                    if (state.isLogout) {
+                      getIt<UserBloc>().add(
+                        UserEvent.reset(),
+                      );
+                      getIt<OnboardBloc>().add(
+                        OnboardEvent.reset(),
+                      );
+                      getIt<PremiumBloc>().add(
+                        const PremiumEvent.reset(),
+                      );
+                      getIt<BackgroundPaletteBloc>().add(
+                        const BackgroundPaletteEvent.reset(),
+                      );
+                    }
+                    _maybeRemoveSplash();
+                  },
                 ),
-                MultiBlocListener(
-                  listeners: [
-                    BlocListener<AuthBloc, AuthState>(
-                      listener: (context, state) {
-                        if (state.isAuthorized && state.uid != null) {
-                          getIt<UserBloc>().add(
-                            UserEvent.init(uid: state.uid!),
-                          );
-                          context.read<NotificationConfigBloc>().add(
-                            NotificationConfigEvent.init(),
-                          );
-                          getIt<OnboardBloc>().add(
-                            OnboardEvent.load(),
-                          );
-                          getIt<PremiumBloc>().add(
-                            PremiumEvent.init(uid: state.uid!),
-                          );
-                          getIt<BackgroundPaletteBloc>().add(
-                            BackgroundPaletteEvent.init(uid: state.uid!),
-                          );
-                        }
-                        if (state.isLogout) {
-                          getIt<UserBloc>().add(
-                            UserEvent.reset(),
-                          );
-                          getIt<OnboardBloc>().add(
-                            OnboardEvent.reset(),
-                          );
-                          getIt<PremiumBloc>().add(
-                            const PremiumEvent.reset(),
-                          );
-                          getIt<BackgroundPaletteBloc>().add(
-                            const BackgroundPaletteEvent.reset(),
-                          );
-                        }
-                        _maybeRemoveSplash();
-                      },
-                    ),
-                    BlocListener<OnboardBloc, OnboardState>(
-                      listenWhen: (p, c) => p.status != c.status,
-                      listener: (context, _) => _maybeRemoveSplash(),
-                    ),
-                    BlocListener<ConnectivityBloc, ConnectivityState>(
-                      listenWhen: (p, c) => p.isOffline && c.isOnline,
-                      listener: (context, _) {
-                        UiMessageService.showSuccess(
-                          AppLocalizations.of(context)!.connection_restored,
-                        );
-                      },
-                    ),
-                  ],
-                  child: child ?? SizedBox(),
+                BlocListener<OnboardBloc, OnboardState>(
+                  listenWhen: (p, c) => p.status != c.status,
+                  listener: (context, _) => _maybeRemoveSplash(),
+                ),
+                BlocListener<ConnectivityBloc, ConnectivityState>(
+                  listenWhen: (p, c) => p.isOffline && c.isOnline,
+                  listener: (context, _) {
+                    UiMessageService.showSuccess(
+                      AppLocalizations.of(context)!.connection_restored,
+                    );
+                  },
                 ),
               ],
+              child: child ?? SizedBox(),
             );
           },
         ),
