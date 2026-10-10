@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import '../../features/notifications/domain/models/notification_data/notification_data.dart';
 import '../../features/notifications/presentation/widgets/web_notification_widget.dart';
 import '../routes/init_router/init_router.dart';
+import '../utils/notification_icon_helper.dart';
 import 'notification_tap_processor.dart';
 
 @pragma('vm:entry-point')
@@ -120,7 +121,23 @@ class LocalNotificationService {
     );
   }
 
-  /// Todo: implement attachment icon taken from payload
+  /// True when an identical notification (same title + body) is already in
+  /// the tray — e.g. the copy the OS draws itself for an FCM `notification`
+  /// message while the app is in background. Fails open so a message is
+  /// never lost.
+  Future<bool> _isAlreadyShown(String title, String body) async {
+    try {
+      final active = await _flutterLocalNotificationsPlugin
+          .getActiveNotifications();
+      return active.any(
+        (n) => n.title == title && n.body == body,
+      );
+    } catch (e) {
+      debugPrint('Active notifications check failed: $e');
+      return false;
+    }
+  }
+
   Future<void> sendNotification({
     required String title,
     required String body,
@@ -163,31 +180,36 @@ class LocalNotificationService {
         payload: payload,
       );
     } else {
-      /// Just test notification icon used
-      /// for attachments
-      // String? largeIconPath =
-      //     icon ??
-      //     await copyAssetToTemp(
-      //       'assets/images/ic_notification.png',
-      //       'ic_notification.png',
-      //     );
+      if (await _isAlreadyShown(title, body)) return;
+
+      final iconUrl =
+          icon ??
+          switch (notificationData) {
+            ChatNotificationData(senderAvatar: final avatar) => avatar,
+            MatchNotificationData() => null,
+            PremiumNotificationData() => null,
+            UnknownNotificationData() => null,
+          };
+      final iconPath = iconUrl != null && iconUrl.isNotEmpty
+          ? await NotificationIconHelper.getLocalPath(iconUrl)
+          : null;
 
       final androidNotificationDetails = AndroidNotificationDetails(
         'general',
         'general',
         actions: [],
         priority: Priority.high,
-        // largeIcon: FilePathAndroidBitmap(
-        //   largeIconPath,
-        // ),
+        largeIcon: iconPath != null ? FilePathAndroidBitmap(iconPath) : null,
       );
 
       final darwinNotificationDetails = DarwinNotificationDetails(
-        attachments: [
-          // DarwinNotificationAttachment(
-          //   largeIconPath,
-          // ),
-        ],
+        attachments: iconPath != null
+            ? [
+                DarwinNotificationAttachment(
+                  iconPath,
+                ),
+              ]
+            : null,
       );
 
       await _flutterLocalNotificationsPlugin.show(
