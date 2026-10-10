@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -21,20 +22,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LogoutUseCase _logoutUseCase;
 
   AuthBloc({
-    required IAuthRepository authRepository,
-    required SignInWithGoogleUseCase signInWithGoogleUseCase,
-    required AppleSignInUseCase appleSignInUseCase,
-    required LogoutUseCase logoutUseCase,
-  }) : _authRepository = authRepository,
-       _signInWithGoogleUseCase = signInWithGoogleUseCase,
-        _appleSignInUseCase = appleSignInUseCase,
-        _logoutUseCase = logoutUseCase,
-       super(const AuthState()) {
+    required this._authRepository,
+    required this._signInWithGoogleUseCase,
+    required this._appleSignInUseCase,
+    required this._logoutUseCase,
+  }) : super(const AuthState()) {
     on<_Init>(_init);
     on<_Listen>(_listen);
-    on<_SignInViaGoogle>(_signInViaGoogle);
-    on<_SignOut>(_signOut);
-    on<_SignInViaApple>(_signInViaApple);
+    on<_SignInViaGoogle>(
+      _signInViaGoogle,
+      transformer: droppable(),
+    );
+    on<_SignOut>(
+      _signOut,
+      transformer: droppable(),
+    );
+    on<_SignInViaApple>(
+      _signInViaApple,
+      transformer: droppable(),
+    );
   }
 
   Future<void> _listen(
@@ -114,7 +120,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
     );
   }
-void _signInViaApple(
+
+  void _signInViaApple(
     _SignInViaApple event,
     Emitter<AuthState> emit,
   ) async {

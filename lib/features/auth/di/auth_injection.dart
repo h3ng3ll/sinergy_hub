@@ -7,6 +7,7 @@ import '../../../core/services/crypto_service.dart';
 import '../../../core/services/firebase/firebase_auth_service.dart';
 import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../core/services/firebase/firebase_functions_service.dart';
+import '../../../core/services/firebase/firebase_messaging_service.dart';
 import '../../../core/services/firebase/firebase_realtime_db_service.dart';
 import '../../../core/services/google_sign_in_service/google_sign_in_service.dart';
 import '../../../core/services/logger_service.dart';
@@ -65,7 +66,8 @@ void initAuthFeature(GetIt getIt) {
   getIt.registerFactory(
     () => LogoutUseCase(
       authRepository: getIt<IAuthRepository>(),
-      presenceService: getIt<IPresenceService>(),
+      firebaseFunctionsService: getIt<FirebaseFunctionsService>(),
+      firebaseMessagingService: getIt<FirebaseMessagingService>(),
     ),
   );
   getIt.registerFactory(

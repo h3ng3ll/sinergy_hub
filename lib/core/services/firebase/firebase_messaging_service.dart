@@ -3,28 +3,20 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import '../../utils/env/env.dart';
 import '../local_notification_service.dart';
-import '../notification_tap_processor.dart';
 
+/// Background / terminated delivery. A message carrying a `notification`
+/// block is drawn by the OS itself while the app is not in the foreground,
+/// so this handler must NOT draw it again — doing so produced two identical
+/// notifications per message (the old title/body dedupe raced the OS: it only
+/// won while the background engine was cold, i.e. for the first message).
+/// Taps on the OS notification are routed via `onMessageOpenedApp` /
+/// `getInitialMessage` in [FirebaseMessagingService.init].
 @pragma('vm:entry-point')
 Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
-  // Нужно инициализировать сервис, если он есть в background
-  final localService = LocalNotificationService(
-    notificationTapProcessor: NotificationTapProcessor(),
-  );
-  final notification = message.notification;
-  if (notification != null) {
-    debugPrint('Background Message notification details: ');
-    debugPrint('Title: ${message.notification?.title}');
-    debugPrint('Body: ${message.notification?.body}');
-    debugPrint('Data: ${message.data}');
-    await localService.sendNotification(
-      title: notification.title ?? 'New Notification',
-      body: notification.body ?? '',
-      payload: message.data,
-    );
-  }
+  debugPrint('Background message: ${message.messageId} data: ${message.data}');
 }
 
 class FirebaseMessagingService {
@@ -120,6 +112,18 @@ class FirebaseMessagingService {
 
       // Слушаем foreground сообщения
       FirebaseMessaging.onMessage.listen(_handleMessage);
+
+      if (!kIsWeb) {
+        /// Taps on OS-drawn notifications (app in background / killed).
+        FirebaseMessaging.onMessageOpenedApp.listen(_handleOpenedMessage);
+        final initialMessage = await _firebaseMessaging.getInitialMessage();
+        if (initialMessage != null) {
+          /// Cold start: the router has no context until the first frame.
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) => _handleOpenedMessage(initialMessage),
+          );
+        }
+      }
     } finally {
       // Always completes — with the token on success, with whatever
       // [fcmToken] holds (possibly null) if something above threw — so
@@ -128,6 +132,11 @@ class FirebaseMessagingService {
         _tokenReadyCompleter.complete(fcmToken);
       }
     }
+  }
+
+  Future<void> _handleOpenedMessage(RemoteMessage message) async {
+    if (message.data.isEmpty) return;
+    await _localNotificationService.openFromData(message.data);
   }
 
   void _handleMessage(RemoteMessage message) {

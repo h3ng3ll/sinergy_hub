@@ -106,36 +106,29 @@ class LocalNotificationService {
     final payload = notificationResponse.payload;
     if (payload == null) return;
 
-    final context = RootPageRoute.rootKey.currentContext;
-    if (context == null || !context.mounted) {
-      return;
-    }
-    final notificationData = NotificationData.fromJson(
+    await openFromData(
       jsonDecode(
         payload,
       ),
     );
-    await _notificationTapProcessor.processTap(
-      notificationData,
-      context,
-    );
   }
 
-  /// True when an identical notification (same title + body) is already in
-  /// the tray — e.g. the copy the OS draws itself for an FCM `notification`
-  /// message while the app is in background. Fails open so a message is
-  /// never lost.
-  Future<bool> _isAlreadyShown(String title, String body) async {
-    try {
-      final active = await _flutterLocalNotificationsPlugin
-          .getActiveNotifications();
-      return active.any(
-        (n) => n.title == title && n.body == body,
-      );
-    } catch (e) {
-      debugPrint('Active notifications check failed: $e');
-      return false;
+  /// Routes a tapped notification's data payload — shared by local
+  /// notifications and the OS-drawn FCM ones (`onMessageOpenedApp` /
+  /// `getInitialMessage`).
+  Future<void> openFromData(
+    Map<String, dynamic> data,
+  ) async {
+    final context = RootPageRoute.rootKey.currentContext;
+    if (context == null || !context.mounted) {
+      return;
     }
+    await _notificationTapProcessor.processTap(
+      NotificationData.fromJson(
+        data,
+      ),
+      context,
+    );
   }
 
   Future<void> sendNotification({
@@ -180,8 +173,6 @@ class LocalNotificationService {
         payload: payload,
       );
     } else {
-      if (await _isAlreadyShown(title, body)) return;
-
       final iconUrl =
           icon ??
           switch (notificationData) {
