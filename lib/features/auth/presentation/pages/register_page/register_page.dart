@@ -8,6 +8,7 @@ import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
@@ -87,6 +88,11 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  void goToLogin() {
+    _stopPolling();
+    LoginPageRoute().replace(context);
+  }
+
   void _stopPolling() {
     _verificationPollTimer?.cancel();
     _verificationPollTimer = null;
@@ -128,13 +134,25 @@ class _RegisterPageState extends State<RegisterPage> {
             BlocListener<RegisterBloc, RegisterState>(
               bloc: _registerBloc,
               listenWhen: (p, n) =>
-                  p.isPendingVerification && (n.isRegistered || n.isFailed),
+                  p.isPendingVerification &&
+                  (n.isRegistered || n.isFailed || n.isSessionLost),
               listener: (context, state) {
                 /// AuthBloc's _listen is subscribed to watchUser() which
                 /// fires after the reload() inside CompleteRegistrationUseCase,
                 /// so isEmailVerified flips and the router redirect engages
                 /// without any explicit AuthBloc event from here.
                 _stopPolling();
+              },
+            ),
+            BlocListener<RegisterBloc, RegisterState>(
+              bloc: _registerBloc,
+              listenWhen: (p, n) => !p.isSessionLost && n.isSessionLost,
+              listener: (context, state) {
+                UiMessageService.showInfo(
+                  'Your account has been created. Please log in with your email and password.',
+                  timeInSecondsDuration: 10,
+                );
+                goToLogin();
               },
             ),
           ],
@@ -190,7 +208,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           if (state.isPendingVerification) ...[
                             Gap(16.0),
                             Text(
-                              'Check your email for the verification link.',
+                              'We sent a verification link to ${_emailController.text}.\n'
+                              'Open it, then come back to the app — you will continue automatically.\n\n'
+                              'Your account is already created. If nothing happens after verifying, just log in with your email and password.',
                               textAlign: TextAlign.center,
                               style: textTheme.medium16.copyWith(
                                 color: AppColors.white.value,
@@ -199,6 +219,18 @@ class _RegisterPageState extends State<RegisterPage> {
                             Gap(12.0),
                             CircularProgressIndicator(
                               color: AppColors.white.value,
+                            ),
+                            Gap(12.0),
+                            TextButton(
+                              onPressed: goToLogin,
+                              child: Text(
+                                'Already verified? Log in',
+                                style: textTheme.medium16.copyWith(
+                                  color: AppColors.white.value,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: AppColors.white.value,
+                                ),
+                              ),
                             ),
                           ],
                         ],

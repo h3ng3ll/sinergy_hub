@@ -7,12 +7,17 @@ enum RegisterStatus {
   failed,
   pendingVerification,
   registered,
+
+  /// The account exists but the app could not confirm verification
+  /// (session lost / server unreachable) — the user must log in.
+  sessionLost,
 }
 
 extension RegisterStateX on RegisterState {
   bool get isRegistered => status == RegisterStatus.registered;
   bool get isFailed => status == RegisterStatus.failed;
   bool get isPendingVerification => status == RegisterStatus.pendingVerification;
+  bool get isSessionLost => status == RegisterStatus.sessionLost;
   bool get isCounting => resendCountdown > 0;
   bool get canResend => resendCountdown == 0;
 }

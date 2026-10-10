@@ -121,10 +121,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           /// Expected during polling — stay in pendingVerification.
           return;
         }
+
+        /// The account is already created at this point, so any other
+        /// failure means the app lost track of it — send the user to log in
+        /// instead of looping an error toast.
         emit(
           state.copyWith(
-            status: RegisterStatus.failed,
-            errorMessage: e.message,
+            status: RegisterStatus.sessionLost,
           ),
         );
       },

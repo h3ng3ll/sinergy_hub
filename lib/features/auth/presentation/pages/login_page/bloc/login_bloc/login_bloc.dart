@@ -71,13 +71,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       },
       (e) {
         if (e is EmailNotVerifiedFailure) {
+          /// No email was sent on login, so Resend is available right away.
           emit(
             state.copyWith(
               status: LoginStatus.pendingVerification,
-              resendCountdown: _kResendCountdownSeconds,
+              resendCountdown: 0,
             ),
           );
-          _startCountdown();
           return;
         }
         emit(

@@ -31,9 +31,11 @@ class LoginUseCase {
     return res.fold(
       (_) async {
         if (!await _authRepository.isEmailVerified()) {
-          /// A failure here is usually rate limiting after a recent send —
-          /// the user still gets the verify step and can resend later.
-          await _authRepository.sendEmailVerification();
+          /// Do NOT send a new verification email here: every new email
+          /// invalidates the links in the previous ones, so a user who
+          /// re-logs in and then taps the link from the registration email
+          /// would hit a dead link and never get verified. Sending is left
+          /// to the explicit "Resend verification email" action.
           return Right(
             const EmailNotVerifiedFailure(),
           );

@@ -121,8 +121,9 @@ class _LoginPageState extends State<LoginPage> {
                   !p.isPendingVerification && n.isPendingVerification,
               listener: (context, state) {
                 UiMessageService.showInfo(
-                  'Your email is not verified yet. A verification link has '
-                  'been sent to ${_emailController.text}',
+                  'Your email is not verified yet. Open the verification link '
+                  'we sent to ${_emailController.text}, or tap "Resend '
+                  'verification email".',
                   timeInSecondsDuration: 10,
                 );
                 _startPolling();
@@ -186,7 +187,10 @@ class _LoginPageState extends State<LoginPage> {
                               if (state.isPendingVerification) ...[
                                 Gap(24.0),
                                 Text(
-                                  'Check your email for the verification link.',
+                                  'Open the verification link from your email, '
+                                  'then come back — you will continue '
+                                  'automatically.\n\nIf you requested several '
+                                  'emails, use the link from the most recent one.',
                                   textAlign: TextAlign.center,
                                   style: textTheme.medium16.copyWith(
                                     color: AppColors.white.value,
