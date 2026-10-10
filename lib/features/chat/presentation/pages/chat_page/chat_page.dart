@@ -206,6 +206,7 @@ class _ChatPageState extends State<ChatPage> {
               users: [chatterUser],
               onTapUrl: onTapUrl,
               onTapEmail: onTapEmail,
+              onTapUser: onTapUser,
             ),
           ),
           BuildChatBottom(

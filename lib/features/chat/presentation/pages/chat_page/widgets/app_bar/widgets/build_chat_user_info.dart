@@ -33,7 +33,7 @@ class BuildChatUserInfo extends StatelessWidget {
                   width: 30,
                   height: 30,
                   colorFilter: ColorFilter.mode(
-                    AppColors.black.value,
+                    AppColors.greyLight.value,
                     BlendMode.srcIn,
                   ),
                 ),

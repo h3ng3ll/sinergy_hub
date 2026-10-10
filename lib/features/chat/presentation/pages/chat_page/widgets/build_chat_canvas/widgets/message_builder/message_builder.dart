@@ -20,6 +20,7 @@ class MessageBuilder extends StatefulWidget {
   final VoidCallback onReachToEnd;
   final Function(String) onTapUrl;
   final Function(String) onTapEmail;
+  final Function(String) onTapUser;
   final UserData currentUser;
 
   const MessageBuilder({
@@ -27,6 +28,7 @@ class MessageBuilder extends StatefulWidget {
     required this.onReachToEnd,
     required this.onTapUrl,
     required this.onTapEmail,
+    required this.onTapUser,
     required this.currentUser,
   });
 
@@ -135,6 +137,9 @@ class _MessageBuilderState extends State<MessageBuilder> {
               isSentByCurUser: isSentByCurUser,
               onTapUrl: widget.onTapUrl,
               onTapEmail: widget.onTapEmail,
+              onTapUser: isSentByCurUser
+                  ? null
+                  : () => widget.onTapUser(sender.uid),
             );
           },
         ),

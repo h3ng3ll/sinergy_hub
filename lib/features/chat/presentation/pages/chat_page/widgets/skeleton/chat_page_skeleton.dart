@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/utils/extensions/go_router_x.dart';
@@ -13,25 +14,29 @@ class ChatPageSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white.value,
-      body: Column(
-        children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: AppColors.white.value,
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.black.value.withValues(
-                    alpha: 0.4,
-                  ),
-                  offset: const Offset(0, 2),
-                  blurRadius: 5,
-                ),
-              ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: Scaffold(
+        backgroundColor: AppColors.white.value,
+        body: Column(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: MediaQuery.paddingOf(context).top,
             ),
-            child: SafeArea(
-              bottom: false,
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppColors.white.value,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.black.value.withValues(
+                      alpha: 0.4,
+                    ),
+                    offset: const Offset(0, 2),
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
               child: SizedBox(
                 height: kToolbarHeight,
                 child: Row(
@@ -86,22 +91,22 @@ class ChatPageSkeleton extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-          const Expanded(
-            child: ChatMessagesSkeleton(),
-          ),
-          BuildChatBottomContainer(
-            child: HorizontalPadding(
-              child: AppShimmer(
-                child: const ShimmerBox(
-                  width: double.infinity,
-                  height: 44.0,
-                  radius: 22.0,
+            const Expanded(
+              child: ChatMessagesSkeleton(),
+            ),
+            BuildChatBottomContainer(
+              child: HorizontalPadding(
+                child: AppShimmer(
+                  child: const ShimmerBox(
+                    width: double.infinity,
+                    height: 44.0,
+                    radius: 22.0,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

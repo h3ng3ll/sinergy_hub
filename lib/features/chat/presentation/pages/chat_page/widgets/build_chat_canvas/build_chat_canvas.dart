@@ -12,6 +12,7 @@ class BuildChatCanvas extends StatelessWidget {
   final List<UserData> users;
   final Function(String) onTapUrl;
   final Function(String) onTapEmail;
+  final Function(String) onTapUser;
   final UserData currentUser;
 
   const BuildChatCanvas({
@@ -21,6 +22,7 @@ class BuildChatCanvas extends StatelessWidget {
     required this.users,
     required this.onTapUrl,
     required this.onTapEmail,
+    required this.onTapUser,
     required this.currentUser,
   });
 
@@ -33,6 +35,7 @@ class BuildChatCanvas extends StatelessWidget {
             onReachToEnd: onReachToEnd,
             onTapUrl: onTapUrl,
             onTapEmail: onTapEmail,
+            onTapUser: onTapUser,
             currentUser: currentUser,
           ),
         ),
@@ -47,6 +50,7 @@ class BuildChatCanvas extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: BuildMessage.loading(
                   user: user,
+                  onTapUser: () => onTapUser(user.uid),
                 ),
               );
             },

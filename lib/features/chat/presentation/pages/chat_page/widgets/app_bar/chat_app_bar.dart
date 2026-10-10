@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../../core/resources/colors/app_colors.dart';
@@ -27,58 +28,68 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white.value,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.value.withValues(
-              alpha: 0.4,
-            ),
-            offset: Offset(
-              0,
-              2,
-            ),
-            blurRadius: 5,
-          ),
-        ],
+    return Padding(
+      padding: EdgeInsets.only(
+        top: MediaQuery.paddingOf(context).top,
       ),
-      child: CustomAppBar(
-        backgroundColor: Colors.transparent,
-        forceMaterialTransparency: true,
-        shadowColor: AppColors.black.value,
-        leadingWidth: 50,
-        leading: InkWell(
-          onTap: context.goBack,
-          child: Icon(
-            Icons.arrow_back,
-            color: AppColors.black.value,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.white.value,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.value.withValues(
+                alpha: 0.4,
+              ),
+              offset: Offset(
+                0,
+                2,
+              ),
+              blurRadius: 5,
+            ),
+          ],
+        ),
+        child: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: CustomAppBar(
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
+            backgroundColor: Colors.transparent,
+            forceMaterialTransparency: true,
+            shadowColor: AppColors.black.value,
+            leadingWidth: 50,
+            leading: InkWell(
+              onTap: context.goBack,
+              child: Icon(
+                Icons.arrow_back,
+                color: AppColors.black.value,
+              ),
+            ),
+            actions: [
+              Gap(50.0),
+              Spacer(),
+              BuildChatUserInfo(
+                onTapUser: onTapUser,
+                user: user,
+              ),
+              Spacer(),
+              CustomPopupMenu<bool>(
+                icon: Icon(
+                  Icons.more_vert,
+                  color: AppColors.black.value,
+                ),
+                color: AppColors.white.value,
+                items: const [true],
+                onSelected: (_) => onToggleBlock(),
+                itemBuilder: (context, _) => CustomPopupMenuItem<bool>.withIcon(
+                  value: true,
+                  icon: isBlocked ? Icons.lock_open : Icons.block,
+                  iconColor: AppColors.tartOrange.value,
+                  text: isBlocked ? l10n.unblock_user : l10n.block_user,
+                ),
+              ),
+            ],
           ),
         ),
-        actions: [
-          Gap(50.0),
-          Spacer(),
-          BuildChatUserInfo(
-            onTapUser: onTapUser,
-            user: user,
-          ),
-          Spacer(),
-          CustomPopupMenu<bool>(
-            icon: Icon(
-              Icons.more_vert,
-              color: AppColors.black.value,
-            ),
-            color: AppColors.white.value,
-            items: const [true],
-            onSelected: (_) => onToggleBlock(),
-            itemBuilder: (context, _) => CustomPopupMenuItem<bool>.withIcon(
-              value: true,
-              icon: isBlocked ? Icons.lock_open : Icons.block,
-              iconColor: AppColors.tartOrange.value,
-              text: isBlocked ? l10n.unblock_user : l10n.block_user,
-            ),
-          ),
-        ],
       ),
     );
   }

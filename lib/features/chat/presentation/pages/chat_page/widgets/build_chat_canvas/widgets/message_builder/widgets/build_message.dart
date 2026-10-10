@@ -16,6 +16,7 @@ class BuildMessage extends StatelessWidget {
   final bool isLoadingStub;
   final Function(String) onTapUrl;
   final Function(String) onTapEmail;
+  final VoidCallback? onTapUser;
 
   const BuildMessage({
     super.key,
@@ -25,13 +26,16 @@ class BuildMessage extends StatelessWidget {
     this.isLoadingStub = false,
     required this.onTapUrl,
     required this.onTapEmail,
+    this.onTapUser,
   });
 
   factory BuildMessage.loading({
     required UserData user,
+    VoidCallback? onTapUser,
   }) => BuildMessage(
     isSentByCurUser: false,
     user: user,
+    onTapUser: onTapUser,
     isLoadingStub: true,
     onTapUrl: (_) {},
     onTapEmail: (_) {},
@@ -70,6 +74,8 @@ class BuildMessage extends StatelessWidget {
                           url: user.avatarUrl,
                           width: 50.0,
                           height: 50.0,
+                          placeholderColor: AppColors.greyLight.value,
+                          onTap: onTapUser?.call,
                         ),
                         Gap(10.0),
                       ],

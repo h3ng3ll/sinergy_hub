@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../resources/colors/app_color_scheme.dart';
 import '../utils/extensions/go_router_x.dart';
@@ -15,6 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final ShapeBorder? shape;
   final bool? forceMaterialTransparency;
   final Color? shadowColor;
+  final SystemUiOverlayStyle? systemOverlayStyle;
 
   const CustomAppBar({
     super.key,
@@ -31,6 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.shape,
     this.forceMaterialTransparency,
     this.shadowColor,
+    this.systemOverlayStyle,
   });
 
   @override
@@ -44,6 +47,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: centerTitle,
       forceMaterialTransparency: forceMaterialTransparency ?? false,
       shadowColor: shadowColor,
+      systemOverlayStyle: systemOverlayStyle,
       scrolledUnderElevation: 0,
       iconTheme: IconThemeData(color: iconColor),
       actionsIconTheme: IconThemeData(color: iconColor),

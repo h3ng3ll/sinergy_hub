@@ -18,6 +18,7 @@ class BuildImage extends StatelessWidget {
   final BoxFit fit;
   final BorderRadius? borderRadius;
   final Border? border;
+  final Color? placeholderColor;
 
   const BuildImage({
     super.key,
@@ -30,6 +31,7 @@ class BuildImage extends StatelessWidget {
     this.fit = BoxFit.cover,
     this.borderRadius,
     this.border,
+    this.placeholderColor,
   });
 
   bool get _hasImage => url != null || bytes != null || asset != null;
@@ -102,7 +104,7 @@ class BuildImage extends StatelessWidget {
         width: 40,
         height: 40,
         colorFilter: ColorFilter.mode(
-          colorScheme.onPrimary.withValues(alpha: 0.6),
+          placeholderColor ?? colorScheme.onPrimary.withValues(alpha: 0.6),
           BlendMode.srcIn,
         ),
       ),

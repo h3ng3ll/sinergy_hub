@@ -10,6 +10,7 @@ class BuildUserAvatar extends StatelessWidget {
   final String? url;
   final Uint8List? cacheImg;
   final VoidCallback? onTap;
+  final Color? placeholderColor;
 
   const BuildUserAvatar({
     super.key,
@@ -18,6 +19,7 @@ class BuildUserAvatar extends StatelessWidget {
     required this.url,
     this.onTap,
     this.cacheImg,
+    this.placeholderColor,
   });
 
   @override
@@ -36,6 +38,7 @@ class BuildUserAvatar extends StatelessWidget {
           shape: BoxShape.circle,
           width: width,
           height: height,
+          placeholderColor: placeholderColor,
         ),
       ),
     );
