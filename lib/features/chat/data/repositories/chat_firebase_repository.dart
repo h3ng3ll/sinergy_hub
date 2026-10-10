@@ -13,8 +13,8 @@ class ChatFirebaseRepository implements IChatRepository {
   final FirebaseFirestoreService _firebaseFirestoreService;
 
   ChatFirebaseRepository({
-    required FirebaseFirestoreService firebaseFirestoreService,
-  }) : _firebaseFirestoreService = firebaseFirestoreService;
+    required this._firebaseFirestoreService,
+  });
 
   ColRef get _chats => _firebaseFirestoreService.chats();
 
@@ -216,10 +216,17 @@ class ChatFirebaseRepository implements IChatRepository {
     required String uid,
     required List<String> participates,
   }) async {
+    /// Array equality in Firestore is order-sensitive, and the stored
+    /// `participants` order does not follow the matchId order — match
+    /// either ordering.
+    final reversed = participates.reversed.toList();
     final chatRow = await _chats
         .where(
           'participants',
-          isEqualTo: participates,
+          whereIn: [
+            participates,
+            if (participates.length > 1) reversed,
+          ],
         )
         .limit(
           1,
