@@ -120,6 +120,7 @@ class LocalNotificationService {
     );
   }
 
+  /// Todo: implement attachment icon taken from payload
   Future<void> sendNotification({
     required String title,
     required String body,
@@ -162,28 +163,30 @@ class LocalNotificationService {
         payload: payload,
       );
     } else {
-      String? largeIconPath =
-          icon ??
-          await copyAssetToTemp(
-            'assets/images/ic_notification.png',
-            'ic_notification.png',
-          );
+      /// Just test notification icon used
+      /// for attachments
+      // String? largeIconPath =
+      //     icon ??
+      //     await copyAssetToTemp(
+      //       'assets/images/ic_notification.png',
+      //       'ic_notification.png',
+      //     );
 
       final androidNotificationDetails = AndroidNotificationDetails(
         'general',
         'general',
         actions: [],
         priority: Priority.high,
-        largeIcon: FilePathAndroidBitmap(
-          largeIconPath,
-        ),
+        // largeIcon: FilePathAndroidBitmap(
+        //   largeIconPath,
+        // ),
       );
 
       final darwinNotificationDetails = DarwinNotificationDetails(
         attachments: [
-          DarwinNotificationAttachment(
-            largeIconPath,
-          ),
+          // DarwinNotificationAttachment(
+          //   largeIconPath,
+          // ),
         ],
       );
 
