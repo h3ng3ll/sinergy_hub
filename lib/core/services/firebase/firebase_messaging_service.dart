@@ -87,7 +87,10 @@ class FirebaseMessagingService {
         if (kDebugMode) {
           print('FCM device token: $token');
         }
-
+        if(Platform.isIOS){
+          final apnsToken = await _firebaseMessaging.getAPNSToken();
+          debugPrint('APNs token: $apnsToken');
+        }
         fcmToken = token;
 
         // Слушаем background сообщения - регистрируем только один раз

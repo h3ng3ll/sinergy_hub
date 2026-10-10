@@ -113,6 +113,10 @@ class _MessageBuilderState extends State<MessageBuilder> {
             message.createdAt.month,
             message.createdAt.day,
           ),
+
+          /// GroupedListView re-sorts the elements and List.sort is unstable,
+          /// so same-day messages need an explicit order or they get shuffled.
+          itemComparator: (a, b) => a.createdAt.compareTo(b.createdAt),
           controller: _scrollController,
           groupSeparatorBuilder: (time) {
             return BuildChatSeparator(
