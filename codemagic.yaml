@@ -217,7 +217,7 @@ workflows:
       vars:
         BUNDLE_ID: "$IOS_BUNDLE_ID"
         APP_STORE_APPLE_ID: $APPSTORE_APP_ID
-      flutter: 3.41.1
+      flutter: 3.47.7
       xcode: latest
       cocoapods: default
     scripts:
@@ -290,7 +290,7 @@ workflows:
       groups:
         - env
         - purchase
-      flutter: 3.44.4
+      flutter: 3.47.7
     scripts:
       - name: Create firebase.json file
         script: |
