@@ -6,6 +6,7 @@ import 'package:sinergy_hub/core/services/logger_service.dart';
 import 'package:sinergy_hub/features/notifications/domain/failures/register_device_token_failure.dart';
 import 'package:sinergy_hub/features/notifications/domain/models/notification_config/notification_config.dart';
 import 'package:sinergy_hub/features/notifications/domain/usecases/register_current_device_token_use_case.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 import '../../data/repositories/notification_config_repository_mock.dart';
 import '../../../auth/data/repositories/auth_repository_mock.dart';
@@ -46,7 +47,7 @@ void main() {
       notificationConfigRepository: repo,
       authRepository: authRepo,
       firebaseMessagingService: messaging,
-      logger: LoggerService(crashlytics: crashlytics),
+      logger: LoggerService(crashlytics: crashlytics, talker: Talker()),
     );
   });
 

@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/core/services/logger_service.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class _MockFirebaseCrashlytics extends Mock implements FirebaseCrashlytics {}
 
@@ -24,7 +25,7 @@ void main() {
         fatal: any(named: 'fatal'),
       ),
     ).thenAnswer((_) async {});
-    logger = LoggerService(crashlytics: crashlytics);
+    logger = LoggerService(crashlytics: crashlytics, talker: Talker());
   });
 
   group('LoggerService', () {

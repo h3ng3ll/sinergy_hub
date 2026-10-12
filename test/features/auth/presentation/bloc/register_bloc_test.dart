@@ -127,7 +127,7 @@ void main() {
     );
 
     blocTest<RegisterBloc, RegisterState>(
-      'real failure during polling → emits failed with message',
+      'real failure during polling → emits sessionLost',
       build: () {
         when(() => completeRegistrationUseCase.call()).thenAnswer(
           (_) async => Right(AuthUnreachableFailure()),
@@ -138,10 +138,9 @@ void main() {
         status: RegisterStatus.pendingVerification,
       ),
       act: (bloc) => bloc.add(const RegisterEvent.checkVerification()),
-      expect: () => [
+      expect: () => const [
         RegisterState(
-          status: RegisterStatus.failed,
-          errorMessage: AuthUnreachableFailure().message,
+          status: RegisterStatus.sessionLost,
         ),
       ],
     );

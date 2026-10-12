@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/features/auth/domain/failures/auth_failures.dart';
@@ -12,6 +13,8 @@ class _AuthRepositoryMock extends Mock implements IAuthRepository {}
 
 class _AuthorizationUseCaseMock extends Mock implements AuthorizationUseCase {}
 
+class _UserMock extends Mock implements User {}
+
 void main() {
   late _AuthRepositoryMock authRepository;
   late _AuthorizationUseCaseMock authorizationUseCase;
@@ -20,6 +23,9 @@ void main() {
   setUp(() {
     authRepository = _AuthRepositoryMock();
     authorizationUseCase = _AuthorizationUseCaseMock();
+    when(() => authRepository.getCurrentUser()).thenAnswer(
+      (_) async => _UserMock(),
+    );
     useCase = CompleteRegistrationUseCase(
       authRepository: authRepository,
       authorizationUseCase: authorizationUseCase,

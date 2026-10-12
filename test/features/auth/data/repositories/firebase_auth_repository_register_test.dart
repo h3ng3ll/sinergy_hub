@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sinergy_hub/core/services/crypto_service.dart';
-import 'package:sinergy_hub/core/services/firebase/firebase_firestore_service.dart';
 import 'package:sinergy_hub/core/services/firebase/firebase_functions_service.dart';
 import 'package:sinergy_hub/core/services/google_sign_in_service/google_sign_in_service.dart';
 import 'package:sinergy_hub/core/services/logger_service.dart';
@@ -18,8 +17,6 @@ class _UserCredentialMock extends Mock implements UserCredential {}
 class _UserMock extends Mock implements User {}
 
 class _GoogleSignInMock extends Mock implements GoogleSignIn {}
-
-class _FirestoreServiceMock extends Mock implements FirebaseFirestoreService {}
 
 class _GoogleSignInServiceMock extends Mock implements GoogleSignInService {}
 
@@ -49,7 +46,6 @@ void main() {
     repository = FirebaseAuthRepository(
       auth: auth,
       googleSignIn: _GoogleSignInMock(),
-      firebaseFirestoreService: _FirestoreServiceMock(),
       googleSignInService: _GoogleSignInServiceMock(),
       env: _EnvMock(),
       cryptoService: _CryptoServiceMock(),
