@@ -10,7 +10,7 @@ workflows:
 #          include: true
 
     environment:
-      flutter: 3.47.6
+      flutter: 3.47.7
       groups:
         - env
         - files
