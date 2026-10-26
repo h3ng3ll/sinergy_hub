@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -33,6 +34,36 @@ import 'mocks/test_di.dart';
 
 final Set<String> _failedCaptures = <String>{};
 late GoRouter _router;
+
+/// Downloads every showcase avatar up front so captures never show the
+/// network-loading placeholder. A failed download is logged, not fatal.
+Future<void> _precacheAvatars() async {
+  await Future.wait(
+    ShowcaseData.avatarUrls.map((url) {
+      final completer = Completer<void>();
+      final stream = CachedNetworkImageProvider(url).resolve(
+        ImageConfiguration.empty,
+      );
+      late final ImageStreamListener listener;
+      listener = ImageStreamListener(
+        (_, _) {
+          stream.removeListener(listener);
+          if (!completer.isCompleted) completer.complete();
+        },
+        onError: (error, _) {
+          stream.removeListener(listener);
+          debugPrint('avatar precache failed: $url ($error)');
+          if (!completer.isCompleted) completer.complete();
+        },
+      );
+      stream.addListener(listener);
+      return completer.future.timeout(
+        const Duration(seconds: 20),
+        onTimeout: () => debugPrint('avatar precache timed out: $url'),
+      );
+    }),
+  );
+}
 
 Future<void> _settle(WidgetTester tester) async {
   for (int i = 0; i < 6; i++) {
@@ -187,6 +218,7 @@ void main() {
 
   setUpAll(() async {
     await setupTestDI();
+    await _precacheAvatars();
     _router = initRouter(
       authBloc: testAuthBloc,
       userBloc: testUserBloc,

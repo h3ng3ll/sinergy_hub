@@ -285,6 +285,7 @@ Future<void> setupTestDI() async {
   getIt.registerLazySingleton<FirebaseCrashlytics>(
     () => _FakeFirebaseCrashlytics(),
   );
+  getIt.registerLazySingleton<Talker>(() => Talker());
   getIt.registerLazySingleton<LoggerService>(
     () => LoggerService(
       crashlytics: getIt<FirebaseCrashlytics>(),
@@ -381,7 +382,8 @@ Future<void> setupTestDI() async {
   getIt.registerFactory<LogoutUseCase>(
     () => LogoutUseCase(
       authRepository: getIt<IAuthRepository>(),
-      presenceService: getIt<IPresenceService>(),
+      firebaseFunctionsService: getIt<FirebaseFunctionsService>(),
+      firebaseMessagingService: getIt<FirebaseMessagingService>(),
     ),
   );
   getIt.registerFactory<RegisterUseCase>(

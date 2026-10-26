@@ -26,9 +26,38 @@ class ShowcaseData {
 
   static final DateTime _now = DateTime(2026, 5, 16, 14, 30);
 
+  // Professional portraits from Unsplash (https://unsplash.com/license),
+  // face-cropped by the imgix CDN so they read well in circular avatars.
+  static const String _avatarParams =
+      '?auto=format&fit=crop&crop=faces&w=800&h=1000&q=80';
+
+  static const Map<String, String> _avatarPhotos = {
+    heroUid: 'photo-1790575546912-96a69a9f6ded', // Vitaly Gariev
+    partnerUid: 'photo-1581065178047-8ee15951ede6', // Annika Palmari
+    'cand-2': 'photo-1588178454780-441fa5b99fa5', // tekimax
+    'cand-3': 'photo-1689600944138-da3b150d9cb8', // Philip White
+    'cand-4': 'photo-1705645930353-0e335311ef20', // Danny Postma
+    'cand-5': 'photo-1790574340486-1ea958f106aa', // Vitaly Gariev
+    'cand-6': 'photo-1613005341945-35e159e522f1', // Good Faces
+    'cand-7': 'photo-1585240975858-7264fd020798', // PodMatch
+    'cand-8': 'photo-1615851947829-3641ababa187', // Gabriella Clare Marino
+  };
+
+  static String? avatarUrlFor(String uid) {
+    final photo = _avatarPhotos[uid];
+    return photo == null
+        ? null
+        : 'https://images.unsplash.com/$photo$_avatarParams';
+  }
+
+  /// Every avatar URL, so the screenshot test can warm the image cache
+  /// before capturing.
+  static List<String> get avatarUrls =>
+      _avatarPhotos.keys.map((uid) => avatarUrlFor(uid)!).toList();
+
   static UserData hero() => UserData(
     uid: heroUid,
-    avatarUrl: null,
+    avatarUrl: avatarUrlFor(heroUid),
     avatarPath: null,
     firstName: 'Alex',
     lastName: 'Reed',
@@ -64,7 +93,7 @@ class ShowcaseData {
 
   static UserData partner() => UserData(
     uid: partnerUid,
-    avatarUrl: null,
+    avatarUrl: avatarUrlFor(partnerUid),
     avatarPath: null,
     firstName: 'Maya',
     lastName: 'Lin',
@@ -101,6 +130,7 @@ class ShowcaseData {
     partner(),
     UserData(
       uid: 'cand-2',
+      avatarUrl: avatarUrlFor('cand-2'),
       firstName: 'Daniel',
       lastName: 'Okafor',
       age: 34,
@@ -129,6 +159,7 @@ class ShowcaseData {
     ),
     UserData(
       uid: 'cand-3',
+      avatarUrl: avatarUrlFor('cand-3'),
       firstName: 'Priya',
       lastName: 'Shah',
       age: 27,
@@ -157,6 +188,7 @@ class ShowcaseData {
     ),
     UserData(
       uid: 'cand-4',
+      avatarUrl: avatarUrlFor('cand-4'),
       firstName: 'Sam',
       lastName: 'Hernandez',
       age: 38,
@@ -184,6 +216,7 @@ class ShowcaseData {
     ),
     UserData(
       uid: 'cand-5',
+      avatarUrl: avatarUrlFor('cand-5'),
       firstName: 'Lin',
       lastName: 'Wu',
       age: 30,
@@ -212,6 +245,7 @@ class ShowcaseData {
     ),
     UserData(
       uid: 'cand-6',
+      avatarUrl: avatarUrlFor('cand-6'),
       firstName: 'Noor',
       lastName: 'Rahman',
       age: 35,
@@ -261,13 +295,15 @@ class ShowcaseData {
         config: const ChatConfig(),
         participants: [heroUid, partnerUid],
         participantInfo: {
-          heroUid: const ParticipantInfo(
+          heroUid: ParticipantInfo(
             id: heroUid,
+            avatarUrl: avatarUrlFor(heroUid),
             name: 'Alex Reed',
             specialization: 'fullStackDeveloper',
           ),
           partnerUid: ParticipantInfo(
             id: partnerUid,
+            avatarUrl: avatarUrlFor(partnerUid),
             name: partnerName,
             specialization: partnerSpec,
           ),
