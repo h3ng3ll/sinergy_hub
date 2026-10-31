@@ -16,7 +16,7 @@ part 'paywall_state_ext.dart';
 part 'paywall_bloc.freezed.dart';
 
 /// Scoped to the paywall sheet — created fresh in
-/// PaywallModalSheet.show()/build(), never a global singleton.
+/// PaywallPage.build(), never a global singleton.
 class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
   final ISubscriptionRepository _subscriptionRepository;
   final GetPlansUseCase _getPlansUseCase;

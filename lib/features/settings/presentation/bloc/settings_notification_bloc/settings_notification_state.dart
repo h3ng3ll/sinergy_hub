@@ -3,6 +3,9 @@ part of 'settings_notification_bloc.dart';
 enum ESettingsNotificationStatus {
   initial,
   loading,
+
+  /// Persisting a change on top of already-loaded data.
+  saving,
   ready,
   failed,
 }

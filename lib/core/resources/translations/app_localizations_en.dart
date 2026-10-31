@@ -475,9 +475,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_title => 'Notifications';
 
   @override
-  String get notifications_center_title => 'Notification Center';
-
-  @override
   String get notifications_failed_title => 'Failed to fetch notifications';
 
   @override
@@ -547,4 +544,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filters_apply => 'Apply Filters';
+
+  @override
+  String match_result_title(String name) {
+    return 'You + $name';
+  }
+
+  @override
+  String get match_result_subtitle => 'Perfect Co-founder Match!';
+
+  @override
+  String get tab_home => 'Home';
+
+  @override
+  String get tab_matches => 'Matches';
+
+  @override
+  String get tab_about => 'About';
+
+  @override
+  String get about_description =>
+      'Synergy Hub helps founders and builders find the right co-founder. Swipe through people who match your skills and goals, see who liked you, and start a conversation when it\'s a match.';
+
+  @override
+  String get about_download_title => 'Get the app';
+
+  @override
+  String get about_download_subtitle =>
+      'Synergy Hub is also available on your phone.';
+
+  @override
+  String get about_app_store_caption => 'Download on the';
+
+  @override
+  String get about_app_store => 'App Store';
+
+  @override
+  String get about_google_play_caption => 'Get it on';
+
+  @override
+  String get about_google_play => 'Google Play';
+
+  @override
+  String about_version(String version) {
+    return 'Version $version';
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../core/widgets/custom_loading_indicator.dart';
@@ -31,7 +32,9 @@ class PaywallPlansList extends StatelessWidget {
         child: Text(
           l10n.paywall_unavailable,
           textAlign: TextAlign.center,
-          style: textTheme.regular14,
+          style: textTheme.medium15.copyWith(
+            color: AppColors.white.value,
+          ),
         ),
       );
     }
@@ -45,7 +48,9 @@ class PaywallPlansList extends StatelessWidget {
         child: Text(
           l10n.paywall_no_plans,
           textAlign: TextAlign.center,
-          style: textTheme.regular14,
+          style: textTheme.medium15.copyWith(
+            color: AppColors.white.value,
+          ),
         ),
       );
     }

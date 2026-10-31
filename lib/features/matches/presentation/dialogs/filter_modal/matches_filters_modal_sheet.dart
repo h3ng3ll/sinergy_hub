@@ -187,8 +187,12 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
       decoration: BoxDecoration(
         color: AppColors.pinkLace.value,
         borderRadius: widget.isSidePanel
-            ? const BorderRadius.horizontal(
-                left: Radius.circular(20.0),
+            /// Top-right matches the header's own rounded top corners, so
+            /// the sheet's fill can't show behind it.
+            ? const BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+                bottomLeft: Radius.circular(20.0),
               )
             : const BorderRadius.vertical(
                 top: Radius.circular(20.0),

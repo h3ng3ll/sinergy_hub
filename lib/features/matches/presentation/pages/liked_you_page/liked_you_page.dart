@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/utils/extensions/go_router_x.dart';
+import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/custom_loading_indicator.dart';
-import '../../../../subscription/presentation/dialogs/paywall_modal_sheet/paywall_modal_sheet.dart';
 import '../../../domain/models/liked_you/liked_you_item.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
 import '../../../domain/usecases/get_liked_you_use_case.dart';
@@ -62,7 +63,7 @@ class _LikedYouPageState extends State<LikedYouPage> {
   Future<void> _onShowPaywall() async {
     if (_isPaywallOpen) return;
     _isPaywallOpen = true;
-    await PaywallModalSheet.show(context);
+    await PaywallPageRoute().navigate(context);
     _isPaywallOpen = false;
   }
 

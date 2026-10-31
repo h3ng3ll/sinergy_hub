@@ -107,7 +107,7 @@ void main() {
       ),
       expect: () => const [
         SettingsNotificationState(
-          status: ESettingsNotificationStatus.loading,
+          status: ESettingsNotificationStatus.saving,
           config: disabledConfig,
           enabledNotifications: false,
         ),
@@ -147,7 +147,7 @@ void main() {
       ),
       expect: () => [
         const SettingsNotificationState(
-          status: ESettingsNotificationStatus.loading,
+          status: ESettingsNotificationStatus.saving,
           config: disabledConfig,
           enabledNotifications: false,
         ),

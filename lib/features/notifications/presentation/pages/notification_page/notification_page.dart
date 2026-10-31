@@ -49,8 +49,6 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Widget _buildWideBody(AppTextTheme textTheme) {
-    final lo = AppLocalizations.of(context)!;
-
     return BlocBuilder<NotificationBloc, NotificationState>(
       builder: (context, state) {
         if (state.isLoading && state.notifications.isEmpty) {
@@ -75,13 +73,6 @@ class _NotificationPageState extends State<NotificationPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: 16.0,
             children: [
-              Text(
-                lo.notifications_center_title,
-                textAlign: TextAlign.center,
-                style: textTheme.bold24.copyWith(
-                  color: AppColors.white.value,
-                ),
-              ),
               Expanded(
                 child: NotificationBuilder(
                   wide: true,
@@ -115,13 +106,6 @@ class _NotificationPageState extends State<NotificationPage> {
           }
           return Column(
             children: [
-              Gap(24.0),
-              Center(
-                child: Text(
-                  AppLocalizations.of(context)!.notifications_center_title,
-                  style: textTheme.bold24,
-                ),
-              ),
               Gap(24.0),
               Expanded(
                 child: HorizontalPadding(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/utils/extensions/go_router_x.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/models/e_page_width.dart';
@@ -18,7 +19,6 @@ import '../../bloc/people_data_bloc/people_data_bloc.dart';
 import '../../bloc/tinder_card_cubit/tinder_card_cubit.dart';
 import '../../bloc/matches_bloc/matches_bloc.dart';
 import '../../../../user/domain/models/user_data/user_data.dart';
-import '../../../../subscription/presentation/dialogs/paywall_modal_sheet/paywall_modal_sheet.dart';
 import 'widgets/build_tinder_card/build_tinder_card.dart';
 import '../../dialogs/filter_modal/matches_filters_modal_sheet.dart';
 
@@ -184,9 +184,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
   Future<void> _onShowPaywall() async {
     if (_isPaywallOpen) return;
     _isPaywallOpen = true;
-    await PaywallModalSheet.show(
-      HomeBottomBarRoute.homeBottomBarKey.currentState!.context,
-    );
+    await PaywallPageRoute().navigate(context);
     _isPaywallOpen = false;
   }
 

@@ -96,6 +96,7 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
                   onTapItem: _goBranch,
                   selectedIndex: selectedIndex,
                   onTapAccount: onTapAccount,
+                  onTapSettings: onTapSettings,
                   onTapPrivacyPolicy: onTapPrivacyPolicy,
                   onTapLogOut: onTapLogOut,
                 )

@@ -1,8 +1,11 @@
+import 'dart:math' show min;
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
@@ -21,6 +24,12 @@ import '../discovery_page/widgets/build_has_match/widgets/build_match_avatar.dar
 import 'widgets/animated_gradient_background.dart';
 import 'widgets/build_avatars_row.dart';
 import 'widgets/build_heart.dart';
+
+/// Max width of the two-column result layout on desktop.
+const double _kDesktopMaxWidth = 1100.0;
+
+/// Gap between the two desktop columns.
+const double _kDesktopColumnGap = 56.0;
 
 class MatchResultPage extends StatefulWidget {
   final String matchId;
@@ -138,6 +147,178 @@ class _MatchResultPageState extends State<MatchResultPage> {
                 screenWidth,
               );
 
+              /// Every size below scales with [screenWidth]. On desktop the
+              /// content is split into two columns, so it is sized from the
+              /// column width instead — otherwise it overflows its column.
+              List<Widget> buildHero(double screenWidth) => <Widget>[
+                BuildAvatarsRow(
+                  matchedUser: match.user,
+                  currentUser: state.user,
+                  screenWidth: screenWidth,
+                ),
+                Gap(
+                  ResponsiveHelper.responsiveSpacing(
+                    screenWidth,
+                    40.0,
+                  ),
+                ),
+                Text(
+                  AppLocalizations.of(
+                    context,
+                  )!.match_result_title(match.user.firstName ?? ''),
+                  style: textTheme.bold24.copyWith(
+                    color: AppColors.white.value,
+                    fontSize: ResponsiveHelper.responsiveFontSize(
+                      screenWidth,
+                      32.0,
+                      maxFontSize: 48,
+                    ),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Gap(
+                  ResponsiveHelper.responsiveSpacing(
+                    screenWidth,
+                    12.0,
+                  ),
+                ),
+                Text(
+                  AppLocalizations.of(context)!.match_result_subtitle,
+                  style: textTheme.medium16.copyWith(
+                    color: AppColors.white.value.withValues(
+                      alpha: 0.9,
+                    ),
+                    fontSize: ResponsiveHelper.responsiveFontSize(
+                      screenWidth,
+                      18.0,
+                      maxFontSize: 24,
+                    ),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Gap(
+                  ResponsiveHelper.responsiveSpacing(
+                    screenWidth,
+                    24.0,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: _buildRoleBadge(
+                        Specializations.get(
+                          match.user.profiler.specialization,
+                        ).name,
+                        screenWidth,
+                        colorScheme,
+                        textTheme,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ResponsiveHelper.responsiveSpacing(
+                          screenWidth,
+                          12.0,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.add,
+                        color: AppColors.white.value.withValues(alpha: 0.8),
+                        size: ResponsiveHelper.responsiveIconSize(
+                          screenWidth,
+                          20.0,
+                          maxSize: 28,
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: _buildRoleBadge(
+                        state.user != null
+                            ? Specializations.get(
+                                state.user!.profiler.specialization,
+                              ).name
+                            : '',
+                        screenWidth,
+                        colorScheme,
+                        textTheme,
+                      ),
+                    ),
+                  ],
+                ),
+              ];
+              Widget buildScoreCard(double screenWidth) =>
+                  _buildCompatibilityCard(
+                    screenWidth,
+                    compatibilityScore,
+                    skillsMatch,
+                    visionAlign,
+                    experienceScore,
+                    colorScheme,
+                    textTheme,
+                  );
+              Widget buildActionButtons(double screenWidth) =>
+                  _buildActionButtons(
+                    context,
+                    screenWidth,
+                    colorScheme,
+                    textTheme,
+                  );
+
+              /// Desktop: side-by-side so the whole result fits the
+              /// viewport instead of one tall column running off-screen.
+              if (ResponsiveHelper.isDesktop(screenWidth)) {
+                final rowWidth = min(
+                  screenWidth - pagePadding * 2,
+                  _kDesktopMaxWidth,
+                );
+                final columnWidth = (rowWidth - _kDesktopColumnGap) / 2;
+
+                return AnimatedGradientBackground(
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: SafeArea(
+                      child: Center(
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: pagePadding,
+                            vertical: 24.0,
+                          ),
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: _kDesktopMaxWidth,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              spacing: _kDesktopColumnGap,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: buildHero(columnWidth),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    spacing: 32.0,
+                                    children: [
+                                      buildScoreCard(columnWidth),
+                                      buildActionButtons(columnWidth),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+
               return AnimatedGradientBackground(
                 child: Scaffold(
                   backgroundColor: Colors.transparent,
@@ -159,111 +340,7 @@ class _MatchResultPageState extends State<MatchResultPage> {
                               child: Column(
                                 children: [
                                   const SizedBox(height: 20),
-                                  // User Avatars Row
-                                  BuildAvatarsRow(
-                                    matchedUser: match.user,
-                                    currentUser: state.user,
-                                    screenWidth: screenWidth,
-                                  ),
-                                  Gap(
-                                    ResponsiveHelper.responsiveSpacing(
-                                      screenWidth,
-                                      40.0,
-                                    ),
-                                  ),
-                                  // Match Title
-                                  Text(
-                                    'You + ${match.user.firstName}',
-                                    style: textTheme.bold24.copyWith(
-                                      color: AppColors.white.value,
-                                      fontSize:
-                                          ResponsiveHelper.responsiveFontSize(
-                                            screenWidth,
-                                            32.0,
-                                            maxFontSize: 48,
-                                          ),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Gap(
-                                    ResponsiveHelper.responsiveSpacing(
-                                      screenWidth,
-                                      12.0,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Perfect Co-founder Match!',
-                                    style: textTheme.medium16.copyWith(
-                                      color: AppColors.white.value.withValues(
-                                        alpha: 0.9,
-                                      ),
-                                      fontSize:
-                                          ResponsiveHelper.responsiveFontSize(
-                                            screenWidth,
-                                            18.0,
-                                            maxFontSize: 24,
-                                          ),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Gap(
-                                    ResponsiveHelper.responsiveSpacing(
-                                      screenWidth,
-                                      24.0,
-                                    ),
-                                  ),
-                                  // Role Badges (matched user on left, current user on right)
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Flexible(
-                                        child: _buildRoleBadge(
-                                          Specializations.get(
-                                            match.user.profiler.specialization,
-                                          ).name,
-                                          screenWidth,
-                                          colorScheme,
-                                          textTheme,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              ResponsiveHelper.responsiveSpacing(
-                                                screenWidth,
-                                                12.0,
-                                              ),
-                                        ),
-                                        child: Icon(
-                                          Icons.add,
-                                          color: AppColors.white.value
-                                              .withValues(alpha: 0.8),
-                                          size:
-                                              ResponsiveHelper.responsiveIconSize(
-                                                screenWidth,
-                                                20.0,
-                                                maxSize: 28,
-                                              ),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        child: _buildRoleBadge(
-                                          state.user != null
-                                              ? Specializations.get(
-                                                  state
-                                                      .user!
-                                                      .profiler
-                                                      .specialization,
-                                                ).name
-                                              : '',
-                                          screenWidth,
-                                          colorScheme,
-                                          textTheme,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  ...buildHero(screenWidth),
                                   Gap(
                                     ResponsiveHelper.responsiveSpacing(
                                       screenWidth,
@@ -271,16 +348,7 @@ class _MatchResultPageState extends State<MatchResultPage> {
                                       maxSpacing: 80,
                                     ),
                                   ),
-                                  // Compatibility Score Card
-                                  _buildCompatibilityCard(
-                                    screenWidth,
-                                    compatibilityScore,
-                                    skillsMatch,
-                                    visionAlign,
-                                    experienceScore,
-                                    colorScheme,
-                                    textTheme,
-                                  ),
+                                  buildScoreCard(screenWidth),
                                   Gap(
                                     ResponsiveHelper.responsiveSpacing(
                                       screenWidth,
@@ -288,13 +356,7 @@ class _MatchResultPageState extends State<MatchResultPage> {
                                       maxSpacing: 48,
                                     ),
                                   ),
-                                  // Action Buttons
-                                  _buildActionButtons(
-                                    context,
-                                    screenWidth,
-                                    colorScheme,
-                                    textTheme,
-                                  ),
+                                  buildActionButtons(screenWidth),
                                   const SizedBox(height: 24),
                                 ],
                               ),
@@ -312,7 +374,6 @@ class _MatchResultPageState extends State<MatchResultPage> {
       ),
     );
   }
-
 
   Widget _buildRoleBadge(
     String role,
@@ -432,6 +493,8 @@ class _MatchResultPageState extends State<MatchResultPage> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 8.0,
             children: [
               _buildScoreItem(
                 screenWidth,
@@ -468,44 +531,49 @@ class _MatchResultPageState extends State<MatchResultPage> {
     Color color,
     AppTextTheme textTheme,
   ) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          score,
-          style: textTheme.bold20.copyWith(
-            color: color,
-            fontSize: ResponsiveHelper.responsiveFontSize(
-              screenWidth,
-              28.0,
-              maxFontSize: 42,
-            ),
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        Gap(
-          ResponsiveHelper.responsiveSpacing(
-            screenWidth,
-            4.0,
-            maxSpacing: 8,
-          ),
-        ),
-        Text(
-          label,
-          style: textTheme.regular12.copyWith(
-            color: AppColors.white.value.withValues(alpha: 0.8),
-            fontSize: ResponsiveHelper.responsiveFontSize(
-              screenWidth,
-              13.0,
-              maxFontSize: 18,
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              score,
+              style: textTheme.bold20.copyWith(
+                color: color,
+                fontSize: ResponsiveHelper.responsiveFontSize(
+                  screenWidth,
+                  28.0,
+                  maxFontSize: 42,
+                ),
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+          Gap(
+            ResponsiveHelper.responsiveSpacing(
+              screenWidth,
+              4.0,
+              maxSpacing: 8,
+            ),
+          ),
+          Text(
+            label,
+            style: textTheme.regular12.copyWith(
+              color: AppColors.white.value.withValues(alpha: 0.8),
+              fontSize: ResponsiveHelper.responsiveFontSize(
+                screenWidth,
+                13.0,
+                maxFontSize: 18,
+              ),
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
     );
   }
 

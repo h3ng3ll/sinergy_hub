@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/utils/extensions/go_router_x.dart';
+import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
@@ -10,7 +12,6 @@ import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../appearance/presentation/bloc/background_palette_bloc/background_palette_bloc.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
-import '../../../../subscription/presentation/dialogs/paywall_modal_sheet/paywall_modal_sheet.dart';
 import '../../bloc/settings_notification_bloc/settings_notification_bloc.dart';
 import '../../dialogs/palette_color_picker_sheet/palette_color_picker_sheet.dart';
 import 'widgets/background_palette_section.dart';
@@ -71,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _onShowPaywall() async {
     if (_isPaywallOpen) return;
     _isPaywallOpen = true;
-    await PaywallModalSheet.show(context);
+    await PaywallPageRoute().navigate(context);
     _isPaywallOpen = false;
   }
 
@@ -96,54 +97,71 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Colors.transparent,
         body: BlocProvider<SettingsNotificationBloc>.value(
           value: _settingsNotificationBloc,
-          child: BlocConsumer<SettingsNotificationBloc,
-              SettingsNotificationState>(
-            listenWhen: (p, c) => p.status != c.status && c.isFailed,
-            listener: (context, state) {
-              UiMessageService.showError(
-                state.errorMessage,
-              );
-            },
-            builder: (context, state) {
-              if (state.isInitial || state.isLoading) {
-                return const LoadingDataWidget();
-              }
-              return HorizontalPadding(
-                child: ListView(
-                  children: [
-                    NotificationToggleTile(
-                      enabled: state.enabledNotifications,
-                      onChanged: (value) =>
-                          _settingsNotificationBloc.add(
-                            SettingsNotificationEvent.toggle(
-                              enabled: value,
+          child:
+              BlocConsumer<SettingsNotificationBloc, SettingsNotificationState>(
+                listenWhen: (p, c) => p.status != c.status && c.isFailed,
+                listener: (context, state) {
+                  UiMessageService.showError(
+                    state.errorMessage,
+                  );
+                },
+                builder: (context, state) {
+                  if (state.isInitial || state.isLoading) {
+                    return const LoadingDataWidget();
+                  }
+
+                  /// A save keeps the loaded settings on screen and only
+                  /// overlays the indicator (blocking taps until it settles).
+                  return Stack(
+                    children: [
+                      HorizontalPadding(
+                        child: ListView(
+                          children: [
+                            NotificationToggleTile(
+                              enabled: state.enabledNotifications,
+                              onChanged: (value) =>
+                                  _settingsNotificationBloc.add(
+                                    SettingsNotificationEvent.toggle(
+                                      enabled: value,
+                                    ),
+                                  ),
                             ),
+                            BlocConsumer<
+                              BackgroundPaletteBloc,
+                              BackgroundPaletteState
+                            >(
+                              listenWhen: (p, c) =>
+                                  c.isFailed &&
+                                  p.errorMessage != c.errorMessage,
+                              listener: _onPaletteFailed,
+                              builder: (context, paletteState) {
+                                return BackgroundPaletteSection(
+                                  primary: paletteState.primaryColor,
+                                  secondary: paletteState.secondaryColor,
+                                  isPremium: paletteState.isPremium,
+                                  onTapPrimary: _onPickPrimary,
+                                  onTapSecondary: _onPickSecondary,
+                                  onReset:
+                                      paletteState.isPremium &&
+                                          paletteState.hasCustomPalette
+                                      ? _onResetPalette
+                                      : null,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (state.isSaving)
+                        const Positioned.fill(
+                          child: AbsorbPointer(
+                            child: LoadingDataWidget(),
                           ),
-                    ),
-                    BlocConsumer<BackgroundPaletteBloc,
-                        BackgroundPaletteState>(
-                      listenWhen: (p, c) =>
-                          c.isFailed && p.errorMessage != c.errorMessage,
-                      listener: _onPaletteFailed,
-                      builder: (context, paletteState) {
-                        return BackgroundPaletteSection(
-                          primary: paletteState.primaryColor,
-                          secondary: paletteState.secondaryColor,
-                          isPremium: paletteState.isPremium,
-                          onTapPrimary: _onPickPrimary,
-                          onTapSecondary: _onPickSecondary,
-                          onReset: paletteState.isPremium &&
-                                  paletteState.hasCustomPalette
-                              ? _onResetPalette
-                              : null,
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
         ),
       ),
     );

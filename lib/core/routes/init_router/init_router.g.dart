@@ -103,6 +103,15 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                     ),
                   ],
                 ),
+                StatefulShellBranchData.$branch(
+                  routes: [
+                    GoRouteData.$route(
+                      path: '/about',
+                      hasOverriddenOnExit: false,
+                      factory: $AboutPageRoute._fromState,
+                    ),
+                  ],
+                ),
               ],
             ),
           ],
@@ -189,6 +198,11 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                   factory: $ProfilePageRoute._fromState,
                 ),
               ],
+            ),
+            GoRouteData.$route(
+              path: '/premium',
+              hasOverriddenOnExit: false,
+              factory: $PaywallPageRoute._fromState,
             ),
             GoRouteData.$route(
               path: '/discovery-profile/:userId',
@@ -458,6 +472,26 @@ mixin $MatchesPageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/matches');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $AboutPageRoute on GoRouteData {
+  static AboutPageRoute _fromState(GoRouterState state) => AboutPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/about');
 
   @override
   void go(BuildContext context) => context.go(location);
@@ -751,6 +785,26 @@ mixin $ProfilePageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/profile');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $PaywallPageRoute on GoRouteData {
+  static PaywallPageRoute _fromState(GoRouterState state) => PaywallPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/premium');
 
   @override
   void go(BuildContext context) => context.go(location);

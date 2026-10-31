@@ -11,6 +11,7 @@ class HomeAppBarWeb extends CustomAppBar {
   final int selectedIndex;
   final Function(int) onTapItem;
   final VoidCallback onTapAccount;
+  final VoidCallback onTapSettings;
   final VoidCallback onTapPrivacyPolicy;
   final VoidCallback onTapLogOut;
 
@@ -20,6 +21,7 @@ class HomeAppBarWeb extends CustomAppBar {
     required this.onTapItem,
     required this.selectedIndex,
     required this.onTapAccount,
+    required this.onTapSettings,
     required this.onTapPrivacyPolicy,
     required this.onTapLogOut,
   });
@@ -49,6 +51,13 @@ class HomeAppBarWeb extends CustomAppBar {
                           onTap: onTapAccount,
                           child: Icon(
                             Icons.person,
+                            color: colorScheme.secondary,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: onTapSettings,
+                          child: Icon(
+                            Icons.settings,
                             color: colorScheme.secondary,
                           ),
                         ),
@@ -106,6 +115,13 @@ class HomeAppBarWeb extends CustomAppBar {
                           onTap: () => onTapItem(2),
                           child: Icon(
                             Icons.favorite,
+                            color: colorScheme.secondary,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () => onTapItem(3),
+                          child: Icon(
+                            Icons.info_outline,
                             color: colorScheme.secondary,
                           ),
                         ),

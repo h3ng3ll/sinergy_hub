@@ -77,7 +77,7 @@ class SettingsNotificationBloc
     );
     emit(
       state.copyWith(
-        status: ESettingsNotificationStatus.loading,
+        status: ESettingsNotificationStatus.saving,
         config: config,
         enabledNotifications: event.enabled,
       ),

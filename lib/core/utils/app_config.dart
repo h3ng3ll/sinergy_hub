@@ -1,4 +1,12 @@
 abstract class AppConfig {
+  /// App Store listing (`https://apps.apple.com/app/id<ID>`). Empty hides
+  /// the App Store button on the About page.
+  static const String appStoreUrl = 'https://apps.apple.com/app/id6767223876';
+
+  /// Google Play listing for the production package.
+  static const String googlePlayUrl =
+      'https://play.google.com/store/apps/details?id=com.hengell.synergyhub';
+
   static bool get isQA => false;
 
   static String emulatorAddress() {

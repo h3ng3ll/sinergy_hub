@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../core/utils/extensions/go_router_x.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/translations/app_localizations.dart';
@@ -14,7 +15,6 @@ import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../subscription/presentation/bloc/premium_bloc/premium_bloc.dart';
-import '../../../../subscription/presentation/dialogs/paywall_modal_sheet/paywall_modal_sheet.dart';
 import '../../../../user/presentation/bloc/user_bloc/user_bloc.dart';
 import '../../home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import 'bloc/profile_bloc/profile_bloc.dart';
@@ -61,7 +61,7 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 
   Future<void> _onUpgrade() async {
-    await PaywallModalSheet.show(context);
+    await PaywallPageRoute().navigate(context);
   }
 
   void _onManageSubscription(BuildContext context) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../features/about/presentation/pages/about_page/about_page.dart';
 import '../../../features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../../../features/auth/presentation/pages/authorization_page/authorization_page.dart';
 import '../../../features/connectivity/presentation/bloc/connectivity_bloc/connectivity_bloc.dart';
@@ -29,6 +30,7 @@ import '../../../features/onboard_survey/presentation/pages/onboard_survey_page/
 import '../../../features/privacy_policy/presentation/pages/privacy_policy_page/privacy_policy_page.dart';
 import '../../../features/report/presentation/pages/report_user_page/report_user_page.dart';
 import '../../../features/settings/presentation/pages/settings_page/settings_page.dart';
+import '../../../features/subscription/presentation/pages/paywall_page/paywall_page.dart';
 import '../../../features/support/presentation/pages/support_page/support_page.dart';
 import '../../../features/terms_of_use/presentation/pages/terms_of_use_page/terms_of_use_page.dart';
 import '../../../features/user/presentation/bloc/user_bloc/user_bloc.dart';
@@ -234,6 +236,13 @@ GoRouter initRouter({
                     ),
                   ],
                 ),
+                TypedStatefulShellBranch(
+                  routes: [
+                    TypedGoRoute<AboutPageRoute>(
+                      path: '/about',
+                    ),
+                  ],
+                ),
               ],
             ),
           ],
@@ -293,6 +302,9 @@ GoRouter initRouter({
                   path: '/profile',
                 ),
               ],
+            ),
+            TypedGoRoute<PaywallPageRoute>(
+              path: '/premium',
             ),
             TypedGoRoute<DiscoveryUserProfilePageRoute>(
               path: '/discovery-profile/:userId',
@@ -530,6 +542,15 @@ class MatchesPageRoute extends GoRouteData with $MatchesPageRoute {
   }
 }
 
+class AboutPageRoute extends GoRouteData with $AboutPageRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      const AboutPage(),
+    );
+  }
+}
+
 class ProfilePageRoute extends GoRouteData with $ProfilePageRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
@@ -725,6 +746,17 @@ class SettingsPageRoute extends GoRouteData with $SettingsPageRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return GoRouterPageBuilder.pageBuilder(
       SettingsPage(),
+    );
+  }
+}
+
+class PaywallPageRoute extends GoRouteData with $PaywallPageRoute {
+  PaywallPageRoute();
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return GoRouterPageBuilder.pageBuilder(
+      const PaywallPage(),
     );
   }
 }

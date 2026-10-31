@@ -207,7 +207,6 @@
   "time_today": "Today",
   "time_yesterday": "Yesterday",
   "notifications_title": "Notifications",
-  "notifications_center_title": "Notification Center",
   "notifications_failed_title": "Failed to fetch notifications",
   "matches_search_hint": "Search matches...",
   "matches_failed_load": "Failed load data: {error}",
@@ -237,5 +236,32 @@
   "status_online": "Online",
   "status_offline": "Offline",
   "user_profile_report": "Report",
-  "filters_apply": "Apply Filters"
+  "filters_apply": "Apply Filters",
+  "match_result_title": "You + {name}",
+  "@match_result_title": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "match_result_subtitle": "Perfect Co-founder Match!",
+  "tab_home": "Home",
+  "tab_matches": "Matches",
+  "tab_about": "About",
+  "about_description": "Synergy Hub helps founders and builders find the right co-founder. Swipe through people who match your skills and goals, see who liked you, and start a conversation when it's a match.",
+  "about_download_title": "Get the app",
+  "about_download_subtitle": "Synergy Hub is also available on your phone.",
+  "about_app_store_caption": "Download on the",
+  "about_app_store": "App Store",
+  "about_google_play_caption": "Get it on",
+  "about_google_play": "Google Play",
+  "about_version": "Version {version}",
+  "@about_version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  }
 }

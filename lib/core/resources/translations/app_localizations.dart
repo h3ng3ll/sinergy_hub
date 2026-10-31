@@ -958,12 +958,6 @@ abstract class AppLocalizations {
   /// **'Notifications'**
   String get notifications_title;
 
-  /// No description provided for @notifications_center_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Notification Center'**
-  String get notifications_center_title;
-
   /// No description provided for @notifications_failed_title.
   ///
   /// In en, this message translates to:
@@ -1101,6 +1095,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Apply Filters'**
   String get filters_apply;
+
+  /// No description provided for @match_result_title.
+  ///
+  /// In en, this message translates to:
+  /// **'You + {name}'**
+  String match_result_title(String name);
+
+  /// No description provided for @match_result_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect Co-founder Match!'**
+  String get match_result_subtitle;
+
+  /// No description provided for @tab_home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get tab_home;
+
+  /// No description provided for @tab_matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches'**
+  String get tab_matches;
+
+  /// No description provided for @tab_about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get tab_about;
+
+  /// No description provided for @about_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Synergy Hub helps founders and builders find the right co-founder. Swipe through people who match your skills and goals, see who liked you, and start a conversation when it\'s a match.'**
+  String get about_description;
+
+  /// No description provided for @about_download_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Get the app'**
+  String get about_download_title;
+
+  /// No description provided for @about_download_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Synergy Hub is also available on your phone.'**
+  String get about_download_subtitle;
+
+  /// No description provided for @about_app_store_caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Download on the'**
+  String get about_app_store_caption;
+
+  /// No description provided for @about_app_store.
+  ///
+  /// In en, this message translates to:
+  /// **'App Store'**
+  String get about_app_store;
+
+  /// No description provided for @about_google_play_caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Get it on'**
+  String get about_google_play_caption;
+
+  /// No description provided for @about_google_play.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Play'**
+  String get about_google_play;
+
+  /// No description provided for @about_version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String about_version(String version);
 }
 
 class _AppLocalizationsDelegate

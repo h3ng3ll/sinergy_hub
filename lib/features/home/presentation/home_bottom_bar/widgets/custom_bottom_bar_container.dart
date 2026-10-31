@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/resources/colors/app_colors.dart';
+import '../../../../../core/resources/translations/app_localizations.dart';
 import 'custom_bottom_bar_item.dart';
 
 class CustomBottomBarContainer extends StatelessWidget {
@@ -17,6 +18,8 @@ class CustomBottomBarContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lo = AppLocalizations.of(context)!;
+
     return Container(
       height: 90.0,
       color: AppColors.white.value.withValues(
@@ -35,20 +38,26 @@ class CustomBottomBarContainer extends StatelessWidget {
               CustomBottomBarItem(
                 onTapItem: () => onTapItem(0),
                 icon: Icons.home,
-                text: 'Home',
+                text: lo.tab_home,
                 isSelected: selectedIndex == 0,
               ),
               CustomBottomBarItem(
                 onTapItem: () => onTapItem(1),
                 icon: Icons.volunteer_activism,
-                text: 'Liked you',
+                text: lo.liked_you_tab_label,
                 isSelected: selectedIndex == 1,
               ),
               CustomBottomBarItem(
                 onTapItem: () => onTapItem(2),
                 icon: Icons.favorite,
-                text: 'Matches',
+                text: lo.tab_matches,
                 isSelected: selectedIndex == 2,
+              ),
+              CustomBottomBarItem(
+                onTapItem: () => onTapItem(3),
+                icon: Icons.info_outline,
+                text: lo.tab_about,
+                isSelected: selectedIndex == 3,
               ),
               // CustomBottomBarItem(
               //   onTapItem: () => onTapItem(2),

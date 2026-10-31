@@ -58,8 +58,10 @@ class PaywallFooter extends StatelessWidget {
         Text(
           l10n.paywall_auto_renew_note,
           textAlign: TextAlign.center,
-          style: textTheme.regular10.copyWith(
-            color: AppColors.greyLight.value,
+          style: textTheme.regular12.copyWith(
+            color: AppColors.white.value.withValues(
+              alpha: 0.8,
+            ),
           ),
         ),
         Row(
