@@ -106,9 +106,11 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
                           'Synergy Hub',
+                          textAlign: TextAlign.center,
                           style: textTheme.bold32.copyWith(
                             color: AppColors.white.value,
                           ),
@@ -116,6 +118,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                         Gap(8.0),
                         Text(
                           'Welcome to Synergy Hub',
+                          textAlign: TextAlign.center,
                           style: textTheme.medium16.copyWith(
                             color: AppColors.white.value,
                           ),
@@ -133,6 +136,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                             ),
                             onPressed: onAuthWithApple,
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SvgPicture.asset(
@@ -157,7 +161,9 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                           Gap(12.0),
                         // ],
                         if (kIsWeb)
-                          getIt<GoogleSignInService>().renderButton()
+                          Center(
+                            child: getIt<GoogleSignInService>().renderButton(),
+                          )
                         else
                           ActionBtn(
                             padding: EdgeInsets.symmetric(
@@ -166,6 +172,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                             ),
                             onPressed: onAuthWithGoogle,
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SvgPicture.asset(

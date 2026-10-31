@@ -9,6 +9,7 @@ import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/services/ui_message_service.dart';
+import '../../../../../core/utils/responsive_helper.dart';
 import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
@@ -23,6 +24,7 @@ import 'widgets/build_profile_header.dart';
 import 'widgets/build_skills_n_expertise/build_skills_n_expertise.dart';
 import 'widgets/delete_account_dialog.dart';
 import 'widgets/premium_status_card.dart';
+import 'widgets/wide/profile_wide_body.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
@@ -112,6 +114,18 @@ class _ProfileTabState extends State<ProfileTab> {
             }
 
             final userData = state.userData!;
+            if (!ResponsiveHelper.isMobile(context)) {
+              return ProfileWideBody(
+                userData: userData,
+                onTapAvatar: onTapAvatar,
+                onTapEditAbout: onTapEditAbout,
+                onTapEditExperience: onTapEditExperience,
+                onTapEditLookingFor: onTapEditLookingFor,
+                onUpgrade: _onUpgrade,
+                onManageSubscription: () => _onManageSubscription(context),
+                onDelete: () => _onDeletePressed(context),
+              );
+            }
             return BuildAnimatedBackground(
               child: Scaffold(
                 appBar: CustomAppBar(),

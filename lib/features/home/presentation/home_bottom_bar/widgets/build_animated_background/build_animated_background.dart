@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 
 import '../../../../../../core/resources/app_shader.dart';
+import 'background_scope.dart';
 import '../../../../../appearance/domain/models/background_palette/background_palette.dart';
 import '../../../../../appearance/presentation/bloc/background_palette_bloc/background_palette_bloc.dart';
 
@@ -62,6 +63,18 @@ class _BuildAnimatedBackgroundState extends State<BuildAnimatedBackground>
 
   @override
   Widget build(BuildContext context) {
+    /// A responsive shell above already paints the full-screen background:
+    /// pass through (keeping the clip) and re-enable painting for descendants.
+    if (BackgroundScope.isActive(context)) {
+      return ClipRRect(
+        borderRadius: widget.clipper ?? BorderRadius.zero,
+        child: BackgroundScope(
+          active: false,
+          child: widget.child,
+        ),
+      );
+    }
+
     /// Only the applied palette is selected (freezed equality), so unrelated
     /// palette-bloc emissions never rebuild the background.
     final palette = context.select<BackgroundPaletteBloc, BackgroundPalette?>(

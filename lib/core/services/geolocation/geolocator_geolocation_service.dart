@@ -17,6 +17,7 @@ class GeolocatorGeolocationService implements IGeolocationService {
 
   @override
   Future<Either<EGeoPermission, GeoFailure>> requestPermission() async {
+    /// Todo: say unsupported in web exception if try call it without checking
     if (!kIsWeb) {
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {

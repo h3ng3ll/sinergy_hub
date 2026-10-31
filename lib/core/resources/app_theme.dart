@@ -9,6 +9,11 @@ abstract class AppThemeData {
 
   static final light = ThemeData(
     useMaterial3: true,
+    bottomSheetTheme: const BottomSheetThemeData(
+      constraints: BoxConstraints(
+        maxWidth: 640.0,
+      ),
+    ),
     scaffoldBackgroundColor: const Color(0xffFDFDFD),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
@@ -40,6 +45,11 @@ abstract class AppThemeData {
 
   static ThemeData dark = ThemeData(
     useMaterial3: false,
+    bottomSheetTheme: const BottomSheetThemeData(
+      constraints: BoxConstraints(
+        maxWidth: 640.0,
+      ),
+    ),
     scaffoldBackgroundColor: const Color(0xff1C1C1C),
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xff1C1C1C),

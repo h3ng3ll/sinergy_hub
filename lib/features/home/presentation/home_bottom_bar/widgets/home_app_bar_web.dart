@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../core/routes/models/e_page_width.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
 
 class HomeAppBarWeb extends CustomAppBar {
@@ -32,81 +33,88 @@ class HomeAppBarWeb extends CustomAppBar {
       leading: Container(),
       actions: [
         Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: Row(
-                  spacing: 15.0,
-                  children: [
-                    InkWell(
-                      onTap: onTapAccount,
-                      child: Icon(
-                        Icons.person,
-                        color: colorScheme.secondary,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: onTapPrivacyPolicy,
-                      child: Icon(
-                        Icons.privacy_tip,
-                        color: colorScheme.secondary,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: onTapLogOut,
-                      child: Icon(
-                        Icons.logout,
-                        color: AppColors.tartOrange.value,
-                      ),
-                    ),
-                  ],
-                ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: EPageWidth.wide.maxWidth,
               ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: Row(
+                      spacing: 15.0,
+                      children: [
+                        InkWell(
+                          onTap: onTapAccount,
+                          child: Icon(
+                            Icons.person,
+                            color: colorScheme.secondary,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: onTapPrivacyPolicy,
+                          child: Icon(
+                            Icons.privacy_tip,
+                            color: colorScheme.secondary,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: onTapLogOut,
+                          child: Icon(
+                            Icons.logout,
+                            color: AppColors.tartOrange.value,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
-              Text(
-                'Sinergy Hub',
-                style: textTheme.bold22.copyWith(
-                  color: AppColors.white.value,
-                ),
+                  Text(
+                    'Sinergy Hub',
+                    style: textTheme.bold22.copyWith(
+                      color: AppColors.white.value,
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      spacing: 15.0,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: onTapNotifications,
+                          child: Icon(
+                            Icons.notifications,
+                            color: colorScheme.secondary,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () => onTapItem(0),
+                          child: Icon(
+                            Icons.home,
+                            color: colorScheme.secondary,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () => onTapItem(1),
+                          child: Icon(
+                            Icons.volunteer_activism,
+                            color: colorScheme.secondary,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () => onTapItem(2),
+                          child: Icon(
+                            Icons.favorite,
+                            color: colorScheme.secondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: Row(
-                  spacing: 15.0,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                      onTap: onTapNotifications,
-                      child: Icon(
-                        Icons.notifications,
-                        color: colorScheme.secondary,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => onTapItem(0),
-                      child: Icon(
-                        Icons.home,
-                        color: colorScheme.secondary,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => onTapItem(1),
-                      child: Icon(
-                        Icons.volunteer_activism,
-                        color: colorScheme.secondary,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => onTapItem(2),
-                      child: Icon(
-                        Icons.favorite,
-                        color: colorScheme.secondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ],

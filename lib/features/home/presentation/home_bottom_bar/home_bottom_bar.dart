@@ -5,6 +5,8 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../core/routes/init_router/init_router.dart';
+import '../../../../core/routes/models/e_page_width.dart';
+import '../../../../core/routes/presentation/responsive_shell.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../home_drawer/home_drawer.dart';
@@ -113,7 +115,11 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
                     ),
                   ],
                 ),
-          body: widget.navigationShell,
+          body: ResponsiveShell(
+            width: EPageWidth.content,
+            paintBackground: false,
+            child: widget.navigationShell,
+          ),
           drawer: geTablet
               ? null
               : HomeDrawer(

@@ -23,6 +23,7 @@ class BuildAbout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = AppTextTheme.of(context);
+    final bio = userData.aboutMe?.trim() ?? '';
     final experience = Experiences.get(
       userData.profiler.experience,
     );
@@ -35,10 +36,11 @@ class BuildAbout extends StatelessWidget {
             onTapEdit: onTapEdit,
             title: 'About',
           ),
-          Text(
-            userData.aboutMe.toString(),
-            style: textTheme.regular16,
-          ),
+          if (bio.isNotEmpty)
+            Text(
+              bio,
+              style: textTheme.regular16,
+            ),
           InkWell(
             onTap: onTapEditExperience,
             child: Row(

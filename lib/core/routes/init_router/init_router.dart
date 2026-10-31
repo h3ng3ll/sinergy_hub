@@ -36,6 +36,8 @@ import '../../../features/user/presentation/pages/edit_experience_page/edit_expe
 import '../../../features/user/presentation/pages/edit_looking_for_page/edit_looking_for_page.dart';
 import '../../../features/user/presentation/pages/edit_specialization_page/edit_specialization_page.dart';
 import '../../../features/user/presentation/pages/user_profile_page/user_profile_page.dart';
+import '../models/e_page_width.dart';
+import '../presentation/responsive_shell.dart';
 import '../root_page/root_page.dart';
 
 part 'init_router.g.dart';
@@ -84,8 +86,8 @@ String? resolveRedirect({
   // survey, or onboard-about) instead of leaving them stranded.
   final effectiveLocation =
       (isAuth && connectivity.isOnline && isOnNoConnection)
-          ? AuthorizationPageRoute().location
-          : location;
+      ? AuthorizationPageRoute().location
+      : location;
 
   final isOnAuthPage = effectiveLocation == AuthorizationPageRoute().location;
 
@@ -168,26 +170,30 @@ GoRouter initRouter({
 
 @TypedShellRoute<RootPageRoute>(
   routes: [
-    TypedGoRoute<AuthorizationPageRoute>(
-      path: '/',
+    TypedShellRoute<AuthShellRoute>(
       routes: [
-        TypedGoRoute<RegisterPageRoute>(
-          path: '/sign-up',
-        ),
-        TypedGoRoute<LoginPageRoute>(
-          path: '/sign-in',
-        ),
-        TypedGoRoute<ResetPasswordPageRoute>(
-          path: '/reset-password',
-        ),
-        TypedGoRoute<PrivacyPolicyPageRoute>(
-          path: '/privacy-policy',
-        ),
-        TypedGoRoute<SupportPageRoute>(
-          path: '/support',
-        ),
-        TypedGoRoute<TermsOfUsePageRoute>(
-          path: '/terms-of-use',
+        TypedGoRoute<AuthorizationPageRoute>(
+          path: '/',
+          routes: [
+            TypedGoRoute<RegisterPageRoute>(
+              path: '/sign-up',
+            ),
+            TypedGoRoute<LoginPageRoute>(
+              path: '/sign-in',
+            ),
+            TypedGoRoute<ResetPasswordPageRoute>(
+              path: '/reset-password',
+            ),
+            TypedGoRoute<PrivacyPolicyPageRoute>(
+              path: '/privacy-policy',
+            ),
+            TypedGoRoute<SupportPageRoute>(
+              path: '/support',
+            ),
+            TypedGoRoute<TermsOfUsePageRoute>(
+              path: '/terms-of-use',
+            ),
+          ],
         ),
       ],
     ),
@@ -257,31 +263,39 @@ GoRouter initRouter({
                 ),
               ],
             ),
-            TypedGoRoute<EditProfilePageRoute>(
-              path: '/edit-profile-page',
+            TypedShellRoute<ContentShellRoute>(
               routes: [
-                TypedGoRoute<EditLookingForRoute>(
-                  path: 'looking-for-edit',
+                TypedGoRoute<EditProfilePageRoute>(
+                  path: '/edit-profile-page',
+                  routes: [
+                    TypedGoRoute<EditLookingForRoute>(
+                      path: 'looking-for-edit',
+                    ),
+                    TypedGoRoute<EditExperienceRoute>(
+                      path: 'experience-edit',
+                    ),
+                    TypedGoRoute<EditSpecializationRoute>(
+                      path: 'specialization-edit',
+                    ),
+                  ],
                 ),
-                TypedGoRoute<EditExperienceRoute>(
-                  path: 'experience-edit',
+                TypedGoRoute<NotificationPageRoute>(
+                  path: '/notification',
                 ),
-                TypedGoRoute<EditSpecializationRoute>(
-                  path: 'specialization-edit',
+                TypedGoRoute<SettingsPageRoute>(
+                  path: '/settings',
                 ),
               ],
             ),
-            TypedGoRoute<ProfilePageRoute>(
-              path: '/profile',
+            TypedShellRoute<ProfileShellRoute>(
+              routes: [
+                TypedGoRoute<ProfilePageRoute>(
+                  path: '/profile',
+                ),
+              ],
             ),
             TypedGoRoute<DiscoveryUserProfilePageRoute>(
               path: '/discovery-profile/:userId',
-            ),
-            TypedGoRoute<NotificationPageRoute>(
-              path: '/notification',
-            ),
-            TypedGoRoute<SettingsPageRoute>(
-              path: '/settings',
             ),
           ],
         ),
@@ -302,6 +316,48 @@ class RootPageRoute extends ShellRouteData {
     return RootPage(
       key: rootKey,
       navigator: navigator,
+    );
+  }
+}
+
+class AuthShellRoute extends ShellRouteData {
+  @override
+  Widget builder(
+    BuildContext context,
+    GoRouterState state,
+    Widget navigator,
+  ) {
+    return ResponsiveShell(
+      width: EPageWidth.compact,
+      child: navigator,
+    );
+  }
+}
+
+class ContentShellRoute extends ShellRouteData {
+  @override
+  Widget builder(
+    BuildContext context,
+    GoRouterState state,
+    Widget navigator,
+  ) {
+    return ResponsiveShell(
+      width: EPageWidth.content,
+      child: navigator,
+    );
+  }
+}
+
+class ProfileShellRoute extends ShellRouteData {
+  @override
+  Widget builder(
+    BuildContext context,
+    GoRouterState state,
+    Widget navigator,
+  ) {
+    return ResponsiveShell(
+      width: EPageWidth.medium,
+      child: navigator,
     );
   }
 }
@@ -403,8 +459,11 @@ class OnboardShellPageRoute extends ShellRouteData {
     GoRouterState state,
     Widget navigator,
   ) {
-    return OnboardShellPage(
-      child: navigator,
+    return ResponsiveShell(
+      width: EPageWidth.content,
+      child: OnboardShellPage(
+        child: navigator,
+      ),
     );
   }
 }
@@ -581,8 +640,11 @@ class ChatShellRoute extends ShellRouteData {
     GoRouterState state,
     Widget navigator,
   ) {
-    return ChatShell(
-      navigationShell: navigator,
+    return ResponsiveShell(
+      width: EPageWidth.wide,
+      child: ChatShell(
+        navigationShell: navigator,
+      ),
     );
   }
 }

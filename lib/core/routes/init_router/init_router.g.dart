@@ -11,40 +11,45 @@ List<RouteBase> get $appRoutes => [$rootPageRoute, $noConnectionPageRoute];
 RouteBase get $rootPageRoute => ShellRouteData.$route(
   factory: $RootPageRouteExtension._fromState,
   routes: [
-    GoRouteData.$route(
-      path: '/',
-      hasOverriddenOnExit: false,
-      factory: $AuthorizationPageRoute._fromState,
+    ShellRouteData.$route(
+      factory: $AuthShellRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
-          path: '/sign-up',
+          path: '/',
           hasOverriddenOnExit: false,
-          factory: $RegisterPageRoute._fromState,
-        ),
-        GoRouteData.$route(
-          path: '/sign-in',
-          hasOverriddenOnExit: false,
-          factory: $LoginPageRoute._fromState,
-        ),
-        GoRouteData.$route(
-          path: '/reset-password',
-          hasOverriddenOnExit: false,
-          factory: $ResetPasswordPageRoute._fromState,
-        ),
-        GoRouteData.$route(
-          path: '/privacy-policy',
-          hasOverriddenOnExit: false,
-          factory: $PrivacyPolicyPageRoute._fromState,
-        ),
-        GoRouteData.$route(
-          path: '/support',
-          hasOverriddenOnExit: false,
-          factory: $SupportPageRoute._fromState,
-        ),
-        GoRouteData.$route(
-          path: '/terms-of-use',
-          hasOverriddenOnExit: false,
-          factory: $TermsOfUsePageRoute._fromState,
+          factory: $AuthorizationPageRoute._fromState,
+          routes: [
+            GoRouteData.$route(
+              path: '/sign-up',
+              hasOverriddenOnExit: false,
+              factory: $RegisterPageRoute._fromState,
+            ),
+            GoRouteData.$route(
+              path: '/sign-in',
+              hasOverriddenOnExit: false,
+              factory: $LoginPageRoute._fromState,
+            ),
+            GoRouteData.$route(
+              path: '/reset-password',
+              hasOverriddenOnExit: false,
+              factory: $ResetPasswordPageRoute._fromState,
+            ),
+            GoRouteData.$route(
+              path: '/privacy-policy',
+              hasOverriddenOnExit: false,
+              factory: $PrivacyPolicyPageRoute._fromState,
+            ),
+            GoRouteData.$route(
+              path: '/support',
+              hasOverriddenOnExit: false,
+              factory: $SupportPageRoute._fromState,
+            ),
+            GoRouteData.$route(
+              path: '/terms-of-use',
+              hasOverriddenOnExit: false,
+              factory: $TermsOfUsePageRoute._fromState,
+            ),
+          ],
         ),
       ],
     ),
@@ -138,47 +143,57 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                 ),
               ],
             ),
-            GoRouteData.$route(
-              path: '/edit-profile-page',
-              hasOverriddenOnExit: false,
-              factory: $EditProfilePageRoute._fromState,
+            ShellRouteData.$route(
+              factory: $ContentShellRouteExtension._fromState,
               routes: [
                 GoRouteData.$route(
-                  path: 'looking-for-edit',
+                  path: '/edit-profile-page',
                   hasOverriddenOnExit: false,
-                  factory: $EditLookingForRoute._fromState,
+                  factory: $EditProfilePageRoute._fromState,
+                  routes: [
+                    GoRouteData.$route(
+                      path: 'looking-for-edit',
+                      hasOverriddenOnExit: false,
+                      factory: $EditLookingForRoute._fromState,
+                    ),
+                    GoRouteData.$route(
+                      path: 'experience-edit',
+                      hasOverriddenOnExit: false,
+                      factory: $EditExperienceRoute._fromState,
+                    ),
+                    GoRouteData.$route(
+                      path: 'specialization-edit',
+                      hasOverriddenOnExit: false,
+                      factory: $EditSpecializationRoute._fromState,
+                    ),
+                  ],
                 ),
                 GoRouteData.$route(
-                  path: 'experience-edit',
+                  path: '/notification',
                   hasOverriddenOnExit: false,
-                  factory: $EditExperienceRoute._fromState,
+                  factory: $NotificationPageRoute._fromState,
                 ),
                 GoRouteData.$route(
-                  path: 'specialization-edit',
+                  path: '/settings',
                   hasOverriddenOnExit: false,
-                  factory: $EditSpecializationRoute._fromState,
+                  factory: $SettingsPageRoute._fromState,
                 ),
               ],
             ),
-            GoRouteData.$route(
-              path: '/profile',
-              hasOverriddenOnExit: false,
-              factory: $ProfilePageRoute._fromState,
+            ShellRouteData.$route(
+              factory: $ProfileShellRouteExtension._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: '/profile',
+                  hasOverriddenOnExit: false,
+                  factory: $ProfilePageRoute._fromState,
+                ),
+              ],
             ),
             GoRouteData.$route(
               path: '/discovery-profile/:userId',
               hasOverriddenOnExit: false,
               factory: $DiscoveryUserProfilePageRoute._fromState,
-            ),
-            GoRouteData.$route(
-              path: '/notification',
-              hasOverriddenOnExit: false,
-              factory: $NotificationPageRoute._fromState,
-            ),
-            GoRouteData.$route(
-              path: '/settings',
-              hasOverriddenOnExit: false,
-              factory: $SettingsPageRoute._fromState,
             ),
           ],
         ),
@@ -189,6 +204,10 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
 
 extension $RootPageRouteExtension on RootPageRoute {
   static RootPageRoute _fromState(GoRouterState state) => RootPageRoute();
+}
+
+extension $AuthShellRouteExtension on AuthShellRoute {
+  static AuthShellRoute _fromState(GoRouterState state) => AuthShellRoute();
 }
 
 mixin $AuthorizationPageRoute on GoRouteData {
@@ -588,6 +607,11 @@ mixin $ChatPageViewRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
+extension $ContentShellRouteExtension on ContentShellRoute {
+  static ContentShellRoute _fromState(GoRouterState state) =>
+      ContentShellRoute();
+}
+
 mixin $EditProfilePageRoute on GoRouteData {
   static EditProfilePageRoute _fromState(GoRouterState state) =>
       EditProfilePageRoute();
@@ -675,6 +699,53 @@ mixin $EditSpecializationRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
+mixin $NotificationPageRoute on GoRouteData {
+  static NotificationPageRoute _fromState(GoRouterState state) =>
+      NotificationPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/notification');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $SettingsPageRoute on GoRouteData {
+  static SettingsPageRoute _fromState(GoRouterState state) =>
+      SettingsPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ProfileShellRouteExtension on ProfileShellRoute {
+  static ProfileShellRoute _fromState(GoRouterState state) =>
+      ProfileShellRoute();
+}
+
 mixin $ProfilePageRoute on GoRouteData {
   static ProfilePageRoute _fromState(GoRouterState state) => ProfilePageRoute();
 
@@ -706,48 +777,6 @@ mixin $DiscoveryUserProfilePageRoute on GoRouteData {
   String get location => GoRouteData.$location(
     '/discovery-profile/${Uri.encodeComponent(_self.userId)}',
   );
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-mixin $NotificationPageRoute on GoRouteData {
-  static NotificationPageRoute _fromState(GoRouterState state) =>
-      NotificationPageRoute();
-
-  @override
-  String get location => GoRouteData.$location('/notification');
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-mixin $SettingsPageRoute on GoRouteData {
-  static SettingsPageRoute _fromState(GoRouterState state) =>
-      SettingsPageRoute();
-
-  @override
-  String get location => GoRouteData.$location('/settings');
 
   @override
   void go(BuildContext context) => context.go(location);
