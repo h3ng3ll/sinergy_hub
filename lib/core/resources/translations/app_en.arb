@@ -143,5 +143,99 @@
         "type": "int"
       }
     }
-  }
+  },
+  "app_title": "Synergy Hub",
+  "common_save": "Save",
+  "common_cancel": "Cancel",
+  "common_save_changes": "Save Changes",
+  "common_edit": "Edit",
+  "common_updated": "Updated",
+  "common_failed_to_load": "Failed to load data",
+  "common_not_specified": "Not specified yet",
+  "common_cofounder_match_hint": "Help us find your perfect co-founder match",
+  "auth_welcome": "Welcome to Synergy Hub",
+  "auth_continue_with_apple": "Continue with Apple",
+  "auth_continue_with_google": "Continue with Google",
+  "auth_login": "Login",
+  "auth_register": "Register",
+  "auth_agreement_prefix": "By continuing you agree to ",
+  "auth_agreement_terms": "Terms",
+  "auth_agreement_and": " & ",
+  "profile_delete_account": "Delete account",
+  "profile_account_deleted": "Account deleted",
+  "profile_bio_empty_prompt": "Tell others about yourself",
+  "profile_subscription_open_failed": "Couldn't open subscription settings. Manage it in your store account.",
+  "edit_profile_title": "Edit Profile",
+  "edit_profile_updated": "Profile updated successfully",
+  "edit_profile_first_name": "FirstName",
+  "edit_profile_last_name": "LastName",
+  "edit_profile_age": "Age",
+  "edit_profile_bio": "Bio",
+  "edit_profile_specialization": "Specialization",
+  "edit_profile_skills": "Skills",
+  "edit_profile_photo": "Photo",
+  "edit_profile_personal_info": "Personal info",
+  "edit_looking_for_title": "Edit Looking For",
+  "edit_looking_for_heading": "Who are you looking for?",
+  "edit_looking_for_description": "Select 1-5 specializations",
+  "edit_looking_for_search_hint": "Search specializations...",
+  "edit_experience_title": "Edit Experience",
+  "edit_experience_heading": "What is your experience level?",
+  "edit_specialization_title": "Edit Specialization",
+  "edit_specialization_heading": "What is your specific specialization?",
+  "edit_specialization_search_hint": "Search your specialization...",
+  "common_close": "Close",
+  "time_just_now": "Just now",
+  "time_minutes_short": "{minutes}m",
+  "@time_minutes_short": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    },
+    "description": "Compact age of a list item in minutes"
+  },
+  "time_hours_short": "{hours}h",
+  "@time_hours_short": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    },
+    "description": "Compact age of a list item in hours"
+  },
+  "time_today": "Today",
+  "time_yesterday": "Yesterday",
+  "notifications_title": "Notifications",
+  "notifications_center_title": "Notification Center",
+  "notifications_failed_title": "Failed to fetch notifications",
+  "matches_search_hint": "Search matches...",
+  "matches_failed_load": "Failed load data: {error}",
+  "@matches_failed_load": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "matches_filter_recent": "Recent",
+  "matches_filter_unread": "Unread",
+  "matches_filter_all": "All",
+  "matches_filter_favorites": "Favorites",
+  "matches_filter_archived": "Archived",
+  "chats_empty_title": "No chats yet",
+  "chats_empty_subtitle": "Start connecting with others",
+  "chat_unknown_user": "Unknown",
+  "chat_you_prefix": "You:",
+  "chat_archived_success": "Chat archived successfully",
+  "chat_unarchived_success": "Chat unarchived successfully",
+  "chat_added_to_favorites": "Added to favorites",
+  "chat_removed_from_favorites": "Removed from favorites",
+  "chat_online_now": "Online now",
+  "chat_offline_now": "Offline now",
+  "chat_message_hint": "Message...",
+  "status_online": "Online",
+  "status_offline": "Offline",
+  "user_profile_report": "Report",
+  "filters_apply": "Apply Filters"
 }

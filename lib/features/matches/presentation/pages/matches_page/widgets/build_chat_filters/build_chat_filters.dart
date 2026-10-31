@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
@@ -42,6 +43,7 @@ class BuildChatFilters extends StatelessWidget {
       height: 80.0,
       child: ListView(
         // spacing: 10.0,
+        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         children: [
           Padding(
@@ -69,7 +71,7 @@ class BuildChatFilters extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Recent',
+                    AppLocalizations.of(context)!.matches_filter_recent,
                     style: textTheme.bold14.copyWith(
                       color: EChatFilter.recent == filter
                           ? AppColors.darkOrchid.value
@@ -102,7 +104,7 @@ class BuildChatFilters extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Unread',
+                  AppLocalizations.of(context)!.matches_filter_unread,
                   style: textTheme.bold14.copyWith(
                     color: EChatFilter.unread == filter
                         ? AppColors.darkOrchid.value
@@ -134,7 +136,7 @@ class BuildChatFilters extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'All',
+                  AppLocalizations.of(context)!.matches_filter_all,
                   style: textTheme.bold14.copyWith(
                     color: EChatFilter.all == filter
                         ? AppColors.darkOrchid.value
@@ -166,7 +168,7 @@ class BuildChatFilters extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Favorites',
+                  AppLocalizations.of(context)!.matches_filter_favorites,
                   style: textTheme.bold14.copyWith(
                     color: EChatFilter.favorite == filter
                         ? AppColors.darkOrchid.value
@@ -198,7 +200,7 @@ class BuildChatFilters extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Archived',
+                  AppLocalizations.of(context)!.matches_filter_archived,
                   style: textTheme.bold14.copyWith(
                     color: EChatFilter.archived == filter
                         ? AppColors.darkOrchid.value

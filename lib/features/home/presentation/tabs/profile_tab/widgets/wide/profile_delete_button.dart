@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../bloc/profile_bloc/profile_bloc.dart';
@@ -44,7 +45,7 @@ class ProfileDeleteButton extends StatelessWidget {
               size: 20.0,
             ),
             label: Text(
-              'Delete account',
+              AppLocalizations.of(context)!.profile_delete_account,
               style: textTheme.medium15.copyWith(
                 color: red,
               ),

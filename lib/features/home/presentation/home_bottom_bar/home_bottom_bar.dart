@@ -14,6 +14,13 @@ import 'widgets/build_animated_background/build_animated_background.dart';
 import 'widgets/custom_bottom_bar_container.dart';
 import 'widgets/home_app_bar_web.dart';
 
+/// Branch index of the Discovery tab — full width so its filters panel can
+/// dock at the window's right edge (the deck itself is capped in the page).
+const int _kDiscoveryTabIndex = 0;
+
+/// Branch index of the Matches tab — its chat grid uses the wider shell.
+const int _kMatchesTabIndex = 2;
+
 class HomeBottomBar extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
 
@@ -96,7 +103,7 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
                   leading: Builder(
                     builder: (context) {
                       return GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Scaffold.of(context).openDrawer();
                         },
                         child: Icon(
@@ -116,7 +123,11 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
                   ],
                 ),
           body: ResponsiveShell(
-            width: EPageWidth.content,
+            width: switch (selectedIndex) {
+              _kDiscoveryTabIndex => EPageWidth.full,
+              _kMatchesTabIndex => EPageWidth.medium,
+              _ => EPageWidth.content,
+            },
             paintBackground: false,
             child: widget.navigationShell,
           ),

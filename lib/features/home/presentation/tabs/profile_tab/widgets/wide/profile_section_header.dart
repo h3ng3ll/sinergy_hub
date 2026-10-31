@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
 
@@ -48,7 +49,7 @@ class ProfileSectionHeader extends StatelessWidget {
         ),
         IconButton(
           onPressed: onTapEdit,
-          tooltip: 'Edit',
+          tooltip: AppLocalizations.of(context)!.common_edit,
           splashRadius: 20.0,
           hoverColor: accent.withValues(
             alpha: 0.08,

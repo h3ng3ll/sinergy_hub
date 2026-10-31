@@ -4,8 +4,8 @@ import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../onboard_survey/domain/models/specializations/specializations.dart';
 import '../../../../../../user/domain/models/user_data/user_data.dart';
-import 'profile_avatar_ring.dart';
-import 'profile_section_card.dart';
+import '../../../../../../../core/widgets/wide/avatar_ring.dart';
+import '../../../../../../../core/widgets/wide/hover_card.dart';
 
 class ProfileIdentityCard extends StatelessWidget {
   final UserData userData;
@@ -41,7 +41,7 @@ class ProfileIdentityCard extends StatelessWidget {
     final textTheme = AppTextTheme.of(context);
     final accent = AppColors.majorelleBlue.value;
 
-    return ProfileSectionCard(
+    return HoverCard(
       padding: const EdgeInsets.symmetric(
         horizontal: 20.0,
         vertical: 28.0,
@@ -50,7 +50,7 @@ class ProfileIdentityCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 14.0,
         children: [
-          ProfileAvatarRing(
+          AvatarRing(
             url: userData.avatarUrl,
             initials: _initials,
             onTap: onTapAvatar,

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
@@ -10,6 +11,8 @@ import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
+import '../../../../../core/utils/responsive_helper.dart';
+import '../../widgets/selection_page_layout/selection_page_layout.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
@@ -56,7 +59,7 @@ class EditSpecializationPage extends StatelessWidget {
   ) {
     if (state.isSaved) {
       UiMessageService.showInfo(
-        'Updated',
+        AppLocalizations.of(context)!.common_updated,
       );
       context.pop();
     } else if (state.isFailed) {
@@ -101,7 +104,7 @@ class EditSpecializationPage extends StatelessWidget {
                 onPressed: () => context.pop(),
               ),
               title: Text(
-                'Edit Specialization',
+                AppLocalizations.of(context)!.edit_specialization_title,
                 style: textTheme.bold17.copyWith(
                   color: colorScheme.onPrimary,
                 ),
@@ -127,7 +130,7 @@ class EditSpecializationPage extends StatelessWidget {
                                 ),
                               )
                             : Text(
-                                'Save',
+                                AppLocalizations.of(context)!.common_save,
                                 style: textTheme.bold14.copyWith(
                                   color: canSave
                                       ? AppColors.black.value
@@ -151,7 +154,7 @@ class EditSpecializationPage extends StatelessWidget {
                 if (editState.userData == null) {
                   return Center(
                     child: Text(
-                      'Failed to load data',
+                      AppLocalizations.of(context)!.common_failed_to_load,
                       style: textTheme.regular14.copyWith(
                         color: colorScheme.secondary,
                       ),
@@ -164,22 +167,47 @@ class EditSpecializationPage extends StatelessWidget {
                   SearchSpecializationState
                 >(
                   builder: (context, searchState) {
+                    if (!ResponsiveHelper.isMobile(context)) {
+                      return HorizontalPadding(
+                        child: SelectionPageLayout(
+                          header: OnboardSurveyHeader(
+                            title: AppLocalizations.of(context)!.edit_specialization_heading,
+                            description:
+                                AppLocalizations.of(context)!.common_cofounder_match_hint,
+                          ),
+                          search: SearchInput(
+                            onChanged: (query) =>
+                                _onSearchSpecialization(context, query),
+                            hintText: AppLocalizations.of(context)!.edit_specialization_search_hint,
+                          ),
+                          content: SpecializationList(
+                            columns: 2,
+                            specializations: searchState.specializations,
+                            isSelected: (e) =>
+                                e.specialization ==
+                                editState.selectedSpecialization,
+                            onSelect: (e) =>
+                                _onSelectSpecialization(context, e),
+                          ),
+                        ),
+                      );
+                    }
                     return HorizontalPadding(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Center(
                             child: OnboardSurveyHeader(
-                              title: 'What is your specific specialization?',
+                              title: AppLocalizations.of(context)!.edit_specialization_heading,
                               description:
-                                  'Help us find your perfect co-founder match',
+                                  AppLocalizations.of(context)!.common_cofounder_match_hint,
                             ),
                           ),
                           Gap(20.0),
                           SearchInput(
                             onChanged: (query) =>
                                 _onSearchSpecialization(context, query),
-                            hintText: 'Search your specialization...',
+                            hintText: AppLocalizations.of(context)!.edit_specialization_search_hint,
                           ),
                           Expanded(
                             child: SpecializationList(

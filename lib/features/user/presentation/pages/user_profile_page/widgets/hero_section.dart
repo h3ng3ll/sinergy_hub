@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../../core/utils/initials.dart';
+import '../../../../../../core/utils/responsive_helper.dart';
 import '../../../../../../core/widgets/build_image.dart';
+import '../../../../../../core/widgets/wide/avatar_ring.dart';
 import '../../../../domain/models/user_data/user_data.dart';
 import 'experience_chip.dart';
 import 'online_badge.dart';
@@ -30,40 +33,48 @@ class HeroSection extends StatelessWidget {
     return Column(
       spacing: 14.0,
       children: [
-        SizedBox.square(
-          dimension: 132.0,
-          child: Stack(
-            children: [
-              BuildImage(
-                url: userData.avatarUrl,
-                width: 132.0,
-                height: 132.0,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 3.0,
-                  color: AppColors.white.value.withValues(alpha: 0.85),
+        if (!ResponsiveHelper.isMobile(context))
+          AvatarRing(
+            url: userData.avatarUrl,
+            initials: initialsOf([userData.firstName, userData.lastName]),
+            showEditBadge: false,
+            statusOnline: userData.isOnline,
+          )
+        else
+          SizedBox.square(
+            dimension: 132.0,
+            child: Stack(
+              children: [
+                BuildImage(
+                  url: userData.avatarUrl,
+                  width: 132.0,
+                  height: 132.0,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    width: 3.0,
+                    color: AppColors.white.value.withValues(alpha: 0.85),
+                  ),
                 ),
-              ),
-              Positioned(
-                right: 8.0,
-                bottom: 8.0,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: statusColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 3.0,
-                      color: AppColors.white.value,
+                Positioned(
+                  right: 8.0,
+                  bottom: 8.0,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: statusColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        width: 3.0,
+                        color: AppColors.white.value,
+                      ),
+                    ),
+                    child: const SizedBox.square(
+                      dimension: 22.0,
                     ),
                   ),
-                  child: const SizedBox.square(
-                    dimension: 22.0,
-                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         Column(
           spacing: 6.0,
           children: [

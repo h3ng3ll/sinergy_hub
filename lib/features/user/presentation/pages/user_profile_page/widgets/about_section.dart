@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
 import 'profile_section_card.dart';
@@ -17,7 +18,8 @@ class AboutSection extends StatelessWidget {
     final textTheme = AppTextTheme.of(context);
 
     return ProfileSectionCard(
-      title: 'About',
+      title: AppLocalizations.of(context)!.about_me,
+      icon: Icons.person_outline,
       child: Text(
         aboutMe,
         style: textTheme.regular16.copyWith(

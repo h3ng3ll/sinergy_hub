@@ -4,9 +4,12 @@ import 'package:gap/gap.dart';
 
 import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../core/resources/translations/app_localizations.dart';
+import '../../../../../core/utils/responsive_helper.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../core/widgets/custom_loading_indicator.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
+import '../../../../../core/widgets/wide/hover_card.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import '../../../domain/models/notification/notification.dart';
 import '../../bloc/notification_bloc/notification_bloc.dart';
@@ -34,50 +37,104 @@ class _NotificationPageState extends State<NotificationPage> {
         backgroundColor: Colors.transparent,
         appBar: CustomAppBar(
           title: Text(
-            'Notifications',
+            AppLocalizations.of(context)!.notifications_title,
             style: textTheme.bold24.copyWith(color: AppColors.white.value),
           ),
         ),
-        body: Container(
-          color: AppColors.white.value,
-          child: BlocBuilder<NotificationBloc, NotificationState>(
-            builder: (context, state) {
-              if (state.isFailed) {
-                return FailedNotifications(
-                  errorMessage: state.errorMessage,
-                );
-              }
-              if (state.isLoading && state.notifications.isEmpty) {
-                return const CustomLoadingIndicator();
-              }
-              if (state.notifications.isEmpty) {
-                return NoFoundNotifications();
-              }
-              return Column(
+        body: ResponsiveHelper.isMobile(context)
+            ? _buildMobileBody(textTheme)
+            : _buildWideBody(textTheme),
+      ),
+    );
+  }
 
-                children: [
-                  Gap(24.0),
-                  Center(
-                    child: Text(
-                      'Notification Center',
-                      style: textTheme.bold24,
-                    ),
-                  ),
-                  Gap(24.0),
-                  Expanded(
-                    child: HorizontalPadding(
-                      child: NotificationBuilder(
-                        notifications: state.notifications,
-                        onTap: onTap,
-                        onEndReached: onEndReached,
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
+  Widget _buildWideBody(AppTextTheme textTheme) {
+    final lo = AppLocalizations.of(context)!;
+
+    return BlocBuilder<NotificationBloc, NotificationState>(
+      builder: (context, state) {
+        if (state.isLoading && state.notifications.isEmpty) {
+          return const CustomLoadingIndicator();
+        }
+        if (state.isFailed || state.notifications.isEmpty) {
+          return Center(
+            child: HorizontalPadding(
+              child: HoverCard(
+                padding: const EdgeInsets.all(32.0),
+                child: state.isFailed
+                    ? FailedNotifications(
+                        errorMessage: state.errorMessage,
+                      )
+                    : NoFoundNotifications(),
+              ),
+            ),
+          );
+        }
+        return HorizontalPadding(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 16.0,
+            children: [
+              Text(
+                lo.notifications_center_title,
+                textAlign: TextAlign.center,
+                style: textTheme.bold24.copyWith(
+                  color: AppColors.white.value,
+                ),
+              ),
+              Expanded(
+                child: NotificationBuilder(
+                  wide: true,
+                  notifications: state.notifications,
+                  onTap: onTap,
+                  onEndReached: onEndReached,
+                ),
+              ),
+            ],
           ),
-        ),
+        );
+      },
+    );
+  }
+
+  Widget _buildMobileBody(AppTextTheme textTheme) {
+    return Container(
+      color: AppColors.white.value,
+      child: BlocBuilder<NotificationBloc, NotificationState>(
+        builder: (context, state) {
+          if (state.isFailed) {
+            return FailedNotifications(
+              errorMessage: state.errorMessage,
+            );
+          }
+          if (state.isLoading && state.notifications.isEmpty) {
+            return const CustomLoadingIndicator();
+          }
+          if (state.notifications.isEmpty) {
+            return NoFoundNotifications();
+          }
+          return Column(
+            children: [
+              Gap(24.0),
+              Center(
+                child: Text(
+                  AppLocalizations.of(context)!.notifications_center_title,
+                  style: textTheme.bold24,
+                ),
+              ),
+              Gap(24.0),
+              Expanded(
+                child: HorizontalPadding(
+                  child: NotificationBuilder(
+                    notifications: state.notifications,
+                    onTap: onTap,
+                    onEndReached: onEndReached,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

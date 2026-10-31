@@ -10,7 +10,7 @@ import 'profile_delete_button.dart';
 import 'profile_identity_card.dart';
 import 'profile_looking_for_section.dart';
 import 'profile_premium_section.dart';
-import 'staggered_entrance.dart';
+import '../../../../../../../core/widgets/wide/staggered_entrance.dart';
 
 /// Total length of the staggered card entrance.
 const Duration _kEntranceDuration = Duration(milliseconds: 900);

@@ -52,8 +52,7 @@ class BuildChatsEmpty extends StatelessWidget {
               ),
               const Gap(16.0),
               Text(
-                // TODO: localize
-                'No chats yet',
+                AppLocalizations.of(context)!.chats_empty_title,
                 style: textTheme.bold16.copyWith(
                   color: colorScheme.onPrimary,
                 ),
@@ -61,8 +60,7 @@ class BuildChatsEmpty extends StatelessWidget {
               ),
               const Gap(8.0),
               Text(
-                // TODO: localize
-                'Start connecting with others',
+                AppLocalizations.of(context)!.chats_empty_subtitle,
                 style: textTheme.regular12.copyWith(
                   color: colorScheme.onPrimary.withValues(
                     alpha: 0.6,

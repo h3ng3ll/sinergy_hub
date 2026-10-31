@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../../gen/assets.gen.dart';
@@ -93,7 +94,8 @@ class ChatTileItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  otherUser?.name ?? 'Unknown',
+                  otherUser?.name ??
+                      AppLocalizations.of(context)!.chat_unknown_user,
                   style: textTheme.bold16.copyWith(
                     color: colorScheme.onPrimary,
                   ),

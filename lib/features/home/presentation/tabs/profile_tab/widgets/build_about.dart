@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../onboard_survey/domain/models/experiences/experiences.dart';
@@ -34,7 +35,7 @@ class BuildAbout extends StatelessWidget {
         children: [
           BuildUserTitleWidget(
             onTapEdit: onTapEdit,
-            title: 'About',
+            title: AppLocalizations.of(context)!.about_me,
           ),
           if (bio.isNotEmpty)
             Text(

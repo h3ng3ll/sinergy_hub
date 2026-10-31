@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/resources/colors/app_color_scheme.dart';
@@ -49,32 +50,33 @@ class BuildLocationSection extends StatelessWidget {
         CityInput(
           controller: cityController,
         ),
-        TranslucentBtn(
-          onPressed: isDetecting ? null : onUseMyLocation,
-          child: isDetecting
-              ? SizedBox(
-                  width: 16.0,
-                  height: 16.0,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.0,
-                    color: colorScheme.onPrimary,
-                  ),
-                )
-              : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 8.0,
-                  children: [
-                    Icon(
-                      Icons.my_location,
-                      size: 18.0,
+        if (!kIsWeb)
+          TranslucentBtn(
+            onPressed: isDetecting ? null : onUseMyLocation,
+            child: isDetecting
+                ? SizedBox(
+                    width: 16.0,
+                    height: 16.0,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
                       color: colorScheme.onPrimary,
                     ),
-                    Text(
-                      lo.location_use_my_location,
-                    ),
-                  ],
-                ),
-        ),
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 8.0,
+                    children: [
+                      Icon(
+                        Icons.my_location,
+                        size: 18.0,
+                        color: colorScheme.onPrimary,
+                      ),
+                      Text(
+                        lo.location_use_my_location,
+                      ),
+                    ],
+                  ),
+          ),
         if (errorMessage.isNotEmpty)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

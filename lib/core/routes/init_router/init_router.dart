@@ -265,6 +265,16 @@ GoRouter initRouter({
             ),
             TypedShellRoute<ContentShellRoute>(
               routes: [
+                TypedGoRoute<NotificationPageRoute>(
+                  path: '/notification',
+                ),
+                TypedGoRoute<SettingsPageRoute>(
+                  path: '/settings',
+                ),
+              ],
+            ),
+            TypedShellRoute<ProfileShellRoute>(
+              routes: [
                 TypedGoRoute<EditProfilePageRoute>(
                   path: '/edit-profile-page',
                   routes: [
@@ -279,16 +289,6 @@ GoRouter initRouter({
                     ),
                   ],
                 ),
-                TypedGoRoute<NotificationPageRoute>(
-                  path: '/notification',
-                ),
-                TypedGoRoute<SettingsPageRoute>(
-                  path: '/settings',
-                ),
-              ],
-            ),
-            TypedShellRoute<ProfileShellRoute>(
-              routes: [
                 TypedGoRoute<ProfilePageRoute>(
                   path: '/profile',
                 ),
@@ -641,7 +641,7 @@ class ChatShellRoute extends ShellRouteData {
     Widget navigator,
   ) {
     return ResponsiveShell(
-      width: EPageWidth.wide,
+      width: EPageWidth.full,
       child: ChatShell(
         navigationShell: navigator,
       ),

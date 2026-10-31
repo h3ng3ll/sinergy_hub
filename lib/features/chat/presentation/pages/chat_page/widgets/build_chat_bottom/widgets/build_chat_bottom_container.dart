@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../../../core/resources/colors/app_colors.dart';
+import '../../../../../../../../core/utils/responsive_helper.dart';
 
 class BuildChatBottomContainer extends StatelessWidget {
   final Widget child;
@@ -12,6 +13,23 @@ class BuildChatBottomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!ResponsiveHelper.isMobile(context)) {
+      return Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 12.0,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.white.value,
+          border: Border(
+            top: BorderSide(
+              color: AppColors.platinum.value,
+            ),
+          ),
+        ),
+        child: child,
+      );
+    }
+
     return Container(
 
       padding: EdgeInsets.symmetric(

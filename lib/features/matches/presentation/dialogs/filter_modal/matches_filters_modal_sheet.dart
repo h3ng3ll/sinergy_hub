@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
+import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/widgets/btn/app_btn.dart';
 import '../../../../home/presentation/edit_profile_page/widgets/build_skills_section/build_skills_section.dart';
 import '../../../../onboard_survey/domain/models/experience/experience.dart';
@@ -28,13 +29,24 @@ class MatchesFiltersModalSheet extends StatefulWidget {
   final MatchesFilter initialOptions;
   final ValueChanged<MatchesFilter>? onApply;
 
+  /// Tablet/desktop: rendered as a panel docked to the right of the page
+  /// (fills the height it's given, rounded on the left).
+  final bool isSidePanel;
+
+  /// Close handler when docked as a panel; the sheet pops itself otherwise.
+  final VoidCallback? onClose;
+
   const MatchesFiltersModalSheet({
     super.key,
     required this.initialOptions,
     this.onApply,
+    this.onClose,
+    this.isSidePanel = false,
   });
 
-  /// Shows the matches filters modal bottom sheet.
+  /// Shows the matches filters modal bottom sheet (phones). On tablet and
+  /// desktop the Discovery page docks this widget as a side panel instead
+  /// (see [isSidePanel]).
   static Future<MatchesFilter?> show(
     BuildContext context, {
     required MatchesFilter initialOptions,
@@ -150,6 +162,11 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
   }
 
   void _onClose() {
+    final onClose = widget.onClose;
+    if (onClose != null) {
+      onClose();
+      return;
+    }
     Navigator.pop(context);
   }
 
@@ -166,13 +183,18 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
     final textTheme = AppTextTheme.of(context);
 
     return Container(
-      height: sheetHeight,
+      height: widget.isSidePanel ? null : sheetHeight,
       decoration: BoxDecoration(
         color: AppColors.pinkLace.value,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20.0),
-        ),
+        borderRadius: widget.isSidePanel
+            ? const BorderRadius.horizontal(
+                left: Radius.circular(20.0),
+              )
+            : const BorderRadius.vertical(
+                top: Radius.circular(20.0),
+              ),
       ),
+      clipBehavior: widget.isSidePanel ? Clip.antiAlias : Clip.none,
       child: Padding(
         padding: EdgeInsets.only(bottom: keyboardHeight),
         child: Column(
@@ -205,14 +227,18 @@ class _MatchesFiltersModalSheetState extends State<MatchesFiltersModalSheet> {
                       radiusKm: _options.radiusKm ?? kDefaultLocationRadiusKm,
                       onRadiusChanged: _onRadiusChanged,
                       hasCoordinates:
-                          context.watch<UserBloc>().state.userData?.location
+                          context
+                              .watch<UserBloc>()
+                              .state
+                              .userData
+                              ?.location
                               ?.hasCoordinates ??
                           false,
                     ),
                     const SizedBox(height: 24.0),
 
                     Text(
-                      'Skills',
+                      AppLocalizations.of(context)!.edit_profile_skills,
                       style: textTheme.medium18,
                     ),
                     const SizedBox(height: 12.0),
@@ -255,7 +281,7 @@ class _ApplyButton extends StatelessWidget {
     return Center(
       child: PrimaryBtn(
         onPressed: hasActiveFilters ? onPressed : null,
-        text: 'Apply Filters',
+        text: AppLocalizations.of(context)!.filters_apply,
         padding: EdgeInsets.symmetric(
           vertical: 10,
           horizontal: 14.0,

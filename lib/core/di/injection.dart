@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -26,6 +27,9 @@ import '../services/connectivity_service.dart';
 import '../services/crypto_service.dart';
 import '../services/geolocation/geolocator_geolocation_service.dart';
 import '../services/geolocation/i_geolocation_service.dart';
+import '../services/geolocation/i_reverse_geocoding_service.dart';
+import '../services/geolocation/native_reverse_geocoding_service.dart';
+import '../services/geolocation/web_reverse_geocoding_service.dart';
 import '../services/firebase/firebase_auth_service.dart';
 import '../services/firebase/firebase_firestore_service.dart';
 import '../services/firebase/firebase_functions_service.dart';
@@ -80,6 +84,11 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton(() => ConnectivityService());
   getIt.registerLazySingleton<IGeolocationService>(
     () => GeolocatorGeolocationService(),
+  );
+  getIt.registerLazySingleton<IReverseGeocodingService>(
+    () => kIsWeb
+        ? WebReverseGeocodingService()
+        : NativeReverseGeocodingService(),
   );
   getIt.registerLazySingleton(
     () => FirebaseDatabase.instance,

@@ -9,7 +9,10 @@ enum EPageWidth {
   compact(_kCompactMaxWidth),
   content(_kContentMaxWidth),
   medium(_kMediumMaxWidth),
-  wide(_kWideMaxWidth);
+  wide(_kWideMaxWidth),
+
+  /// No cap — the page spans the whole window (e.g. chat).
+  full(double.infinity);
 
   final double maxWidth;
 

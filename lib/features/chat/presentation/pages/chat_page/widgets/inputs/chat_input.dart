@@ -4,6 +4,7 @@ import '../../../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../../core/resources/translations/app_localizations.dart';
+import '../../../../../../../core/utils/responsive_helper.dart';
 import '../../../../../../../core/widgets/custom_text_field.dart';
 
 class ChatInput extends StatelessWidget {
@@ -52,9 +53,33 @@ class ChatInput extends StatelessWidget {
       );
     }
 
+    if (!ResponsiveHelper.isMobile(context)) {
+      final pillBorder = OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(24.0),
+      );
+
+      return CustomTextField(
+        controller: textEditingController,
+        hintText: l10n.chat_message_hint,
+        style: textTheme.regular14.copyWith(
+          color: colorScheme.onSecondary,
+        ),
+        maxLines: 5,
+        minLines: 1,
+        fillColor: AppColors.antiFlashWhite.value,
+        enabledBorder: pillBorder,
+        focusedBorder: pillBorder,
+        border: pillBorder,
+        hintStyle: textTheme.regular14.copyWith(
+          color: AppColors.darkBlueGray.value,
+        ),
+      );
+    }
+
     return CustomTextField(
       controller: textEditingController,
-      hintText: 'Message...',
+      hintText: l10n.chat_message_hint,
       style: textTheme.regular14.copyWith(
         color: colorScheme.onSecondary,
       ),

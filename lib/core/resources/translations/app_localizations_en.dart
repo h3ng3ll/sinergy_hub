@@ -325,4 +325,226 @@ class AppLocalizationsEn extends AppLocalizations {
   String filter_location_radius_km(int km) {
     return '$km km';
   }
+
+  @override
+  String get app_title => 'Synergy Hub';
+
+  @override
+  String get common_save => 'Save';
+
+  @override
+  String get common_cancel => 'Cancel';
+
+  @override
+  String get common_save_changes => 'Save Changes';
+
+  @override
+  String get common_edit => 'Edit';
+
+  @override
+  String get common_updated => 'Updated';
+
+  @override
+  String get common_failed_to_load => 'Failed to load data';
+
+  @override
+  String get common_not_specified => 'Not specified yet';
+
+  @override
+  String get common_cofounder_match_hint =>
+      'Help us find your perfect co-founder match';
+
+  @override
+  String get auth_welcome => 'Welcome to Synergy Hub';
+
+  @override
+  String get auth_continue_with_apple => 'Continue with Apple';
+
+  @override
+  String get auth_continue_with_google => 'Continue with Google';
+
+  @override
+  String get auth_login => 'Login';
+
+  @override
+  String get auth_register => 'Register';
+
+  @override
+  String get auth_agreement_prefix => 'By continuing you agree to ';
+
+  @override
+  String get auth_agreement_terms => 'Terms';
+
+  @override
+  String get auth_agreement_and => ' & ';
+
+  @override
+  String get profile_delete_account => 'Delete account';
+
+  @override
+  String get profile_account_deleted => 'Account deleted';
+
+  @override
+  String get profile_bio_empty_prompt => 'Tell others about yourself';
+
+  @override
+  String get profile_subscription_open_failed =>
+      'Couldn\'t open subscription settings. Manage it in your store account.';
+
+  @override
+  String get edit_profile_title => 'Edit Profile';
+
+  @override
+  String get edit_profile_updated => 'Profile updated successfully';
+
+  @override
+  String get edit_profile_first_name => 'FirstName';
+
+  @override
+  String get edit_profile_last_name => 'LastName';
+
+  @override
+  String get edit_profile_age => 'Age';
+
+  @override
+  String get edit_profile_bio => 'Bio';
+
+  @override
+  String get edit_profile_specialization => 'Specialization';
+
+  @override
+  String get edit_profile_skills => 'Skills';
+
+  @override
+  String get edit_profile_photo => 'Photo';
+
+  @override
+  String get edit_profile_personal_info => 'Personal info';
+
+  @override
+  String get edit_looking_for_title => 'Edit Looking For';
+
+  @override
+  String get edit_looking_for_heading => 'Who are you looking for?';
+
+  @override
+  String get edit_looking_for_description => 'Select 1-5 specializations';
+
+  @override
+  String get edit_looking_for_search_hint => 'Search specializations...';
+
+  @override
+  String get edit_experience_title => 'Edit Experience';
+
+  @override
+  String get edit_experience_heading => 'What is your experience level?';
+
+  @override
+  String get edit_specialization_title => 'Edit Specialization';
+
+  @override
+  String get edit_specialization_heading =>
+      'What is your specific specialization?';
+
+  @override
+  String get edit_specialization_search_hint => 'Search your specialization...';
+
+  @override
+  String get common_close => 'Close';
+
+  @override
+  String get time_just_now => 'Just now';
+
+  @override
+  String time_minutes_short(int minutes) {
+    return '${minutes}m';
+  }
+
+  @override
+  String time_hours_short(int hours) {
+    return '${hours}h';
+  }
+
+  @override
+  String get time_today => 'Today';
+
+  @override
+  String get time_yesterday => 'Yesterday';
+
+  @override
+  String get notifications_title => 'Notifications';
+
+  @override
+  String get notifications_center_title => 'Notification Center';
+
+  @override
+  String get notifications_failed_title => 'Failed to fetch notifications';
+
+  @override
+  String get matches_search_hint => 'Search matches...';
+
+  @override
+  String matches_failed_load(String error) {
+    return 'Failed load data: $error';
+  }
+
+  @override
+  String get matches_filter_recent => 'Recent';
+
+  @override
+  String get matches_filter_unread => 'Unread';
+
+  @override
+  String get matches_filter_all => 'All';
+
+  @override
+  String get matches_filter_favorites => 'Favorites';
+
+  @override
+  String get matches_filter_archived => 'Archived';
+
+  @override
+  String get chats_empty_title => 'No chats yet';
+
+  @override
+  String get chats_empty_subtitle => 'Start connecting with others';
+
+  @override
+  String get chat_unknown_user => 'Unknown';
+
+  @override
+  String get chat_you_prefix => 'You:';
+
+  @override
+  String get chat_archived_success => 'Chat archived successfully';
+
+  @override
+  String get chat_unarchived_success => 'Chat unarchived successfully';
+
+  @override
+  String get chat_added_to_favorites => 'Added to favorites';
+
+  @override
+  String get chat_removed_from_favorites => 'Removed from favorites';
+
+  @override
+  String get chat_online_now => 'Online now';
+
+  @override
+  String get chat_offline_now => 'Offline now';
+
+  @override
+  String get chat_message_hint => 'Message...';
+
+  @override
+  String get status_online => 'Online';
+
+  @override
+  String get status_offline => 'Offline';
+
+  @override
+  String get user_profile_report => 'Report';
+
+  @override
+  String get filters_apply => 'Apply Filters';
 }

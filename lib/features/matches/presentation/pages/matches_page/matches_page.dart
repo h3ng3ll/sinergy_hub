@@ -7,6 +7,8 @@ import '../../../../../core/di/injection.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
 import '../../../../../core/routes/presentation/loading_data_widget.dart';
 import '../../../../../core/services/ui_message_service.dart';
+import '../../../../../core/resources/translations/app_localizations.dart';
+import '../../../../../core/utils/responsive_helper.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../../../../chat/data/utils/extensions/chats_filter_state_ext.dart';
@@ -20,6 +22,9 @@ import 'widgets/build_chat_filters/build_chat_filters.dart';
 import 'widgets/chats_builder/chats_builder.dart';
 import 'widgets/chats_builder/widgets/build_chats_empty.dart';
 import 'widgets/chats_builder/widgets/chat_actions_dialog.dart';
+
+/// Search field cap on tablet/desktop so it doesn't span the whole tab.
+const double _kWideSearchMaxWidth = 600.0;
 
 class MatchesPage extends StatefulWidget {
   const MatchesPage({super.key});
@@ -97,6 +102,9 @@ class _MatchesPageState extends State<MatchesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final lo = AppLocalizations.of(context)!;
+    final isWide = !ResponsiveHelper.isMobile(context);
+
     return BlocProvider.value(
       value: _chatsFilterBloc,
       child: BlocListener<ChatsFilterBloc, ChatsFilterState>(
@@ -107,19 +115,19 @@ class _MatchesPageState extends State<MatchesPage> {
             );
           } else if (state.isArchived) {
             UiMessageService.showInfo(
-              'Chat unarchived successfully',
+              lo.chat_archived_success,
             );
           } else if (state.isUnArchived) {
             UiMessageService.showInfo(
-              'Chat unarchived successfully',
+              lo.chat_unarchived_success,
             );
           } else if (state.isFavorite) {
             UiMessageService.showInfo(
-              'Added to favorites',
+              lo.chat_added_to_favorites,
             );
-          } else if (state.isFavorite) {
+          } else if (state.isUnFavorite) {
             UiMessageService.showInfo(
-              'Removed from favorites',
+              lo.chat_removed_from_favorites,
             );
           }
         },
@@ -130,14 +138,24 @@ class _MatchesPageState extends State<MatchesPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               HorizontalPadding(
-                child: SearchInput(
-                  hintText: 'Search matches...',
-                  onChanged: onChangedQuery,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: isWide ? _kWideSearchMaxWidth : double.infinity,
+                    ),
+                    child: SearchInput(
+                      hintText: lo.matches_search_hint,
+                      onChanged: onChangedQuery,
+                    ),
+                  ),
                 ),
               ),
               Gap(5.0),
-              BuildChatFilters(
-                onTapChatFilter: onTapChatFilter,
+              Align(
+                alignment: isWide ? Alignment.center : Alignment.centerLeft,
+                child: BuildChatFilters(
+                  onTapChatFilter: onTapChatFilter,
+                ),
               ),
               Gap(3.0),
               Expanded(
@@ -150,7 +168,7 @@ class _MatchesPageState extends State<MatchesPage> {
                     }
                     if (state.status == ChatsFilterStatus.failed) {
                       return Text(
-                        'Failed load data: ${state.errorMessage}',
+                        lo.matches_failed_load(state.errorMessage),
                       );
                     }
                     if (state.isInitial && state.isEmpty) {
@@ -166,6 +184,7 @@ class _MatchesPageState extends State<MatchesPage> {
                         showChatActions: _showChatActions,
                         onlineUsers: state.onlineUsers,
                         uid: uid,
+                        wide: isWide,
                       ),
                     );
                   },

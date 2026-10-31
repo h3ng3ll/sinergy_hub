@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
@@ -10,6 +11,9 @@ import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
+import '../../../../../core/utils/responsive_helper.dart';
+import '../../widgets/selection_page_layout/selection_page_layout.dart';
+import '../../widgets/survey_card_grid/survey_card_grid.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import '../../../../onboard_survey/domain/models/specialization/specialization.dart';
@@ -81,7 +85,7 @@ class EditLookingForPage extends StatelessWidget {
         listener: (context, state) {
           if (state.status == EditLookingForStatus.saved) {
             UiMessageService.showInfo(
-              'Updated',
+              AppLocalizations.of(context)!.common_updated,
             );
             context.pop();
           } else if (state.status == EditLookingForStatus.failed) {
@@ -102,7 +106,7 @@ class EditLookingForPage extends StatelessWidget {
                 onPressed: () => context.pop(),
               ),
               title: Text(
-                'Edit Looking For',
+                AppLocalizations.of(context)!.edit_looking_for_title,
                 style: textTheme.bold17.copyWith(
                   color: colorScheme.onPrimary,
                 ),
@@ -132,7 +136,7 @@ class EditLookingForPage extends StatelessWidget {
                                 ),
                               )
                             : Text(
-                                'Save',
+                                AppLocalizations.of(context)!.common_save,
                                 style: textTheme.bold14.copyWith(
                                   color: canSave
                                       ? AppColors.black.value
@@ -156,7 +160,7 @@ class EditLookingForPage extends StatelessWidget {
                 if (editState.status == EditLookingForStatus.failed) {
                   return Center(
                     child: Text(
-                      'Failed to load data',
+                      AppLocalizations.of(context)!.common_failed_to_load,
                       style: textTheme.regular14.copyWith(
                         color: colorScheme.secondary,
                       ),
@@ -173,51 +177,72 @@ class EditLookingForPage extends StatelessWidget {
                     final reachLimit =
                         editState.selectedSpecializations.length >= 5;
 
+                    Widget buildCard(BuildContext context, int index) {
+                      final specialization = specializations[index];
+                      final isSelected = editState.selectedSpecializations
+                          .contains(
+                            specialization.specialization,
+                          );
+
+                      return SurveyCard(
+                        isSelected: isSelected,
+                        colors: specialization.colors,
+                        icon: specialization.icon,
+                        title: specialization.name,
+                        description: specialization.particulars.join(
+                          ', ',
+                        ),
+                        onTap: isSelected || !reachLimit
+                            ? () => _onToggleSpecialization(
+                                context,
+                                specialization.specialization,
+                              )
+                            : null,
+                        onLongPress: (renderBox) {},
+                      );
+                    }
+
+                    if (!ResponsiveHelper.isMobile(context)) {
+                      return HorizontalPadding(
+                        child: SelectionPageLayout(
+                          header: OnboardSurveyHeader(
+                            title: AppLocalizations.of(context)!.edit_looking_for_heading,
+                            description: AppLocalizations.of(context)!.edit_looking_for_description,
+                          ),
+                          search: SearchInput(
+                            onChanged: (query) =>
+                                _onSearchSpecialization(context, query),
+                            hintText: AppLocalizations.of(context)!.edit_looking_for_search_hint,
+                          ),
+                          content: SurveyCardGrid(
+                            itemCount: specializations.length,
+                            itemBuilder: buildCard,
+                          ),
+                        ),
+                      );
+                    }
+
                     return HorizontalPadding(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Center(
                             child: OnboardSurveyHeader(
-                              title: 'Who are you looking for?',
-                              description: 'Select 1-5 specializations',
+                              title: AppLocalizations.of(context)!.edit_looking_for_heading,
+                              description: AppLocalizations.of(context)!.edit_looking_for_description,
                             ),
                           ),
                           Gap(20.0),
                           SearchInput(
                             onChanged: (query) =>
                                 _onSearchSpecialization(context, query),
-                            hintText: 'Search specializations...',
+                            hintText: AppLocalizations.of(context)!.edit_looking_for_search_hint,
                           ),
                           Gap(20.0),
                           Expanded(
                             child: ListView.separated(
                               separatorBuilder: (context, index) => Gap(20.0),
-                              itemBuilder: (BuildContext context, int index) {
-                                final specialization = specializations[index];
-                                final isSelected = editState
-                                    .selectedSpecializations
-                                    .contains(
-                                      specialization.specialization,
-                                    );
-
-                                return SurveyCard(
-                                  isSelected: isSelected,
-                                  colors: specialization.colors,
-                                  icon: specialization.icon,
-                                  title: specialization.name,
-                                  description: specialization.particulars.join(
-                                    ', ',
-                                  ),
-                                  onTap: isSelected || !reachLimit
-                                      ? () => _onToggleSpecialization(
-                                          context,
-                                          specialization.specialization,
-                                        )
-                                      : null,
-                                  onLongPress: (renderBox) {},
-                                );
-                              },
+                              itemBuilder: buildCard,
                               itemCount: specializations.length,
                             ),
                           ),

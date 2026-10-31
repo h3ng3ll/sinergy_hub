@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
@@ -10,6 +11,8 @@ import '../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../core/services/ui_message_service.dart';
 import '../../../../../core/widgets/btn/action_btn.dart';
 import '../../../../../core/widgets/custom_app_bar.dart';
+import '../../../../../core/utils/responsive_helper.dart';
+import '../../widgets/selection_page_layout/selection_page_layout.dart';
 import '../../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../home/presentation/home_bottom_bar/widgets/build_animated_background/build_animated_background.dart';
 import '../../../../onboard_survey/domain/models/experience/experience.dart';
@@ -43,7 +46,7 @@ class EditExperiencePage extends StatelessWidget {
   ) {
     if (state.isSaved) {
       UiMessageService.showInfo(
-        'Updated',
+        AppLocalizations.of(context)!.common_updated,
       );
       context.pop();
     } else if (state.isFailed) {
@@ -78,7 +81,7 @@ class EditExperiencePage extends StatelessWidget {
                 onPressed: () => context.pop(),
               ),
               title: Text(
-                'Edit Experience',
+                AppLocalizations.of(context)!.edit_experience_title,
                 style: textTheme.bold17.copyWith(
                   color: colorScheme.onPrimary,
                 ),
@@ -104,7 +107,7 @@ class EditExperiencePage extends StatelessWidget {
                                 ),
                               )
                             : Text(
-                                'Save',
+                                AppLocalizations.of(context)!.common_save,
                                 style: textTheme.bold14.copyWith(
                                   color: canSave
                                       ? AppColors.black.value
@@ -128,9 +131,26 @@ class EditExperiencePage extends StatelessWidget {
                 if (state.userData == null) {
                   return Center(
                     child: Text(
-                      'Failed to load data',
+                      AppLocalizations.of(context)!.common_failed_to_load,
                       style: textTheme.regular14.copyWith(
                         color: colorScheme.secondary,
+                      ),
+                    ),
+                  );
+                }
+
+                if (!ResponsiveHelper.isMobile(context)) {
+                  return HorizontalPadding(
+                    child: SelectionPageLayout(
+                      header: OnboardSurveyHeader(
+                        title: AppLocalizations.of(context)!.edit_experience_heading,
+                        description:
+                            AppLocalizations.of(context)!.common_cofounder_match_hint,
+                      ),
+                      content: ExperienceGrid(
+                        selectedExperience: state.selectedExperience,
+                        onSelectExperience: (experience) =>
+                            _onSelectExperience(context, experience),
                       ),
                     ),
                   );
@@ -142,9 +162,9 @@ class EditExperiencePage extends StatelessWidget {
                     children: [
                       Center(
                         child: OnboardSurveyHeader(
-                          title: 'What is your experience level?',
+                          title: AppLocalizations.of(context)!.edit_experience_heading,
                           description:
-                              'Help us find your perfect co-founder match',
+                              AppLocalizations.of(context)!.common_cofounder_match_hint,
                         ),
                       ),
                       Gap(20.0),

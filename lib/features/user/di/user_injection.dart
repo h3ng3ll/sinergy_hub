@@ -6,6 +6,7 @@ import '../../../core/services/firebase/firebase_firestore_service.dart';
 import '../../../core/services/firebase/firebase_functions_service.dart';
 import '../../../core/services/firebase/firebase_storage_service.dart';
 import '../../../core/services/geolocation/i_geolocation_service.dart';
+import '../../../core/services/geolocation/i_reverse_geocoding_service.dart';
 import '../../../core/services/image_service.dart';
 import '../../../core/services/logger_service.dart';
 import '../../auth/domain/repostories/i_auth_repository.dart';
@@ -97,6 +98,7 @@ void initUserFeature(GetIt getIt) {
   getIt.registerLazySingleton<DetectCurrentLocationUseCase>(
     () => DetectCurrentLocationUseCase(
       geolocationService: getIt<IGeolocationService>(),
+      reverseGeocodingService: getIt<IReverseGeocodingService>(),
     ),
   );
   getIt.registerLazySingleton<UpdateUserCoordinatesUseCase>(

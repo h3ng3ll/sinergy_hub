@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/models/exceptions.dart';
 import '../../../../core/services/geolocation/failures/geo_failures.dart';
 import '../../../../core/services/geolocation/i_geolocation_service.dart';
+import '../../../../core/services/geolocation/i_reverse_geocoding_service.dart';
 import '../models/detected_location/detected_location.dart';
 
 /// Chains permission → position → reverse-geocode behind the geolocation
@@ -11,9 +12,11 @@ import '../models/detected_location/detected_location.dart';
 /// the settings screen that fixes it.
 class DetectCurrentLocationUseCase {
   final IGeolocationService _geolocationService;
+  final IReverseGeocodingService _reverseGeocodingService;
 
   DetectCurrentLocationUseCase({
     required this._geolocationService,
+    required this._reverseGeocodingService,
   });
 
   Future<Either<DetectedLocation, Exceptions>> call() async {
@@ -23,7 +26,7 @@ class DetectCurrentLocationUseCase {
       (_) async {
         try {
           final position = await _geolocationService.currentPosition();
-          final place = await _geolocationService.reverseGeocode(position);
+          final place = await _reverseGeocodingService.placeFrom(position);
           return Left(
             DetectedLocation(
               position: position,

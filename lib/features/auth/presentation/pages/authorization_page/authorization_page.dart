@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/colors/app_color_scheme.dart';
 import '../../../../../core/resources/colors/app_colors.dart';
@@ -109,7 +110,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          'Synergy Hub',
+                          AppLocalizations.of(context)!.app_title,
                           textAlign: TextAlign.center,
                           style: textTheme.bold32.copyWith(
                             color: AppColors.white.value,
@@ -117,7 +118,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                         ),
                         Gap(8.0),
                         Text(
-                          'Welcome to Synergy Hub',
+                          AppLocalizations.of(context)!.auth_welcome,
                           textAlign: TextAlign.center,
                           style: textTheme.medium16.copyWith(
                             color: AppColors.white.value,
@@ -150,7 +151,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                 ),
                                 Gap(10.0),
                                 Text(
-                                  'Continue with Apple',
+                                  AppLocalizations.of(context)!.auth_continue_with_apple,
                                   style: textTheme.medium16.copyWith(
                                     color: colorScheme.onSecondary,
                                   ),
@@ -186,7 +187,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                 ),
                                 Gap(10.0),
                                 Text(
-                                  'Continue with Google',
+                                  AppLocalizations.of(context)!.auth_continue_with_google,
                                   style: textTheme.medium16.copyWith(
                                     color: colorScheme.onSecondary,
                                   ),
@@ -207,7 +208,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                 ),
                                 onPressed: onLogin,
                                 child: Text(
-                                  'Login',
+                                  AppLocalizations.of(context)!.auth_login,
                                   style: textTheme.medium16.copyWith(
                                     color: colorScheme.onSecondary,
                                   ),
@@ -223,7 +224,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                 ),
                                 onPressed: onRegister,
                                 child: Text(
-                                  'Register',
+                                  AppLocalizations.of(context)!.auth_register,
                                   style: textTheme.medium16.copyWith(
                                     color: colorScheme.onSecondary,
                                   ),
@@ -239,19 +240,19 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                               color: AppColors.white.value,
                             ),
                             children: [
-                              const TextSpan(
-                                text: 'By continuing you agree to ',
+                              TextSpan(
+                                text: AppLocalizations.of(context)!.auth_agreement_prefix,
                               ),
                               TextSpan(
-                                text: 'Terms',
+                                text: AppLocalizations.of(context)!.auth_agreement_terms,
                                 style: linkStyle,
                                 recognizer: _termsRecognizer,
                               ),
-                              const TextSpan(
-                                text: ' & ',
+                              TextSpan(
+                                text: AppLocalizations.of(context)!.auth_agreement_and,
                               ),
                               TextSpan(
-                                text: 'Privacy Policy',
+                                text: AppLocalizations.of(context)!.privacy_policy,
                                 style: linkStyle,
                                 recognizer: _privacyRecognizer,
                               ),

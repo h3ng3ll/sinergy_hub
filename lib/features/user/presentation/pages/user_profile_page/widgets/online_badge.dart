@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../core/resources/text/app_text_theme.dart';
 
@@ -32,7 +33,7 @@ class OnlineBadge extends StatelessWidget {
           ),
         ),
         Text(
-          isOnline ? 'Online' : 'Offline',
+          isOnline ? AppLocalizations.of(context)!.status_online : AppLocalizations.of(context)!.status_offline,
           style: textTheme.medium14.copyWith(
             color: AppColors.white.value.withValues(alpha: 0.92),
           ),

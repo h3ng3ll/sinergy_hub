@@ -675,6 +675,432 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{km} km'**
   String filter_location_radius_km(int km);
+
+  /// No description provided for @app_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Synergy Hub'**
+  String get app_title;
+
+  /// No description provided for @common_save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get common_save;
+
+  /// No description provided for @common_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get common_cancel;
+
+  /// No description provided for @common_save_changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get common_save_changes;
+
+  /// No description provided for @common_edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get common_edit;
+
+  /// No description provided for @common_updated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated'**
+  String get common_updated;
+
+  /// No description provided for @common_failed_to_load.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load data'**
+  String get common_failed_to_load;
+
+  /// No description provided for @common_not_specified.
+  ///
+  /// In en, this message translates to:
+  /// **'Not specified yet'**
+  String get common_not_specified;
+
+  /// No description provided for @common_cofounder_match_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Help us find your perfect co-founder match'**
+  String get common_cofounder_match_hint;
+
+  /// No description provided for @auth_welcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Synergy Hub'**
+  String get auth_welcome;
+
+  /// No description provided for @auth_continue_with_apple.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Apple'**
+  String get auth_continue_with_apple;
+
+  /// No description provided for @auth_continue_with_google.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get auth_continue_with_google;
+
+  /// No description provided for @auth_login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get auth_login;
+
+  /// No description provided for @auth_register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get auth_register;
+
+  /// No description provided for @auth_agreement_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'By continuing you agree to '**
+  String get auth_agreement_prefix;
+
+  /// No description provided for @auth_agreement_terms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms'**
+  String get auth_agreement_terms;
+
+  /// No description provided for @auth_agreement_and.
+  ///
+  /// In en, this message translates to:
+  /// **' & '**
+  String get auth_agreement_and;
+
+  /// No description provided for @profile_delete_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get profile_delete_account;
+
+  /// No description provided for @profile_account_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted'**
+  String get profile_account_deleted;
+
+  /// No description provided for @profile_bio_empty_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell others about yourself'**
+  String get profile_bio_empty_prompt;
+
+  /// No description provided for @profile_subscription_open_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open subscription settings. Manage it in your store account.'**
+  String get profile_subscription_open_failed;
+
+  /// No description provided for @edit_profile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get edit_profile_title;
+
+  /// No description provided for @edit_profile_updated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get edit_profile_updated;
+
+  /// No description provided for @edit_profile_first_name.
+  ///
+  /// In en, this message translates to:
+  /// **'FirstName'**
+  String get edit_profile_first_name;
+
+  /// No description provided for @edit_profile_last_name.
+  ///
+  /// In en, this message translates to:
+  /// **'LastName'**
+  String get edit_profile_last_name;
+
+  /// No description provided for @edit_profile_age.
+  ///
+  /// In en, this message translates to:
+  /// **'Age'**
+  String get edit_profile_age;
+
+  /// No description provided for @edit_profile_bio.
+  ///
+  /// In en, this message translates to:
+  /// **'Bio'**
+  String get edit_profile_bio;
+
+  /// No description provided for @edit_profile_specialization.
+  ///
+  /// In en, this message translates to:
+  /// **'Specialization'**
+  String get edit_profile_specialization;
+
+  /// No description provided for @edit_profile_skills.
+  ///
+  /// In en, this message translates to:
+  /// **'Skills'**
+  String get edit_profile_skills;
+
+  /// No description provided for @edit_profile_photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get edit_profile_photo;
+
+  /// No description provided for @edit_profile_personal_info.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal info'**
+  String get edit_profile_personal_info;
+
+  /// No description provided for @edit_looking_for_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Looking For'**
+  String get edit_looking_for_title;
+
+  /// No description provided for @edit_looking_for_heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Who are you looking for?'**
+  String get edit_looking_for_heading;
+
+  /// No description provided for @edit_looking_for_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Select 1-5 specializations'**
+  String get edit_looking_for_description;
+
+  /// No description provided for @edit_looking_for_search_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search specializations...'**
+  String get edit_looking_for_search_hint;
+
+  /// No description provided for @edit_experience_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Experience'**
+  String get edit_experience_title;
+
+  /// No description provided for @edit_experience_heading.
+  ///
+  /// In en, this message translates to:
+  /// **'What is your experience level?'**
+  String get edit_experience_heading;
+
+  /// No description provided for @edit_specialization_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Specialization'**
+  String get edit_specialization_title;
+
+  /// No description provided for @edit_specialization_heading.
+  ///
+  /// In en, this message translates to:
+  /// **'What is your specific specialization?'**
+  String get edit_specialization_heading;
+
+  /// No description provided for @edit_specialization_search_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search your specialization...'**
+  String get edit_specialization_search_hint;
+
+  /// No description provided for @common_close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get common_close;
+
+  /// No description provided for @time_just_now.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get time_just_now;
+
+  /// Compact age of a list item in minutes
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m'**
+  String time_minutes_short(int minutes);
+
+  /// Compact age of a list item in hours
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h'**
+  String time_hours_short(int hours);
+
+  /// No description provided for @time_today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get time_today;
+
+  /// No description provided for @time_yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get time_yesterday;
+
+  /// No description provided for @notifications_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications_title;
+
+  /// No description provided for @notifications_center_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Center'**
+  String get notifications_center_title;
+
+  /// No description provided for @notifications_failed_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to fetch notifications'**
+  String get notifications_failed_title;
+
+  /// No description provided for @matches_search_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search matches...'**
+  String get matches_search_hint;
+
+  /// No description provided for @matches_failed_load.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed load data: {error}'**
+  String matches_failed_load(String error);
+
+  /// No description provided for @matches_filter_recent.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get matches_filter_recent;
+
+  /// No description provided for @matches_filter_unread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get matches_filter_unread;
+
+  /// No description provided for @matches_filter_all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get matches_filter_all;
+
+  /// No description provided for @matches_filter_favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get matches_filter_favorites;
+
+  /// No description provided for @matches_filter_archived.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get matches_filter_archived;
+
+  /// No description provided for @chats_empty_title.
+  ///
+  /// In en, this message translates to:
+  /// **'No chats yet'**
+  String get chats_empty_title;
+
+  /// No description provided for @chats_empty_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start connecting with others'**
+  String get chats_empty_subtitle;
+
+  /// No description provided for @chat_unknown_user.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get chat_unknown_user;
+
+  /// No description provided for @chat_you_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'You:'**
+  String get chat_you_prefix;
+
+  /// No description provided for @chat_archived_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat archived successfully'**
+  String get chat_archived_success;
+
+  /// No description provided for @chat_unarchived_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat unarchived successfully'**
+  String get chat_unarchived_success;
+
+  /// No description provided for @chat_added_to_favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to favorites'**
+  String get chat_added_to_favorites;
+
+  /// No description provided for @chat_removed_from_favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from favorites'**
+  String get chat_removed_from_favorites;
+
+  /// No description provided for @chat_online_now.
+  ///
+  /// In en, this message translates to:
+  /// **'Online now'**
+  String get chat_online_now;
+
+  /// No description provided for @chat_offline_now.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline now'**
+  String get chat_offline_now;
+
+  /// No description provided for @chat_message_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Message...'**
+  String get chat_message_hint;
+
+  /// No description provided for @status_online.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get status_online;
+
+  /// No description provided for @status_offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get status_offline;
+
+  /// No description provided for @user_profile_report.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get user_profile_report;
+
+  /// No description provided for @filters_apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filters'**
+  String get filters_apply;
 }
 
 class _AppLocalizationsDelegate

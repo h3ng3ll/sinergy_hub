@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
+import '../../../../../core/routes/models/e_page_width.dart';
 import '../../../../../core/services/ui_message_service.dart';
+import '../../../../../core/utils/responsive_helper.dart';
 import '../../../../chat/presentation/bloc/chat_bloc/chat_bloc.dart';
 import '../../../domain/models/matches_filter/matches_filter.dart';
 import '../../../domain/usecases/create_user_matches_use_case.dart';
@@ -20,6 +22,12 @@ import '../../../../subscription/presentation/dialogs/paywall_modal_sheet/paywal
 import 'widgets/build_tinder_card/build_tinder_card.dart';
 import '../../dialogs/filter_modal/matches_filters_modal_sheet.dart';
 
+/// Width of the filters panel docked beside the deck on tablet/desktop.
+const double _kFilterPanelWidth = 440.0;
+
+/// Open/close time of the docked filters panel.
+const Duration _kFilterPanelTransition = Duration(milliseconds: 280);
+
 class DiscoveryPage extends StatefulWidget {
   const DiscoveryPage({
     super.key,
@@ -34,6 +42,9 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
   late final PeopleDataBloc _peopleDataBloc;
   late final MatchesBloc _matchesBloc;
   bool _isPaywallOpen = false;
+
+  /// Tablet/desktop: filters are docked beside the deck instead of a sheet.
+  bool _isFilterPanelOpen = false;
 
   @override
   void initState() {
@@ -67,6 +78,11 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
   }
 
   Future<void> onAdjustFilters() async {
+    if (!ResponsiveHelper.isMobile(context)) {
+      setState(() => _isFilterPanelOpen = !_isFilterPanelOpen);
+      return;
+    }
+
     final MatchesFilter? result = await MatchesFiltersModalSheet.show(
       HomeBottomBarRoute.homeBottomBarKey.currentState!.context,
       initialOptions: _peopleDataBloc.state.filter,
@@ -78,6 +94,19 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
         filter: result,
       ),
     );
+  }
+
+  void _onApplyFilterPanel(MatchesFilter filter) {
+    _peopleDataBloc.add(
+      PeopleDataEvent.applyFilter(
+        filter: filter,
+      ),
+    );
+    setState(() => _isFilterPanelOpen = false);
+  }
+
+  void _onCloseFilterPanel() {
+    setState(() => _isFilterPanelOpen = false);
   }
 
   void onKeepSwiping() {}
@@ -218,7 +247,8 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                 .state
                 .filter
                 .isApplied;
-            return Scaffold(
+            final isWide = !ResponsiveHelper.isMobile(context);
+            final page = Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
                 backgroundColor: Colors.transparent,
@@ -263,12 +293,48 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                   ),
                 ],
               ),
-              body: BuildTinderCard(
-                onAdjustFilters: onAdjustFilters,
-                onPanUpdate: onPanUpdate,
-                onPanStart: onPanStart,
-                onPanEnd: onPanEnd,
+              body: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: isWide
+                        ? EPageWidth.content.maxWidth
+                        : double.infinity,
+                  ),
+                  child: BuildTinderCard(
+                    onAdjustFilters: onAdjustFilters,
+                    onPanUpdate: onPanUpdate,
+                    onPanStart: onPanStart,
+                    onPanEnd: onPanEnd,
+                  ),
+                ),
               ),
+            );
+
+            if (!isWide) return page;
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: page,
+                ),
+                AnimatedSize(
+                  duration: _kFilterPanelTransition,
+                  curve: Curves.easeOutCubic,
+                  alignment: Alignment.centerLeft,
+                  child: _isFilterPanelOpen
+                      ? SizedBox(
+                          width: _kFilterPanelWidth,
+                          child: MatchesFiltersModalSheet(
+                            isSidePanel: true,
+                            initialOptions: _peopleDataBloc.state.filter,
+                            onApply: _onApplyFilterPanel,
+                            onClose: _onCloseFilterPanel,
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ),
+              ],
             );
           },
         ),

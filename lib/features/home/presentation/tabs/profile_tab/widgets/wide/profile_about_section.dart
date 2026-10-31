@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
 import '../../../../../../onboard_survey/domain/models/experiences/experiences.dart';
 import '../../../../../../user/domain/models/user_data/user_data.dart';
-import 'profile_section_card.dart';
+import '../../../../../../../core/widgets/wide/hover_card.dart';
 import 'profile_section_header.dart';
 
 class ProfileAboutSection extends StatelessWidget {
@@ -29,14 +30,14 @@ class ProfileAboutSection extends StatelessWidget {
     );
     final muted = AppColors.darkBlueGray.value;
 
-    return ProfileSectionCard(
+    return HoverCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: 16.0,
         children: [
           ProfileSectionHeader(
             icon: Icons.person_outline,
-            title: 'About',
+            title: AppLocalizations.of(context)!.about_me,
             onTapEdit: onTapEdit,
           ),
           if (bio.isNotEmpty)
@@ -58,7 +59,7 @@ class ProfileAboutSection extends StatelessWidget {
                   vertical: 4.0,
                 ),
                 child: Text(
-                  'Tell others about yourself',
+                  AppLocalizations.of(context)!.profile_bio_empty_prompt,
                   style: textTheme.regular16.copyWith(
                     color: muted,
                     fontStyle: FontStyle.italic,

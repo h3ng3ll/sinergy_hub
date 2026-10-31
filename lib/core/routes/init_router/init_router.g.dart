@@ -147,6 +147,21 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
               factory: $ContentShellRouteExtension._fromState,
               routes: [
                 GoRouteData.$route(
+                  path: '/notification',
+                  hasOverriddenOnExit: false,
+                  factory: $NotificationPageRoute._fromState,
+                ),
+                GoRouteData.$route(
+                  path: '/settings',
+                  hasOverriddenOnExit: false,
+                  factory: $SettingsPageRoute._fromState,
+                ),
+              ],
+            ),
+            ShellRouteData.$route(
+              factory: $ProfileShellRouteExtension._fromState,
+              routes: [
+                GoRouteData.$route(
                   path: '/edit-profile-page',
                   hasOverriddenOnExit: false,
                   factory: $EditProfilePageRoute._fromState,
@@ -168,21 +183,6 @@ RouteBase get $rootPageRoute => ShellRouteData.$route(
                     ),
                   ],
                 ),
-                GoRouteData.$route(
-                  path: '/notification',
-                  hasOverriddenOnExit: false,
-                  factory: $NotificationPageRoute._fromState,
-                ),
-                GoRouteData.$route(
-                  path: '/settings',
-                  hasOverriddenOnExit: false,
-                  factory: $SettingsPageRoute._fromState,
-                ),
-              ],
-            ),
-            ShellRouteData.$route(
-              factory: $ProfileShellRouteExtension._fromState,
-              routes: [
                 GoRouteData.$route(
                   path: '/profile',
                   hasOverriddenOnExit: false,
@@ -612,6 +612,53 @@ extension $ContentShellRouteExtension on ContentShellRoute {
       ContentShellRoute();
 }
 
+mixin $NotificationPageRoute on GoRouteData {
+  static NotificationPageRoute _fromState(GoRouterState state) =>
+      NotificationPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/notification');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $SettingsPageRoute on GoRouteData {
+  static SettingsPageRoute _fromState(GoRouterState state) =>
+      SettingsPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ProfileShellRouteExtension on ProfileShellRoute {
+  static ProfileShellRoute _fromState(GoRouterState state) =>
+      ProfileShellRoute();
+}
+
 mixin $EditProfilePageRoute on GoRouteData {
   static EditProfilePageRoute _fromState(GoRouterState state) =>
       EditProfilePageRoute();
@@ -697,53 +744,6 @@ mixin $EditSpecializationRoute on GoRouteData {
 
   @override
   void replace(BuildContext context) => context.replace(location);
-}
-
-mixin $NotificationPageRoute on GoRouteData {
-  static NotificationPageRoute _fromState(GoRouterState state) =>
-      NotificationPageRoute();
-
-  @override
-  String get location => GoRouteData.$location('/notification');
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-mixin $SettingsPageRoute on GoRouteData {
-  static SettingsPageRoute _fromState(GoRouterState state) =>
-      SettingsPageRoute();
-
-  @override
-  String get location => GoRouteData.$location('/settings');
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $ProfileShellRouteExtension on ProfileShellRoute {
-  static ProfileShellRoute _fromState(GoRouterState state) =>
-      ProfileShellRoute();
 }
 
 mixin $ProfilePageRoute on GoRouteData {

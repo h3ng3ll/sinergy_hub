@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../../core/widgets/padding/horizontal_padding.dart';
 
 class FailedNotifications extends StatelessWidget {
@@ -18,6 +19,7 @@ class FailedNotifications extends StatelessWidget {
     return Center(
       child: HorizontalPadding(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 12.0,
           children: [
@@ -27,7 +29,7 @@ class FailedNotifications extends StatelessWidget {
               size: 48.0,
             ),
             Text(
-              'Failed to fetch notifications',
+              AppLocalizations.of(context)!.notifications_failed_title,
               textAlign: TextAlign.center,
               style: textTheme.bold17,
             ),

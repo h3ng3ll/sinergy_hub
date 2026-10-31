@@ -1,18 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'failures/geo_failures.dart';
 import 'i_geolocation_service.dart';
 import 'models/e_geo_permission.dart';
 import 'models/e_geo_settings_target.dart';
-import 'models/geo_place.dart';
 import 'models/geo_position.dart';
 
 class GeolocatorGeolocationService implements IGeolocationService {
-  final Geocoding _geocoding = Geocoding();
-
   bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 
   @override
@@ -75,26 +71,6 @@ class GeolocatorGeolocationService implements IGeolocationService {
       accuracyMeters: position.accuracy,
       capturedAt: position.timestamp,
     );
-  }
-
-  @override
-  Future<GeoPlace?> reverseGeocode(GeoPosition position) async {
-    if (kIsWeb) return null;
-    try {
-      final placemarks = await _geocoding.placemarkFromCoordinates(
-        position.latitude,
-        position.longitude,
-      );
-      if (placemarks.isEmpty) return null;
-      final placemark = placemarks.first;
-      return GeoPlace(
-        country: placemark.country,
-        countryCode: placemark.isoCountryCode,
-        city: placemark.locality,
-      );
-    } catch (_) {
-      return null;
-    }
   }
 
   /// iOS doesn't allow deep-linking into Location Services, so

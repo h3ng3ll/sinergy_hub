@@ -28,12 +28,13 @@ class _NoFoundNotificationsState extends State<NoFoundNotifications>
 
   @override
   void initState() {
-    _controller = AnimationController(
-      vsync: this,
-      duration: _kSwingDuration,
-    )..repeat(
-        reverse: true,
-      );
+    _controller =
+        AnimationController(
+          vsync: this,
+          duration: _kSwingDuration,
+        )..repeat(
+          reverse: true,
+        );
     _animation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
@@ -56,6 +57,7 @@ class _NoFoundNotificationsState extends State<NoFoundNotifications>
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Stack(

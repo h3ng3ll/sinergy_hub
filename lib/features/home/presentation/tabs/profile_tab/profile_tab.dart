@@ -77,7 +77,7 @@ class _ProfileTabState extends State<ProfileTab> {
     );
     if (!opened) {
       await UiMessageService.showError(
-        "Couldn't open subscription settings. Manage it in your store account.",
+        AppLocalizations.of(context)!.profile_subscription_open_failed,
       );
     }
   }
@@ -99,7 +99,7 @@ class _ProfileTabState extends State<ProfileTab> {
         listenWhen: (p, c) => p.status != c.status,
         listener: (context, state) {
           if (state.isDeleted) {
-            UiMessageService.showSuccess('Account deleted');
+            UiMessageService.showSuccess(AppLocalizations.of(context)!.profile_account_deleted);
           } else if (state.isDeleteFailed || state.isSubscriptionUrlFailed) {
             UiMessageService.showError(state.errorMessage);
           } else if (state.isSubscriptionUrlReady) {
@@ -203,7 +203,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                   return SizedBox(
                                     width: double.infinity,
                                     child: ActionBtn(
-                                      text: 'Delete account',
+                                      text: AppLocalizations.of(context)!.profile_delete_account,
                                       anyStateColor: AppColors.heartRed.value,
                                       onPressed: profileState.isDeleting
                                           ? null

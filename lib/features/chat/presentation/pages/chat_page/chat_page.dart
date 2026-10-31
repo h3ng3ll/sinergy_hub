@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../core/utils/responsive_helper.dart';
+import '../../../../../core/resources/colors/app_colors.dart';
 import '../../../../../core/di/injection.dart';
 import '../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../core/routes/init_router/init_router.dart';
@@ -181,9 +183,13 @@ class _ChatPageState extends State<ChatPage> {
     /// their own action.
     final bool amIBlocked = chat.isBlockedBy(currentUser.uid);
 
+    final wide = !ResponsiveHelper.isMobile(context);
+
     return Scaffold(
       key: const ValueKey('loaded'),
+      backgroundColor: wide ? AppColors.white.value : null,
       appBar: ChatAppBar(
+        wide: wide,
         onTapUser: () => onTapUser(
           chatterUser.uid,
         ),

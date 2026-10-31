@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../../../../../../core/resources/colors/app_colors.dart';
+import '../../../../../../../../../../core/resources/text/app_text_theme.dart';
+import '../../../../../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../../../../../core/utils/extensions/date_time_ext.dart';
+import '../../../../../../../../../../core/utils/responsive_helper.dart';
 
 class BuildChatSeparator extends StatelessWidget {
   final DateTime time;
@@ -11,12 +15,12 @@ class BuildChatSeparator extends StatelessWidget {
     required this.time,
   });
 
-  String dayText() {
+  String dayText(AppLocalizations lo) {
     if (time.isToday()) {
-      return 'Today';
+      return lo.time_today;
     }
     else if (time.isYesterday()) {
-      return 'Yesterday';
+      return lo.time_yesterday;
     }
     return DateFormat(
       'dd MMMM',
@@ -27,9 +31,37 @@ class BuildChatSeparator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lo = AppLocalizations.of(context)!;
+
+    if (!ResponsiveHelper.isMobile(context)) {
+      return Center(
+        child: Container(
+          margin: const EdgeInsets.symmetric(
+            vertical: 8.0,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14.0,
+            vertical: 6.0,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.antiFlashWhite.value,
+            borderRadius: BorderRadius.circular(
+              20.0,
+            ),
+          ),
+          child: Text(
+            dayText(lo),
+            style: AppTextTheme.of(context).medium12.copyWith(
+              color: AppColors.darkBlueGray.value,
+            ),
+          ),
+        ),
+      );
+    }
+
     return Center(
       child: Text(
-        dayText(),
+        dayText(lo),
       ),
     );
   }

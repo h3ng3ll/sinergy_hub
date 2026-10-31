@@ -3,12 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../../core/resources/colors/app_colors.dart';
-import '../../../../../../../core/resources/translations/app_localizations.dart';
 import '../../../../../../../core/utils/extensions/go_router_x.dart';
 import '../../../../../../../core/widgets/custom_app_bar.dart';
-import '../../../../../../../core/widgets/custom_popup_menu.dart';
 import '../../../../../../user/domain/models/user_data/user_data.dart';
 import 'widgets/build_chat_user_info.dart';
+import 'widgets/chat_block_menu.dart';
+import 'widgets/chat_header_wide.dart';
 
 class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onTapUser;
@@ -16,17 +16,28 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isBlocked;
   final UserData user;
 
+  /// Tablet/desktop: light header with a hairline divider.
+  final bool wide;
+
   const ChatAppBar({
     super.key,
     required this.onTapUser,
     required this.onToggleBlock,
     required this.isBlocked,
     required this.user,
+    this.wide = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    if (wide) {
+      return ChatHeaderWide(
+        onTapUser: onTapUser,
+        onToggleBlock: onToggleBlock,
+        isBlocked: isBlocked,
+        user: user,
+      );
+    }
 
     return Padding(
       padding: EdgeInsets.only(
@@ -72,20 +83,9 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                 user: user,
               ),
               Spacer(),
-              CustomPopupMenu<bool>(
-                icon: Icon(
-                  Icons.more_vert,
-                  color: AppColors.black.value,
-                ),
-                color: AppColors.white.value,
-                items: const [true],
-                onSelected: (_) => onToggleBlock(),
-                itemBuilder: (context, _) => CustomPopupMenuItem<bool>.withIcon(
-                  value: true,
-                  icon: isBlocked ? Icons.lock_open : Icons.block,
-                  iconColor: AppColors.tartOrange.value,
-                  text: isBlocked ? l10n.unblock_user : l10n.block_user,
-                ),
+              ChatBlockMenu(
+                isBlocked: isBlocked,
+                onToggleBlock: onToggleBlock,
               ),
             ],
           ),
@@ -96,5 +96,5 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(50.0);
+  Size get preferredSize => Size.fromHeight(wide ? 68.0 : 50.0);
 }

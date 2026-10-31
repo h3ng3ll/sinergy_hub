@@ -16,6 +16,7 @@ import '../../../../core/services/ui_message_service.dart';
 import '../../../../core/widgets/btn/custom_text_btn.dart';
 import '../../../../core/widgets/btn/translucent_btn.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/utils/responsive_helper.dart';
 import '../../../../core/widgets/padding/horizontal_padding.dart';
 import '../../../../core/widgets/build_user_avatar.dart';
 import '../../../onboard_survey/domain/models/skill/skill.dart';
@@ -28,6 +29,8 @@ import 'bloc/edit_profile_page_bloc/edit_profile_page_bloc.dart';
 import 'widgets/build_grouped_input.dart';
 import 'widgets/build_skills_section/build_skills_section.dart';
 import 'widgets/build_specialization_field.dart';
+import 'widgets/wide/edit_profile_wide_layout.dart';
+import '../../../../core/widgets/wide/avatar_ring.dart';
 import '../../../../core/widgets/inputs/age_input.dart';
 import '../../../../core/widgets/inputs/bio_input.dart';
 import '../../../../core/widgets/inputs/first_name_input.dart';
@@ -155,6 +158,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  String get _initials {
+    final letters = [
+      _firstNameController.text,
+      _lastNameController.text,
+    ].map((e) => e.trim()).where((e) => e.isNotEmpty).map(
+      (e) => e[0].toUpperCase(),
+    );
+    return letters.isEmpty ? '?' : letters.join();
+  }
+
   void onCancel() {
     context.pop();
   }
@@ -178,7 +191,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   );
                 } else {
                   UiMessageService.showSuccess(
-                    'Profile updated successfully',
+                    AppLocalizations.of(context)!.edit_profile_updated,
                   );
                 }
                 context.pop();
@@ -222,7 +235,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           Spacer(),
                           Center(
                             child: Text(
-                              'Edit Profile',
+                              AppLocalizations.of(context)!.edit_profile_title,
                               style: textTheme.bold20.copyWith(
                                 color: colorScheme.onPrimary,
                               ),
@@ -231,7 +244,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           Spacer(),
                         ],
                       ),
-                      body: HorizontalPadding(
+                      body: ResponsiveHelper.isMobile(context)
+                          ? HorizontalPadding(
                         child: Form(
                           key: _formKey,
                           child: ListView(
@@ -248,31 +262,31 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     cacheImg: image,
                                   ),
                                   BuildGroupedInput(
-                                    title: 'FirstName',
+                                    title: AppLocalizations.of(context)!.edit_profile_first_name,
                                     child: FirstNameInput(
                                       controller: _firstNameController,
                                     ),
                                   ),
                                   BuildGroupedInput(
-                                    title: 'LastName',
+                                    title: AppLocalizations.of(context)!.edit_profile_last_name,
                                     child: LastNameInput(
                                       controller: _lastNameController,
                                     ),
                                   ),
                                   BuildGroupedInput(
-                                    title: 'Age',
+                                    title: AppLocalizations.of(context)!.edit_profile_age,
                                     child: AgeInput(
                                       controller: _ageController,
                                     ),
                                   ),
                                   BuildGroupedInput(
-                                    title: 'Bio',
+                                    title: AppLocalizations.of(context)!.edit_profile_bio,
                                     child: BioInput(
                                       controller: _bioController,
                                     ),
                                   ),
                                   BuildGroupedInput(
-                                    title: 'Specialization',
+                                    title: AppLocalizations.of(context)!.edit_profile_specialization,
                                     child: BuildSpecializationField(
                                       specialization:
                                           userData?.profiler.specialization,
@@ -296,7 +310,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               ),
                               Gap(15.0),
                               Text(
-                                'Skills',
+                                AppLocalizations.of(context)!.edit_profile_skills,
                                 style: textTheme.regular14.copyWith(
                                   color: colorScheme.onPrimary,
                                 ),
@@ -315,12 +329,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 children: [
                                   CustomTextBtn(
                                     onPressed: onCancel,
-                                    text: 'Cancel',
+                                    text: AppLocalizations.of(context)!.common_cancel,
                                   ),
                                   TranslucentBtn(
                                     onPressed: onSaveChanges,
                                     child: Text(
-                                      'Save Changes',
+                                      AppLocalizations.of(context)!.common_save_changes,
                                     ),
                                   ),
                                 ],
@@ -328,7 +342,62 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             ],
                           ),
                         ),
-                      ),
+                      )
+                          : Form(
+                              key: _formKey,
+                              child: EditProfileWideLayout(
+                                avatar: AvatarRing(
+                                  url: userData?.avatarUrl,
+                                  bytes: image,
+                                  initials: _initials,
+                                  onTap: onTapAvatar,
+                                ),
+                                firstName: BuildGroupedInput(
+                                  title: AppLocalizations.of(context)!.edit_profile_first_name,
+                                  child: FirstNameInput(
+                                    controller: _firstNameController,
+                                  ),
+                                ),
+                                lastName: BuildGroupedInput(
+                                  title: AppLocalizations.of(context)!.edit_profile_last_name,
+                                  child: LastNameInput(
+                                    controller: _lastNameController,
+                                  ),
+                                ),
+                                age: BuildGroupedInput(
+                                  title: AppLocalizations.of(context)!.edit_profile_age,
+                                  child: AgeInput(
+                                    controller: _ageController,
+                                  ),
+                                ),
+                                bio: BioInput(
+                                  controller: _bioController,
+                                ),
+                                specialization: BuildSpecializationField(
+                                  specialization:
+                                      userData?.profiler.specialization,
+                                  onTap: onTapSpecialization,
+                                ),
+                                locationTitle: lo.location_group_title,
+                                location: BuildLocationSection(
+                                  countryController: _countryController,
+                                  cityController: _cityController,
+                                  isDetecting: state.isDetectingLocation,
+                                  errorMessage: state.locationError,
+                                  settingsTarget: state.locationSettingsTarget,
+                                  onUseMyLocation: onUseMyLocation,
+                                  onOpenSettings: onOpenLocationSettings,
+                                ),
+                                skills: BuildSkillsSection(
+                                  onRemoveExistingSkill: onRemoveExistingSkill,
+                                  onSubmitSkill: onSubmitSkill,
+                                  skills: availableSkills,
+                                  activeSkills: state.skills,
+                                ),
+                                onCancel: onCancel,
+                                onSave: onSaveChanges,
+                              ),
+                            ),
                     ),
                   ),
                 ),
